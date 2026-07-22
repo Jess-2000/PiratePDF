@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <IsTestProject>true</IsTestProject>
+
+    <NoWarn>
+      $(NoWarn);
+      CA1707
+    </NoWarn>
+  </PropertyGroup>
+</Project>
