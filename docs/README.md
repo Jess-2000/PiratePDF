@@ -2,6 +2,8 @@
 
 This directory contains the authoritative product, engineering, architecture, testing, and release documentation for PiratePDF and the BlackFlag Engine.
 
+[![Continuous Integration](https://github.com/Jess-2000/PiratePDF/actions/workflows/continuous-integration.yml/badge.svg?branch=develop)](https://github.com/Jess-2000/PiratePDF/actions/workflows/continuous-integration.yml)
+
 ## Primary Documents
 
 - [Project Charter](Project-Charter.md)
