@@ -1,4 +1,17 @@
-# PiratePDF Master Blueprint
+# PiratePDF Master Blueprint - Volume I: Vision and Product Strategy
+
+| Field | Value |
+|---|---|
+| **Document ID** | PP-VSN-001 |
+| **Category** | Vision |
+| **Version** | 1.0 |
+| **Status** | Approved |
+| **Owner** | PiratePDF Project |
+| **Related BF Work Items** | BF-1000, BF-8000 |
+| **Last Updated** | 2026-07-24 |
+| **Next Review** | 2026-10-24 |
+
+---
 
 ## Volume I — Vision and Product Strategy
 
@@ -624,3 +637,8 @@ Deferred features must remain clearly labeled and must not quietly enter an acti
 | Version | Date | Summary |
 |---|---|---|
 | 1.0 | July 22, 2026 | Initial authoritative Markdown edition. |
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-24 | Standardized document metadata and Blueprint structure. |

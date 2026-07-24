@@ -1,5 +1,18 @@
 # BlackFlag Engine Syntax Specification
 
+| Field | Value |
+|---|---|
+| **Document ID** | PP-SPEC-013 |
+| **Category** | Technical Specification |
+| **Version** | 1.0 |
+| **Status** | In Development |
+| **Owner** | PiratePDF Project |
+| **Related BF Work Items** | BF-2100, BF-2200, BF-2300, BF-2400, BF-2500 |
+| **Last Updated** | 2026-07-24 |
+| **Next Review** | 2026-10-24 |
+
+---
+
 **Status:** Draft  
 **Version:** 1.0
 
@@ -40,3 +53,8 @@
 - Detect numeric overflow.
 - Preserve source offsets.
 - Produce structured diagnostics.
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-24 | Standardized specification metadata and governance structure. |

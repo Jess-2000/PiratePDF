@@ -1,131 +1,220 @@
 # PiratePDF Project Charter
 
-**Status:** Active  
-**Version:** 1.0  
-**Last Updated:** July 22, 2026
+| Field | Value |
+|---|---|
+| **Document ID** | PP-CHARTER-001 |
+| **Category** | Project Charter |
+| **Version** | 1.0 |
+| **Status** | Approved |
+| **Owner** | PiratePDF Project |
+| **Related BF Work Items** | BF-1000, BF-2000, BF-8000 |
+| **Last Updated** | 2026-07-24 |
+| **Next Review** | 2026-10-24 |
+
+---
+
+## Purpose
+
+This charter defines PiratePDF’s mission, product direction, engineering commitments, edition philosophy, and measures of success.
+
+It serves as a stable reference for deciding what PiratePDF should become and how the project should evolve.
 
 ## Mission
 
-PiratePDF exists to provide a powerful, understandable, and dependable desktop PDF editing platform built on the proprietary BlackFlag Engine.
+PiratePDF exists to make working with PDF documents simpler, faster, more transparent, and more trustworthy.
 
-The project prioritizes user control, professional reliability, strong performance, transparent document analysis, and minimal third-party licensing friction.
+The project aims to provide a feature-rich document editor that is approachable for everyday users while also supporting specialized professional workflows.
 
 ## Product Vision
 
-PiratePDF will provide two closely related editions:
+PiratePDF shall become a complete document workspace that helps users:
 
-- PiratePDF Standard
-- PiratePDF Professional
+- Create PDFs.
+- Open and edit PDFs.
+- Convert documents to PDF.
+- Inspect document structure and health.
+- Repair damaged or malformed PDFs.
+- Optimize document size and performance.
+- Prepare documents for printing.
+- Learn useful document-production skills.
+- Extend the application through plugins.
 
-Both editions will share the same BlackFlag Engine and core editing architecture.
+PiratePDF should feel like a breath of fresh air compared with software that is expensive, difficult to understand, or unnecessarily restrictive.
 
-The Professional edition will add production-oriented workflows, FusionPro integration, batch automation, advanced reporting, and other specialized tools.
+## Core Product Principles
 
-## Core Engineering Principles
+### Save Time
 
-1. Performance first.
-2. User control.
-3. Non-destructive editing by default.
-4. Minimal third-party dependencies.
-5. Cross-platform architecture.
-6. Professional reliability.
-7. Extensibility.
-8. Accessibility.
-9. Transparency.
-10. Testability.
-11. Documentation-first development.
-12. Green builds before new development.
+Features should reduce repetitive work, unnecessary applications, and avoidable manual steps.
 
-## Quality Commitment
+### Reduce Frustration
 
-PiratePDF must favor correctness and document integrity over speed of feature delivery.
+Common workflows should be clear, predictable, and easy to discover.
 
-No feature is considered complete until:
+### Increase Confidence
 
-- Its requirements are documented.
-- Its architecture is reviewed.
-- Its implementation is tested.
-- Its user-facing behavior is documented.
-- Its performance has been evaluated where applicable.
+PiratePDF should explain what it found, why it matters, and what the user can do about it.
 
-## Performance Commitment
+### Respect the Document
 
-Both PiratePDF Standard and Professional must support opening and editing very large PDF documents, including files containing 6,000 pages or more.
+The application shall preserve document integrity, avoid unnecessary rewrites, validate changes, and clearly communicate destructive operations.
 
-Large-document support must be designed into:
+### Performance Is a Feature
 
-- File access
-- Parsing
-- Rendering
-- Search
-- Editing
-- Undo and redo
-- Color analysis
-- Saving
-- Crash recovery
+PiratePDF and the BlackFlag Engine shall be designed for responsive interaction and large documents, including files containing thousands of pages.
 
-## Accessibility Commitment
+### Professional Without Being Intimidating
 
-PiratePDF should support:
+New users should be able to begin productive work quickly. Experienced users should have access to increasingly advanced capabilities without overwhelming everyone else.
 
-- Keyboard navigation
-- Visible focus indicators
-- Scalable interface elements
-- High-contrast compatibility
-- Screen-reader metadata where practical
-- Configurable shortcuts
-- Accessible error messages
+### Design From Experience
 
-## Compatibility Philosophy
+Real-world document and print-production workflows shall inform the product roadmap.
 
-PiratePDF should preserve document content faithfully whenever possible.
+Ideas should be validated against practical user needs rather than copied from competitor feature lists.
 
-When content cannot be reproduced exactly, the software must:
+### Documentation Is Part of the Product
 
-1. Preserve as much information as possible.
-2. Notify the user.
-3. Explain what was approximated, flattened, substituted, or skipped.
-4. Avoid silently discarding content.
+The source code, architecture, specifications, roadmap, and developer guidance shall be maintained as first-class project assets.
 
-## Documentation Philosophy
+## Edition Philosophy
 
-The documentation defines the intended software.
+PiratePDF follows this principle:
 
-The expected development lifecycle is:
+> Standard is complete. Professional is specialized.
 
-1. Idea
-2. Blueprint
-3. Technical specification
-4. Architecture review
-5. Implementation
-6. Testing
-7. Documentation update
-8. Release
+### Standard Edition
 
-## Release Philosophy
+Standard Edition shall provide a feature-rich, complete document-editing experience.
 
-PiratePDF should not release features merely because they appear functional.
+Standard users should have access to core capabilities including:
 
-A feature must also be:
+- PDF creation and editing.
+- Word-document conversion.
+- Page resizing.
+- Templates.
+- Personal color palettes.
+- Document Inspector.
+- Document Doctor.
+- PDF optimization.
+- Document comparison.
+- Plugin management.
+- General-purpose plugin support.
 
-- Stable
-- Recoverable
-- Testable
-- Documented
-- Accessible
-- Compatible with the supported platform range
-- Safe for real user documents
+Standard Edition should also help users learn document-editing and print-production concepts that may be useful in professional environments.
+
+### Professional Edition
+
+Professional Edition shall extend Standard with capabilities needed primarily by larger businesses and specialized production environments.
+
+Examples include:
+
+- FusionPro integration.
+- Advanced preflight.
+- PDF/X and PDF/A workflows.
+- Advanced color management.
+- Ink-coverage analysis.
+- Separation previews.
+- Batch processing.
+- Production reports.
+- Shared organizational templates.
+- Shared organizational palettes.
+- Managed plugin deployment.
+- Enterprise workflow automation.
+
+Professional Edition shall earn its value through specialized capability rather than by withholding essential document functionality.
+
+## Plugin Strategy
+
+PiratePDF Version 1.0 shall include a plugin architecture.
+
+The plugin system shall:
+
+- Be available to Standard and Professional users.
+- Keep optional integrations outside the core application.
+- Support version and compatibility checks.
+- Allow plugins to contribute commands and workflows through controlled extension points.
+- Protect the stability of the host application where practical.
+- Support an official FusionPro plugin for Professional Edition, subject to available integration and licensing options.
+
+Developer Mode is intentionally deferred until the plugin ecosystem is mature enough to justify it.
+
+## Engineering Commitments
+
+PiratePDF shall be developed using production-quality engineering practices.
+
+Each merged milestone should include, where applicable:
+
+- Maintainable implementation.
+- Automated tests.
+- Documentation updates.
+- Clean build output.
+- Passing continuous integration.
+- Clear traceability through BF work-item identifiers.
+- A focused pull request.
+- A demo or sample when it provides meaningful validation.
+
+The project shall favor clean, understandable architecture without introducing unnecessary abstraction.
+
+## Code Readability
+
+Source files should be organized for future readers.
+
+Methods should generally follow the natural execution flow from high-level entry points to lower-level implementation details.
+
+Long files should use simple, consistent section markers where they improve navigation.
+
+Comments should explain intent, constraints, or non-obvious decisions. Comments should not merely restate readable code.
+
+Architectural and file-purpose explanations belong primarily in the documentation library rather than in large source-code summaries.
 
 ## Success Criteria
 
-The project will be considered successful when PiratePDF can:
+PiratePDF will be considered successful when users can complete everyday document workflows without needing multiple PDF applications.
 
-- Reliably open, inspect, edit, and save complex PDF documents.
-- Handle documents with 6,000 pages or more.
-- Provide dependable object-level editing.
-- Support sophisticated color analysis and conversion.
-- Convert DOC and DOCX files into editable PDFs.
-- Preserve Unicode text and emoji safely.
-- Support Standard and Professional editions from one codebase.
-- Provide an extensible plugin and SDK architecture.
-- Maintain accurate and searchable engineering documentation.
+Success includes:
+
+- Users choosing PiratePDF because they prefer it.
+- Reliable handling of real-world documents.
+- High performance on large PDFs.
+- Clear and trustworthy editing behavior.
+- Strong document inspection and repair capabilities.
+- Useful Standard Edition functionality.
+- Clear Professional Edition value for production environments.
+- A clean codebase that contributors can understand.
+- Documentation that remains synchronized with the implementation.
+
+## Intentionally Deferred Capabilities
+
+The following ideas are valuable but are not required for Version 1.0:
+
+- Project Workspaces.
+- Workflow Marketplace.
+- Developer Mode.
+- Cloud synchronization.
+- Live collaboration.
+- Mobile companion applications.
+- AI-assisted content analysis.
+
+These ideas remain candidates for later releases and shall not distract from completing the Version 1.0 foundation.
+
+## Related Documents
+
+- PP-VSN-000 — PiratePDF Master Blueprint
+- PP-VSN-001 — Vision and Product Strategy
+- PP-ARCH-001 — BlackFlag Engine Architecture
+- PP-ROAD-001 — Development Roadmap
+- PP-GOV-001 — Project Governance Guide
+- PP-GOV-002 — Documentation Standards
+
+## Related BF Work Items
+
+- BF-1000
+- BF-2000
+- BF-8000
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-24 | Standardized the project mission, product principles, and edition philosophy. |

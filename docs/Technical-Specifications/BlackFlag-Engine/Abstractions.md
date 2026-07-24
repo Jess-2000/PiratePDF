@@ -1,5 +1,18 @@
 # BlackFlag Engine Abstractions Specification
 
+| Field | Value |
+|---|---|
+| **Document ID** | PP-SPEC-010 |
+| **Category** | Technical Specification |
+| **Version** | 1.0 |
+| **Status** | In Development |
+| **Owner** | PiratePDF Project |
+| **Related BF Work Items** | BF-1000, BF-2000 |
+| **Last Updated** | 2026-07-24 |
+| **Next Review** | 2026-10-24 |
+
+---
+
 **Status:** Draft  
 **Version:** 1.0
 
@@ -27,3 +40,8 @@
 - `IAsyncDisposable`
 
 The interface must support files larger than 2 GB.
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-24 | Standardized specification metadata and governance structure. |

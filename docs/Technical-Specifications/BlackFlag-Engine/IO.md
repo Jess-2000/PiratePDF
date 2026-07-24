@@ -1,5 +1,18 @@
 # BlackFlag Engine I/O Specification
 
+| Field | Value |
+|---|---|
+| **Document ID** | PP-SPEC-012 |
+| **Category** | Technical Specification |
+| **Version** | 1.0 |
+| **Status** | In Development |
+| **Owner** | PiratePDF Project |
+| **Related BF Work Items** | BF-1000, BF-2100 |
+| **Last Updated** | 2026-07-24 |
+| **Next Review** | 2026-10-24 |
+
+---
+
 **Status:** Draft  
 **Version:** 1.0
 
@@ -37,3 +50,8 @@
 - Reads after disposal.
 - Concurrent independent reads.
 - Repeated disposal.
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-24 | Standardized specification metadata and governance structure. |

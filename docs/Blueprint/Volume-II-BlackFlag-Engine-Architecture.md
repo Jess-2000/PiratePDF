@@ -1,4 +1,17 @@
-# PiratePDF Master Blueprint
+# PiratePDF Master Blueprint - Volume II: BlackFlag Engine Architecture
+
+| Field | Value |
+|---|---|
+| **Document ID** | PP-ARCH-001 |
+| **Category** | Architecture |
+| **Version** | 1.0 |
+| **Status** | Approved |
+| **Owner** | PiratePDF Project |
+| **Related BF Work Items** | BF-1000, BF-2000 |
+| **Last Updated** | 2026-07-24 |
+| **Next Review** | 2026-10-24 |
+
+---
 
 ## Volume II — BlackFlag Engine Architecture
 
@@ -385,3 +398,8 @@ This architecture is correctly implemented when:
 | Version | Date | Summary |
 |---|---|---|
 | 1.0 | July 22, 2026 | Initial authoritative Markdown architecture. |
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-24 | Standardized document metadata and Blueprint structure. |
