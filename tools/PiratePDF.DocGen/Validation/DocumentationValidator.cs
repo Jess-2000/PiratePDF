@@ -1,0 +1,310 @@
+﻿using System.Globalization;
+using System.Text.RegularExpressions;
+
+using PiratePDF.DocGen.Models;
+
+namespace PiratePDF.DocGen.Validation;
+
+internal static partial class DocumentationValidator
+{
+    // =========================================================================
+    // Configuration
+    // =========================================================================
+
+    private static readonly HashSet<string> ValidStatuses =
+    [
+        "Proposed",
+        "Draft",
+        "Review",
+        "Approved",
+        "In Development",
+        "Implemented",
+        "Tested",
+        "Released",
+        "Deferred",
+        "Deprecated",
+        "Superseded",
+        "Rejected"
+    ];
+
+    // =========================================================================
+    // Public API
+    // =========================================================================
+
+    public static DocumentationValidationResult Validate(
+        IReadOnlyCollection<DocumentMetadata> documents)
+    {
+        ArgumentNullException.ThrowIfNull(documents);
+
+        var issues = new List<ValidationIssue>();
+
+        // Validate each document independently before performing checks that
+        // compare documents with one another.
+        foreach (var document in documents)
+        {
+            ValidateDocument(document, issues);
+        }
+
+        ValidateDuplicateDocumentIds(documents, issues);
+
+        return new DocumentationValidationResult(issues);
+    }
+
+    // =========================================================================
+    // Document Validation
+    // =========================================================================
+
+    private static void ValidateDocument(
+        DocumentMetadata document,
+        List<ValidationIssue> issues)
+    {
+        ArgumentNullException.ThrowIfNull(document);
+        ArgumentNullException.ThrowIfNull(issues);
+
+        ValidateRequiredMetadata(document, issues);
+        ValidateStatus(document, issues);
+        ValidateWorkItemReferences(document, issues);
+        ValidateMetadataDates(document, issues);
+    }
+
+    private static void ValidateRequiredMetadata(
+        DocumentMetadata document,
+        List<ValidationIssue> issues)
+    {
+        ValidateRequiredField(
+            document.Title,
+            "Title",
+            document,
+            issues);
+
+        ValidateRequiredField(
+            document.DocumentId,
+            "Document ID",
+            document,
+            issues);
+
+        ValidateRequiredField(
+            document.Category,
+            "Category",
+            document,
+            issues);
+
+        ValidateRequiredField(
+            document.Version,
+            "Version",
+            document,
+            issues);
+
+        ValidateRequiredField(
+            document.Status,
+            "Status",
+            document,
+            issues);
+
+        ValidateRequiredField(
+            document.Owner,
+            "Owner",
+            document,
+            issues);
+
+        ValidateRequiredField(
+            document.RelatedWorkItems,
+            "Related BF Work Items",
+            document,
+            issues);
+
+        ValidateRequiredField(
+            document.LastUpdated,
+            "Last Updated",
+            document,
+            issues);
+
+        ValidateRequiredField(
+            document.NextReview,
+            "Next Review",
+            document,
+            issues);
+    }
+
+    // =========================================================================
+    // Field Validation
+    // =========================================================================
+
+    private static void ValidateRequiredField(
+        string value,
+        string fieldName,
+        DocumentMetadata document,
+        List<ValidationIssue> issues)
+    {
+        if (!string.IsNullOrWhiteSpace(value))
+        {
+            return;
+        }
+
+        issues.Add(
+            new ValidationIssue(
+                ValidationSeverity.Error,
+                GetDisplayDocumentId(document),
+                document.FilePath,
+                $"{fieldName} is missing."));
+    }
+
+    private static void ValidateStatus(
+        DocumentMetadata document,
+        List<ValidationIssue> issues)
+    {
+        if (string.IsNullOrWhiteSpace(document.Status))
+        {
+            return;
+        }
+
+        if (ValidStatuses.Contains(document.Status))
+        {
+            return;
+        }
+
+        issues.Add(
+            new ValidationIssue(
+                ValidationSeverity.Error,
+                GetDisplayDocumentId(document),
+                document.FilePath,
+                $"Unknown document status '{document.Status}'."));
+    }
+
+    private static void ValidateWorkItemReferences(
+        DocumentMetadata document,
+        List<ValidationIssue> issues)
+    {
+        if (string.IsNullOrWhiteSpace(document.RelatedWorkItems))
+        {
+            return;
+        }
+
+        var references = document.RelatedWorkItems.Split(
+            [',', ';'],
+            StringSplitOptions.RemoveEmptyEntries |
+            StringSplitOptions.TrimEntries);
+
+        if (references.Length == 0)
+        {
+            issues.Add(
+                new ValidationIssue(
+                    ValidationSeverity.Error,
+                    GetDisplayDocumentId(document),
+                    document.FilePath,
+                    "Related BF Work Items does not contain a valid reference."));
+
+            return;
+        }
+
+        foreach (var reference in references)
+        {
+            if (WorkItemPattern().IsMatch(reference))
+            {
+                continue;
+            }
+
+            issues.Add(
+                new ValidationIssue(
+                    ValidationSeverity.Error,
+                    GetDisplayDocumentId(document),
+                    document.FilePath,
+                    $"Invalid BF work-item reference '{reference}'."));
+        }
+    }
+
+    private static void ValidateMetadataDates(
+        DocumentMetadata document,
+        List<ValidationIssue> issues)
+    {
+        ValidateDate(
+            document.LastUpdated,
+            "Last Updated",
+            document,
+            issues);
+
+        ValidateDate(
+            document.NextReview,
+            "Next Review",
+            document,
+            issues);
+    }
+
+    private static void ValidateDate(
+        string value,
+        string fieldName,
+        DocumentMetadata document,
+        List<ValidationIssue> issues)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return;
+        }
+
+        if (DateOnly.TryParseExact(
+                value,
+                "yyyy-MM-dd",
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out _))
+        {
+            return;
+        }
+
+        issues.Add(
+            new ValidationIssue(
+                ValidationSeverity.Error,
+                GetDisplayDocumentId(document),
+                document.FilePath,
+                $"{fieldName} must use the YYYY-MM-DD format."));
+    }
+
+    // =========================================================================
+    // Cross-Document Validation
+    // =========================================================================
+
+    private static void ValidateDuplicateDocumentIds(
+        IReadOnlyCollection<DocumentMetadata> documents,
+        List<ValidationIssue> issues)
+    {
+        // Missing identifiers are reported by required-field validation and
+        // should not be treated as one shared duplicate identifier.
+        var duplicateGroups = documents
+            .Where(document =>
+                !string.IsNullOrWhiteSpace(document.DocumentId))
+            .GroupBy(
+                document => document.DocumentId,
+                StringComparer.OrdinalIgnoreCase)
+            .Where(group => group.Count() > 1);
+
+        foreach (var duplicateGroup in duplicateGroups)
+        {
+            foreach (var document in duplicateGroup)
+            {
+                issues.Add(
+                    new ValidationIssue(
+                        ValidationSeverity.Error,
+                        document.DocumentId,
+                        document.FilePath,
+                        $"Duplicate Document ID '{document.DocumentId}'."));
+            }
+        }
+    }
+
+    // =========================================================================
+    // Helpers
+    // =========================================================================
+
+    private static string GetDisplayDocumentId(
+        DocumentMetadata document)
+    {
+        return string.IsNullOrWhiteSpace(document.DocumentId)
+            ? "(missing)"
+            : document.DocumentId;
+    }
+
+    [GeneratedRegex(
+        @"^BF-\d{4,}$",
+        RegexOptions.CultureInvariant)]
+    private static partial Regex WorkItemPattern();
+}

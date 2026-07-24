@@ -1,5 +1,18 @@
 # BlackFlag Engine Core Specification
 
+| Field | Value |
+|---|---|
+| **Document ID** | PP-SPEC-011 |
+| **Category** | Technical Specification |
+| **Version** | 1.0 |
+| **Status** | In Development |
+| **Owner** | PiratePDF Project |
+| **Related BF Work Items** | BF-1000, BF-2150 |
+| **Last Updated** | 2026-07-24 |
+| **Next Review** | 2026-10-24 |
+
+---
+
 **Status:** Draft  
 **Version:** 1.0
 
@@ -37,3 +50,8 @@ Required behavior:
 - Support containment checks.
 - Support intersection checks.
 - Treat the end offset as exclusive.
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-24 | Standardized specification metadata and governance structure. |
