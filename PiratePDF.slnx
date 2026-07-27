@@ -3,14 +3,22 @@
     <Project Path="src/BlackFlag.Engine.Abstractions/BlackFlag.Engine.Abstractions.csproj" />
     <Project Path="src/BlackFlag.Engine.Core/BlackFlag.Engine.Core.csproj" />
     <Project Path="src/BlackFlag.Engine.Document/BlackFlag.Engine.Document.csproj" />
+    <Project Path="src/BlackFlag.Engine.Editing/BlackFlag.Engine.Editing.csproj" />
     <Project Path="src/BlackFlag.Engine.IO/BlackFlag.Engine.IO.csproj" />
+    <Project Path="src/BlackFlag.Engine.Parsing/BlackFlag.Engine.Parsing.csproj" />
+    <Project Path="src/BlackFlag.Engine.Rendering/BlackFlag.Engine.Rendering.csproj" />
     <Project Path="src/BlackFlag.Engine.SDK/BlackFlag.Engine.SDK.csproj" />
     <Project Path="src/BlackFlag.Engine.Syntax/BlackFlag.Engine.Syntax.csproj" />
+    <Project Path="src/BlackFlag.Engine.Writing/BlackFlag.Engine.Writing.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/BlackFlag.Engine.Abstractions.Tests/BlackFlag.Engine.Abstractions.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.Core.Tests/BlackFlag.Engine.Core.Tests.csproj" />
+    <Project Path="tests/BlackFlag.Engine.Editing.Tests/BlackFlag.Engine.Editing.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.IO.Tests/BlackFlag.Engine.IO.Tests.csproj" />
+    <Project Path="tests/BlackFlag.Engine.Parsing.Tests/BlackFlag.Engine.Parsing.Tests.csproj" />
+    <Project Path="tests/BlackFlag.Engine.Rendering.Tests/BlackFlag.Engine.Rendering.Tests.csproj" />
+    <Project Path="tests/BlackFlag.Engine.Writing.Tests/BlackFlag.Engine.Writing.Tests.csproj" />
     <Project Path="tests/PiratePDF.DocGen.Tests/PiratePDF.DocGen.Tests.csproj" />
   </Folder>
 </Solution>
