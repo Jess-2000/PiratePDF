@@ -1,0 +1,129 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+  pull_request:
+    branches:
+      - main
+      - develop
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test-and-validate:
+    name: Build, Test, and Validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "1"
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "1"
+      NUGET_XMLDOC_MODE: skip
+      CONFIGURATION: Release
+      SOLUTION_PATH: ./PiratePDF.slnx
+      DOCGEN_PROJECT_PATH: ./tools/PiratePDF.DocGen/PiratePDF.DocGen.csproj
+      DOCGEN_DLL_PATH: ./tools/PiratePDF.DocGen/bin/Release/net10.0/PiratePDF.DocGen.dll
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up .NET 10
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Display .NET information
+        run: dotnet --info
+
+      - name: Restore dependencies
+        run: dotnet restore "$SOLUTION_PATH"
+
+      - name: Build solution
+        run: >
+          dotnet build "$SOLUTION_PATH"
+          --configuration "$CONFIGURATION"
+          --no-restore
+
+      - name: Run tests
+        run: >
+          dotnet test "$SOLUTION_PATH"
+          --configuration "$CONFIGURATION"
+          --no-build
+          --no-restore
+          --logger "console;verbosity=normal"
+
+      - name: Verify DocGen build artifact
+        shell: bash
+        run: |
+          if [[ ! -f "$DOCGEN_DLL_PATH" ]]; then
+            echo "::error::DocGen Release artifact was not produced at $DOCGEN_DLL_PATH"
+            exit 1
+          fi
+
+          echo "DocGen artifact found: $DOCGEN_DLL_PATH"
+
+      - name: Generate documentation index and validate
+        run: dotnet "$DOCGEN_DLL_PATH" all
+
+      - name: Analyze documentation health
+        run: dotnet "$DOCGEN_DLL_PATH" health
+
+      - name: Verify no documentation repairs are required
+        run: dotnet "$DOCGEN_DLL_PATH" repair
+
+      - name: Verify tracked generated files are current
+        shell: bash
+        run: |
+          if ! git diff --quiet --exit-code; then
+            echo "::error::Tracked generated files are out of date."
+            echo
+            echo "Run these commands locally and commit the resulting changes:"
+            echo "  dotnet build ./PiratePDF.slnx --configuration Release"
+            echo "  dotnet ./tools/PiratePDF.DocGen/bin/Release/net10.0/PiratePDF.DocGen.dll all"
+            echo
+            git diff --stat
+            echo
+            git diff
+            exit 1
+          fi
+
+          echo "Tracked generated files are current."
+
+      - name: Verify no unexpected files were generated
+        shell: bash
+        run: |
+          unexpected_files="$(git ls-files --others --exclude-standard)"
+
+          if [[ -n "$unexpected_files" ]]; then
+            echo "::error::CI generated unexpected untracked files."
+            echo "$unexpected_files"
+            exit 1
+          fi
+
+          echo "No unexpected untracked files were generated."
+
+      - name: Verify repository formatting
+        shell: bash
+        run: |
+          if ! git diff --check; then
+            echo "::error::Whitespace or formatting errors were detected."
+            exit 1
+          fi
+
+          echo "No whitespace errors were detected."

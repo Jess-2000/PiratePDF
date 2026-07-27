@@ -43,3 +43,5 @@ docs/_site/
 # Publish output
 publish/
 docs/ValidationReport.md
+docs/Documentation-Health.md
+docs/Document-Changes.md

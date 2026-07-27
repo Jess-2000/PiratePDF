@@ -1,4 +1,4 @@
-@'
+﻿@'
 # PiratePDF Documentation Standards
 
 | Field | Value |
@@ -28,10 +28,10 @@ Generated Word, PDF, HTML, and in-application documentation are publications der
 |---|---|---|
 | PP-VSN | Vision | PP-VSN-001 |
 | PP-ARCH | Architecture | PP-ARCH-001 |
-| PP-ROAD | Roadmap | PP-ROAD-001 |
+| PP-ROAD | Roadmap | PP-ROAD-000 |
 | PP-SPEC | Technical Specification | PP-SPEC-001 |
 | PP-DEV | Developer Documentation | PP-DEV-001 |
-| PP-GOV | Governance | PP-GOV-001 |
+| PP-GOV | Governance | PP-GOV-002 |
 | PP-ADR | Architecture Decision Record | PP-ADR-001 |
 | PP-USER | User Documentation | PP-USER-001 |
 | PP-REL | Release Documentation | PP-REL-001 |
@@ -53,7 +53,7 @@ Every authoritative Markdown document must include:
 
 ## Standard Header
 
-```markdown
+markdown
 # Document Title
 
 | Field | Value |
@@ -68,3 +68,40 @@ Every authoritative Markdown document must include:
 | **Next Review** | 2026-10-23 |
 
 ---
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-25 | Added missing revision history section. |
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-25 | Added missing revision history section. |
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-25 | Added missing revision history section. |
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-25 | Added missing revision history section. |
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-25 | Added missing revision history section. |
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-25 | Added missing revision history section. |
+

@@ -1,4 +1,4 @@
-# PiratePDF Project Charter
+﻿# PiratePDF Project Charter
 
 | Field | Value |
 |---|---|
@@ -203,8 +203,8 @@ These ideas remain candidates for later releases and shall not distract from com
 - PP-VSN-000 — PiratePDF Master Blueprint
 - PP-VSN-001 — Vision and Product Strategy
 - PP-ARCH-001 — BlackFlag Engine Architecture
-- PP-ROAD-001 — Development Roadmap
-- PP-GOV-001 — Project Governance Guide
+- PP-ROAD-000 — Development Roadmap
+- PP-GOV-002 — Project Governance Guide
 - PP-GOV-002 — Documentation Standards
 
 ## Related BF Work Items
@@ -218,3 +218,4 @@ These ideas remain candidates for later releases and shall not distract from com
 | Version | Date | Description |
 |---|---|---|
 | 1.0 | 2026-07-24 | Standardized the project mission, product principles, and edition philosophy. |
+

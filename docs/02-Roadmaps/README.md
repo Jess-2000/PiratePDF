@@ -1,4 +1,4 @@
-# PiratePDF Roadmaps
+﻿# PiratePDF Roadmaps
 
 | Field | Value |
 |---|---|
@@ -43,7 +43,7 @@ Tracks release planning, feature freezes, beta milestones, and production releas
 
 # Related Documents
 
-- PP-GOV-001 — Project Governance Guide
+- PP-GOV-002 — Project Governance Guide
 - PP-GOV-002 — Documentation Standards
 - PP-GOV-003 — Documentation Validation Rules
 
@@ -54,3 +54,4 @@ Tracks release planning, feature freezes, beta milestones, and production releas
 | Version | Date | Description |
 |---|---|---|
 | 1.0 | 2026-07-24 | Initial roadmap index. |
+

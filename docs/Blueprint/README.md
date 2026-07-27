@@ -1,4 +1,4 @@
-# PiratePDF Master Blueprint
+﻿# PiratePDF Master Blueprint
 
 | Field | Value |
 |---|---|
@@ -42,9 +42,9 @@ Conflicts between the Blueprint and a technical specification shall be reviewed 
 
 ## Related Documents
 
-- PP-GOV-001 - Project Governance Guide
+- PP-GOV-002 - Project Governance Guide
 - PP-GOV-002 - Documentation Standards
-- PP-ROAD-001 - Development Roadmap
+- PP-ROAD-000 - Development Roadmap
 - PP-ADR-000 - Architecture Decision Records
 
 ## Related BF Work Items
@@ -58,3 +58,4 @@ Conflicts between the Blueprint and a technical specification shall be reviewed 
 | Version | Date | Description |
 |---|---|---|
 | 1.0 | 2026-07-24 | Standardized the Master Blueprint index and volume catalog. |
+
