@@ -20,8 +20,12 @@ packages/
 # Test Results
 TestResults/
 
-# Coverage
-coverage/
+# Test coverage output
+**/TestResults/
+**/coverage.cobertura.xml
+**/coverage.opencover.xml
+**/coverage.json
+**/coverage.info
 *.coverage
 *.coveragexml
 
