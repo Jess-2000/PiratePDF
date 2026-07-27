@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using System.Text.RegularExpressions;
-
+using PiratePDF.DocGen.Library;
 using PiratePDF.DocGen.Models;
 
 namespace PiratePDF.DocGen.Validation;
@@ -48,6 +48,38 @@ internal static partial class DocumentationValidator
         ValidateDuplicateDocumentIds(documents, issues);
 
         return new DocumentationValidationResult(issues);
+    }
+
+    public static DocumentationValidationResult Validate(
+        DocumentationLibrary library)
+    {
+        ArgumentNullException.ThrowIfNull(library);
+
+        var issues = new List<ValidationIssue>();
+
+        // Metadata rules validate the standardized document header.
+        foreach (var document in library.AllDocuments)
+        {
+            ValidateDocument(document.Metadata, issues);
+        }
+
+        ValidateDuplicateDocumentIds(
+            library.AllDocuments
+            .Select(document => document.Metadata)
+            .ToArray(),
+            issues);
+
+        // Structural rules inspect complete Markdown content and report malformed
+        // constructs before they cause misleading section-level findings.
+        foreach (var document in library.AllDocuments)
+        {
+            issues.AddRange(
+                MarkdownStructureValidator.Validate(
+                    document));
+        }
+
+        return new DocumentationValidationResult(
+            issues);
     }
 
     // =========================================================================

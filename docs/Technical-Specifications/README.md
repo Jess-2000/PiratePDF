@@ -1,4 +1,4 @@
-# PiratePDF Technical Specifications
+﻿# PiratePDF Technical Specifications
 
 | Field | Value |
 |---|---|
@@ -65,7 +65,7 @@ A specification marked `In Development` may describe both implemented and planne
 
 - PP-VSN-000 - PiratePDF Master Blueprint
 - PP-ARCH-001 - BlackFlag Engine Architecture
-- PP-GOV-001 - Project Governance Guide
+- PP-GOV-002 - Project Governance Guide
 - PP-GOV-002 - Documentation Standards
 - PP-GOV-003 - Documentation Validation Rules
 - PP-ADR-000 - Architecture Decision Records
@@ -82,3 +82,4 @@ A specification marked `In Development` may describe both implemented and planne
 | Version | Date | Description |
 |---|---|---|
 | 1.0 | 2026-07-24 | Standardized the technical specification catalog. |
+

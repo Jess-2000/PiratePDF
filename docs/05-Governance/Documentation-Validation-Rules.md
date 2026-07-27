@@ -1,4 +1,4 @@
-# Documentation Validation Rules
+﻿# Documentation Validation Rules
 
 | Field | Value |
 |---|---|
@@ -171,7 +171,7 @@ Future versions of DocGen are expected to validate:
 
 # Related Documents
 
-- PP-GOV-001 — Project Governance Guide
+- PP-GOV-002 — Project Governance Guide
 - PP-GOV-002 — Documentation Standards
 
 ---
@@ -181,3 +181,4 @@ Future versions of DocGen are expected to validate:
 | Version | Date | Description |
 |---|---|---|
 | 1.0 | 2026-07-24 | Initial document. |
+

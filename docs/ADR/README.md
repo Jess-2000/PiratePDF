@@ -44,5 +44,35 @@ Approved ADRs remain in the repository even when superseded so the architectural
 
 Use the repository ADR template:
 
-```text
+text
 docs/ADR/ADR-Template.md
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-25 | Added missing revision history section. |
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-25 | Added missing revision history section. |
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-25 | Added missing revision history section. |
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-25 | Added missing revision history section. |
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-25 | Added missing revision history section. |

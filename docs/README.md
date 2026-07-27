@@ -93,9 +93,39 @@ Authoritative documents use stable document identifiers.
 
 Examples:
 
-```text
+text
 PP-VSN-001
 PP-ARCH-001
 PP-SPEC-013
 PP-GOV-003
 PP-ADR-006
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-25 | Added missing revision history section. |
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-25 | Added missing revision history section. |
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-25 | Added missing revision history section. |
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-25 | Added missing revision history section. |
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-07-25 | Added missing revision history section. |
