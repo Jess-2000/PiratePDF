@@ -50,6 +50,20 @@ public sealed class PdfDocument
             new PdfObjectStore());
     }
 
+    internal void BindCoreStructure(
+        PdfObjectIdentifier catalogIdentifier,
+        PdfObjectIdentifier pageTreeIdentifier)
+    {
+        Catalog.BindObjectIdentifier(
+            catalogIdentifier);
+
+        Pages.BindObjectIdentifier(
+            pageTreeIdentifier);
+
+        Trailer.SetRootObject(
+            catalogIdentifier);
+    }
+
     public void SetVersion(PdfVersion version)
     {
         Version = version;

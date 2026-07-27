@@ -1,14 +1,22 @@
 using System.Collections;
 
+using BlackFlag.Engine.Document.Model;
+using BlackFlag.Engine.Document.Objects;
+using BlackFlag.Engine.Document.Objects.Primitives;
+
 namespace BlackFlag.Engine.Document.Pages;
 
 /// <summary>
 /// Owns the ordered pages of a PDF document.
 /// </summary>
 public sealed class PdfPageTree :
-    IReadOnlyList<PdfPage>
+    IReadOnlyList<PdfPage>,
+    IPdfDictionaryBackedModel
 {
     private readonly List<PdfPage> pages =
+        new();
+
+    private readonly PdfObjectBinding binding =
         new();
 
     public int Count =>
@@ -17,13 +25,17 @@ public sealed class PdfPageTree :
     public PdfPage this[int index] =>
         pages[index];
 
+    internal PdfObjectIdentifier? ObjectIdentifier =>
+        binding.Identifier;
+
     public void Add(PdfPage page)
     {
         ArgumentNullException.ThrowIfNull(page);
 
-        EnsurePageIsNotPresent(page);
+        EnsurePageCanBeAdded(page);
 
         pages.Add(page);
+        page.AttachToParent(this);
     }
 
     public void Insert(
@@ -38,18 +50,27 @@ public sealed class PdfPageTree :
                 nameof(index));
         }
 
-        EnsurePageIsNotPresent(page);
+        EnsurePageCanBeAdded(page);
 
         pages.Insert(
             index,
             page);
+
+        page.AttachToParent(this);
     }
 
     public bool Remove(PdfPage page)
     {
         ArgumentNullException.ThrowIfNull(page);
 
-        return pages.Remove(page);
+        if (!pages.Remove(page))
+        {
+            return false;
+        }
+
+        page.DetachFromParent(this);
+
+        return true;
     }
 
     public PdfPage RemoveAt(int index)
@@ -57,6 +78,7 @@ public sealed class PdfPageTree :
         var page = pages[index];
 
         pages.RemoveAt(index);
+        page.DetachFromParent(this);
 
         return page;
     }
@@ -99,6 +121,43 @@ public sealed class PdfPageTree :
         return pages.IndexOf(page);
     }
 
+    internal void BindObjectIdentifier(
+        PdfObjectIdentifier identifier)
+    {
+        binding.Bind(identifier);
+    }
+
+    internal PdfObjectIdentifier GetRequiredObjectIdentifier()
+    {
+        return binding.GetRequiredIdentifier(
+            nameof(PdfPageTree));
+    }
+
+    PdfDictionary
+        IPdfDictionaryBackedModel.CreateDictionarySnapshot()
+    {
+        return CreateDictionarySnapshot();
+    }
+
+    internal PdfDictionary CreateDictionarySnapshot()
+    {
+        var dictionary = new PdfDictionary();
+
+        dictionary.Add(
+            PdfNames.Type,
+            PdfNames.Pages);
+
+        dictionary.Add(
+            PdfNames.Count,
+            new PdfInteger(Count));
+
+        dictionary.Add(
+            PdfNames.Kids,
+            CreateKidsArray());
+
+        return dictionary;
+    }
+
     public IEnumerator<PdfPage> GetEnumerator()
     {
         return pages.GetEnumerator();
@@ -109,13 +168,40 @@ public sealed class PdfPageTree :
         return GetEnumerator();
     }
 
-    private void EnsurePageIsNotPresent(
+    private PdfArray CreateKidsArray()
+    {
+        var references = new PdfArray();
+
+        foreach (var page in pages)
+        {
+            var identifier =
+                page.ObjectIdentifier ??
+                throw new InvalidOperationException(
+                    $"Page '{page.Id}' has not been assigned an " +
+                    "indirect-object identifier.");
+
+            references.Add(
+                new PdfIndirectReference(identifier));
+        }
+
+        return references;
+    }
+
+    private void EnsurePageCanBeAdded(
         PdfPage page)
     {
         if (pages.Contains(page))
         {
             throw new InvalidOperationException(
                 "The page already belongs to this page tree.");
+        }
+
+        if (
+            page.Parent is not null &&
+            !ReferenceEquals(page.Parent, this))
+        {
+            throw new InvalidOperationException(
+                "The page already belongs to another page tree.");
         }
     }
 }

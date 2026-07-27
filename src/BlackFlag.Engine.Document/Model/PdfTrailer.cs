@@ -1,4 +1,5 @@
 using BlackFlag.Engine.Document.Objects;
+using BlackFlag.Engine.Document.Objects.Primitives;
 
 namespace BlackFlag.Engine.Document.Model;
 
@@ -48,5 +49,68 @@ public sealed class PdfTrailer
         }
 
         PreviousCrossReferenceOffset = offset;
+    }
+
+    internal PdfDictionary CreateDictionarySnapshot(
+        int objectStoreSize)
+    {
+        if (objectStoreSize < 1)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(objectStoreSize),
+                objectStoreSize,
+                "The trailer size must be at least one.");
+        }
+
+        var rootObject =
+            RootObject ??
+            throw new InvalidOperationException(
+                "The trailer root object has not been assigned.");
+
+        var dictionary = new PdfDictionary();
+
+        dictionary.Add(
+            PdfNames.Size,
+            new PdfInteger(objectStoreSize));
+
+        dictionary.Add(
+            PdfNames.Root,
+            new PdfIndirectReference(rootObject));
+
+        AddOptionalReference(
+            dictionary,
+            PdfNames.Info,
+            InformationObject);
+
+        AddOptionalReference(
+            dictionary,
+            PdfNames.Encrypt,
+            EncryptionObject);
+
+        if (PreviousCrossReferenceOffset.HasValue)
+        {
+            dictionary.Add(
+                PdfNames.Previous,
+                new PdfInteger(
+                    PreviousCrossReferenceOffset.Value));
+        }
+
+        return dictionary;
+    }
+
+    private static void AddOptionalReference(
+        PdfDictionary dictionary,
+        PdfName key,
+        PdfObjectIdentifier? identifier)
+    {
+        if (!identifier.HasValue)
+        {
+            return;
+        }
+
+        dictionary.Add(
+            key,
+            new PdfIndirectReference(
+                identifier.Value));
     }
 }

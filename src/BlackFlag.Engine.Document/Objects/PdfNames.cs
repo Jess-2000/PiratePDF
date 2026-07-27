@@ -37,6 +37,12 @@ public static class PdfNames
     public static PdfName Contents { get; } =
         PdfName.FromLatin1("Contents");
 
+    public static PdfName Language { get; } =
+        PdfName.FromLatin1("Lang");
+
+    public static PdfName Rotate { get; } =
+        PdfName.FromLatin1("Rotate");
+
     public static PdfName Length { get; } =
         PdfName.FromLatin1("Length");
 
