@@ -14,6 +14,7 @@
   <Folder Name="/tests/">
     <Project Path="tests/BlackFlag.Engine.Abstractions.Tests/BlackFlag.Engine.Abstractions.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.Core.Tests/BlackFlag.Engine.Core.Tests.csproj" />
+    <Project Path="tests/BlackFlag.Engine.Document.Tests/BlackFlag.Engine.Document.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.Editing.Tests/BlackFlag.Engine.Editing.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.IO.Tests/BlackFlag.Engine.IO.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.Parsing.Tests/BlackFlag.Engine.Parsing.Tests.csproj" />
