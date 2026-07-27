@@ -10,5 +10,9 @@ public enum PdfObjectKind
     WholeNumber,
     RealNumber,
     NameValue,
-    ByteString
+    ByteString,
+    ArrayValue,
+    DictionaryValue,
+    StreamValue,
+    IndirectReference
 }

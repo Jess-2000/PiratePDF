@@ -54,14 +54,14 @@ public sealed class PdfName :
     public bool Equals(PdfName? other)
     {
         return other is not null &&
-               bytes.AsSpan().SequenceEqual(
-                   other.bytes);
+            bytes.AsSpan().SequenceEqual(
+                other.bytes);
     }
 
     public override bool Equals(object? obj)
     {
         return obj is PdfName other &&
-               Equals(other);
+            Equals(other);
     }
 
     public override int GetHashCode()
