@@ -1,121 +1,126 @@
-using BlackFlag.Engine.Abstractions.IO;
-
 using Microsoft.Win32.SafeHandles;
+using BlackFlag.Engine.Abstractions.IO;
+using FileRandomAccess = System.IO.RandomAccess;
 
 namespace BlackFlag.Engine.IO.Sources;
 
 /// <summary>
-/// Provides position-independent, read-only access to a file.
+/// Provides position-independent random access to a file.
 /// </summary>
-public sealed class FileRandomAccessSource : IRandomAccessSource
+public sealed class FileRandomAccessSource :
+    IRandomAccessSource
 {
-    private readonly SafeFileHandle fileHandle;
-    private bool isDisposed;
+    private readonly SafeFileHandle handle;
+    private readonly string filePath;
 
-    /// <summary>
-    /// Initializes a new source for the specified file.
-    /// </summary>
-    /// <param name="filePath">
-    /// The path of the file to open.
-    /// </param>
-    /// <exception cref="ArgumentException">
-    /// Thrown when <paramref name="filePath"/> is null, empty, or whitespace.
-    /// </exception>
-    /// <exception cref="FileNotFoundException">
-    /// Thrown when the specified file does not exist.
-    /// </exception>
-    public FileRandomAccessSource(string filePath)
+    private bool disposed;
+
+    public FileRandomAccessSource(string path)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
+        ArgumentException.ThrowIfNullOrWhiteSpace(path);
 
-        FilePath = Path.GetFullPath(filePath);
+        filePath = Path.GetFullPath(path);
 
-        if (!File.Exists(FilePath))
-        {
-            throw new FileNotFoundException(
-                "The requested random-access file could not be found.",
-                FilePath);
-        }
-
-        fileHandle = File.OpenHandle(
-            FilePath,
+        handle = File.OpenHandle(
+            filePath,
             FileMode.Open,
             FileAccess.Read,
             FileShare.Read,
-            FileOptions.Asynchronous | FileOptions.RandomAccess);
+            FileOptions.RandomAccess);
+    }
 
-        try
+    /// <summary>
+    /// Gets the normalized path of the opened file.
+    /// </summary>
+    public string FilePath
+    {
+        get
         {
-            Length = RandomAccess.GetLength(fileHandle);
-        }
-        catch
-        {
-            fileHandle.Dispose();
-            throw;
+            EnsureNotDisposed();
+            return filePath;
         }
     }
 
     /// <summary>
-    /// Gets the normalized absolute path of the source file.
+    /// Gets the current length of the file.
     /// </summary>
-    public string FilePath { get; }
-
-    /// <inheritdoc />
-    public long Length { get; }
-
-    /// <inheritdoc />
-    public int Read(long offset, Span<byte> destination)
+    public long Length
     {
-        ThrowIfDisposed();
+        get
+        {
+            EnsureNotDisposed();
+
+            return FileRandomAccess.GetLength(handle);
+        }
+    }
+
+    public int Read(
+        long offset,
+        Span<byte> destination)
+    {
+        EnsureNotDisposed();
         ValidateOffset(offset);
 
-        if (destination.IsEmpty || offset >= Length)
+        if (destination.IsEmpty)
         {
             return 0;
         }
 
-        return RandomAccess.Read(
-            fileHandle,
+        var length = Length;
+
+        // Reading at or beyond EOF returns zero bytes.
+        if (offset >= length)
+        {
+            return 0;
+        }
+
+        return FileRandomAccess.Read(
+            handle,
             destination,
             offset);
     }
 
-    /// <inheritdoc />
     public ValueTask<int> ReadAsync(
         long offset,
         Memory<byte> destination,
         CancellationToken cancellationToken = default)
     {
-        ThrowIfDisposed();
+        EnsureNotDisposed();
         ValidateOffset(offset);
 
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (destination.IsEmpty || offset >= Length)
+        if (destination.IsEmpty)
         {
             return ValueTask.FromResult(0);
         }
 
-        return RandomAccess.ReadAsync(
-            fileHandle,
+        var length = Length;
+
+        // Reading at or beyond EOF returns zero bytes.
+        if (offset >= length)
+        {
+            return ValueTask.FromResult(0);
+        }
+
+        return FileRandomAccess.ReadAsync(
+            handle,
             destination,
             offset,
             cancellationToken);
     }
 
-    /// <inheritdoc />
     public void Dispose()
     {
-        if (isDisposed)
+        if (disposed)
         {
             return;
         }
 
-        fileHandle.Dispose();
-        isDisposed = true;
+        handle.Dispose();
+        disposed = true;
     }
 
-    /// <inheritdoc />
     public ValueTask DisposeAsync()
     {
         Dispose();
@@ -133,10 +138,10 @@ public sealed class FileRandomAccessSource : IRandomAccessSource
         }
     }
 
-    private void ThrowIfDisposed()
+    private void EnsureNotDisposed()
     {
         ObjectDisposedException.ThrowIf(
-            isDisposed,
+            disposed,
             this);
     }
 }
