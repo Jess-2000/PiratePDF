@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference
+      Include="..\BlackFlag.Engine.Abstractions\BlackFlag.Engine.Abstractions.csproj" />
+
+    <ProjectReference
+      Include="..\BlackFlag.Engine.Core\BlackFlag.Engine.Core.csproj" />
+
+    <ProjectReference
+      Include="..\BlackFlag.Engine.IO\BlackFlag.Engine.IO.csproj" />
+
+    <ProjectReference
+      Include="..\BlackFlag.Engine.Syntax\BlackFlag.Engine.Syntax.csproj" />
+
+    <ProjectReference
+      Include="..\BlackFlag.Engine.Document\BlackFlag.Engine.Document.csproj" />
+
+    <ProjectReference
+      Include="..\BlackFlag.Engine.Objects\BlackFlag.Engine.Objects.csproj" />
+  </ItemGroup>
+
+</Project>
