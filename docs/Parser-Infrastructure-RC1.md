@@ -150,3 +150,9 @@ No project-file changes should be necessary when the projects use normal SDK-sty
 - [ ] Milestone merged and tagged
 
 The final three items must be completed in the actual `PiratePDF` repository because this package contains only the files supplied for the milestone, not the complete solution or all lexer partial files.
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 0.4.0 | 2026-07-30 | Added missing revision history section. |

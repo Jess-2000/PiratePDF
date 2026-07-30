@@ -67,3 +67,9 @@ Deferring these prevents freezing speculative public APIs in RC1.
 - Comprehensive unit tests
 - Full repository build and test suite passing
 - Performance and API review completed
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 0.5.0 | 2026-07-30 | Added missing revision history section. |
