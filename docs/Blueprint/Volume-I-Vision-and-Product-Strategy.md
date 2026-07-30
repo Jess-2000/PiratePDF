@@ -13,7 +13,7 @@
 
 ---
 
-## Volume I — Vision and Product Strategy
+## Volume I â€” Vision and Product Strategy
 
 **Document ID:** PP-BP-VOL1  
 **Version:** 1.0  
@@ -146,7 +146,7 @@ Professional capabilities may add:
 
 The user-facing conversion workflow should use clear language:
 
-> **File → Convert to PDF…**
+> **File â†’ Convert to PDFâ€¦**
 
 Initial supported source formats:
 

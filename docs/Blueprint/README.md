@@ -1,4 +1,4 @@
-﻿# PiratePDF Master Blueprint
+# PiratePDF Master Blueprint
 
 | Field | Value |
 |---|---|

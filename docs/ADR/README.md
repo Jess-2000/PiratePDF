@@ -21,12 +21,12 @@ An ADR captures a significant architectural decision, its context, the alternati
 
 ## Decision Records
 
-- [PP-ADR-001 — Use C# as the Primary Language](ADR-0001-use-csharp-as-primary-language.md)
-- [PP-ADR-002 — Keep BlackFlag Engine Independent of Avalonia](ADR-0002-keep-blackflag-independent-of-avalonia.md)
-- [PP-ADR-003 — Use Random-Access File I/O](ADR-0003-use-random-access-file-io.md)
-- [PP-ADR-004 — Keep Word Conversion Outside BlackFlag Engine](ADR-0004-keep-word-conversion-outside-engine.md)
-- [PP-ADR-005 — Use One Codebase for Standard and Professional Editions](ADR-0005-use-one-codebase-for-editions.md)
-- [PP-ADR-006 — Use Markdown as the Documentation Source of Truth](ADR-0006-use-markdown-as-documentation-source.md)
+- [PP-ADR-001 â€” Use C# as the Primary Language](ADR-0001-use-csharp-as-primary-language.md)
+- [PP-ADR-002 â€” Keep BlackFlag Engine Independent of Avalonia](ADR-0002-keep-blackflag-independent-of-avalonia.md)
+- [PP-ADR-003 â€” Use Random-Access File I/O](ADR-0003-use-random-access-file-io.md)
+- [PP-ADR-004 â€” Keep Word Conversion Outside BlackFlag Engine](ADR-0004-keep-word-conversion-outside-engine.md)
+- [PP-ADR-005 â€” Use One Codebase for Standard and Professional Editions](ADR-0005-use-one-codebase-for-editions.md)
+- [PP-ADR-006 â€” Use Markdown as the Documentation Source of Truth](ADR-0006-use-markdown-as-documentation-source.md)
 
 ## ADR Lifecycle
 

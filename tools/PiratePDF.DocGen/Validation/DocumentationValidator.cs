@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using PiratePDF.DocGen.Library;
 using PiratePDF.DocGen.Models;

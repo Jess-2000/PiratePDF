@@ -1,4 +1,4 @@
-﻿@'
+@'
 # PiratePDF Documentation Standards
 
 | Field | Value |

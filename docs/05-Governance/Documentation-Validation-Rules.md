@@ -1,4 +1,4 @@
-﻿# Documentation Validation Rules
+# Documentation Validation Rules
 
 | Field | Value |
 |---|---|

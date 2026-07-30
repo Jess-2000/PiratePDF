@@ -1,5 +1,5 @@
 @'
-# ADR-XXXX — Decision Title
+# ADR-XXXX â€” Decision Title
 
 | Field | Value |
 |---|---|
@@ -54,7 +54,7 @@ Explain how the decision will be tested or reviewed.
 
 ## Related Documents
 
-- PP-ARCH-000 — Related architecture document
+- PP-ARCH-000 â€” Related architecture document
 
 ## Related BF Work Items
 

@@ -1,4 +1,4 @@
-# ADR-0003 — Use Random-Access File I/O
+# ADR-0003 â€” Use Random-Access File I/O
 
 | Field | Value |
 |---|---|

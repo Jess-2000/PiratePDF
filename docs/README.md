@@ -35,7 +35,7 @@ New contributors should begin with:
 
 ### Vision and Blueprint
 
-The Master Blueprint defines PiratePDF’s product vision, high-level architecture, application behavior, engineering expectations, testing strategy, and future direction.
+The Master Blueprint defines PiratePDFâ€™s product vision, high-level architecture, application behavior, engineering expectations, testing strategy, and future direction.
 
 - [Master Blueprint](Blueprint/README.md)
 

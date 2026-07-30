@@ -1,4 +1,4 @@
-﻿# PiratePDF Project Charter
+# PiratePDF Project Charter
 
 | Field | Value |
 |---|---|

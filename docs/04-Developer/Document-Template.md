@@ -39,7 +39,7 @@ Document known risks, tradeoffs, and limitations.
 
 ## Related Documents
 
-- PP-XXXX-000 — Related document
+- PP-XXXX-000 â€” Related document
 
 ## Related BF Work Items
 

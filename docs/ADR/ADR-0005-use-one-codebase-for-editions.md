@@ -1,4 +1,4 @@
-# ADR-0005 — Use One Codebase for Standard and Professional Editions
+# ADR-0005 â€” Use One Codebase for Standard and Professional Editions
 
 | Field | Value |
 |---|---|

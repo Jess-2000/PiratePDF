@@ -1,4 +1,4 @@
-﻿# PiratePDF Roadmaps
+# PiratePDF Roadmaps
 
 | Field | Value |
 |---|---|

@@ -1,4 +1,4 @@
-# ADR-0004 — Keep Word Conversion Outside BlackFlag Engine
+# ADR-0004 â€” Keep Word Conversion Outside BlackFlag Engine
 
 | Field | Value |
 |---|---|
