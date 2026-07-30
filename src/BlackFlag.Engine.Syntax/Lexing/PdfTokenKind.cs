@@ -41,9 +41,64 @@ public enum PdfTokenKind
     HexadecimalString,
 
     /// <summary>
-    /// Represents a general PDF keyword or content-stream operator.
+    /// Represents a non-reserved PDF keyword or content-stream operator.
     /// </summary>
     Keyword,
+
+    /// <summary>
+    /// Represents the <c>true</c> keyword.
+    /// </summary>
+    BooleanTrue,
+
+    /// <summary>
+    /// Represents the <c>false</c> keyword.
+    /// </summary>
+    BooleanFalse,
+
+    /// <summary>
+    /// Represents the <c>null</c> keyword.
+    /// </summary>
+    Null,
+
+    /// <summary>
+    /// Represents the <c>obj</c> keyword.
+    /// </summary>
+    ObjectStart,
+
+    /// <summary>
+    /// Represents the <c>endobj</c> keyword.
+    /// </summary>
+    ObjectEnd,
+
+    /// <summary>
+    /// Represents the <c>R</c> indirect-reference marker.
+    /// </summary>
+    IndirectReferenceMarker,
+
+    /// <summary>
+    /// Represents the <c>stream</c> keyword.
+    /// </summary>
+    StreamStart,
+
+    /// <summary>
+    /// Represents the <c>endstream</c> keyword.
+    /// </summary>
+    StreamEnd,
+
+    /// <summary>
+    /// Represents the <c>xref</c> keyword.
+    /// </summary>
+    CrossReference,
+
+    /// <summary>
+    /// Represents the <c>trailer</c> keyword.
+    /// </summary>
+    Trailer,
+
+    /// <summary>
+    /// Represents the <c>startxref</c> keyword.
+    /// </summary>
+    StartCrossReference,
 
     /// <summary>
     /// Represents an opening array delimiter.
