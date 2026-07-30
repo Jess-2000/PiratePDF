@@ -4,6 +4,7 @@
     <Project Path="src/BlackFlag.Engine.Core/BlackFlag.Engine.Core.csproj" />
     <Project Path="src/BlackFlag.Engine.Document/BlackFlag.Engine.Document.csproj" />
     <Project Path="src/BlackFlag.Engine.IO/BlackFlag.Engine.IO.csproj" />
+    <Project Path="src/BlackFlag.Engine.Objects/BlackFlag.Engine.Objects.csproj" />
     <Project Path="src/BlackFlag.Engine.SDK/BlackFlag.Engine.SDK.csproj" />
     <Project Path="src/BlackFlag.Engine.Syntax/BlackFlag.Engine.Syntax.csproj" />
   </Folder>
@@ -11,5 +12,6 @@
     <Project Path="tests/BlackFlag.Engine.Abstractions.Tests/BlackFlag.Engine.Abstractions.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.Core.Tests/BlackFlag.Engine.Core.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.IO.Tests/BlackFlag.Engine.IO.Tests.csproj" />
+    <Project Path="tests/BlackFlag.Engine.Objects.Tests/BlackFlag.Engine.Objects.Tests.csproj" />
   </Folder>
 </Solution>
