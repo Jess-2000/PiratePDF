@@ -33,5 +33,8 @@ public enum PdfObjectType
     Dictionary,
 
     /// <summary>A PDF indirect reference.</summary>
-    IndirectReference
+    IndirectReference,
+
+    /// <summary>A PDF stream object.</summary>
+    Stream
 }

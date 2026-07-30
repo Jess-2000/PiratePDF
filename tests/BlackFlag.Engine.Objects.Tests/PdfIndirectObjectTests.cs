@@ -85,7 +85,7 @@ public sealed class PdfIndirectObjectTests
     {
         PdfIndirectObject indirectObject = new(1, 0, PdfNull.Instance);
 
-        Assert.False(indirectObject is PdfObject);
+        Assert.False(typeof(PdfObject).IsAssignableFrom(indirectObject.GetType()));
     }
 
     [Fact]

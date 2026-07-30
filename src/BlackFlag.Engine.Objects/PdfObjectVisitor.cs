@@ -122,4 +122,15 @@ public abstract class PdfObjectVisitor<TResult>
         ArgumentNullException.ThrowIfNull(value);
         return Visit((PdfObject)value);
     }
+
+    /// <summary>
+    /// Visits a PDF stream object.
+    /// </summary>
+    /// <param name="value">The PDF stream object being visited.</param>
+    /// <returns>The result of visiting <paramref name="value"/>.</returns>
+    public virtual TResult Visit(PdfStream value)
+    {
+        ArgumentNullException.ThrowIfNull(value);
+        return Visit((PdfObject)value);
+    }
 }
