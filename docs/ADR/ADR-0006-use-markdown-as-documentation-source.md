@@ -1,4 +1,4 @@
-# ADR-0006 — Use Markdown as Documentation Source of Truth
+# ADR-0006 â€” Use Markdown as Documentation Source of Truth
 
 | Field | Value |
 |---|---|

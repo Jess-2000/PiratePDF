@@ -1,4 +1,4 @@
-﻿using PiratePDF.DocGen.Changes;
+using PiratePDF.DocGen.Changes;
 using PiratePDF.DocGen.Repair.Diagnostics;
 using PiratePDF.DocGen.Repair.Rules;
 using PiratePDF.DocGen.Tests.TestInfrastructure;

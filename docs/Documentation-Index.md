@@ -6,12 +6,12 @@
 | Document ID | Title | Category | Version | Status | Last Updated |
 |---|---|---|---|---|---|
 | PP-ADR-000 | [Architecture Decision Records](ADR/README.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
-| PP-ADR-001 | [ADR-0001 — Use C# as the Primary Language](ADR/ADR-0001-use-csharp-as-primary-language.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
-| PP-ADR-002 | [ADR-0002 — Keep BlackFlag Engine Independent of Avalonia](ADR/ADR-0002-keep-blackflag-independent-of-avalonia.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
-| PP-ADR-003 | [ADR-0003 — Use Random-Access File I/O](ADR/ADR-0003-use-random-access-file-io.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
-| PP-ADR-004 | [ADR-0004 — Keep Word Conversion Outside BlackFlag Engine](ADR/ADR-0004-keep-word-conversion-outside-engine.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
-| PP-ADR-005 | [ADR-0005 — Use One Codebase for Standard and Professional Editions](ADR/ADR-0005-use-one-codebase-for-editions.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
-| PP-ADR-006 | [ADR-0006 — Use Markdown as Documentation Source of Truth](ADR/ADR-0006-use-markdown-as-documentation-source.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
+| PP-ADR-001 | [ADR-0001 â€” Use C# as the Primary Language](ADR/ADR-0001-use-csharp-as-primary-language.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
+| PP-ADR-002 | [ADR-0002 â€” Keep BlackFlag Engine Independent of Avalonia](ADR/ADR-0002-keep-blackflag-independent-of-avalonia.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
+| PP-ADR-003 | [ADR-0003 â€” Use Random-Access File I/O](ADR/ADR-0003-use-random-access-file-io.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
+| PP-ADR-004 | [ADR-0004 â€” Keep Word Conversion Outside BlackFlag Engine](ADR/ADR-0004-keep-word-conversion-outside-engine.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
+| PP-ADR-005 | [ADR-0005 â€” Use One Codebase for Standard and Professional Editions](ADR/ADR-0005-use-one-codebase-for-editions.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
+| PP-ADR-006 | [ADR-0006 â€” Use Markdown as Documentation Source of Truth](ADR/ADR-0006-use-markdown-as-documentation-source.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
 | PP-ARCH-001 | [PiratePDF Master Blueprint - Volume II: BlackFlag Engine Architecture](Blueprint/Volume-II-BlackFlag-Engine-Architecture.md) | Architecture | 1.0 | Approved | 2026-07-24 |
 | PP-CHARTER-001 | [PiratePDF Project Charter](Project-Charter.md) | Project Charter | 1.0 | Approved | 2026-07-24 |
 | PP-DEV-001 | [PiratePDF Master Blueprint - Volume IV: Engineering Standards](Blueprint/Volume-IV-Engineering-Standards.md) | Developer Documentation | 1.0 | Approved | 2026-07-24 |

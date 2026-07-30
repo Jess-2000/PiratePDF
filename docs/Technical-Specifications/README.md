@@ -1,4 +1,4 @@
-﻿# PiratePDF Technical Specifications
+# PiratePDF Technical Specifications
 
 | Field | Value |
 |---|---|

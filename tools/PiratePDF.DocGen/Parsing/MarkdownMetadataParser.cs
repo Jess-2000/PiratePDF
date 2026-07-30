@@ -1,4 +1,4 @@
-﻿using PiratePDF.DocGen.Models;
+using PiratePDF.DocGen.Models;
 
 namespace PiratePDF.DocGen.Parsing;
 

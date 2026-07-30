@@ -13,7 +13,7 @@
 
 ---
 
-## Volume II — BlackFlag Engine Architecture
+## Volume II â€” BlackFlag Engine Architecture
 
 **Document ID:** PP-BP-VOL2  
 **Version:** 1.0  
@@ -79,15 +79,15 @@ The intended initial dependency direction is:
 
 ```text
 BlackFlag.Engine.Core
-        ↑
+        â†‘
 BlackFlag.Engine.Abstractions
-        ↑
+        â†‘
 BlackFlag.Engine.IO
-        ↑
+        â†‘
 BlackFlag.Engine.Syntax
-        ↑
+        â†‘
 BlackFlag.Engine.Document
-        ↑
+        â†‘
 BlackFlag.Engine.SDK
 ```
 
@@ -324,13 +324,13 @@ The rendering pipeline will eventually include:
 
 ```text
 Random-access source
-→ Syntax parser
-→ Document model
-→ Content interpreter
-→ Graphics state
-→ Fonts and images
-→ Raster/vector surface
-→ Render cache
+â†’ Syntax parser
+â†’ Document model
+â†’ Content interpreter
+â†’ Graphics state
+â†’ Fonts and images
+â†’ Raster/vector surface
+â†’ Render cache
 ```
 
 Rendering should support:

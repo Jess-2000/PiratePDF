@@ -1,4 +1,4 @@
-﻿using PiratePDF.DocGen.Commands;
+using PiratePDF.DocGen.Commands;
 using PiratePDF.DocGen.Infrastructure;
 
 try

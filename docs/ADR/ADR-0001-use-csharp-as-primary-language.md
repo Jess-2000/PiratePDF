@@ -1,4 +1,4 @@
-# ADR-0001 — Use C# as the Primary Language
+# ADR-0001 â€” Use C# as the Primary Language
 
 | Field | Value |
 |---|---|

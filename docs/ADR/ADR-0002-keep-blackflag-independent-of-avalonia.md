@@ -1,4 +1,4 @@
-# ADR-0002 — Keep BlackFlag Engine Independent of Avalonia
+# ADR-0002 â€” Keep BlackFlag Engine Independent of Avalonia
 
 | Field | Value |
 |---|---|
@@ -26,7 +26,7 @@ No BlackFlag Engine project may reference Avalonia or PiratePDF UI assemblies.
 
 The dependency direction is:
 
-BlackFlag Engine → SDK → PiratePDF application and UI.
+BlackFlag Engine â†’ SDK â†’ PiratePDF application and UI.
 
 ## Consequences
 
