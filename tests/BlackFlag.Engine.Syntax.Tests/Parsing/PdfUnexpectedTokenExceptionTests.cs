@@ -16,6 +16,7 @@ public sealed class PdfUnexpectedTokenExceptionTests
                 token);
 
         Assert.Equal(PdfTokenKind.Name, exception.ExpectedKind);
+        Assert.Equal(new[] { PdfTokenKind.Name }, exception.ExpectedKinds);
         Assert.Equal(token, exception.ActualToken);
         Assert.Equal(token.Span.Start, exception.Position);
     }
@@ -53,6 +54,50 @@ public sealed class PdfUnexpectedTokenExceptionTests
     }
 
     [Fact]
+    public void MultipleKindsConstructorStoresAllExpectedKinds()
+    {
+        PdfToken token = CreateToken();
+        PdfTokenKind[] expectedKinds =
+        [
+            PdfTokenKind.IntegerNumber,
+            PdfTokenKind.RealNumber
+        ];
+
+        var exception =
+            new PdfUnexpectedTokenException(
+                expectedKinds,
+                token);
+
+        Assert.Equal(PdfTokenKind.IntegerNumber, exception.ExpectedKind);
+        Assert.Equal(expectedKinds, exception.ExpectedKinds);
+        Assert.Contains(
+            "Expected one of the token kinds IntegerNumber, RealNumber",
+            exception.Message);
+    }
+
+    [Fact]
+    public void MultipleKindsConstructorDefensivelyCopiesExpectedKinds()
+    {
+        PdfToken token = CreateToken();
+        PdfTokenKind[] expectedKinds =
+        [
+            PdfTokenKind.IntegerNumber,
+            PdfTokenKind.RealNumber
+        ];
+
+        var exception =
+            new PdfUnexpectedTokenException(
+                expectedKinds,
+                token);
+
+        expectedKinds[0] = PdfTokenKind.Name;
+
+        Assert.Equal(
+            PdfTokenKind.IntegerNumber,
+            exception.ExpectedKinds[0]);
+    }
+
+    [Fact]
     public void ConstructorRejectsUnassignedExpectedKind()
     {
         PdfToken token = CreateToken();
@@ -60,6 +105,42 @@ public sealed class PdfUnexpectedTokenExceptionTests
         Assert.Throws<ArgumentOutOfRangeException>(
             () => new PdfUnexpectedTokenException(
                 PdfTokenKind.None,
+                token));
+    }
+
+    [Fact]
+    public void MultipleKindsConstructorRejectsNullCollection()
+    {
+        PdfToken token = CreateToken();
+
+        Assert.Throws<ArgumentNullException>(
+            () => new PdfUnexpectedTokenException(
+                null!,
+                token));
+    }
+
+    [Fact]
+    public void MultipleKindsConstructorRejectsEmptyCollection()
+    {
+        PdfToken token = CreateToken();
+
+        Assert.Throws<ArgumentException>(
+            () => new PdfUnexpectedTokenException(
+                Array.Empty<PdfTokenKind>(),
+                token));
+    }
+
+    [Fact]
+    public void MultipleKindsConstructorRejectsUnassignedKind()
+    {
+        PdfToken token = CreateToken();
+
+        Assert.Throws<ArgumentOutOfRangeException>(
+            () => new PdfUnexpectedTokenException(
+                [
+                    PdfTokenKind.Name,
+                    PdfTokenKind.None
+                ],
                 token));
     }
 
