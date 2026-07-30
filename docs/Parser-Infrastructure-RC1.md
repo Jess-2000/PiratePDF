@@ -1,5 +1,16 @@
 # BlackFlag Engine — Parser Infrastructure RC1
 
+| Field | Value |
+|---|---|
+| Document ID | BF-DOC-0004 |
+| Category | Architecture |
+| Version | 0.4.0 |
+| Status | Tested |
+| Owner | PiratePDF Project |
+| Related BF Work Items | BF-0004 |
+| Last Updated | 2026-07-30 |
+| Next Review | 2026-10-30 |
+
 ## Scope
 
 Parser Infrastructure RC1 adds the token-consumption layer between `PdfLexer` and the future `PdfParser`.

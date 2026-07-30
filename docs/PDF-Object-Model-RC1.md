@@ -1,5 +1,16 @@
 # BlackFlag Engine 0.5.0 — PDF Object Model RC1
 
+| Field | Value |
+|---|---|
+| Document ID | BF-DOC-0005 |
+| Category | Architecture |
+| Version | 0.5.0 |
+| Status | In Development |
+| Owner | PiratePDF Project |
+| Related BF Work Items | BF-0005 |
+| Last Updated | 2026-07-30 |
+| Next Review | 2026-10-30 |
+
 ## Scope
 
 This milestone introduces the parser-independent object values that future parser,

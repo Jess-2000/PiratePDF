@@ -5,6 +5,8 @@
 
 | Document ID | Title | Category | Version | Status | Last Updated |
 |---|---|---|---|---|---|
+| BF-DOC-0004 | [BlackFlag Engine — Parser Infrastructure RC1](Parser-Infrastructure-RC1.md) | Architecture | 0.4.0 | Tested | 2026-07-30 |
+| BF-DOC-0005 | [BlackFlag Engine 0.5.0 — PDF Object Model RC1](PDF-Object-Model-RC1.md) | Architecture | 0.5.0 | In Development | 2026-07-30 |
 | PP-ADR-000 | [Architecture Decision Records](ADR/README.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
 | PP-ADR-001 | [ADR-0001 â€” Use C# as the Primary Language](ADR/ADR-0001-use-csharp-as-primary-language.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
 | PP-ADR-002 | [ADR-0002 â€” Keep BlackFlag Engine Independent of Avalonia](ADR/ADR-0002-keep-blackflag-independent-of-avalonia.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
