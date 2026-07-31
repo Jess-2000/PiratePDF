@@ -31,6 +31,7 @@
 | PP-SPEC-013 | [BlackFlag Engine Syntax Specification](Technical-Specifications/BlackFlag-Engine/Syntax.md) | Technical Specification | 1.0 | In Development | 2026-07-24 |
 | PP-SPEC-014 | [BlackFlag Engine Document Model Specification](Technical-Specifications/BlackFlag-Engine/Document.md) | Technical Specification | 1.0 | In Development | 2026-07-24 |
 | PP-SPEC-015 | [BlackFlag Engine SDK Specification](Technical-Specifications/BlackFlag-Engine/SDK.md) | Technical Specification | 1.0 | In Development | 2026-07-24 |
+| PP-SPEC-BF-1036 | [BF-1036 — Collection Parser](milestones/BF-1036-Collection-Parser.md) | Technical Specification | 1.0 | Approved | 2026-07-30 |
 | PP-TEST-001 | [PiratePDF Master Blueprint - Volume V: Testing and Quality Assurance](Blueprint/Volume-V-Testing-and-QA.md) | Testing Documentation | 1.0 | Approved | 2026-07-24 |
 | PP-VSN-000 | [PiratePDF Master Blueprint](Blueprint/README.md) | Vision | 1.0 | Approved | 2026-07-24 |
 | PP-VSN-001 | [PiratePDF Master Blueprint - Volume I: Vision and Product Strategy](Blueprint/Volume-I-Vision-and-Product-Strategy.md) | Vision | 1.0 | Approved | 2026-07-24 |

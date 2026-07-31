@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using BlackFlag.Engine.Abstractions.IO;
 using BlackFlag.Engine.Objects;
 using BlackFlag.Engine.Syntax.Lexing;
@@ -10,13 +10,14 @@ namespace BlackFlag.Engine.Parsing;
 /// Parses immutable PDF objects from a token stream and its underlying source.
 /// </summary>
 /// <remarks>
-/// BF-1035 supports primitive PDF objects only. Collection, indirect-object,
-/// and stream parsing are added by later packages.
+/// BF-1036 supports primitive objects, arrays, dictionaries, and recursively
+/// nested collections. Indirect-object and stream parsing are added by later
+/// packages.
 /// </remarks>
 public sealed partial class PdfObjectParser
 {
     private static readonly ReadOnlyCollection<PdfTokenKind>
-        PrimitiveTokenKinds =
+        SupportedObjectTokenKinds =
             Array.AsReadOnly<PdfTokenKind>(
                 [
                     PdfTokenKind.Null,
@@ -26,14 +27,16 @@ public sealed partial class PdfObjectParser
                     PdfTokenKind.RealNumber,
                     PdfTokenKind.Name,
                     PdfTokenKind.LiteralString,
-                    PdfTokenKind.HexadecimalString
+                    PdfTokenKind.HexadecimalString,
+                    PdfTokenKind.ArrayStart,
+                    PdfTokenKind.DictionaryStart
                 ]);
 
     private readonly PdfTokenReader reader;
     private readonly IRandomAccessSource source;
 
     /// <summary>
-    /// Initializes a primitive PDF object parser.
+    /// Initializes a PDF object parser.
     /// </summary>
     /// <param name="reader">
     /// The token reader that supplies lexical tokens.
@@ -53,16 +56,17 @@ public sealed partial class PdfObjectParser
     }
 
     /// <summary>
-    /// Parses and consumes the next primitive PDF object.
+    /// Parses and consumes the next supported PDF object.
     /// </summary>
     /// <returns>
     /// The parsed immutable PDF object.
     /// </returns>
     /// <exception cref="PdfUnexpectedTokenException">
-    /// The next token is not a supported primitive-object token.
+    /// The next token is not a supported object token, a collection is not
+    /// terminated correctly, or a dictionary key is not a PDF name.
     /// </exception>
     /// <exception cref="EndOfStreamException">
-    /// The source cannot provide all bytes covered by the token span.
+    /// The source cannot provide all bytes covered by a token span.
     /// </exception>
     /// <exception cref="FormatException">
     /// A token's source bytes cannot be converted to the value represented by
@@ -100,9 +104,15 @@ public sealed partial class PdfObjectParser
                 PdfTokenKind.HexadecimalString =>
                     ParseHexadecimalString(token),
 
+                PdfTokenKind.ArrayStart =>
+                    ParseArray(),
+
+                PdfTokenKind.DictionaryStart =>
+                    ParseDictionary(),
+
                 _ =>
                     throw new PdfUnexpectedTokenException(
-                        PrimitiveTokenKinds,
+                        SupportedObjectTokenKinds,
                         token)
             };
 
