@@ -210,7 +210,7 @@ public sealed class PdfObjectParserTests
     public void ParseRejectsUnsupportedTokenWithoutConsumingIt()
     {
         using TestRandomAccessSource source =
-            CreateSource("[null]");
+            CreateSource("obj");
 
         PdfTokenReader reader =
             CreateReader(source);
@@ -225,11 +225,11 @@ public sealed class PdfObjectParserTests
                 parser.Parse);
 
         Assert.Equal(
-            PdfTokenKind.ArrayStart,
+            PdfTokenKind.ObjectStart,
             exception.ActualToken.Kind);
 
         Assert.Equal(
-            PdfTokenKind.ArrayStart,
+            PdfTokenKind.ObjectStart,
             reader.Peek().Kind);
     }
 
@@ -256,6 +256,369 @@ public sealed class PdfObjectParserTests
         Assert.Equal(
             PdfTokenKind.IntegerNumber,
             reader.Peek().Kind);
+    }
+
+    [Fact]
+    public void ParseReturnsCanonicalEmptyArray()
+    {
+        PdfArray result =
+            Assert.IsType<PdfArray>(
+                Parse("[]"));
+
+        Assert.Same(PdfArray.Empty, result);
+    }
+
+    [Fact]
+    public void ParseReturnsArrayContainingPrimitiveObjects()
+    {
+        PdfArray result =
+            Assert.IsType<PdfArray>(
+                Parse("[null true 42 3.5 /Name (text) <4142>]"));
+
+        Assert.Equal(7, result.Count);
+        Assert.Same(PdfNull.Instance, result[0]);
+        Assert.True(
+            Assert.IsType<PdfBoolean>(result[1]).Value);
+        Assert.Equal(
+            42,
+            Assert.IsType<PdfInteger>(result[2]).Value);
+        Assert.Equal(
+            3.5,
+            Assert.IsType<PdfReal>(result[3]).Value);
+        Assert.Equal(
+            "Name",
+            Assert.IsType<PdfName>(result[4]).Value);
+        Assert.Equal(
+            "text",
+            Assert.IsType<PdfLiteralString>(result[5]).Value);
+        Assert.Equal(
+            Encoding.ASCII.GetBytes("AB"),
+            Assert.IsType<PdfHexString>(result[6]).Value.ToArray());
+    }
+
+    [Fact]
+    public void ParseReturnsNestedArrays()
+    {
+        PdfArray result =
+            Assert.IsType<PdfArray>(
+                Parse("[1 [2 [3]] 4]"));
+
+        Assert.Equal(3, result.Count);
+        Assert.Equal(
+            1,
+            Assert.IsType<PdfInteger>(result[0]).Value);
+
+        PdfArray second =
+            Assert.IsType<PdfArray>(result[1]);
+
+        Assert.Equal(
+            2,
+            Assert.IsType<PdfInteger>(second[0]).Value);
+
+        PdfArray third =
+            Assert.IsType<PdfArray>(second[1]);
+
+        Assert.Equal(
+            3,
+            Assert.IsType<PdfInteger>(third[0]).Value);
+        Assert.Equal(
+            4,
+            Assert.IsType<PdfInteger>(result[2]).Value);
+    }
+
+    [Fact]
+    public void ParseReturnsCanonicalEmptyDictionary()
+    {
+        PdfDictionary result =
+            Assert.IsType<PdfDictionary>(
+                Parse("<<>>"));
+
+        Assert.Same(PdfDictionary.Empty, result);
+    }
+
+    [Fact]
+    public void ParseReturnsDictionaryContainingPrimitiveObjects()
+    {
+        PdfDictionary result =
+            Assert.IsType<PdfDictionary>(
+                Parse(
+                    "<< /Null null /Flag true /Count 5 "
+                    + "/Ratio 2.5 /Label (Black Flag) >>"));
+
+        Assert.Equal(5, result.Count);
+        Assert.Same(
+            PdfNull.Instance,
+            result[new PdfName("Null")]);
+        Assert.True(
+            Assert.IsType<PdfBoolean>(
+                result[new PdfName("Flag")]).Value);
+        Assert.Equal(
+            5,
+            Assert.IsType<PdfInteger>(
+                result[new PdfName("Count")]).Value);
+        Assert.Equal(
+            2.5,
+            Assert.IsType<PdfReal>(
+                result[new PdfName("Ratio")]).Value);
+        Assert.Equal(
+            "Black Flag",
+            Assert.IsType<PdfLiteralString>(
+                result[new PdfName("Label")]).Value);
+    }
+
+    [Fact]
+    public void ParseReturnsNestedDictionaries()
+    {
+        PdfDictionary result =
+            Assert.IsType<PdfDictionary>(
+                Parse("<< /Outer << /Inner << /Value 17 >> >> >>"));
+
+        PdfDictionary outer =
+            Assert.IsType<PdfDictionary>(
+                result[new PdfName("Outer")]);
+
+        PdfDictionary inner =
+            Assert.IsType<PdfDictionary>(
+                outer[new PdfName("Inner")]);
+
+        Assert.Equal(
+            17,
+            Assert.IsType<PdfInteger>(
+                inner[new PdfName("Value")]).Value);
+    }
+
+    [Fact]
+    public void ParseReturnsMixedNestedCollections()
+    {
+        PdfDictionary result =
+            Assert.IsType<PdfDictionary>(
+                Parse(
+                    "<< /Items [1 << /Enabled true >> [2 3]] "
+                    + "/Metadata << /Names [/A /B] >> >>"));
+
+        PdfArray items =
+            Assert.IsType<PdfArray>(
+                result[new PdfName("Items")]);
+
+        PdfDictionary itemDictionary =
+            Assert.IsType<PdfDictionary>(items[1]);
+
+        Assert.True(
+            Assert.IsType<PdfBoolean>(
+                itemDictionary[new PdfName("Enabled")]).Value);
+
+        PdfArray nestedItems =
+            Assert.IsType<PdfArray>(items[2]);
+
+        Assert.Equal(
+            3,
+            Assert.IsType<PdfInteger>(nestedItems[1]).Value);
+
+        PdfDictionary metadata =
+            Assert.IsType<PdfDictionary>(
+                result[new PdfName("Metadata")]);
+
+        PdfArray names =
+            Assert.IsType<PdfArray>(
+                metadata[new PdfName("Names")]);
+
+        Assert.Equal(
+            "B",
+            Assert.IsType<PdfName>(names[1]).Value);
+    }
+
+    [Fact]
+    public void ParseUsesLastDictionaryValueForDuplicateKey()
+    {
+        PdfDictionary result =
+            Assert.IsType<PdfDictionary>(
+                Parse("<< /Value 1 /Value 2 /Value 3 >>"));
+
+        Assert.Single(result);
+        Assert.Equal(
+            3,
+            Assert.IsType<PdfInteger>(
+                result[new PdfName("Value")]).Value);
+    }
+
+    [Fact]
+    public void ParseConsumesExactlyOneCollectionObject()
+    {
+        using TestRandomAccessSource source =
+            CreateSource("[null] << /Value 9 >> true");
+
+        PdfTokenReader reader =
+            CreateReader(source);
+
+        var parser =
+            new PdfObjectParser(
+                reader,
+                source);
+
+        PdfArray first =
+            Assert.IsType<PdfArray>(parser.Parse());
+
+        Assert.Single(first);
+        Assert.Equal(
+            PdfTokenKind.DictionaryStart,
+            reader.Peek().Kind);
+
+        PdfDictionary second =
+            Assert.IsType<PdfDictionary>(parser.Parse());
+
+        Assert.Equal(
+            9,
+            Assert.IsType<PdfInteger>(
+                second[new PdfName("Value")]).Value);
+        Assert.Equal(
+            PdfTokenKind.BooleanTrue,
+            reader.Peek().Kind);
+
+        Assert.True(
+            Assert.IsType<PdfBoolean>(parser.Parse()).Value);
+        Assert.True(reader.EndOfFile);
+    }
+
+    [Fact]
+    public void ParseRejectsInvalidDictionaryKeyWithoutConsumingIt()
+    {
+        using TestRandomAccessSource source =
+            CreateSource("<< 17 null >>");
+
+        PdfTokenReader reader =
+            CreateReader(source);
+
+        var parser =
+            new PdfObjectParser(
+                reader,
+                source);
+
+        PdfUnexpectedTokenException exception =
+            Assert.Throws<PdfUnexpectedTokenException>(
+                parser.Parse);
+
+        Assert.Equal(
+            PdfTokenKind.Name,
+            exception.ExpectedKind);
+        Assert.Equal(
+            PdfTokenKind.IntegerNumber,
+            exception.ActualToken.Kind);
+        Assert.Equal(
+            PdfTokenKind.IntegerNumber,
+            reader.Peek().Kind);
+    }
+
+    [Fact]
+    public void ParseRejectsUnterminatedArrayAtEndOfFile()
+    {
+        using TestRandomAccessSource source =
+            CreateSource("[null true");
+
+        PdfTokenReader reader =
+            CreateReader(source);
+
+        var parser =
+            new PdfObjectParser(
+                reader,
+                source);
+
+        PdfUnexpectedTokenException exception =
+            Assert.Throws<PdfUnexpectedTokenException>(
+                parser.Parse);
+
+        Assert.Equal(
+            PdfTokenKind.ArrayEnd,
+            exception.ExpectedKind);
+        Assert.Equal(
+            PdfTokenKind.EndOfFile,
+            exception.ActualToken.Kind);
+        Assert.Equal(
+            PdfTokenKind.EndOfFile,
+            reader.Peek().Kind);
+    }
+
+    [Fact]
+    public void ParseRejectsUnterminatedDictionaryAtEndOfFile()
+    {
+        using TestRandomAccessSource source =
+            CreateSource("<< /Value 1");
+
+        PdfTokenReader reader =
+            CreateReader(source);
+
+        var parser =
+            new PdfObjectParser(
+                reader,
+                source);
+
+        PdfUnexpectedTokenException exception =
+            Assert.Throws<PdfUnexpectedTokenException>(
+                parser.Parse);
+
+        Assert.Equal(
+            PdfTokenKind.DictionaryEnd,
+            exception.ExpectedKind);
+        Assert.Equal(
+            PdfTokenKind.EndOfFile,
+            exception.ActualToken.Kind);
+        Assert.Equal(
+            PdfTokenKind.EndOfFile,
+            reader.Peek().Kind);
+    }
+
+    [Fact]
+    public void ParseRejectsDictionaryWithoutValue()
+    {
+        using TestRandomAccessSource source =
+            CreateSource("<< /Value >>");
+
+        PdfTokenReader reader =
+            CreateReader(source);
+
+        var parser =
+            new PdfObjectParser(
+                reader,
+                source);
+
+        PdfUnexpectedTokenException exception =
+            Assert.Throws<PdfUnexpectedTokenException>(
+                parser.Parse);
+
+        Assert.Equal(
+            PdfTokenKind.DictionaryEnd,
+            exception.ActualToken.Kind);
+        Assert.Equal(
+            PdfTokenKind.DictionaryEnd,
+            reader.Peek().Kind);
+    }
+
+    [Theory]
+    [InlineData("[null", PdfTokenKind.ArrayEnd)]
+    [InlineData("<< /Array [1 2", PdfTokenKind.ArrayEnd)]
+    [InlineData("<< /Nested << /Value 1", PdfTokenKind.DictionaryEnd)]
+    public void ParseReportsInnermostUnterminatedCollection(
+        string sourceText,
+        PdfTokenKind expectedKind)
+    {
+        using TestRandomAccessSource source =
+            CreateSource(sourceText);
+
+        PdfTokenReader reader =
+            CreateReader(source);
+
+        var parser =
+            new PdfObjectParser(
+                reader,
+                source);
+
+        PdfUnexpectedTokenException exception =
+            Assert.Throws<PdfUnexpectedTokenException>(
+                parser.Parse);
+
+        Assert.Equal(expectedKind, exception.ExpectedKind);
+        Assert.Equal(
+            PdfTokenKind.EndOfFile,
+            exception.ActualToken.Kind);
     }
 
     private static PdfObject Parse(
