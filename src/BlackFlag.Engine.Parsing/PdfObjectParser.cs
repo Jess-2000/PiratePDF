@@ -10,9 +10,9 @@ namespace BlackFlag.Engine.Parsing;
 /// Parses immutable PDF objects from a token stream and its underlying source.
 /// </summary>
 /// <remarks>
-/// BF-1036 supports primitive objects, arrays, dictionaries, and recursively
-/// nested collections. Indirect-object and stream parsing are added by later
-/// packages.
+/// BF-1037 supports primitive objects, recursive collections, and indirect
+/// references. Indirect-object declarations are parsed through the internal
+/// document-loading entry point. Stream parsing is added by a later package.
 /// </remarks>
 public sealed partial class PdfObjectParser
 {
@@ -88,6 +88,10 @@ public sealed partial class PdfObjectParser
 
                 PdfTokenKind.BooleanFalse =>
                     ParseBoolean(value: false),
+
+                PdfTokenKind.IntegerNumber
+                    when IsIndirectReference() =>
+                        ParseIndirectReference(),
 
                 PdfTokenKind.IntegerNumber =>
                     ParseInteger(token),

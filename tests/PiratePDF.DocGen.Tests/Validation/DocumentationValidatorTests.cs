@@ -1,3 +1,4 @@
+using PiratePDF.DocGen.Models;
 using PiratePDF.DocGen.Tests.TestInfrastructure;
 using PiratePDF.DocGen.Validation;
 
@@ -24,6 +25,50 @@ public sealed class DocumentationValidatorTests
         Assert.Equal(0, result.WarningCount);
         Assert.Equal(0, result.InformationCount);
         Assert.Empty(result.Issues);
+    }
+
+    [Theory]
+    [MemberData(nameof(GetCanonicalStatuses))]
+    public void Validate_WithCanonicalStatus_ReturnsNoStatusIssue(
+        string status)
+    {
+        using var directory = new TemporaryDirectory();
+
+        var library = DocumentationTestFactory.LoadLibrary(
+            directory,
+            new DocumentationTestFactory.TestDocument(
+                "Canonical-Status.md",
+                DocumentationTestFactory.CreateDocument(
+                    status: status)));
+
+        var result = DocumentationValidator.Validate(
+            library);
+
+        Assert.DoesNotContain(
+            result.Issues,
+            issue => issue.Message.Contains(
+                "Unknown document status",
+                StringComparison.Ordinal));
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("Release Candidate")]
+    [InlineData("released")]
+    public void IsValid_WithNonCanonicalValue_ReturnsFalse(
+        string? status)
+    {
+        Assert.False(
+            DocumentStatuses.IsValid(status));
+    }
+
+    [Fact]
+    public void GetAll_ReturnsTheCanonicalStatusCollection()
+    {
+        Assert.Equal(
+            DocumentStatuses.All,
+            DocumentStatuses.GetAll());
     }
 
     [Fact]
@@ -137,5 +182,17 @@ public sealed class DocumentationValidatorTests
                 issue.Message.Contains(
                     "Unclosed fenced code block",
                     StringComparison.Ordinal));
+    }
+
+    public static TheoryData<string> GetCanonicalStatuses()
+    {
+        var statuses = new TheoryData<string>();
+
+        foreach (var status in DocumentStatuses.GetAll())
+        {
+            statuses.Add(status);
+        }
+
+        return statuses;
     }
 }

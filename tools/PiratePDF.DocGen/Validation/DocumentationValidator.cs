@@ -8,26 +8,6 @@ namespace PiratePDF.DocGen.Validation;
 internal static partial class DocumentationValidator
 {
     // =========================================================================
-    // Configuration
-    // =========================================================================
-
-    private static readonly HashSet<string> ValidStatuses =
-    [
-        "Proposed",
-        "Draft",
-        "Review",
-        "Approved",
-        "In Development",
-        "Implemented",
-        "Tested",
-        "Released",
-        "Deferred",
-        "Deprecated",
-        "Superseded",
-        "Rejected"
-    ];
-
-    // =========================================================================
     // Public API
     // =========================================================================
 
@@ -65,8 +45,8 @@ internal static partial class DocumentationValidator
 
         ValidateDuplicateDocumentIds(
             library.AllDocuments
-            .Select(document => document.Metadata)
-            .ToArray(),
+                .Select(document => document.Metadata)
+                .ToArray(),
             issues);
 
         // Structural rules inspect complete Markdown content and report malformed
@@ -190,7 +170,7 @@ internal static partial class DocumentationValidator
             return;
         }
 
-        if (ValidStatuses.Contains(document.Status))
+        if (DocumentStatuses.IsValid(document.Status))
         {
             return;
         }
