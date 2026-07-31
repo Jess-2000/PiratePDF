@@ -1,3 +1,5 @@
+#nullable enable
+
 using PiratePDF.DocGen.Models;
 using PiratePDF.DocGen.Tests.TestInfrastructure;
 using PiratePDF.DocGen.Validation;
