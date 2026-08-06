@@ -4,75 +4,54 @@
 |---|---|
 | **Document ID** | PP-ADR-000 |
 | **Category** | Architecture Decision Record |
-| **Version** | 1.0 |
+| **Version** | 2.0 |
 | **Status** | Approved |
 | **Owner** | PiratePDF Project |
-| **Related BF Work Items** | BF-1000, BF-1025, BF-1026 |
-| **Last Updated** | 2026-07-24 |
-| **Next Review** | 2026-10-24 |
+| **Related BF Work Items** | BF-1000, BF-1039, BF-8000 |
+| **Last Updated** | 2026-07-31 |
+| **Next Review** | 2026-10-31 |
 
 ---
 
 ## Purpose
 
-This directory contains Architecture Decision Records for PiratePDF and the BlackFlag Engine.
+This directory contains Architecture Decision Records for PiratePDF and
+BlackFlag Engine.
 
-An ADR captures a significant architectural decision, its context, the alternatives considered, and the consequences of adopting it.
+An ADR captures a significant architectural decision, its context,
+alternatives, consequences, and future implications.
 
-## Decision Records
+## Authoritative Index
 
-- [PP-ADR-001 â€” Use C# as the Primary Language](ADR-0001-use-csharp-as-primary-language.md)
-- [PP-ADR-002 â€” Keep BlackFlag Engine Independent of Avalonia](ADR-0002-keep-blackflag-independent-of-avalonia.md)
-- [PP-ADR-003 â€” Use Random-Access File I/O](ADR-0003-use-random-access-file-io.md)
-- [PP-ADR-004 â€” Keep Word Conversion Outside BlackFlag Engine](ADR-0004-keep-word-conversion-outside-engine.md)
-- [PP-ADR-005 â€” Use One Codebase for Standard and Professional Editions](ADR-0005-use-one-codebase-for-editions.md)
-- [PP-ADR-006 â€” Use Markdown as the Documentation Source of Truth](ADR-0006-use-markdown-as-documentation-source.md)
+See [ADR-Index.md](ADR-Index.md) for the complete decision inventory.
 
-## ADR Lifecycle
+## Governance
 
-ADR status values include:
+ADR-0000 establishes the Project Charter as the governing document for future
+architectural decisions.
 
-- Proposed
-- Approved
-- Deprecated
-- Superseded
-- Rejected
-
-Approved ADRs remain in the repository even when superseded so the architectural history of the project is preserved.
+Approved records are retained even when superseded so the project's decision
+history remains available.
 
 ## Creating an ADR
 
-Use the repository ADR template:
+Start from:
 
-text
+```text
 docs/ADR/ADR-Template.md
+```
+
+New ADRs must:
+
+- use an unused sequential number,
+- include governed metadata,
+- explain alternatives and consequences,
+- identify related milestones, and
+- be added to `ADR-Index.md`.
 
 ## Revision History
 
 | Version | Date | Description |
 |---|---|---|
-| 1.0 | 2026-07-25 | Added missing revision history section. |
-
-## Revision History
-
-| Version | Date | Description |
-|---|---|---|
-| 1.0 | 2026-07-25 | Added missing revision history section. |
-
-## Revision History
-
-| Version | Date | Description |
-|---|---|---|
-| 1.0 | 2026-07-25 | Added missing revision history section. |
-
-## Revision History
-
-| Version | Date | Description |
-|---|---|---|
-| 1.0 | 2026-07-25 | Added missing revision history section. |
-
-## Revision History
-
-| Version | Date | Description |
-|---|---|---|
-| 1.0 | 2026-07-25 | Added missing revision history section. |
+| 1.0 | 2026-07-25 | Established the ADR directory and lifecycle. |
+| 2.0 | 2026-07-31 | Added Charter governance and the authoritative ADR index. |

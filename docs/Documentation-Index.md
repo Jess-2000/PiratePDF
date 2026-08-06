@@ -8,19 +8,25 @@
 | BF-DOC-0004 | [BlackFlag Engine — Parser Infrastructure RC1](Parser-Infrastructure-RC1.md) | Architecture | 0.4.0 | Tested | 2026-07-30 |
 | BF-DOC-0005 | [BlackFlag Engine 0.5.0 — PDF Object Model RC1](PDF-Object-Model-RC1.md) | Architecture | 0.5.0 | In Development | 2026-07-30 |
 | BF-DOC-1001 | [Documentation Template RC1](Documentation-Template-RC1.md) | Developer Documentation | 0.1.0 | In Development | 2026-07-30 |
-| PP-ADR-000 | [Architecture Decision Records](ADR/README.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
+| PP-ADR-000 | [Architecture Decision Records](ADR/README.md) | Architecture Decision Record | 2.0 | Approved | 2026-07-31 |
+| PP-ADR-0000 | [ADR-0000 — Project Charter Governance](ADR/ADR-0000-project-charter-governance.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-31 |
 | PP-ADR-001 | [ADR-0001 â€” Use C# as the Primary Language](ADR/ADR-0001-use-csharp-as-primary-language.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
 | PP-ADR-002 | [ADR-0002 â€” Keep BlackFlag Engine Independent of Avalonia](ADR/ADR-0002-keep-blackflag-independent-of-avalonia.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
 | PP-ADR-003 | [ADR-0003 â€” Use Random-Access File I/O](ADR/ADR-0003-use-random-access-file-io.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
 | PP-ADR-004 | [ADR-0004 â€” Keep Word Conversion Outside BlackFlag Engine](ADR/ADR-0004-keep-word-conversion-outside-engine.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
 | PP-ADR-005 | [ADR-0005 â€” Use One Codebase for Standard and Professional Editions](ADR/ADR-0005-use-one-codebase-for-editions.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
 | PP-ADR-006 | [ADR-0006 â€” Use Markdown as Documentation Source of Truth](ADR/ADR-0006-use-markdown-as-documentation-source.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
+| PP-ADR-007 | [ADR-0007 — Separate Stream Parsing from Object Parsing](ADR/ADR-0007-separate-stream-parsing-from-object-parsing.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-31 |
+| PP-ADR-008 | [ADR-0008 — Defer Indirect Stream Length Resolution](ADR/ADR-0008-defer-indirect-stream-length-resolution.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-31 |
+| PP-ADR-009 | [ADR-0009 — Preserve Raw Stream Bytes Before Filter Decoding](ADR/ADR-0009-preserve-raw-stream-bytes.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-31 |
+| PP-ADR-INDEX-001 | [Architecture Decision Record Index](ADR/ADR-Index.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-31 |
 | PP-ARCH-001 | [PiratePDF Master Blueprint - Volume II: BlackFlag Engine Architecture](Blueprint/Volume-II-BlackFlag-Engine-Architecture.md) | Architecture | 1.0 | Approved | 2026-07-24 |
 | PP-CHARTER-001 | [PiratePDF Project Charter](Project-Charter.md) | Project Charter | 1.0 | Approved | 2026-07-24 |
 | PP-DEV-001 | [PiratePDF Master Blueprint - Volume IV: Engineering Standards](Blueprint/Volume-IV-Engineering-Standards.md) | Developer Documentation | 1.0 | Approved | 2026-07-24 |
 | PP-DOC-000 | [PiratePDF Documentation](README.md) | Documentation Index | 1.0 | Approved | 2026-07-24 |
 | PP-GOV-002 | [PiratePDF Documentation Standards](05-Governance/Documentation-Standards.md) | Governance | 1.0 | Approved | 2026-07-23 |
 | PP-GOV-003 | [Documentation Validation Rules](05-Governance/Documentation-Validation-Rules.md) | Governance | 1.0 | Approved | 2026-07-24 |
+| PP-REL-BF-1039 | [BF-1039 Release Summary](releases/BF-1039/Release-Summary.md) | Release Documentation | 1.0 | Tested | 2026-07-31 |
 | PP-ROAD-000 | [PiratePDF Roadmaps](02-Roadmaps/README.md) | Roadmap | 1.0 | Approved | 2026-07-24 |
 | PP-ROAD-002 | [PiratePDF Master Blueprint - Volume VI: Future Roadmap](Blueprint/Volume-VI-Future-Roadmap.md) | Roadmap | 1.0 | Approved | 2026-07-24 |
 | PP-SPEC-000 | [PiratePDF Technical Specifications](Technical-Specifications/README.md) | Technical Specification | 1.0 | In Development | 2026-07-24 |
@@ -34,6 +40,7 @@
 | PP-SPEC-BF-1036 | [BF-1036 — Collection Parser](milestones/BF-1036-Collection-Parser.md) | Technical Specification | 1.0 | Approved | 2026-07-30 |
 | PP-SPEC-BF-1037 | [BF-1037 — Indirect Objects and References](milestones/BF-1037-Indirect-Objects-and-References.md) | Technical Specification | 1.0 | Tested | 2026-07-31 |
 | PP-SPEC-BF-1038 | [BF-1038 — Traditional Cross-Reference Tables and Trailers](milestones/BF-1038-Traditional-Cross-Reference-Tables.md) | Technical Specification | 1.0 | Tested | 2026-07-31 |
+| PP-SPEC-BF-1039 | [BF-1039 — PDF Stream Parsing Foundation](milestones/BF-1039-PDF-Stream-Parsing-Foundation.md) | Technical Specification | 1.0 | Tested | 2026-07-31 |
 | PP-TEST-001 | [PiratePDF Master Blueprint - Volume V: Testing and Quality Assurance](Blueprint/Volume-V-Testing-and-QA.md) | Testing Documentation | 1.0 | Approved | 2026-07-24 |
 | PP-VSN-000 | [PiratePDF Master Blueprint](Blueprint/README.md) | Vision | 1.0 | Approved | 2026-07-24 |
 | PP-VSN-001 | [PiratePDF Master Blueprint - Volume I: Vision and Product Strategy](Blueprint/Volume-I-Vision-and-Product-Strategy.md) | Vision | 1.0 | Approved | 2026-07-24 |

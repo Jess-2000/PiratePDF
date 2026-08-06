@@ -1,4 +1,5 @@
 using BlackFlag.Engine.Objects;
+using BlackFlag.Engine.Parsing.Streams;
 using BlackFlag.Engine.Syntax.Lexing;
 using BlackFlag.Engine.Syntax.Parsing;
 
@@ -52,6 +53,20 @@ public sealed partial class PdfObjectParser
 
         PdfObject value =
             Parse();
+
+        if (
+            value is PdfDictionary dictionary &&
+            reader.Peek().Kind == PdfTokenKind.StreamStart)
+        {
+            var streamParser =
+                new PdfStreamParser(
+                    reader,
+                    source);
+
+            value =
+                streamParser.Parse(
+                    dictionary);
+        }
 
         reader.Expect(
             PdfTokenKind.ObjectEnd);
