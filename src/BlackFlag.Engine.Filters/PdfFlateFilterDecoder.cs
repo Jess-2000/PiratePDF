@@ -154,4 +154,3 @@ public sealed class PdfFlateFilterDecoder : IPdfFilterDecoder
         }
     }
 }
-

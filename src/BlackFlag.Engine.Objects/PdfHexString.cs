@@ -65,4 +65,3 @@ public sealed class PdfHexString : PdfObject, IEquatable<PdfHexString>
     public static bool operator !=(PdfHexString? left, PdfHexString? right) =>
         !Equals(left, right);
 }
-

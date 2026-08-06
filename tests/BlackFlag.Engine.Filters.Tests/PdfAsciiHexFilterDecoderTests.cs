@@ -95,4 +95,3 @@ public sealed class PdfAsciiHexFilterDecoderTests
                 bufferSize: 16));
     }
 }
-

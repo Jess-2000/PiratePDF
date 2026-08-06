@@ -112,4 +112,3 @@ public sealed class PdfPredictorDecoderTests
         return writer.WrittenMemory.ToArray();
     }
 }
-

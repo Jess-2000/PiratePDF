@@ -38,4 +38,3 @@ public enum PdfObjectType
     /// <summary>A PDF stream object.</summary>
     Stream
 }
-

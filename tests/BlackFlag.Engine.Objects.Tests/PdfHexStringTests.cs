@@ -77,4 +77,3 @@ public sealed class PdfHexStringTests
         public override string Visit(PdfHexString value) => "HexString";
     }
 }
-

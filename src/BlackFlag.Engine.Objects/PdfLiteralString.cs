@@ -59,4 +59,3 @@ public sealed class PdfLiteralString : PdfObject, IEquatable<PdfLiteralString>
         PdfLiteralString? right) =>
         !Equals(left, right);
 }
-

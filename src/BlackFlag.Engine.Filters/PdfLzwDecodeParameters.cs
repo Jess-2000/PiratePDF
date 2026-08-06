@@ -46,4 +46,3 @@ internal readonly record struct PdfLzwDecodeParameters(
                 dictionary));
     }
 }
-

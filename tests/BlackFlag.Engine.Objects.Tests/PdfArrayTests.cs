@@ -316,4 +316,3 @@ public sealed class PdfArrayTests
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
-

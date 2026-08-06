@@ -46,4 +46,3 @@ internal sealed class TestFilterDecoder : IPdfFilterDecoder
             data.Length);
     }
 }
-

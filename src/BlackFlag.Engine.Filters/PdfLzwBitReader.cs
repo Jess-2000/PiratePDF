@@ -54,4 +54,3 @@ internal ref struct PdfLzwBitReader
         return true;
     }
 }
-

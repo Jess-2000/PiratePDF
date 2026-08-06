@@ -109,4 +109,3 @@ public sealed class PdfFilterDecodeBudgetTests
             bufferSize: 16);
     }
 }
-

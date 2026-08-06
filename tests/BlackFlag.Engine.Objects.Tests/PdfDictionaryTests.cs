@@ -465,4 +465,3 @@ public sealed class PdfDictionaryTests
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
-

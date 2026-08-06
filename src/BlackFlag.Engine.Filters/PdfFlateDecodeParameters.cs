@@ -170,4 +170,3 @@ internal readonly record struct PdfFlateDecodeParameters(
             $"The Flate decode parameter /{parameter} has value {value}; expected {expected}.");
     }
 }
-

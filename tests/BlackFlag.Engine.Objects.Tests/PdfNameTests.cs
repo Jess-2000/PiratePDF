@@ -59,4 +59,3 @@ public sealed class PdfNameTests
         public override string Visit(PdfName value) => "Name";
     }
 }
-

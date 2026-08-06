@@ -335,4 +335,3 @@ public sealed class PdfTokenReader
         }
     }
 }
-

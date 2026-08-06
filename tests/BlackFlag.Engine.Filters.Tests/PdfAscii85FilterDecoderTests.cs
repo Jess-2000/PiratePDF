@@ -111,4 +111,3 @@ public sealed class PdfAscii85FilterDecoderTests
                 bufferSize: 16));
     }
 }
-

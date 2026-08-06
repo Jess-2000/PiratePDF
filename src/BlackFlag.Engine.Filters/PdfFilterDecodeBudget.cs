@@ -114,4 +114,3 @@ public sealed class PdfFilterDecodeBudget : IPdfFilterDecodeBudget
             Limits.MaximumExpansionRatio;
     }
 }
-

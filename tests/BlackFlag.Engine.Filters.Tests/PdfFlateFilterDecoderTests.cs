@@ -351,4 +351,3 @@ public sealed class PdfFlateFilterDecoderTests
             ]);
     }
 }
-

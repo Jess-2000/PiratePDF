@@ -156,4 +156,3 @@ public sealed class PdfAsciiHexFilterDecoder : IPdfFilterDecoder
         destination.Advance(1);
     }
 }
-

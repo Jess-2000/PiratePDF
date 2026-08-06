@@ -95,4 +95,3 @@ public sealed class PdfRunLengthFilterDecoderTests
                 bufferSize: 16));
     }
 }
-

@@ -22,4 +22,3 @@ public abstract class PdfObject
     /// </exception>
     public abstract TResult Accept<TResult>(PdfObjectVisitor<TResult> visitor);
 }
-

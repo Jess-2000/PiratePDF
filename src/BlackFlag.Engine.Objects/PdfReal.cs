@@ -52,4 +52,3 @@ public sealed class PdfReal : PdfObject, IEquatable<PdfReal>
     public static bool operator !=(PdfReal? left, PdfReal? right) =>
         !Equals(left, right);
 }
-

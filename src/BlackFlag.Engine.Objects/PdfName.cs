@@ -57,4 +57,3 @@ public sealed class PdfName : PdfObject, IEquatable<PdfName>
     public static bool operator !=(PdfName? left, PdfName? right) =>
         !Equals(left, right);
 }
-

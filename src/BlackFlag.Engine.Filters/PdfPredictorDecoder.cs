@@ -443,4 +443,3 @@ internal static class PdfPredictorDecoder
             data.Length);
     }
 }
-

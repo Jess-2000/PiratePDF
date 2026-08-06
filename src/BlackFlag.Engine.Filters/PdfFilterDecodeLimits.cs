@@ -92,4 +92,3 @@ public sealed class PdfFilterDecodeLimits
     /// </summary>
     public int BufferSize { get; }
 }
-

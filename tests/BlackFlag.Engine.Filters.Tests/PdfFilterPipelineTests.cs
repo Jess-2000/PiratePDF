@@ -286,4 +286,3 @@ public sealed class PdfFilterPipelineTests
             bufferSize: 16);
     }
 }
-

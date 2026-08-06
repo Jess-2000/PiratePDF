@@ -31,4 +31,3 @@ public interface IPdfFilterDecodeBudget
     /// <param name="byteCount">The positive number of decoded bytes.</param>
     void AccountDecodedBytes(int byteCount);
 }
-

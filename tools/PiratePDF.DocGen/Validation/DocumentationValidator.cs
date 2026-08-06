@@ -320,4 +320,3 @@ internal static partial class DocumentationValidator
         RegexOptions.CultureInvariant)]
     private static partial Regex WorkItemPattern();
 }
-

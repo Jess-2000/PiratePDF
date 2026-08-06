@@ -480,4 +480,3 @@ public sealed class PdfLexerKeywordTests
             endOfFile.Span.End.Offset);
     }
 }
-

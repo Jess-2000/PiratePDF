@@ -52,4 +52,3 @@ public sealed class PdfNullTests
         public override string Visit(PdfNull value) => "Null";
     }
 }
-

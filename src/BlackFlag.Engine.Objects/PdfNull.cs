@@ -44,4 +44,3 @@ public sealed class PdfNull : PdfObject, IEquatable<PdfNull>
     /// </summary>
     public static bool operator !=(PdfNull? left, PdfNull? right) => !(left == right);
 }
-

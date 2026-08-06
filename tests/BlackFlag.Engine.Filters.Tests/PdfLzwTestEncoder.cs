@@ -100,4 +100,3 @@ internal static class PdfLzwTestEncoder
         return bytes.ToArray();
     }
 }
-

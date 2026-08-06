@@ -267,4 +267,3 @@ public sealed class PdfAscii85FilterDecoder : IPdfFilterDecoder
             0x20;
     }
 }
-

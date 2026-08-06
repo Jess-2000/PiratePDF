@@ -43,4 +43,3 @@ public sealed class PdfFilterDecodeContext
     /// </summary>
     public int FilterIndex { get; }
 }
-

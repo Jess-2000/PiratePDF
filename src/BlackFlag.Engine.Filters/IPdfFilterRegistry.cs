@@ -28,4 +28,3 @@ public interface IPdfFilterRegistry
     /// <returns>The registered decoder.</returns>
     IPdfFilterDecoder GetRequired(PdfName name);
 }
-
