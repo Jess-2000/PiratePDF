@@ -49,3 +49,4 @@ publish/
 docs/ValidationReport.md
 docs/Documentation-Health.md
 docs/Document-Changes.md
+.package-backups/
