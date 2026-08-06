@@ -4,11 +4,11 @@
 |---|---|
 | **Document ID** | PP-ADR-INDEX-001 |
 | **Category** | Architecture Decision Record |
-| **Version** | 1.0 |
+| **Version** | 1.1 |
 | **Status** | Approved |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1000, BF-1039, BF-8000 |
-| **Last Updated** | 2026-07-31 |
+| **Last Updated** | 2026-08-06 |
 | **Next Review** | 2026-10-31 |
 
 ---
@@ -32,6 +32,9 @@ PiratePDF and BlackFlag Engine.
 | [ADR-0007](ADR-0007-separate-stream-parsing-from-object-parsing.md) | Separate Stream Parsing from Object Parsing | Accepted | BF-1039 |
 | [ADR-0008](ADR-0008-defer-indirect-stream-length-resolution.md) | Defer Indirect Stream Length Resolution | Accepted | BF-1039 |
 | [ADR-0009](ADR-0009-preserve-raw-stream-bytes.md) | Preserve Raw Stream Bytes Before Filter Decoding | Accepted | BF-1039 |
+| [ADR-0010](ADR-0010-lazy-bounded-materialization.md) | Use Lazy, Bounded Materialization for Large Data | Accepted | BF-1040 |
+| [ADR-0011](ADR-0011-passive-document-conversion.md) | Convert Documents as Passive Content | Accepted | BF-1040 |
+| [ADR-0012](ADR-0012-pure-filter-transformations.md) | Implement Filter Decoders as Pure Transformations | Accepted | BF-1040 |
 
 ## Lifecycle
 
@@ -61,3 +64,4 @@ ADR-0001.
 | Version | Date | Description |
 |---|---|---|
 | 1.0 | 2026-07-31 | Created the authoritative ADR index through ADR-0009. |
+| 1.1 | 2026-08-06 | Added ADR-0010 through ADR-0012 for BF-1040. |

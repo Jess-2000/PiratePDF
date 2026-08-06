@@ -4,6 +4,7 @@
     <Project Path="src/BlackFlag.Engine.Core/BlackFlag.Engine.Core.csproj" />
     <Project Path="src/BlackFlag.Engine.Document/BlackFlag.Engine.Document.csproj" />
     <Project Path="src/BlackFlag.Engine.Editing/BlackFlag.Engine.Editing.csproj" />
+    <Project Path="src/BlackFlag.Engine.Filters/BlackFlag.Engine.Filters.csproj" />
     <Project Path="src/BlackFlag.Engine.IO/BlackFlag.Engine.IO.csproj" />
     <Project Path="src/BlackFlag.Engine.Objects/BlackFlag.Engine.Objects.csproj" />
     <Project Path="src/BlackFlag.Engine.Parsing/BlackFlag.Engine.Parsing.csproj" />
@@ -18,6 +19,7 @@
     <Project Path="tests/BlackFlag.Engine.Core.Tests/BlackFlag.Engine.Core.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.Document.Tests/BlackFlag.Engine.Document.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.Editing.Tests/BlackFlag.Engine.Editing.Tests.csproj" />
+    <Project Path="tests/BlackFlag.Engine.Filters.Tests/BlackFlag.Engine.Filters.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.IO.Tests/BlackFlag.Engine.IO.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.Objects.Tests/BlackFlag.Engine.Objects.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.Parsing.Tests/BlackFlag.Engine.Parsing.Tests.csproj" />
