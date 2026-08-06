@@ -15,6 +15,17 @@ public sealed class PdfLexerOptions
         DefaultMaximumTokenLength;
 
     /// <summary>
+    /// Gets or sets a value indicating whether unreserved regular tokens are
+    /// returned as <see cref="PdfTokenKind.Keyword"/> values.
+    /// </summary>
+    /// <remarks>
+    /// Content-stream parsers enable this option because graphics operators
+    /// use the regular-token grammar. Document-syntax parsing leaves it
+    /// disabled so unexpected keywords remain errors.
+    /// </remarks>
+    public bool AllowUnknownKeywords { get; set; }
+
+    /// <summary>
     /// Gets or sets the maximum number of source bytes that may belong to one
     /// lexical token.
     /// </summary>
