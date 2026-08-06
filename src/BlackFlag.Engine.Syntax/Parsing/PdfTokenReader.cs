@@ -24,7 +24,7 @@ public sealed class PdfTokenReader
 {
     private const int DefaultBufferCapacity = 8;
 
-    private readonly IPdfLexer lexer;
+    private IPdfLexer lexer;
 
     private PdfToken[] buffer;
     private int head;
@@ -75,6 +75,32 @@ public sealed class PdfTokenReader
 
         this.lexer = lexer;
         buffer = new PdfToken[initialBufferCapacity];
+    }
+
+    /// <summary>
+    /// Replaces the lexer and clears all buffered reader state.
+    /// </summary>
+    /// <param name="lexer">
+    /// The lexer that will supply tokens after the reset.
+    /// </param>
+    /// <remarks>
+    /// This internal operation is used when a parser consumes raw source bytes
+    /// that cannot be represented as ordinary lexical tokens.
+    /// </remarks>
+    internal void Reset(
+        IPdfLexer lexer)
+    {
+        ArgumentNullException.ThrowIfNull(lexer);
+
+        this.lexer = lexer;
+
+        Array.Clear(buffer);
+        head = 0;
+        count = 0;
+        endOfFileToken = default;
+        endOfFileWasRead = false;
+        current = default;
+        hasCurrent = false;
     }
 
     /// <summary>
