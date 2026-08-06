@@ -213,3 +213,4 @@ public sealed partial class PdfCrossReferenceParser
             0x20;
     }
 }
+

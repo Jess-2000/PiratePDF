@@ -22,6 +22,9 @@
 
     <ProjectReference
       Include="..\BlackFlag.Engine.Objects\BlackFlag.Engine.Objects.csproj" />
+
+    <ProjectReference
+      Include="..\BlackFlag.Engine.Filters\BlackFlag.Engine.Filters.csproj" />
   </ItemGroup>
 
 </Project>

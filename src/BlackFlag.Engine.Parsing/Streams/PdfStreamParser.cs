@@ -90,3 +90,4 @@ internal sealed partial class PdfStreamParser
             (int)lengthInteger.Value);
     }
 }
+

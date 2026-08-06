@@ -87,3 +87,4 @@ public sealed class PdfCrossReferenceChain
     public IReadOnlyDictionary<PdfObjectId, PdfCrossReferenceEntry> Entries =>
         entries;
 }
+

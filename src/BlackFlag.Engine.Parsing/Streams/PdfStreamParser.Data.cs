@@ -72,3 +72,4 @@ internal sealed partial class PdfStreamParser
         }
     }
 }
+

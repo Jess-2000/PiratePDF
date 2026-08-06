@@ -53,3 +53,4 @@ public readonly record struct PdfObjectId
             GenerationNumber);
     }
 }
+

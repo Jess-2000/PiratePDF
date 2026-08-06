@@ -86,3 +86,4 @@ public sealed class PdfCrossReferenceTable
     /// </summary>
     public PdfDictionary Trailer { get; }
 }
+

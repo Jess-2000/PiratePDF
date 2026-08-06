@@ -68,3 +68,4 @@ public sealed partial class PdfObjectParser
         return checked((int)value);
     }
 }
+

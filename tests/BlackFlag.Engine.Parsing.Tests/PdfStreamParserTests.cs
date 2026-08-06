@@ -435,3 +435,4 @@ public sealed class PdfStreamParserTests
             "The requested byte sequence was not found.");
     }
 }
+

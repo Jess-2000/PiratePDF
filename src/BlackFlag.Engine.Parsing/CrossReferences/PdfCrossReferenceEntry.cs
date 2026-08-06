@@ -49,3 +49,4 @@ public sealed record PdfCrossReferenceEntry
     /// </summary>
     public bool IsInUse { get; }
 }
+

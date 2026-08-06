@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using BlackFlag.Engine.Objects;
 using BlackFlag.Engine.Syntax.Lexing;
 
@@ -62,3 +62,4 @@ public sealed partial class PdfObjectParser
                 decodedBytes.ToArray()));
     }
 }
+
