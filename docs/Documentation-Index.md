@@ -53,6 +53,7 @@
 | PP-SPEC-BF-1039 | [BF-1039 — PDF Stream Parsing Foundation](milestones/BF-1039-PDF-Stream-Parsing-Foundation.md) | Technical Specification | 1.0 | Tested | 2026-07-31 |
 | PP-SPEC-BF-1040 | [BF-1040 — Stream Filter Framework and FlateDecode](milestones/BF-1040-Stream-Filter-Framework-and-FlateDecode.md) | Technical Specification | 1.0 | Tested | 2026-08-06 |
 | PP-SPEC-BF-1041 | [BF-1041 — Additional PDF Stream Filters](milestones/BF-1041-Additional-PDF-Stream-Filters.md) | Technical Specification | 1.0 | Tested | 2026-08-06 |
+| PP-SPEC-BF-1043 | [BF-1043 — Document Loading and Indirect Object Resolution](milestones/BF-1043-Document-Loading-and-Indirect-Object-Resolution.md) | Technical Specification | 1.0 | Implemented | 2026-08-06 |
 | PP-TEST-001 | [PiratePDF Master Blueprint - Volume V: Testing and Quality Assurance](Blueprint/Volume-V-Testing-and-QA.md) | Testing Documentation | 1.0 | Approved | 2026-07-24 |
 | PP-VSN-000 | [PiratePDF Master Blueprint](Blueprint/README.md) | Vision | 1.0 | Approved | 2026-07-24 |
 | PP-VSN-001 | [PiratePDF Master Blueprint - Volume I: Vision and Product Strategy](Blueprint/Volume-I-Vision-and-Product-Strategy.md) | Vision | 1.0 | Approved | 2026-07-24 |
