@@ -25,6 +25,9 @@
 
     <ProjectReference
       Include="..\BlackFlag.Engine.Filters\BlackFlag.Engine.Filters.csproj" />
+
+    <ProjectReference
+      Include="..\BlackFlag.Engine.Rendering\BlackFlag.Engine.Rendering.csproj" />
   </ItemGroup>
 
 </Project>

@@ -13,6 +13,9 @@
 
     <ProjectReference
       Include="..\BlackFlag.Engine.Document\BlackFlag.Engine.Document.csproj" />
+
+    <ProjectReference
+      Include="..\BlackFlag.Engine.Objects\BlackFlag.Engine.Objects.csproj" />
   </ItemGroup>
 
 </Project>

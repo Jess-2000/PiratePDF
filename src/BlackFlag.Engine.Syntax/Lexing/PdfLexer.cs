@@ -101,7 +101,7 @@ public sealed partial class PdfLexer : IPdfLexer
                     ReadNumber(),
 
             _ when
-                IsKeywordStartByte(
+                IsRegularPdfByte(
                     value) =>
                     ReadKeyword(),
 

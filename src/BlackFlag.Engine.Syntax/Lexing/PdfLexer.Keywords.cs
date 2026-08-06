@@ -44,6 +44,13 @@ public sealed partial class PdfLexer
                 start);
         }
 
+        if (Options.AllowUnknownKeywords)
+        {
+            return CreateToken(
+                PdfTokenKind.Keyword,
+                start);
+        }
+
         throw CreateUnknownKeywordException(
             keywordBytes,
             keywordLength,
@@ -172,14 +179,6 @@ public sealed partial class PdfLexer
         return false;
     }
 
-    private static bool IsKeywordStartByte(
-        byte value)
-    {
-        return
-            value is >= (byte)'A' and <= (byte)'Z' ||
-            value is >= (byte)'a' and <= (byte)'z';
-    }
-
     private static bool IsRegularPdfByte(
         byte value)
     {
@@ -230,6 +229,10 @@ public sealed partial class PdfLexer
             ConvertKeywordBytesToDisplayText(
                 keywordBytes[..displayedLength]);
 
+            byte firstByte = keywordLength > 0
+                ? keywordBytes[0]
+                : (byte)0;
+
         if (keywordLength > keywordBytes.Length)
         {
             description =
@@ -242,8 +245,10 @@ public sealed partial class PdfLexer
             string.Concat(
                 "Unknown PDF keyword '",
                 description,
-                "'"),
-            position);
+                "' (0x",
+                firstByte.ToString("X2", System.Globalization.CultureInfo.InvariantCulture),
+                ")"),
+                position);
     }
 
     private static string ConvertKeywordBytesToDisplayText(
