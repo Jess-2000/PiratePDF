@@ -33,8 +33,10 @@
 | PP-GOV-003 | [Documentation Validation Rules](05-Governance/Documentation-Validation-Rules.md) | Governance | 1.0 | Approved | 2026-07-24 |
 | PP-HIST-001 | [Building BlackFlag](BUILDING-BLACKFLAG.md) | Developer Guide | 0.1 | In Development | 2026-08-06 |
 | PP-HIST-BF-1040 | [BF-1040 Milestone Reflection](releases/BF-1040/Milestone-Reflection.md) | Project History | 1.0 | Tested | 2026-08-06 |
+| PP-HIST-BF-1041 | [BF-1041 Milestone Reflection](releases/BF-1041/Milestone-Reflection.md) | Project History | 1.0 | Tested | 2026-08-06 |
 | PP-REL-BF-1039 | [BF-1039 Release Summary](releases/BF-1039/Release-Summary.md) | Release Documentation | 1.0 | Tested | 2026-07-31 |
 | PP-REL-BF-1040 | [BF-1040 Release Summary](releases/BF-1040/Release-Summary.md) | Release Documentation | 1.0 | Tested | 2026-08-06 |
+| PP-REL-BF-1041 | [BF-1041 Release Summary](releases/BF-1041/Release-Summary.md) | Release Documentation | 1.0 | Tested | 2026-08-06 |
 | PP-ROAD-000 | [PiratePDF Roadmaps](02-Roadmaps/README.md) | Roadmap | 1.0 | Approved | 2026-07-24 |
 | PP-ROAD-002 | [PiratePDF Master Blueprint - Volume VI: Future Roadmap](Blueprint/Volume-VI-Future-Roadmap.md) | Roadmap | 1.0 | Approved | 2026-07-24 |
 | PP-SPEC-000 | [PiratePDF Technical Specifications](Technical-Specifications/README.md) | Technical Specification | 1.0 | In Development | 2026-07-24 |
@@ -50,6 +52,7 @@
 | PP-SPEC-BF-1038 | [BF-1038 — Traditional Cross-Reference Tables and Trailers](milestones/BF-1038-Traditional-Cross-Reference-Tables.md) | Technical Specification | 1.0 | Tested | 2026-07-31 |
 | PP-SPEC-BF-1039 | [BF-1039 — PDF Stream Parsing Foundation](milestones/BF-1039-PDF-Stream-Parsing-Foundation.md) | Technical Specification | 1.0 | Tested | 2026-07-31 |
 | PP-SPEC-BF-1040 | [BF-1040 — Stream Filter Framework and FlateDecode](milestones/BF-1040-Stream-Filter-Framework-and-FlateDecode.md) | Technical Specification | 1.0 | Tested | 2026-08-06 |
+| PP-SPEC-BF-1041 | [BF-1041 — Additional PDF Stream Filters](milestones/BF-1041-Additional-PDF-Stream-Filters.md) | Technical Specification | 1.0 | Tested | 2026-08-06 |
 | PP-TEST-001 | [PiratePDF Master Blueprint - Volume V: Testing and Quality Assurance](Blueprint/Volume-V-Testing-and-QA.md) | Testing Documentation | 1.0 | Approved | 2026-07-24 |
 | PP-VSN-000 | [PiratePDF Master Blueprint](Blueprint/README.md) | Vision | 1.0 | Approved | 2026-07-24 |
 | PP-VSN-001 | [PiratePDF Master Blueprint - Volume I: Vision and Product Strategy](Blueprint/Volume-I-Vision-and-Product-Strategy.md) | Vision | 1.0 | Approved | 2026-07-24 |
