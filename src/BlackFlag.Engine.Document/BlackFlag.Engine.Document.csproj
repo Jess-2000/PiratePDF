@@ -5,6 +5,7 @@
     <ProjectReference Include="..\BlackFlag.Engine.IO\BlackFlag.Engine.IO.csproj" />
     <ProjectReference Include="..\BlackFlag.Engine.Syntax\BlackFlag.Engine.Syntax.csproj" />
     <ProjectReference Include="..\BlackFlag.Engine.Abstractions\BlackFlag.Engine.Abstractions.csproj" />
+    <ProjectReference Include="..\BlackFlag.Engine.Objects\BlackFlag.Engine.Objects.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
