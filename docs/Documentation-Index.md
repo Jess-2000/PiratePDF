@@ -19,14 +19,22 @@
 | PP-ADR-007 | [ADR-0007 — Separate Stream Parsing from Object Parsing](ADR/ADR-0007-separate-stream-parsing-from-object-parsing.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-31 |
 | PP-ADR-008 | [ADR-0008 — Defer Indirect Stream Length Resolution](ADR/ADR-0008-defer-indirect-stream-length-resolution.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-31 |
 | PP-ADR-009 | [ADR-0009 — Preserve Raw Stream Bytes Before Filter Decoding](ADR/ADR-0009-preserve-raw-stream-bytes.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-31 |
-| PP-ADR-INDEX-001 | [Architecture Decision Record Index](ADR/ADR-Index.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-31 |
+| PP-ADR-010 | [ADR-0010 — Use Lazy, Bounded Materialization for Large Data](ADR/ADR-0010-lazy-bounded-materialization.md) | Architecture Decision Record | 1.0 | Approved | 2026-08-06 |
+| PP-ADR-011 | [ADR-0011 — Convert Documents as Passive Content](ADR/ADR-0011-passive-document-conversion.md) | Architecture Decision Record | 1.0 | Approved | 2026-08-06 |
+| PP-ADR-012 | [ADR-0012 — Implement Filter Decoders as Pure Transformations](ADR/ADR-0012-pure-filter-transformations.md) | Architecture Decision Record | 1.0 | Approved | 2026-08-06 |
+| PP-ADR-INDEX-001 | [Architecture Decision Record Index](ADR/ADR-Index.md) | Architecture Decision Record | 1.1 | Approved | 2026-08-06 |
 | PP-ARCH-001 | [PiratePDF Master Blueprint - Volume II: BlackFlag Engine Architecture](Blueprint/Volume-II-BlackFlag-Engine-Architecture.md) | Architecture | 1.0 | Approved | 2026-07-24 |
+| PP-ARCH-CONV-001 | [Passive Document Conversion Architecture](Architecture/PASSIVE-DOCUMENT-CONVERSION.md) | Architecture | 1.0 | Approved | 2026-08-06 |
+| PP-ARCH-MEM-001 | [BlackFlag Memory and Resource Architecture](Architecture/MEMORY-ARCHITECTURE.md) | Architecture | 1.0 | In Development | 2026-08-06 |
 | PP-CHARTER-001 | [PiratePDF Project Charter](Project-Charter.md) | Project Charter | 1.0 | Approved | 2026-07-24 |
 | PP-DEV-001 | [PiratePDF Master Blueprint - Volume IV: Engineering Standards](Blueprint/Volume-IV-Engineering-Standards.md) | Developer Documentation | 1.0 | Approved | 2026-07-24 |
 | PP-DOC-000 | [PiratePDF Documentation](README.md) | Documentation Index | 1.0 | Approved | 2026-07-24 |
 | PP-GOV-002 | [PiratePDF Documentation Standards](05-Governance/Documentation-Standards.md) | Governance | 1.0 | Approved | 2026-07-23 |
 | PP-GOV-003 | [Documentation Validation Rules](05-Governance/Documentation-Validation-Rules.md) | Governance | 1.0 | Approved | 2026-07-24 |
+| PP-HIST-001 | [Building BlackFlag](BUILDING-BLACKFLAG.md) | Developer Guide | 0.1 | In Development | 2026-08-06 |
+| PP-HIST-BF-1040 | [BF-1040 Milestone Reflection](releases/BF-1040/Milestone-Reflection.md) | Project History | 1.0 | Tested | 2026-08-06 |
 | PP-REL-BF-1039 | [BF-1039 Release Summary](releases/BF-1039/Release-Summary.md) | Release Documentation | 1.0 | Tested | 2026-07-31 |
+| PP-REL-BF-1040 | [BF-1040 Release Summary](releases/BF-1040/Release-Summary.md) | Release Documentation | 1.0 | Tested | 2026-08-06 |
 | PP-ROAD-000 | [PiratePDF Roadmaps](02-Roadmaps/README.md) | Roadmap | 1.0 | Approved | 2026-07-24 |
 | PP-ROAD-002 | [PiratePDF Master Blueprint - Volume VI: Future Roadmap](Blueprint/Volume-VI-Future-Roadmap.md) | Roadmap | 1.0 | Approved | 2026-07-24 |
 | PP-SPEC-000 | [PiratePDF Technical Specifications](Technical-Specifications/README.md) | Technical Specification | 1.0 | In Development | 2026-07-24 |
@@ -41,6 +49,7 @@
 | PP-SPEC-BF-1037 | [BF-1037 — Indirect Objects and References](milestones/BF-1037-Indirect-Objects-and-References.md) | Technical Specification | 1.0 | Tested | 2026-07-31 |
 | PP-SPEC-BF-1038 | [BF-1038 — Traditional Cross-Reference Tables and Trailers](milestones/BF-1038-Traditional-Cross-Reference-Tables.md) | Technical Specification | 1.0 | Tested | 2026-07-31 |
 | PP-SPEC-BF-1039 | [BF-1039 — PDF Stream Parsing Foundation](milestones/BF-1039-PDF-Stream-Parsing-Foundation.md) | Technical Specification | 1.0 | Tested | 2026-07-31 |
+| PP-SPEC-BF-1040 | [BF-1040 — Stream Filter Framework and FlateDecode](milestones/BF-1040-Stream-Filter-Framework-and-FlateDecode.md) | Technical Specification | 1.0 | Tested | 2026-08-06 |
 | PP-TEST-001 | [PiratePDF Master Blueprint - Volume V: Testing and Quality Assurance](Blueprint/Volume-V-Testing-and-QA.md) | Testing Documentation | 1.0 | Approved | 2026-07-24 |
 | PP-VSN-000 | [PiratePDF Master Blueprint](Blueprint/README.md) | Vision | 1.0 | Approved | 2026-07-24 |
 | PP-VSN-001 | [PiratePDF Master Blueprint - Volume I: Vision and Product Strategy](Blueprint/Volume-I-Vision-and-Product-Strategy.md) | Vision | 1.0 | Approved | 2026-07-24 |
