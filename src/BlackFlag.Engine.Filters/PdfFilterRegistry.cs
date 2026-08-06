@@ -78,3 +78,4 @@ public sealed class PdfFilterRegistry : IPdfFilterRegistry
             $"No decoder is registered for PDF filter /{name.Value}.");
     }
 }
+

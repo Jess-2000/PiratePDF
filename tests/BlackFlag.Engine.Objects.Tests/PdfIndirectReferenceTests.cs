@@ -188,3 +188,4 @@ public sealed class PdfIndirectReferenceTests
         public override string Visit(PdfObject value) => "Object";
     }
 }
+

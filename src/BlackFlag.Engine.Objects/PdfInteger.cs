@@ -52,3 +52,4 @@ public sealed class PdfInteger : PdfObject, IEquatable<PdfInteger>
     public static bool operator !=(PdfInteger? left, PdfInteger? right) =>
         !Equals(left, right);
 }
+

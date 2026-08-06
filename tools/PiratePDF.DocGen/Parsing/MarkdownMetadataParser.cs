@@ -341,3 +341,4 @@ internal static class MarkdownMetadataParser
             : string.Empty;
     }
 }
+

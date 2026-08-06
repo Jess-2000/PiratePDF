@@ -241,3 +241,4 @@ public sealed class PdfLzwFilterDecoderTests
                 bufferSize: 64));
     }
 }
+

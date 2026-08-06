@@ -29,3 +29,4 @@ public interface IPdfFilterDecoder
         IBufferWriter<byte> destination,
         PdfFilterDecodeContext context);
 }
+

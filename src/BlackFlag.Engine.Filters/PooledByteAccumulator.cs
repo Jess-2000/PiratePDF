@@ -175,3 +175,4 @@ internal sealed class PooledByteAccumulator : IDisposable
         buffer = replacement;
     }
 }
+

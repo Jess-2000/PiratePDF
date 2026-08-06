@@ -59,3 +59,4 @@ public sealed class PdfFilterRegistryTests
             exception.Failure);
     }
 }
+

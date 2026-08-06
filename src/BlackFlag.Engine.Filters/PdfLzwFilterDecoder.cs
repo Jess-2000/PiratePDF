@@ -252,3 +252,4 @@ public sealed class PdfLzwFilterDecoder : IPdfFilterDecoder
         }
     }
 }
+

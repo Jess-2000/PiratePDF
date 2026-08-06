@@ -23,3 +23,4 @@ internal static class PdfFlateTestData
         return destination.ToArray();
     }
 }
+

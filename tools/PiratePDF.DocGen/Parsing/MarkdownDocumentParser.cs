@@ -430,3 +430,4 @@ internal static partial class MarkdownDocumentParser
         RegexOptions.IgnoreCase)]
     private static partial Regex WorkItemPattern();
 }
+

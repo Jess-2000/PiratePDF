@@ -300,3 +300,4 @@ public sealed class PdfTokenReaderTests
             initialCapacity);
     }
 }
+

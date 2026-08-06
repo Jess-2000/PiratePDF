@@ -40,3 +40,4 @@ public enum PdfFilterDecodeFailure
     /// </summary>
     Cancelled = 6,
 }
+

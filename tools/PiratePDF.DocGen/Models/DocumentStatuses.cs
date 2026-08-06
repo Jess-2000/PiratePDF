@@ -70,3 +70,4 @@ internal static class DocumentStatuses
                StatusLookup.Contains(status);
     }
 }
+

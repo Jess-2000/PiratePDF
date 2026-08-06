@@ -159,3 +159,4 @@ internal sealed class PooledPdfFilterBufferWriter :
         buffer = replacement;
     }
 }
+

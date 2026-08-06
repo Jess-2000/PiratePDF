@@ -26,3 +26,4 @@ public interface IPdfFilterPipeline
         PdfFilterDecodeLimits limits,
         CancellationToken cancellationToken = default);
 }
+

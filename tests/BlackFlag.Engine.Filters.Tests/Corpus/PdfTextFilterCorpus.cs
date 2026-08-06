@@ -129,3 +129,4 @@ internal static class PdfTextFilterCorpus
             PdfFilterDecodeFailure.InvalidData)
     ];
 }
+

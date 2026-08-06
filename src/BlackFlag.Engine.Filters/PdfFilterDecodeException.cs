@@ -41,3 +41,4 @@ public sealed class PdfFilterDecodeException : IOException
     /// </summary>
     public PdfFilterDecodeFailure Failure { get; }
 }
+

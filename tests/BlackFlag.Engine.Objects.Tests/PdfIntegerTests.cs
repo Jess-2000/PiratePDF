@@ -48,3 +48,4 @@ public sealed class PdfIntegerTests
         public override string Visit(PdfInteger value) => "Integer";
     }
 }
+

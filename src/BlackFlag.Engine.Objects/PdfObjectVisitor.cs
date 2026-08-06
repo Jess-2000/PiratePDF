@@ -134,3 +134,4 @@ public abstract class PdfObjectVisitor<TResult>
         return Visit((PdfObject)value);
     }
 }
+

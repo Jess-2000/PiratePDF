@@ -6,3 +6,4 @@ using System.Diagnostics.CodeAnalysis;
     Justification = "PdfStream is the terminology defined by the PDF specification and is appropriate for the PDF object model.",
     Scope = "type",
     Target = "~T:BlackFlag.Engine.Objects.PdfStream")]
+

@@ -267,3 +267,4 @@ public sealed partial class PdfLexer
             characters);
     }
 }
+

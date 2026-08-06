@@ -47,3 +47,4 @@ public sealed class PdfBooleanTests
         public override string Visit(PdfBoolean value) => "Boolean";
     }
 }
+

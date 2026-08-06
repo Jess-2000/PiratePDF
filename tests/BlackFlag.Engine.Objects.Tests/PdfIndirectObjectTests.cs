@@ -207,3 +207,4 @@ public sealed class PdfIndirectObjectTests
         Assert.True(left != value);
     }
 }
+

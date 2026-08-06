@@ -107,3 +107,4 @@ public sealed class PdfStream :
         PdfStream? right) =>
         !Equals(left, right);
 }
+

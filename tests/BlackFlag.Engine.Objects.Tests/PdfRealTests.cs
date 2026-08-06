@@ -48,3 +48,4 @@ public sealed class PdfRealTests
         public override string Visit(PdfReal value) => "Real";
     }
 }
+

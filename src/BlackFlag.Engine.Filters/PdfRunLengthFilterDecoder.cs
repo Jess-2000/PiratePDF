@@ -116,3 +116,4 @@ public sealed class PdfRunLengthFilterDecoder : IPdfFilterDecoder
             data.Length);
     }
 }
+
