@@ -537,3 +537,4 @@ public sealed class PdfObjectParserIndirectTests
         return new PdfTokenReader(lexer);
     }
 }
+

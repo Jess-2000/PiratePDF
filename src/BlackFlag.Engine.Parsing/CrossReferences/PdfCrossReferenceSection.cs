@@ -69,3 +69,4 @@ public sealed class PdfCrossReferenceSection
     public IReadOnlyList<PdfCrossReferenceEntry> Entries =>
         entries;
 }
+

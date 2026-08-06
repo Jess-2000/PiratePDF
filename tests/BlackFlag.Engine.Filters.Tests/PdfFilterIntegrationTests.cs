@@ -189,6 +189,8 @@ public sealed class PdfFilterIntegrationTests
 
         int offset = 0;
 
+        Span<byte> group = stackalloc byte[5];
+
         while (offset + 4 <= data.Length)
         {
             uint tuple =
@@ -204,8 +206,7 @@ public sealed class PdfFilterIntegrationTests
             }
             else
             {
-                Span<byte> group =
-                    stackalloc byte[5];
+                // reuse stack allocated buffer
 
                 for (int index = 4; index >= 0; index--)
                 {
@@ -238,8 +239,7 @@ public sealed class PdfFilterIntegrationTests
                     (24 - (index * 8));
             }
 
-            Span<byte> group =
-                stackalloc byte[5];
+            // reuse stack allocated buffer
 
             for (int index = 4; index >= 0; index--)
             {

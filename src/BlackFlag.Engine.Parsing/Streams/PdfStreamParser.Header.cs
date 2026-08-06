@@ -41,3 +41,4 @@ internal sealed partial class PdfStreamParser
         return nextOffset;
     }
 }
+

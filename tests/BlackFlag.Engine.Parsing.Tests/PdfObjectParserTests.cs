@@ -658,3 +658,4 @@ public sealed class PdfObjectParserTests
         return new PdfTokenReader(lexer);
     }
 }
+

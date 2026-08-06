@@ -39,3 +39,4 @@ public sealed partial class PdfCrossReferenceParser
         return trailer;
     }
 }
+

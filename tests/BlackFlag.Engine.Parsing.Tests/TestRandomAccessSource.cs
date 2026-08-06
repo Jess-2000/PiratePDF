@@ -1,4 +1,4 @@
-﻿using System.Threading;
+using System.Threading;
 using System.Threading.Tasks;
 using BlackFlag.Engine.Abstractions.IO;
 
@@ -82,3 +82,4 @@ internal sealed class TestRandomAccessSource :
         }
     }
 }
+

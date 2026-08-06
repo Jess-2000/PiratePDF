@@ -136,3 +136,4 @@ public sealed partial class PdfObjectParser
         return new PdfBoolean(value);
     }
 }
+

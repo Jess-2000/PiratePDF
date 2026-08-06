@@ -34,3 +34,4 @@ internal sealed class PdfCrossReferenceChainBuilder
             entries);
     }
 }
+
