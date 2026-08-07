@@ -3,9 +3,7 @@ using BlackFlag.Engine.Objects;
 
 namespace BlackFlag.Engine.Filters;
 
-/// <summary>
-/// Decodes PDF <c>/ASCII85Decode</c> streams.
-/// </summary>
+// Decodes PDF <c>/ASCII85Decode</c> streams.
 public sealed class PdfAscii85FilterDecoder : IPdfFilterDecoder
 {
     private const uint MaximumTupleValue = uint.MaxValue;
@@ -13,10 +11,10 @@ public sealed class PdfAscii85FilterDecoder : IPdfFilterDecoder
     private static readonly PdfName FilterName =
         new("ASCII85Decode");
 
-    /// <inheritdoc />
+    //  <inheritdoc />
     public PdfName Name => FilterName;
 
-    /// <inheritdoc />
+    //  <inheritdoc />
     public void Decode(
         ReadOnlySpan<byte> encodedData,
         IBufferWriter<byte> destination,
@@ -38,9 +36,10 @@ public sealed class PdfAscii85FilterDecoder : IPdfFilterDecoder
                 context.Budget.ThrowIfCancellationRequested();
             }
 
-            byte value = encodedData[index];
+            byte value =
+                encodedData[index];
 
-            if (IsWhiteSpace(value))
+            if (PdfFilterByteClassifier.IsWhiteSpace(value))
             {
                 continue;
             }
@@ -56,6 +55,7 @@ public sealed class PdfAscii85FilterDecoder : IPdfFilterDecoder
                     encodedData[(markerEnd + 1)..]);
 
                 terminated = true;
+
                 DecodePartialGroup(
                     group,
                     groupCount,
@@ -127,9 +127,10 @@ public sealed class PdfAscii85FilterDecoder : IPdfFilterDecoder
     {
         for (int index = startIndex; index < encodedData.Length; index++)
         {
-            byte value = encodedData[index];
+            byte value =
+                encodedData[index];
 
-            if (IsWhiteSpace(value))
+            if (PdfFilterByteClassifier.IsWhiteSpace(value))
             {
                 continue;
             }
@@ -208,34 +209,27 @@ public sealed class PdfAscii85FilterDecoder : IPdfFilterDecoder
         uint tuple,
         int byteCount)
     {
+        ArgumentOutOfRangeException.ThrowIfNegative(
+            byteCount,
+            nameof(byteCount));
+
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(
+            byteCount,
+            4,
+            nameof(byteCount));
+
         Span<byte> output =
             destination.GetSpan(byteCount);
 
-        if (byteCount > 0)
+        for (int index = 0; index < byteCount; index++)
         {
-            output[0] =
-                (byte)(
-                    tuple >> 24);
-        }
+            int shift =
+                24 -
+                (index * 8);
 
-        if (byteCount > 1)
-        {
-            output[1] =
+            output[index] =
                 (byte)(
-                    tuple >> 16);
-        }
-
-        if (byteCount > 2)
-        {
-            output[2] =
-                (byte)(
-                    tuple >> 8);
-        }
-
-        if (byteCount > 3)
-        {
-            output[3] =
-                (byte)tuple;
+                    tuple >> shift);
         }
 
         destination.Advance(byteCount);
@@ -244,26 +238,14 @@ public sealed class PdfAscii85FilterDecoder : IPdfFilterDecoder
     private static void EnsureOnlyTrailingWhiteSpace(
         ReadOnlySpan<byte> trailingData)
     {
-        for (int index = 0; index < trailingData.Length; index++)
+        foreach (byte value in trailingData)
         {
-            if (!IsWhiteSpace(trailingData[index]))
+            if (!PdfFilterByteClassifier.IsWhiteSpace(value))
             {
                 throw new PdfFilterDecodeException(
                     PdfFilterDecodeFailure.InvalidData,
                     "ASCII85Decode contains non-whitespace data after the end marker.");
             }
         }
-    }
-
-    private static bool IsWhiteSpace(
-        byte value)
-    {
-        return value is
-            0x00 or
-            0x09 or
-            0x0A or
-            0x0C or
-            0x0D or
-            0x20;
     }
 }
