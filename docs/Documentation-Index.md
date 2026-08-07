@@ -57,6 +57,7 @@
 | PP-SPEC-BF-1044 | [BF-1044 — Document Open and Effective Page Model](milestones/BF-1044-Document-Open-Effective-Page-Model.md) | Technical Specification | 1.0 | Implemented | 2026-08-06 |
 | PP-SPEC-BF-1045 | [BF-1045 — Content Streams and Canonical Graphics Operators](milestones/BF-1045-Content-Streams-and-Graphics-Operators.md) | Technical Specification | 1.0 | Implemented | 2026-08-06 |
 | PP-SPEC-BF-1046 | [BF-1046 — Canonical PDF Resource Resolution](milestones/BF-1046-Resource-Resolution.md) | Technical Specification | 1.0 | Implemented | 2026-08-07 |
+| PP-SPEC-BF-1047 | [BF-1047 — Graphics Interpretation and Display-List Construction](milestones/BF-1047-Graphics-Interpretation-and-Display-List.md) | Technical Specification | 1.0 | Implemented | 2026-08-07 |
 | PP-TEST-001 | [PiratePDF Master Blueprint - Volume V: Testing and Quality Assurance](Blueprint/Volume-V-Testing-and-QA.md) | Testing Documentation | 1.0 | Approved | 2026-07-24 |
 | PP-VSN-000 | [PiratePDF Master Blueprint](Blueprint/README.md) | Vision | 1.0 | Approved | 2026-07-24 |
 | PP-VSN-001 | [PiratePDF Master Blueprint - Volume I: Vision and Product Strategy](Blueprint/Volume-I-Vision-and-Product-Strategy.md) | Vision | 1.0 | Approved | 2026-07-24 |
