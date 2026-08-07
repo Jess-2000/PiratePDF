@@ -40,3 +40,9 @@ The release gate requires:
 - zero documentation errors;
 - Git format validation; and
 - an exact working-tree allowlist.
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-08-07 | Added missing revision history section. |

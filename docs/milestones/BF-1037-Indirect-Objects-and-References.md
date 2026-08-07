@@ -167,3 +167,9 @@ The release candidate must pass:
 ## Release Tag
 
 Planned tag: `BF-1037-RC1`
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-08-07 | Added missing revision history section. |

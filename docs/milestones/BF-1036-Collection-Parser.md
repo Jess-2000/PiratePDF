@@ -90,3 +90,9 @@ The implementation was validated through:
 ## Release Tag
 
 Planned tag: `BF-1036-RC1`
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-08-07 | Added missing revision history section. |

@@ -47,3 +47,9 @@ streams.
 
 Future image codecs will continue using the same bounded filter service while
 remaining isolated from rendering and document interpretation.
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.0 | 2026-08-07 | Added missing revision history section. |
