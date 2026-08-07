@@ -52,11 +52,11 @@ function Assert-DocumentationRepairPreviewIsClean {
 
     $ChangesMatch = [regex]::Match(
         $Report,
-        '(?im)^\|\s*Changes\s*\|\s*(\d+)\s*\|$')
+        '(?im)^\s*\|\s*Changes\s*\|\s*(\d+)\s*\|\s*$')
 
     $FilesMatch = [regex]::Match(
         $Report,
-        '(?im)^\|\s*Files\s*\|\s*(\d+)\s*\|$')
+        '(?im)^\s*\|\s*Files\s*\|\s*(\d+)\s*\|\s*$')
 
     if (-not $ChangesMatch.Success -or -not $FilesMatch.Success) {
         throw "Unable to read the DocGen repair-preview summary from '$ReportPath'."
