@@ -9,6 +9,7 @@
     <Project Path="src/BlackFlag.Engine.Objects/BlackFlag.Engine.Objects.csproj" />
     <Project Path="src/BlackFlag.Engine.Parsing/BlackFlag.Engine.Parsing.csproj" />
     <Project Path="src/BlackFlag.Engine.Rendering/BlackFlag.Engine.Rendering.csproj" />
+    <Project Path="src/BlackFlag.Engine.Rendering.Skia/BlackFlag.Engine.Rendering.Skia.csproj" />
     <Project Path="src/BlackFlag.Engine.SDK/BlackFlag.Engine.SDK.csproj" />
     <Project Path="src/BlackFlag.Engine.Services/BlackFlag.Engine.Services.csproj" />
     <Project Path="src/BlackFlag.Engine.Syntax/BlackFlag.Engine.Syntax.csproj" />
@@ -24,6 +25,7 @@
     <Project Path="tests/BlackFlag.Engine.Objects.Tests/BlackFlag.Engine.Objects.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.Parsing.Tests/BlackFlag.Engine.Parsing.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.Rendering.Tests/BlackFlag.Engine.Rendering.Tests.csproj" />
+    <Project Path="tests/BlackFlag.Engine.Rendering.Skia.Tests/BlackFlag.Engine.Rendering.Skia.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.Services.Tests/BlackFlag.Engine.Services.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.Syntax.Tests/BlackFlag.Engine.Syntax.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.Writing.Tests/BlackFlag.Engine.Writing.Tests.csproj" />
