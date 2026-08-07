@@ -3,18 +3,16 @@ using BlackFlag.Engine.Objects;
 
 namespace BlackFlag.Engine.Filters;
 
-/// <summary>
-/// Decodes PDF <c>/ASCIIHexDecode</c> streams.
-/// </summary>
+// Decodes PDF <c>/ASCIIHexDecode</c> streams.
 public sealed class PdfAsciiHexFilterDecoder : IPdfFilterDecoder
 {
     private static readonly PdfName FilterName =
         new("ASCIIHexDecode");
 
-    /// <inheritdoc />
+    //  <inheritdoc />
     public PdfName Name => FilterName;
 
-    /// <inheritdoc />
+    //  <inheritdoc />
     public void Decode(
         ReadOnlySpan<byte> encodedData,
         IBufferWriter<byte> destination,
@@ -33,9 +31,10 @@ public sealed class PdfAsciiHexFilterDecoder : IPdfFilterDecoder
                 context.Budget.ThrowIfCancellationRequested();
             }
 
-            byte value = encodedData[index];
+            byte value =
+                encodedData[index];
 
-            if (IsWhiteSpace(value))
+            if (PdfFilterByteClassifier.IsWhiteSpace(value))
             {
                 continue;
             }
@@ -50,7 +49,8 @@ public sealed class PdfAsciiHexFilterDecoder : IPdfFilterDecoder
                 break;
             }
 
-            int nibble = GetHexValue(value);
+            int nibble =
+                GetHexValue(value);
 
             if (nibble < 0)
             {
@@ -95,9 +95,9 @@ public sealed class PdfAsciiHexFilterDecoder : IPdfFilterDecoder
     private static void EnsureOnlyTrailingWhiteSpace(
         ReadOnlySpan<byte> trailingData)
     {
-        for (int index = 0; index < trailingData.Length; index++)
+        foreach (byte value in trailingData)
         {
-            if (!IsWhiteSpace(trailingData[index]))
+            if (!PdfFilterByteClassifier.IsWhiteSpace(value))
             {
                 throw new PdfFilterDecodeException(
                     PdfFilterDecodeFailure.InvalidData,
@@ -109,40 +109,24 @@ public sealed class PdfAsciiHexFilterDecoder : IPdfFilterDecoder
     private static int GetHexValue(
         byte value)
     {
-        if (
-            value >= (byte)'0' &&
-            value <= (byte)'9')
+        return value switch
         {
-            return value - (byte)'0';
-        }
+            >= (byte)'0' and <= (byte)'9' =>
+                value -
+                (byte)'0',
 
-        if (
-            value >= (byte)'A' &&
-            value <= (byte)'F')
-        {
-            return value - (byte)'A' + 10;
-        }
+            >= (byte)'A' and <= (byte)'F' =>
+                value -
+                (byte)'A' +
+                10,
 
-        if (
-            value >= (byte)'a' &&
-            value <= (byte)'f')
-        {
-            return value - (byte)'a' + 10;
-        }
+            >= (byte)'a' and <= (byte)'f' =>
+                value -
+                (byte)'a' +
+                10,
 
-        return -1;
-    }
-
-    private static bool IsWhiteSpace(
-        byte value)
-    {
-        return value is
-            0x00 or
-            0x09 or
-            0x0A or
-            0x0C or
-            0x0D or
-            0x20;
+            _ => -1
+        };
     }
 
     private static void WriteByte(
@@ -153,6 +137,7 @@ public sealed class PdfAsciiHexFilterDecoder : IPdfFilterDecoder
             destination.GetSpan(1);
 
         output[0] = value;
+
         destination.Advance(1);
     }
 }
