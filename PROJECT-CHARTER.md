@@ -1,8 +1,9 @@
 # BlackFlag Engine and PiratePDF Project Charter
 
-**Version:** 1.0
+**Version:** 1.1
 **Status:** Founding Charter
 **Adopted:** 2026-07-31
+**Last Updated:** 2026-08-09
 
 > Dedicated to everyone who believes professional software should be built
 > with care.
@@ -82,12 +83,19 @@ demonstration.
 
 ## Product Promise
 
-Every PiratePDF edition provides the same core promises.
+PiratePDF is one complete product. Every feature that belongs to PiratePDF is
+available to every user without paid tiers, edition gates, subscriptions, or
+feature entitlements.
+
+PiratePDF is committed to being free and open source. The exact open-source
+license is governed by a separate project decision and must be selected
+explicitly before a release is represented as licensed under that specific
+license.
 
 ### Safety
 
-Every user receives the complete BlackFlag security protections. Licensing
-never weakens the security boundary.
+Every user receives the complete BlackFlag security protections. Packaging,
+distribution, or licensing decisions never weaken the security boundary.
 
 ### Transparency
 
@@ -98,13 +106,11 @@ Knowledge is not a premium feature.
 
 ### Reliability
 
-Every edition uses the same BlackFlag Engine. Standard and Professional differ
-through specialized workflow and production capability—not through
-trustworthiness.
+Every user receives the same BlackFlag Engine, the same document fidelity, and
+the same production capabilities.
 
 > Every user deserves the same level of protection, the same level of
-> transparency, and the same confidence that opening a document will never
-> compromise their system. Professional editions expand capability—not trust.
+> transparency, and access to the complete PiratePDF capability set.
 
 ## BlackFlag Security Principles
 
@@ -142,24 +148,23 @@ responsibilities.
 
 ### Universal Protection
 
-Standard and Professional users receive the same passive protection, security
-preflight, folder scanning, rule customization, document inventory, and
-security summary.
-
-Professional editions may add high-volume reporting, enterprise
-administration, and workflow automation, but never stronger basic protection.
+Every PiratePDF user receives the same passive protection, security preflight,
+folder scanning, rule customization, document inventory, security summary,
+high-volume reporting capabilities, workflow automation capabilities, and
+other implemented security or production features.
 
 ## Product Philosophy
 
-PiratePDF Standard is complete. PiratePDF Professional is specialized.
+PiratePDF has one complete edition with the full capability set.
 
-Standard includes the capabilities required to safely inspect, understand,
-edit, repair, sanitize, and produce professional PDF documents.
+Capabilities intended for demanding production environments—such as
+variable-data integration, advanced color management, high-volume automation,
+production reporting, managed deployment, and production-system
+integration—are normal PiratePDF functionality rather than paid-tier
+differentiators.
 
-Professional extends Standard with specialized production and organizational
-workflows such as variable-data integration, advanced color management,
-high-volume automation, enterprise reporting, managed deployment, and
-production-system integration.
+The project does not intentionally restrict implemented functionality behind
+commercial editions, premium tiers, subscriptions, or entitlement checks.
 
 ## Engineering Standards
 

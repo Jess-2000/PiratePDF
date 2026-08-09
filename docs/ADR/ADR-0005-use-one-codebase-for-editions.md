@@ -4,36 +4,46 @@
 |---|---|
 | **Document ID** | PP-ADR-005 |
 | **Category** | Architecture Decision Record |
-| **Version** | 1.0 |
-| **Status** | Approved |
+| **Version** | 1.1 |
+| **Status** | Superseded |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1000, BF-8000 |
-| **Last Updated** | 2026-07-24 |
-| **Next Review** | 2026-10-24 |
+| **Last Updated** | 2026-08-09 |
+| **Next Review** | 2026-11-09 |
 
 ---
 
-**Status:** Accepted  
+**Status:** Superseded  
 **Date:** July 22, 2026
 
 ## Context
 
-Maintaining separate applications would duplicate code, fixes, testing, installers, and documentation.
+This ADR records the original product plan in which PiratePDF Standard and Professional shared one codebase. Maintaining separate applications would have duplicated code, fixes, testing, installers, and documentation.
 
-## Decision
+## Historical Decision
 
-PiratePDF Standard and Professional will share one codebase and one BlackFlag Engine.
+PiratePDF Standard and Professional would share one codebase and one BlackFlag
+Engine.
 
-Edition differences will be controlled above the engine through licensed capabilities and feature registration.
+Edition differences would be controlled above the engine through licensed
+capabilities and feature registration.
 
-## Consequences
+## Superseded By
+
+ADR-0013 — Use One Free and Open-Source PiratePDF Edition supersedes the
+edition-based portion of this decision. The architectural benefit of one
+codebase remains, but PiratePDF no longer has commercial editions or licensed
+feature gates.
+
+## Historical Consequences
 
 - One primary maintenance path.
 - Shared quality and scalability.
 - Easier upgrades between editions.
-- The engine must remain edition-agnostic.
+- The engine remained independent from product-tier policy.
 ## Revision History
 
 | Version | Date | Description |
 |---|---|---|
 | 1.0 | 2026-07-24 | Standardized document metadata and governance structure. |
+| 1.1 | 2026-08-09 | Marked the edition-based decision superseded by ADR-0013 while preserving its architectural history. |

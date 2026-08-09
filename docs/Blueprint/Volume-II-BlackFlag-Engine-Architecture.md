@@ -4,29 +4,29 @@
 |---|---|
 | **Document ID** | PP-ARCH-001 |
 | **Category** | Architecture |
-| **Version** | 1.0 |
+| **Version** | 1.1 |
 | **Status** | Approved |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1000, BF-2000 |
-| **Last Updated** | 2026-07-24 |
-| **Next Review** | 2026-10-24 |
+| **Last Updated** | 2026-08-09 |
+| **Next Review** | 2026-11-09 |
 
 ---
 
 ## Volume II â€” BlackFlag Engine Architecture
 
 **Document ID:** PP-BP-VOL2  
-**Version:** 1.0  
+**Version:** 1.1  
 **Status:** Approved  
-**Last Updated:** July 22, 2026
+**Last Updated:** August 9, 2026
 
 ---
 
 ## 1. Purpose
 
-This volume defines the approved architecture for BlackFlag Engine, the PDF technology platform shared by PiratePDF Standard and PiratePDF Professional.
+This volume defines the approved architecture for BlackFlag Engine, the PDF technology platform that powers PiratePDF.
 
-BlackFlag Engine must remain independent of Avalonia, PiratePDF UI code, edition licensing, and Word-document import logic.
+BlackFlag Engine must remain independent of Avalonia, PiratePDF UI code, product-tier licensing or entitlement logic, and Word-document import logic.
 
 ---
 
@@ -403,3 +403,4 @@ This architecture is correctly implemented when:
 | Version | Date | Description |
 |---|---|---|
 | 1.0 | 2026-07-24 | Standardized document metadata and Blueprint structure. |
+| 1.1 | 2026-08-09 | Updated BlackFlag Engine boundaries for the single-edition free/open-source PiratePDF product model. |

@@ -4,12 +4,12 @@
 |---|---|
 | **Document ID** | PP-ADR-0000 |
 | **Category** | Architecture Decision Record |
-| **Version** | 1.0 |
+| **Version** | 1.1 |
 | **Status** | Approved |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1000, BF-1039, BF-8000 |
-| **Last Updated** | 2026-07-31 |
-| **Next Review** | 2026-10-31 |
+| **Last Updated** | 2026-08-09 |
+| **Next Review** | 2026-11-09 |
 
 ---
 
@@ -41,7 +41,7 @@ be resolved silently in implementation.
 
 ### Allow each milestone to define its own principles
 
-Rejected because it would permit inconsistent security, quality, and edition
+Rejected because it would permit inconsistent security, quality, and product-model
 policies.
 
 ### Treat the Charter as nonbinding project prose
@@ -57,7 +57,7 @@ single statement of mission and project identity.
 ## Consequences
 
 - Future ADRs can reference one stable governing document.
-- Security and edition protections remain consistent.
+- Security and product-model protections remain consistent.
 - Contributors have a clear North Star for difficult decisions.
 - Charter amendments require deliberate review.
 - Technical convenience cannot silently override adopted principles.
@@ -78,3 +78,4 @@ principles genuinely evolve. Historical ADRs remain unchanged.
 | Version | Date | Description |
 |---|---|---|
 | 1.0 | 2026-07-31 | Established the Project Charter as the governing project document. |
+| 1.1 | 2026-08-09 | Updated governance terminology for the single-edition free/open-source product model. |

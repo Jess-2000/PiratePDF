@@ -4,28 +4,28 @@
 |---|---|
 | **Document ID** | PP-VSN-001 |
 | **Category** | Vision |
-| **Version** | 1.0 |
+| **Version** | 1.1 |
 | **Status** | Approved |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1000, BF-8000 |
-| **Last Updated** | 2026-07-24 |
-| **Next Review** | 2026-10-24 |
+| **Last Updated** | 2026-08-09 |
+| **Next Review** | 2026-11-09 |
 
 ---
 
 ## Volume I â€” Vision and Product Strategy
 
 **Document ID:** PP-BP-VOL1  
-**Version:** 1.0  
+**Version:** 1.1  
 **Status:** Approved  
-**Last Updated:** July 22, 2026  
+**Last Updated:** August 9, 2026  
 **Owners:** PiratePDF Project
 
 ---
 
 ## 1. Purpose
 
-This volume defines the product vision, strategic direction, product editions, user groups, core principles, committed capabilities, and long-term success criteria for PiratePDF and the BlackFlag Engine.
+This volume defines the product vision, strategic direction, product model, user groups, core principles, committed capabilities, and long-term success criteria for PiratePDF and the BlackFlag Engine.
 
 This document is the primary source of truth for product-level decisions. Technical implementation details belong in the BlackFlag Engine Technical Specification and subsystem specifications.
 
@@ -33,7 +33,7 @@ This document is the primary source of truth for product-level decisions. Techni
 
 ## 2. Product Summary
 
-PiratePDF is a desktop PDF viewing, editing, inspection, conversion, and production platform powered by the proprietary BlackFlag Engine.
+PiratePDF is a desktop PDF viewing, editing, inspection, conversion, and production platform powered by BlackFlag Engine.
 
 PiratePDF is intended to provide:
 
@@ -44,7 +44,7 @@ PiratePDF is intended to provide:
 - Professional color-management and production capabilities.
 - Minimal third-party licensing friction.
 - A modular plugin and SDK architecture.
-- A shared codebase for Standard and Professional editions.
+- One complete free and open-source product with the full capability set available to every user.
 - Clear, searchable, version-controlled engineering documentation.
 
 ---
@@ -103,7 +103,7 @@ Users should be able to select and edit:
 
 ### 4.3 Large-document reliability
 
-Both Standard and Professional editions must support very large PDFs.
+PiratePDF must support very large PDFs.
 
 The architecture must support:
 
@@ -122,7 +122,7 @@ The architecture must support:
 
 PiratePDF should make sophisticated color workflows understandable and accessible.
 
-Shared capabilities should include:
+Core capabilities should include:
 
 - RGB profile selection.
 - CMYK profile selection.
@@ -134,7 +134,7 @@ Shared capabilities should include:
 - Replace-color workflows.
 - Conversion previews.
 
-Professional capabilities may add:
+Advanced production capabilities include:
 
 - Color separation preview.
 - Advanced production color reports.
@@ -163,17 +163,29 @@ Converted files should:
 
 ---
 
-## 5. Product Editions
+## 5. Product Model and Open-Source Policy
 
-PiratePDF will use one codebase, one engine, and edition-based feature access.
+PiratePDF has one complete edition with one codebase and one BlackFlag Engine.
 
-The BlackFlag Engine must remain edition-agnostic.
+All implemented functionality is part of PiratePDF. Advanced production,
+prepress, batch, automation, integration, reporting, and organizational
+capabilities are not reserved for a paid or premium tier.
 
-### 5.1 PiratePDF Standard
+The product shall be free and open source. The project shall not use
+commercial feature tiers, subscription-gated functionality, entitlement
+checks, or deliberately reduced product variants.
 
-PiratePDF Standard is intended for individuals, small businesses, educational users, designers, office users, and general document workflows.
+The exact open-source license is a separate explicit governance decision and
+is not selected by this Blueprint revision.
 
-Committed shared capabilities include:
+### 5.1 Complete capability set
+
+The single PiratePDF product is intended for individuals, businesses,
+educational users, designers, office users, commercial print operators,
+prepress professionals, production departments, and high-volume document
+workflows.
+
+Committed capabilities include:
 
 - Open and view PDFs.
 - Edit supported PDF content.
@@ -181,64 +193,54 @@ Committed shared capabilities include:
 - Select text, images, and objects.
 - Delete selected content.
 - Undo and redo.
-- Search.
-- Replace text within one document.
-- Replace all instances of words or phrases within one document.
-- Replace one or all matching image instances within one document.
+- Search and replace.
+- Replace matching image instances.
 - Annotations and markup.
 - Document Inspector.
 - Color Information.
 - Color Inspector.
 - Color Usage Explorer.
 - RGB, CMYK, and ICC profile selection.
-- Convert PDF content to grayscale.
-- Monotone and mapped colorization.
+- Grayscale, monotone, and mapped color workflows.
 - Rulers and guidelines.
 - DOC and DOCX conversion to editable PDF.
 - Emoji preservation and editing support.
 - Plugin support.
 - Support for PDFs containing 6,000 pages or more.
-
-### 5.2 PiratePDF Professional
-
-PiratePDF Professional includes everything in Standard and adds tools focused on production environments and high-volume workflows.
-
-Planned Professional capabilities include:
-
-- FusionPro workflow integration.
-- Batch PDF processing.
-- Batch DOC and DOCX conversion.
-- Batch text and image replacement across multiple PDFs.
-- Watched folders.
-- Saved production presets.
+- FusionPro workflow integration where technically and legally possible.
+- Batch PDF processing and document conversion.
+- Batch text and image replacement.
+- Watched folders and saved production presets.
 - Color separation preview.
-- Advanced production color tools.
-- Advanced output-intent management.
+- Advanced production color tools and output-intent management.
 - Production reports.
 - Resume support for interrupted batch jobs.
 - Workflow automation.
-- Professional deployment and administrative capabilities where justified.
+- Deployment and administrative capabilities where justified.
 
-### 5.3 Edition policy
+### 5.2 Product-access policy
 
-The Standard edition must not be artificially restricted through document page limits or reduced engine quality.
+PiratePDF shall not artificially restrict implemented functionality through:
 
-Professional differentiation should come from:
+- Page limits.
+- Reduced engine quality.
+- Premium feature gates.
+- Subscription tiers.
+- Commercial entitlement checks.
+- Separate reduced-capability builds.
 
-- Automation.
-- Scale.
-- Reporting.
-- Integration.
-- Production-specific inspection.
-- Workflow efficiency.
-
----
+UI complexity may be managed through progressive disclosure, workspace
+organization, presets, and context-sensitive controls, but those usability
+choices must not become hidden commercial tiers.
 
 ## 6. User Groups
 
-### 6.1 Standard users
+PiratePDF serves both everyday document users and specialized production
+workflows through the same product.
 
-Typical Standard users may include:
+### 6.1 General document users
+
+Typical users may include:
 
 - Office workers.
 - Educators and students.
@@ -249,9 +251,9 @@ Typical Standard users may include:
 - Users who need occasional print preparation.
 - Users converting Word documents to PDFs.
 
-### 6.2 Professional users
+### 6.2 Production and specialized users
 
-Typical Professional users may include:
+Typical production users may include:
 
 - Commercial print operators.
 - Variable-data production teams.
@@ -261,7 +263,8 @@ Typical Professional users may include:
 - Production departments.
 - Organizations with repeatable batch workflows.
 
----
+These groups use the same PiratePDF product. Interface organization may expose
+different workflows without changing feature entitlement.
 
 ## 7. Core User Experience
 
@@ -369,7 +372,7 @@ Image replacement should support:
 
 ## 8. Keyboard Shortcuts
 
-### 8.1 Standard shortcuts
+### 8.1 Default shortcuts
 
 | Shortcut | Action |
 |---|---|
@@ -431,15 +434,7 @@ Profiles may control:
 - Unsupported-object flattening.
 - Conversion reporting.
 
-Standard should support core profiles and limited saved custom profiles.
-
-Professional may add:
-
-- Unlimited saved presets.
-- Batch profile application.
-- Watched-folder profile assignment.
-- Production reports.
-- FusionPro handoff.
+PiratePDF should support core profiles, saved custom profiles, unlimited saved presets where practical, batch profile application, watched-folder profile assignment, production reports, and FusionPro handoff where integration is available.
 
 ---
 
@@ -460,7 +455,7 @@ Required behavior:
 - Convert color-font glyphs to PDF vector or raster appearances where necessary.
 - Avoid silent missing-glyph substitution.
 
-Emoji support is shared by Standard and Professional.
+Emoji support is part of the single PiratePDF capability set.
 
 The DOC and DOCX conversion pipeline should use the same text-shaping and emoji-handling services as native PDF editing.
 
@@ -486,7 +481,7 @@ Product requirements should distinguish minimum, recommended, and professional w
 - 1 TB SSD.
 - Modern integrated or dedicated graphics.
 
-### 11.3 Professional large-document target
+### 11.3 Large-document workstation target
 
 - Intel Core i7, AMD Ryzen 7, or comparable newer processor.
 - 64 GB RAM where high-volume work requires it.
@@ -607,8 +602,8 @@ PiratePDF will be considered successful when it can:
 - Convert DOC and DOCX files into editable PDFs.
 - Preserve Unicode and emoji behavior.
 - Provide meaningful color inspection and conversion.
-- Support Standard and Professional editions from one codebase.
-- Provide production-ready workflows in Professional.
+- Provide one complete free and open-source product from one codebase.
+- Provide production-ready workflows to every user who needs them.
 - Maintain clear and searchable documentation.
 - Offer stable SDK and plugin extension points.
 - Remain maintainable over many years.
@@ -642,3 +637,4 @@ Deferred features must remain clearly labeled and must not quietly enter an acti
 | Version | Date | Description |
 |---|---|---|
 | 1.0 | 2026-07-24 | Standardized document metadata and Blueprint structure. |
+| 1.1 | 2026-08-09 | Replaced the planned commercial-tier strategy with one complete free and open-source PiratePDF product. |
