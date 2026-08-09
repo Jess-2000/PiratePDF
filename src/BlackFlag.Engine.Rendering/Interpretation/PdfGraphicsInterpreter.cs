@@ -57,6 +57,7 @@ public sealed class PdfGraphicsInterpreter
         PdfGraphicsStateSnapshot state = initialState;
         PdfFillRule? pendingClip = null;
         PdfMarkedContentContext? markedContent = null;
+        var pendingTextClipRuns = new List<PdfDisplayTextRun>();
         bool inTextObject = false;
 
         foreach (PdfGraphicsOperation operation in operations)
@@ -249,6 +250,7 @@ public sealed class PdfGraphicsInterpreter
                         }
 
                         inTextObject = true;
+                        pendingTextClipRuns.Clear();
                         state = state with
                         {
                             TextMatrix = PdfMatrix.Identity,
@@ -266,6 +268,29 @@ public sealed class PdfGraphicsInterpreter
                         }
 
                         inTextObject = false;
+
+                        if (pendingTextClipRuns.Count > 0)
+                        {
+                            int depth = state.Clip is null
+                                ? 1
+                                : checked(state.Clip.Depth + 1);
+
+                            EnsureLimit(
+                                depth,
+                                options.MaximumClipDepth,
+                                operation,
+                                "The clipping hierarchy exceeded its configured depth while applying text clipping.");
+
+                            state = state with
+                            {
+                                Clip = new PdfClipState(
+                                    pendingTextClipRuns,
+                                    state.Clip)
+                            };
+
+                            pendingTextClipRuns.Clear();
+                        }
+
                         break;
 
                     case "Tf":
@@ -697,16 +722,21 @@ public sealed class PdfGraphicsInterpreter
 
             PdfGraphicsStateSnapshot runState = state;
 
-            AddItem(
-                new PdfDisplayTextRun(
-                    font,
-                    state.FontSize,
-                    [element],
-                    state.TextMatrix.Multiply(state.Transform),
-                    runState,
-                    operation.SourceSpan,
-                    markedContent),
-                operation);
+            var displayRun = new PdfDisplayTextRun(
+                font,
+                state.FontSize,
+                [element],
+                state.TextMatrix.Multiply(state.Transform),
+                runState,
+                operation.SourceSpan,
+                markedContent);
+
+            AddItem(displayRun, operation);
+
+            if (runState.TextRenderingMode >= 4)
+            {
+                pendingTextClipRuns.Add(displayRun);
+            }
 
             state = AdvanceTextMatrix(
                 state,
@@ -757,16 +787,21 @@ public sealed class PdfGraphicsInterpreter
 
             PdfGraphicsStateSnapshot runState = state;
 
-            AddItem(
-                new PdfDisplayTextRun(
-                    font,
-                    state.FontSize,
-                    elements,
-                    state.TextMatrix.Multiply(state.Transform),
-                    runState,
-                    operation.SourceSpan,
-                    markedContent),
-                operation);
+            var displayRun = new PdfDisplayTextRun(
+                font,
+                state.FontSize,
+                elements,
+                state.TextMatrix.Multiply(state.Transform),
+                runState,
+                operation.SourceSpan,
+                markedContent);
+
+            AddItem(displayRun, operation);
+
+            if (runState.TextRenderingMode >= 4)
+            {
+                pendingTextClipRuns.Add(displayRun);
+            }
 
             state = AdvanceTextMatrix(
                 state,
