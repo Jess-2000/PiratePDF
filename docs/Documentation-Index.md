@@ -23,6 +23,7 @@
 | PP-ADR-011 | [ADR-0011 — Convert Documents as Passive Content](ADR/ADR-0011-passive-document-conversion.md) | Architecture Decision Record | 1.0 | Approved | 2026-08-06 |
 | PP-ADR-012 | [ADR-0012 — Implement Filter Decoders as Pure Transformations](ADR/ADR-0012-pure-filter-transformations.md) | Architecture Decision Record | 1.0 | Approved | 2026-08-06 |
 | PP-ADR-013 | [ADR-0013 — Use One Free and Open-Source PiratePDF Edition](ADR/ADR-0013-one-free-open-source-edition.md) | Architecture Decision Record | 1.0 | Approved | 2026-08-09 |
+| PP-ADR-014 | [ADR-0014 — Require Independent Source Implementation](ADR/ADR-0014-require-independent-source-implementation.md) | Architecture Decision Record | 1.0 | Approved | 2026-08-09 |
 | PP-ADR-INDEX-001 | [Architecture Decision Record Index](ADR/ADR-Index.md) | Architecture Decision Record | 1.2 | Approved | 2026-08-09 |
 | PP-ARCH-001 | [PiratePDF Master Blueprint - Volume II: BlackFlag Engine Architecture](Blueprint/Volume-II-BlackFlag-Engine-Architecture.md) | Architecture | 1.1 | Approved | 2026-08-09 |
 | PP-ARCH-CONV-001 | [Passive Document Conversion Architecture](Architecture/PASSIVE-DOCUMENT-CONVERSION.md) | Architecture | 1.0 | Approved | 2026-08-06 |
