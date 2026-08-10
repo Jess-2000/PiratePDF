@@ -6,6 +6,7 @@
 | Document ID | Title | Category | Version | Status | Last Updated |
 |---|---|---|---|---|---|
 | BF-1048D | [BF-1048D â€” Image and XObject Rendering](milestones/BF-1048D-Image-and-XObject-Rendering.md) | Milestone | 1.0 | Implemented | 2026-08-09 |
+| BF-1048E | [BF-1048E — Advanced Color and Transparency](milestones/BF-1048E-Advanced-Color-Transparency.md) | Milestone | 1.0 | Implemented | 2026-08-09 |
 | BF-DOC-0004 | [BlackFlag Engine — Parser Infrastructure RC1](Parser-Infrastructure-RC1.md) | Architecture | 0.4.0 | Tested | 2026-07-30 |
 | BF-DOC-0005 | [BlackFlag Engine 0.5.0 — PDF Object Model RC1](PDF-Object-Model-RC1.md) | Architecture | 0.5.0 | In Development | 2026-07-30 |
 | BF-DOC-1001 | [Documentation Template RC1](Documentation-Template-RC1.md) | Developer Documentation | 0.1.0 | In Development | 2026-07-30 |

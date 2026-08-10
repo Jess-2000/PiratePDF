@@ -1,4 +1,5 @@
 using BlackFlag.Engine.Rendering.DisplayList;
+using BlackFlag.Engine.Rendering.Color;
 using BlackFlag.Engine.Rendering.Fonts;
 using BlackFlag.Engine.Rendering.Images;
 using BlackFlag.Engine.Rendering.Skia.Images;
@@ -14,6 +15,7 @@ public sealed class SkiaPdfPageRenderer : IPdfPageRenderer, IDisposable
     private readonly PdfFontDecoder fontDecoder;
     private readonly SkiaFontRealizer fontRealizer;
     private readonly PdfImageDecoder imageDecoder;
+    private readonly PdfColorConverter colorConverter;
 
     /// <summary>Initializes the Skia page renderer and its document-local font services.</summary>
     public SkiaPdfPageRenderer()
@@ -21,6 +23,7 @@ public sealed class SkiaPdfPageRenderer : IPdfPageRenderer, IDisposable
         fontDecoder = new PdfFontDecoder();
         fontRealizer = new SkiaFontRealizer(fontDecoder);
         imageDecoder = new PdfImageDecoder([new SkiaDctImageCodec()]);
+        colorConverter = new PdfColorConverter();
     }
     /// <inheritdoc />
     public PdfRenderResult Render(
@@ -243,7 +246,9 @@ public sealed class SkiaPdfPageRenderer : IPdfPageRenderer, IDisposable
 
             using SKPaint paint = new()
             {
-                IsAntialias = item.ImageResource?.Interpolate ?? false
+                IsAntialias = item.ImageResource?.Interpolate ?? false,
+                Color = new SKColor(255, 255, 255, ToByte(item.GraphicsState.NonstrokingAlpha)),
+                BlendMode = ConvertBlendMode(item.GraphicsState.BlendMode)
             };
 
             canvas.DrawBitmap(
@@ -259,7 +264,7 @@ public sealed class SkiaPdfPageRenderer : IPdfPageRenderer, IDisposable
         }
     }
 
-    private static void RenderPath(
+    private void RenderPath(
         SKCanvas canvas,
         PdfDisplayPath item)
     {
@@ -338,7 +343,7 @@ public sealed class SkiaPdfPageRenderer : IPdfPageRenderer, IDisposable
         return builder.Detach();
     }
 
-    private static SKPaint CreatePaint(
+    private SKPaint CreatePaint(
         PdfColorValue color,
         double alpha,
         SKPaintStyle style,
@@ -349,6 +354,7 @@ public sealed class SkiaPdfPageRenderer : IPdfPageRenderer, IDisposable
             IsAntialias = true,
             Style = style,
             Color = ConvertColor(color, alpha),
+            BlendMode = ConvertBlendMode(state.BlendMode),
             StrokeWidth = state.LineWidth == 0
                 ? 0
                 : checked((float)state.LineWidth),
@@ -381,46 +387,22 @@ public sealed class SkiaPdfPageRenderer : IPdfPageRenderer, IDisposable
         return paint;
     }
 
-    private static SKColor ConvertColor(
-        PdfColorValue color,
-        double alpha)
+    private SKColor ConvertColor(PdfColorValue color, double alpha)
     {
-        byte a = ToByte(alpha);
-
-        if (string.Equals(color.ColorSpaceName, "DeviceGray", StringComparison.Ordinal) &&
-            color.Components.Count >= 1)
-        {
-            byte gray = ToByte(color.Components[0]);
-            return new SKColor(gray, gray, gray, a);
-        }
-
-        if (string.Equals(color.ColorSpaceName, "DeviceRGB", StringComparison.Ordinal) &&
-            color.Components.Count >= 3)
-        {
-            return new SKColor(
-                ToByte(color.Components[0]),
-                ToByte(color.Components[1]),
-                ToByte(color.Components[2]),
-                a);
-        }
-
-        if (string.Equals(color.ColorSpaceName, "DeviceCMYK", StringComparison.Ordinal) &&
-            color.Components.Count >= 4)
-        {
-            double c = Clamp01(color.Components[0]);
-            double m = Clamp01(color.Components[1]);
-            double y = Clamp01(color.Components[2]);
-            double k = Clamp01(color.Components[3]);
-
-            return new SKColor(
-                ToByte((1 - c) * (1 - k)),
-                ToByte((1 - m) * (1 - k)),
-                ToByte((1 - y) * (1 - k)),
-                a);
-        }
-
-        return new SKColor(0, 0, 0, a);
+        PdfSrgbColor converted = colorConverter.Convert(color, PdfColorTarget.Srgb, alpha);
+        return new SKColor(ToByte(converted.Red), ToByte(converted.Green), ToByte(converted.Blue), ToByte(converted.Alpha));
     }
+
+    private static SKBlendMode ConvertBlendMode(BlackFlag.Engine.Objects.PdfObject? source) =>
+        PdfBlendModeParser.Parse(source) switch
+        {
+            PdfBlendMode.Multiply => SKBlendMode.Multiply, PdfBlendMode.Screen => SKBlendMode.Screen, PdfBlendMode.Overlay => SKBlendMode.Overlay,
+            PdfBlendMode.Darken => SKBlendMode.Darken, PdfBlendMode.Lighten => SKBlendMode.Lighten, PdfBlendMode.ColorDodge => SKBlendMode.ColorDodge,
+            PdfBlendMode.ColorBurn => SKBlendMode.ColorBurn, PdfBlendMode.HardLight => SKBlendMode.HardLight, PdfBlendMode.SoftLight => SKBlendMode.SoftLight,
+            PdfBlendMode.Difference => SKBlendMode.Difference, PdfBlendMode.Exclusion => SKBlendMode.Exclusion, PdfBlendMode.Hue => SKBlendMode.Hue,
+            PdfBlendMode.Saturation => SKBlendMode.Saturation, PdfBlendMode.Color => SKBlendMode.Color, PdfBlendMode.Luminosity => SKBlendMode.Luminosity,
+            _ => SKBlendMode.SrcOver
+        };
 
     private void RenderText(
         SKCanvas canvas,
