@@ -453,8 +453,8 @@ public sealed class SkiaPdfPageRenderer : IPdfPageRenderer, IDisposable
             }
 
             diagnostics.Add(new PdfRenderDiagnostic(
-                "SHADING_UNSUPPORTED",
-                exception.Message,
+                PdfRenderingDiagnosticCodes.ShadingMalformed,
+                $"The PDF shading could not be rendered because its definition is malformed or unsupported: {exception.Message}",
                 displayItemIndex));
             return;
         }
