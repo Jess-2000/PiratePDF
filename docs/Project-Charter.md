@@ -4,18 +4,18 @@
 |---|---|
 | **Document ID** | PP-CHARTER-001 |
 | **Category** | Project Charter |
-| **Version** | 1.0 |
+| **Version** | 1.1 |
 | **Status** | Approved |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1000, BF-2000, BF-8000 |
-| **Last Updated** | 2026-07-24 |
-| **Next Review** | 2026-10-24 |
+| **Last Updated** | 2026-08-09 |
+| **Next Review** | 2026-11-09 |
 
 ---
 
 ## Purpose
 
-This charter defines PiratePDF’s mission, product direction, engineering commitments, edition philosophy, and measures of success.
+This charter defines PiratePDF’s mission, product direction, engineering commitments, open-source product philosophy, and measures of success.
 
 It serves as a stable reference for deciding what PiratePDF should become and how the project should evolve.
 
@@ -77,39 +77,36 @@ Ideas should be validated against practical user needs rather than copied from c
 
 The source code, architecture, specifications, roadmap, and developer guidance shall be maintained as first-class project assets.
 
-## Edition Philosophy
+## Product and Open-Source Philosophy
 
-PiratePDF follows this principle:
+PiratePDF is one complete product.
 
-> Standard is complete. Professional is specialized.
+There is no commercial edition split. Functionality intended for advanced
+production, prepress, high-volume, enterprise, or specialized workflows is
+part of the same PiratePDF application as everyday document editing
+functionality.
 
-### Standard Edition
+PiratePDF shall be 100% free and open source. The project shall not introduce
+paid feature tiers, premium-only capabilities, entitlement checks,
+subscription-gated functionality, or deliberately reduced editions.
 
-Standard Edition shall provide a feature-rich, complete document-editing experience.
+The exact open-source license is a separate legal and governance decision. The
+license must be selected explicitly and recorded before a release is
+represented as licensed under that specific license.
 
-Standard users should have access to core capabilities including:
+The complete product capability set may include:
 
 - PDF creation and editing.
 - Word-document conversion.
 - Page resizing.
 - Templates.
-- Personal color palettes.
+- Personal and organizational color palettes.
 - Document Inspector.
 - Document Doctor.
 - PDF optimization.
 - Document comparison.
-- Plugin management.
-- General-purpose plugin support.
-
-Standard Edition should also help users learn document-editing and print-production concepts that may be useful in professional environments.
-
-### Professional Edition
-
-Professional Edition shall extend Standard with capabilities needed primarily by larger businesses and specialized production environments.
-
-Examples include:
-
-- FusionPro integration.
+- Plugin management and general-purpose plugin support.
+- FusionPro integration where technically and legally possible.
 - Advanced preflight.
 - PDF/X and PDF/A workflows.
 - Advanced color management.
@@ -117,12 +114,12 @@ Examples include:
 - Separation previews.
 - Batch processing.
 - Production reports.
-- Shared organizational templates.
-- Shared organizational palettes.
+- Organizational templates and palettes.
 - Managed plugin deployment.
-- Enterprise workflow automation.
+- Workflow automation.
 
-Professional Edition shall earn its value through specialized capability rather than by withholding essential document functionality.
+Advanced capabilities shall be exposed according to workflow relevance and
+user needs, not according to a commercial product tier.
 
 ## Plugin Strategy
 
@@ -130,12 +127,12 @@ PiratePDF Version 1.0 shall include a plugin architecture.
 
 The plugin system shall:
 
-- Be available to Standard and Professional users.
+- Be available to every PiratePDF user.
 - Keep optional integrations outside the core application.
 - Support version and compatibility checks.
 - Allow plugins to contribute commands and workflows through controlled extension points.
 - Protect the stability of the host application where practical.
-- Support an official FusionPro plugin for Professional Edition, subject to available integration and licensing options.
+- Support an official FusionPro plugin, subject to available integration and third-party licensing options.
 
 Developer Mode is intentionally deferred until the plugin ecosystem is mature enough to justify it.
 
@@ -179,8 +176,8 @@ Success includes:
 - High performance on large PDFs.
 - Clear and trustworthy editing behavior.
 - Strong document inspection and repair capabilities.
-- Useful Standard Edition functionality.
-- Clear Professional Edition value for production environments.
+- A complete capability set for everyday and specialized production workflows.
+- Free and open-source availability without paid feature gating.
 - A clean codebase that contributors can understand.
 - Documentation that remains synchronized with the implementation.
 
@@ -218,4 +215,4 @@ These ideas remain candidates for later releases and shall not distract from com
 | Version | Date | Description |
 |---|---|---|
 | 1.0 | 2026-07-24 | Standardized the project mission, product principles, and edition philosophy. |
-
+| 1.1 | 2026-08-09 | Replaced the planned product-tier split with one complete free and open-source PiratePDF product. |

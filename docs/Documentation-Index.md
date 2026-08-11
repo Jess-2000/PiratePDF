@@ -5,16 +5,22 @@
 
 | Document ID | Title | Category | Version | Status | Last Updated |
 |---|---|---|---|---|---|
+| BF-1048-MATRIX | [BF-1048 Rendering Capability Matrix](milestones/BF-1048-Rendering-Capability-Matrix.md) | Milestone | 1.0 | Implemented | 2026-08-10 |
+| BF-1048D | [BF-1048D â€” Image and XObject Rendering](milestones/BF-1048D-Image-and-XObject-Rendering.md) | Milestone | 1.0 | Implemented | 2026-08-09 |
+| BF-1048E | [BF-1048E — Advanced Color and Transparency](milestones/BF-1048E-Advanced-Color-Transparency.md) | Milestone | 1.0 | Implemented | 2026-08-09 |
+| BF-1048F | [BF-1048F - Patterns, Shadings, and Type 3](milestones/BF-1048F-Patterns-Shadings-and-Type3.md) | Milestone | 1.0 | Implemented | 2026-08-10 |
+| BF-1048G | [BF-1048G - Final Rendering Integration and Regression](milestones/BF-1048G-Final-Rendering-Integration-and-Regression.md) | Milestone | 1.0 | Implemented | 2026-08-10 |
+| BF-1048R | [BF-1048R - Cross-Reference Recovery and Damaged-PDF Opening](milestones/BF-1048R-Cross-Reference-Recovery-and-Damaged-PDF-Opening.md) | Milestone | 1.0 | Implemented | 2026-08-10 |
 | BF-DOC-0004 | [BlackFlag Engine — Parser Infrastructure RC1](Parser-Infrastructure-RC1.md) | Architecture | 0.4.0 | Tested | 2026-07-30 |
 | BF-DOC-0005 | [BlackFlag Engine 0.5.0 — PDF Object Model RC1](PDF-Object-Model-RC1.md) | Architecture | 0.5.0 | In Development | 2026-07-30 |
 | BF-DOC-1001 | [Documentation Template RC1](Documentation-Template-RC1.md) | Developer Documentation | 0.1.0 | In Development | 2026-07-30 |
 | PP-ADR-000 | [Architecture Decision Records](ADR/README.md) | Architecture Decision Record | 2.0 | Approved | 2026-07-31 |
-| PP-ADR-0000 | [ADR-0000 — Project Charter Governance](ADR/ADR-0000-project-charter-governance.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-31 |
+| PP-ADR-0000 | [ADR-0000 — Project Charter Governance](ADR/ADR-0000-project-charter-governance.md) | Architecture Decision Record | 1.1 | Approved | 2026-08-09 |
 | PP-ADR-001 | [ADR-0001 â€” Use C# as the Primary Language](ADR/ADR-0001-use-csharp-as-primary-language.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
 | PP-ADR-002 | [ADR-0002 â€” Keep BlackFlag Engine Independent of Avalonia](ADR/ADR-0002-keep-blackflag-independent-of-avalonia.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
 | PP-ADR-003 | [ADR-0003 â€” Use Random-Access File I/O](ADR/ADR-0003-use-random-access-file-io.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
 | PP-ADR-004 | [ADR-0004 â€” Keep Word Conversion Outside BlackFlag Engine](ADR/ADR-0004-keep-word-conversion-outside-engine.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
-| PP-ADR-005 | [ADR-0005 â€” Use One Codebase for Standard and Professional Editions](ADR/ADR-0005-use-one-codebase-for-editions.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
+| PP-ADR-005 | [ADR-0005 â€” Use One Codebase for Standard and Professional Editions](ADR/ADR-0005-use-one-codebase-for-editions.md) | Architecture Decision Record | 1.1 | Superseded | 2026-08-09 |
 | PP-ADR-006 | [ADR-0006 â€” Use Markdown as Documentation Source of Truth](ADR/ADR-0006-use-markdown-as-documentation-source.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
 | PP-ADR-007 | [ADR-0007 — Separate Stream Parsing from Object Parsing](ADR/ADR-0007-separate-stream-parsing-from-object-parsing.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-31 |
 | PP-ADR-008 | [ADR-0008 — Defer Indirect Stream Length Resolution](ADR/ADR-0008-defer-indirect-stream-length-resolution.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-31 |
@@ -22,11 +28,13 @@
 | PP-ADR-010 | [ADR-0010 — Use Lazy, Bounded Materialization for Large Data](ADR/ADR-0010-lazy-bounded-materialization.md) | Architecture Decision Record | 1.0 | Approved | 2026-08-06 |
 | PP-ADR-011 | [ADR-0011 — Convert Documents as Passive Content](ADR/ADR-0011-passive-document-conversion.md) | Architecture Decision Record | 1.0 | Approved | 2026-08-06 |
 | PP-ADR-012 | [ADR-0012 — Implement Filter Decoders as Pure Transformations](ADR/ADR-0012-pure-filter-transformations.md) | Architecture Decision Record | 1.0 | Approved | 2026-08-06 |
-| PP-ADR-INDEX-001 | [Architecture Decision Record Index](ADR/ADR-Index.md) | Architecture Decision Record | 1.1 | Approved | 2026-08-06 |
-| PP-ARCH-001 | [PiratePDF Master Blueprint - Volume II: BlackFlag Engine Architecture](Blueprint/Volume-II-BlackFlag-Engine-Architecture.md) | Architecture | 1.0 | Approved | 2026-07-24 |
+| PP-ADR-013 | [ADR-0013 — Use One Free and Open-Source PiratePDF Edition](ADR/ADR-0013-one-free-open-source-edition.md) | Architecture Decision Record | 1.0 | Approved | 2026-08-09 |
+| PP-ADR-014 | [ADR-0014 — Require Independent Source Implementation](ADR/ADR-0014-require-independent-source-implementation.md) | Architecture Decision Record | 1.0 | Approved | 2026-08-09 |
+| PP-ADR-INDEX-001 | [Architecture Decision Record Index](ADR/ADR-Index.md) | Architecture Decision Record | 1.2 | Approved | 2026-08-09 |
+| PP-ARCH-001 | [PiratePDF Master Blueprint - Volume II: BlackFlag Engine Architecture](Blueprint/Volume-II-BlackFlag-Engine-Architecture.md) | Architecture | 1.1 | Approved | 2026-08-09 |
 | PP-ARCH-CONV-001 | [Passive Document Conversion Architecture](Architecture/PASSIVE-DOCUMENT-CONVERSION.md) | Architecture | 1.0 | Approved | 2026-08-06 |
 | PP-ARCH-MEM-001 | [BlackFlag Memory and Resource Architecture](Architecture/MEMORY-ARCHITECTURE.md) | Architecture | 1.0 | In Development | 2026-08-06 |
-| PP-CHARTER-001 | [PiratePDF Project Charter](Project-Charter.md) | Project Charter | 1.0 | Approved | 2026-07-24 |
+| PP-CHARTER-001 | [PiratePDF Project Charter](Project-Charter.md) | Project Charter | 1.1 | Approved | 2026-08-09 |
 | PP-DEV-001 | [PiratePDF Master Blueprint - Volume IV: Engineering Standards](Blueprint/Volume-IV-Engineering-Standards.md) | Developer Documentation | 1.0 | Approved | 2026-07-24 |
 | PP-DOC-000 | [PiratePDF Documentation](README.md) | Documentation Index | 1.0 | Approved | 2026-07-24 |
 | PP-GOV-002 | [PiratePDF Documentation Standards](05-Governance/Documentation-Standards.md) | Governance | 1.0 | Approved | 2026-07-23 |
@@ -58,6 +66,8 @@
 | PP-SPEC-BF-1045 | [BF-1045 — Content Streams and Canonical Graphics Operators](milestones/BF-1045-Content-Streams-and-Graphics-Operators.md) | Technical Specification | 1.0 | Implemented | 2026-08-06 |
 | PP-SPEC-BF-1046 | [BF-1046 — Canonical PDF Resource Resolution](milestones/BF-1046-Resource-Resolution.md) | Technical Specification | 1.0 | Implemented | 2026-08-07 |
 | PP-SPEC-BF-1047 | [BF-1047 — Graphics Interpretation and Display-List Construction](milestones/BF-1047-Graphics-Interpretation-and-Display-List.md) | Technical Specification | 1.0 | Implemented | 2026-08-07 |
+| PP-SPEC-BF-1048B | [BF-1048B â€” Core Rendering Engine](milestones/BF-1048B-Core-Rendering-Engine.md) | Technical Specification | 1.0 | Implemented | 2026-08-07 |
+| PP-SPEC-BF-1048C | [BF-1048C — Text and Font Rendering](milestones/BF-1048C-Text-and-Font-Rendering.md) | Technical Specification | 1.0 | Implemented | 2026-08-09 |
 | PP-TEST-001 | [PiratePDF Master Blueprint - Volume V: Testing and Quality Assurance](Blueprint/Volume-V-Testing-and-QA.md) | Testing Documentation | 1.0 | Approved | 2026-07-24 |
-| PP-VSN-000 | [PiratePDF Master Blueprint](Blueprint/README.md) | Vision | 1.0 | Approved | 2026-07-24 |
-| PP-VSN-001 | [PiratePDF Master Blueprint - Volume I: Vision and Product Strategy](Blueprint/Volume-I-Vision-and-Product-Strategy.md) | Vision | 1.0 | Approved | 2026-07-24 |
+| PP-VSN-000 | [PiratePDF Master Blueprint](Blueprint/README.md) | Vision | 1.1 | Approved | 2026-08-09 |
+| PP-VSN-001 | [PiratePDF Master Blueprint - Volume I: Vision and Product Strategy](Blueprint/Volume-I-Vision-and-Product-Strategy.md) | Vision | 1.1 | Approved | 2026-08-09 |

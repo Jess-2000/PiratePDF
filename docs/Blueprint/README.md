@@ -4,12 +4,12 @@
 |---|---|
 | **Document ID** | PP-VSN-000 |
 | **Category** | Vision |
-| **Version** | 1.0 |
+| **Version** | 1.1 |
 | **Status** | Approved |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1000, BF-2000, BF-8000 |
-| **Last Updated** | 2026-07-24 |
-| **Next Review** | 2026-10-24 |
+| **Last Updated** | 2026-08-09 |
+| **Next Review** | 2026-11-09 |
 
 ---
 
@@ -34,7 +34,7 @@ The Master Blueprint shall:
 
 - Define the product vision and guiding principles.
 - Define the major BlackFlag Engine and PiratePDF application boundaries.
-- Describe the intended Standard and Professional edition strategy.
+- Define the single-edition, free and open-source product strategy.
 - Establish project-wide engineering and quality expectations.
 - Provide long-term direction without replacing detailed subsystem specifications.
 
@@ -58,4 +58,4 @@ Conflicts between the Blueprint and a technical specification shall be reviewed 
 | Version | Date | Description |
 |---|---|---|
 | 1.0 | 2026-07-24 | Standardized the Master Blueprint index and volume catalog. |
-
+| 1.1 | 2026-08-09 | Updated the Blueprint authority statement for the single-edition free/open-source product model. |

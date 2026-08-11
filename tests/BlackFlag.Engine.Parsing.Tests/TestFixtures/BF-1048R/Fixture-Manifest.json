@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "generatedFor": "PiratePDF BF-1048R",
+  "provenance": "Generated specifically for PiratePDF; no external PDF test corpus was used.",
+  "streamLengthPolicy": "PDF /Length counts stream data only; the structural newline before endstream is excluded.",
+  "fixtures": [
+    {
+      "file": "Valid-Control.pdf",
+      "category": "recovery",
+      "sha256": "0c198bfe889796d3468345c93752e96a637a32937c153d01bf38bbe9f92ac464",
+      "expectedResult": "NormalOpen",
+      "notes": "Known-good control PDF."
+    },
+    {
+      "file": "Bad-StartXref-Plus4.pdf",
+      "category": "recovery",
+      "sha256": "048a0cc456c1b791ab2d92f14fa3dc3a7471398a2595c67c08e0340f4f1e56a0",
+      "expectedResult": "Recoverable",
+      "notes": "startxref is four bytes too large."
+    },
+    {
+      "file": "Bad-StartXref-Minus4.pdf",
+      "category": "recovery",
+      "sha256": "d55f9dac75256591db40485a195c704986ac5d87b11c4a6ff953a8ac179e1008",
+      "expectedResult": "Recoverable",
+      "notes": "startxref is four bytes too small."
+    },
+    {
+      "file": "Missing-StartXref.pdf",
+      "category": "recovery",
+      "sha256": "70a21a4e63f3a2079ea53532dbdca7cc49a3d76e81f6ec9df3d5380e3428f463",
+      "expectedResult": "Recoverable",
+      "notes": "The xref/trailer are present but startxref is missing."
+    },
+    {
+      "file": "Missing-Xref-Table.pdf",
+      "category": "recovery",
+      "sha256": "1523ac1bd0cc3ae5896ebbdf62001a3b535fdd2adf46560d65003441078e82a9",
+      "expectedResult": "Recoverable",
+      "notes": "Indirect objects and trailer remain; the traditional xref table is absent."
+    },
+    {
+      "file": "Wrong-Object-Offset.pdf",
+      "category": "recovery",
+      "sha256": "5c8527cced3f2f8b97206f9fc1409ed022c2f84a7bd18bb646a3ba0c34d931fd",
+      "expectedResult": "Recoverable",
+      "notes": "The xref offset for object 4 points to the wrong source position."
+    },
+    {
+      "file": "Fake-Object-In-Stream.pdf",
+      "category": "recovery",
+      "sha256": "3f5464e8f7b48b4634e39d31bce675712109eac6995e2d5eddaa527ac71f576c",
+      "expectedResult": "Recoverable",
+      "notes": "A valid stream payload contains bytes resembling an indirect object header; recovery must not index object 99."
+    },
+    {
+      "file": "Harmless-JavaScript-and-Embedded-Objects.pdf",
+      "category": "security",
+      "sha256": "32f0ba0e26a1d06a33d4f1488ffc3cc95121ccd4f8e49847ce272bc511eb991f",
+      "expectedResult": "NormalOpenWithSecurityFindings",
+      "notes": "Contains harmless OpenAction JavaScript that only calls app.alert plus a benign embedded text file."
+    },
+    {
+      "file": "Damaged-Encryption-Must-Fail.pdf",
+      "category": "encryption",
+      "sha256": "252c49bc8169774bab160a9d411958668c0e8ebdab86d853f954d0e5d19bb22e",
+      "expectedResult": "DamagedEncryption",
+      "notes": "Encryption dictionary is intentionally incomplete. Recovery must not reconstruct, bypass, or ignore it."
+    },
+    {
+      "file": "Authentication-Required-Metadata.pdf",
+      "category": "encryption",
+      "sha256": "45951cc37a7ecc6f66aa88cb64753695eb3aefe19e9250a16c4af7b409fad1cb",
+      "expectedResult": "AuthenticationRequired",
+      "notes": "Structurally complete Standard security metadata for authentication-handoff testing; not a cryptographically encrypted conformance file.",
+      "testPassword": "fixture-metadata-only"
+    }
+  ]
+}
