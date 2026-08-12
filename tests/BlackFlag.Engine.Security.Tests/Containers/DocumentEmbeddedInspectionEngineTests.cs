@@ -90,6 +90,49 @@ public sealed class DocumentEmbeddedInspectionEngineTests
         Assert.Equal("EmbeddedExecutableContent", observation.Kind);
     }
 
+    [Fact]
+    public void RootInspectionDoesNotReportRootAsEmbeddedContent()
+    {
+        var securityAdapter =
+            new FixtureSecurityAdapter();
+
+        DocumentEmbeddedInspectionResult result =
+            new DocumentEmbeddedInspectionEngine(
+                securityAdapters: [securityAdapter])
+                .InspectRoot(
+                    new DocumentEmbeddedObject(
+                        new byte[] { 0x50, 0x4B, 0x03, 0x04 },
+                        "/",
+                        declaredFileName: "document.docx"));
+
+        DocumentSecurityObservation observation =
+            Assert.Single(result.Observations);
+
+        Assert.Equal("FixtureObservation", observation.Kind);
+    }
+
+    [Fact]
+    public void PreAccountedChildIsNotDoubleCharged()
+    {
+        var budget = new DocumentSecurityInspectionBudget();
+        budget.ConsumeEmbeddedObject(4);
+
+        var securityAdapter =
+            new PreAccountedSecurityAdapter();
+
+        new DocumentEmbeddedInspectionEngine(
+                securityAdapters: [securityAdapter])
+            .InspectRoot(
+                new DocumentEmbeddedObject(
+                    new byte[] { 0x50, 0x4B, 0x03, 0x04 },
+                    "/",
+                    declaredFileName: "document.docx"),
+                budget);
+
+        Assert.Equal(1, budget.EmbeddedObjects);
+        Assert.Equal(4, budget.ExpandedBytes);
+    }
+
     private sealed class FixtureContainerAdapter : IDocumentContainerAdapter
     {
         private readonly DocumentContainerEntry[] entries;
@@ -121,5 +164,49 @@ public sealed class DocumentEmbeddedInspectionEngineTests
                     embeddedObject.LogicalPath + "/nested.zip"),
                 compressedLength: 4);
         }
+    }
+
+    private sealed class FixtureSecurityAdapter : IDocumentContainerSecurityAdapter
+    {
+        public bool CanInspect(
+            DocumentEmbeddedObjectClassification classification) =>
+            classification.Kind == DocumentEmbeddedObjectKind.OoxmlPackage;
+
+        public DocumentContainerSecurityInspection Inspect(
+            DocumentEmbeddedObject embeddedObject,
+            DocumentSecurityInspectionBudget budget,
+            CancellationToken cancellationToken = default) =>
+            new(
+                observations:
+                [
+                    new DocumentSecurityObservation(
+                        DocumentSecurityObservationCategory.ActiveContent,
+                        "FixtureObservation",
+                        "Fixture observation.",
+                        "fixture")
+                ]);
+    }
+
+    private sealed class PreAccountedSecurityAdapter : IDocumentContainerSecurityAdapter
+    {
+        public bool CanInspect(
+            DocumentEmbeddedObjectClassification classification) =>
+            classification.Kind == DocumentEmbeddedObjectKind.OoxmlPackage;
+
+        public DocumentContainerSecurityInspection Inspect(
+            DocumentEmbeddedObject embeddedObject,
+            DocumentSecurityInspectionBudget budget,
+            CancellationToken cancellationToken = default) =>
+            new(
+                embeddedObjects:
+                [
+                    new DocumentContainerEntry(
+                        new DocumentEmbeddedObject(
+                            "data"u8.ToArray(),
+                            "/child.bin",
+                            compressedLength: 4),
+                        compressedLength: 4,
+                        budgetAccounted: true)
+                ]);
     }
 }

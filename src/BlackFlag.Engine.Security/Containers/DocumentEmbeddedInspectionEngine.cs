@@ -10,13 +10,16 @@ public sealed class DocumentEmbeddedInspectionEngine
 {
     private readonly IDocumentEmbeddedObjectClassifier classifier;
     private readonly IDocumentContainerAdapter[] adapters;
+    private readonly IDocumentContainerSecurityAdapter[] securityAdapters;
 
     public DocumentEmbeddedInspectionEngine(
         IDocumentEmbeddedObjectClassifier? classifier = null,
-        IEnumerable<IDocumentContainerAdapter>? adapters = null)
+        IEnumerable<IDocumentContainerAdapter>? adapters = null,
+        IEnumerable<IDocumentContainerSecurityAdapter>? securityAdapters = null)
     {
         this.classifier = classifier ?? new DocumentEmbeddedObjectClassifier();
         this.adapters = adapters?.ToArray() ?? [];
+        this.securityAdapters = securityAdapters?.ToArray() ?? [];
     }
 
     public DocumentEmbeddedInspectionResult Inspect(
@@ -31,8 +34,42 @@ public sealed class DocumentEmbeddedInspectionEngine
 
         foreach (DocumentEmbeddedObject embeddedObject in embeddedObjects)
         {
-            InspectOne(embeddedObject, depth: 1, budget, observations, cancellationToken);
+            InspectOne(
+                embeddedObject,
+                depth: 1,
+                isEmbeddedObject: true,
+                budgetAccounted: false,
+                budget,
+                observations,
+                cancellationToken);
         }
+
+        return new DocumentEmbeddedInspectionResult(observations);
+    }
+
+    /// <summary>
+    /// Inspects a root container without incorrectly reporting the root itself
+    /// as embedded content. All recursively discovered children still use the
+    /// same shared inspection budget.
+    /// </summary>
+    public DocumentEmbeddedInspectionResult InspectRoot(
+        DocumentEmbeddedObject rootObject,
+        DocumentSecurityInspectionBudget? budget = null,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(rootObject);
+
+        budget ??= new DocumentSecurityInspectionBudget();
+        var observations = new List<DocumentSecurityObservation>();
+
+        InspectOne(
+            rootObject,
+            depth: 0,
+            isEmbeddedObject: false,
+            budgetAccounted: true,
+            budget,
+            observations,
+            cancellationToken);
 
         return new DocumentEmbeddedInspectionResult(observations);
     }
@@ -40,6 +77,8 @@ public sealed class DocumentEmbeddedInspectionEngine
     private void InspectOne(
         DocumentEmbeddedObject embeddedObject,
         int depth,
+        bool isEmbeddedObject,
+        bool budgetAccounted,
         DocumentSecurityInspectionBudget budget,
         List<DocumentSecurityObservation> observations,
         CancellationToken cancellationToken)
@@ -47,80 +86,144 @@ public sealed class DocumentEmbeddedInspectionEngine
         cancellationToken.ThrowIfCancellationRequested();
         budget.ValidateContainerDepth(depth);
         budget.ConsumeWork();
-        budget.ConsumeEmbeddedObject(embeddedObject.Content.Length);
 
-        if (embeddedObject.CompressedLength is long compressedLength)
+        if (isEmbeddedObject && !budgetAccounted)
         {
-            budget.ValidateCompressionRatio(compressedLength, embeddedObject.Content.Length);
-        }
-
-        DocumentEmbeddedObjectClassification classification = classifier.Classify(embeddedObject);
-
-        AddObservation(
-            observations,
-            budget,
-            classification.IsExecutable
-                ? DocumentSecurityObservationCategory.ExecutableContent
-                : DocumentSecurityObservationCategory.EmbeddedContent,
-            classification.IsExecutable ? "EmbeddedExecutableContent" : "EmbeddedObject",
-            classification.IsExecutable
-                ? $"Embedded content at '{embeddedObject.LogicalPath}' is executable or script content."
-                : $"Embedded content at '{embeddedObject.LogicalPath}' was classified as {classification.FormatIdentifier}.",
-            classification,
-            embeddedObject);
-
-        if (!classification.IsContainer)
-            return;
-
-        IDocumentContainerAdapter? adapter =
-            adapters.FirstOrDefault(item => item.CanExpand(classification));
-
-        if (adapter is null)
-            return;
-
-        foreach (DocumentContainerEntry child in adapter.Expand(embeddedObject, cancellationToken))
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            DocumentContainerEntry entry = child;
-
-            if (entry.EmbeddedObject.CompressedLength is null)
+            if (embeddedObject.CompressedLength is long compressedLength)
             {
-                entry = new DocumentContainerEntry(
-                    new DocumentEmbeddedObject(
-                        entry.EmbeddedObject.Content,
-                        entry.EmbeddedObject.LogicalPath,
-                        entry.CompressedLength,
-                        entry.EmbeddedObject.DeclaredMediaType,
-                        entry.EmbeddedObject.DeclaredFileName),
-                    entry.CompressedLength);
+                budget.ValidateCompressionRatio(
+                    compressedLength,
+                    embeddedObject.Content.Length);
             }
 
-            InspectOne(
-                entry.EmbeddedObject,
-                checked(depth + 1),
+            budget.ConsumeEmbeddedObject(embeddedObject.Content.Length);
+        }
+
+        DocumentEmbeddedObjectClassification classification =
+            classifier.Classify(embeddedObject);
+
+        if (isEmbeddedObject)
+        {
+            AddClassificationObservation(
+                observations,
+                budget,
+                classification,
+                embeddedObject);
+        }
+
+        if (!classification.IsContainer)
+        {
+            return;
+        }
+
+        IDocumentContainerSecurityAdapter? securityAdapter =
+            securityAdapters.FirstOrDefault(
+                item => item.CanInspect(classification));
+
+        if (securityAdapter is not null)
+        {
+            DocumentContainerSecurityInspection inspection =
+                securityAdapter.Inspect(
+                    embeddedObject,
+                    budget,
+                    cancellationToken);
+
+            foreach (DocumentSecurityObservation observation in inspection.Observations)
+            {
+                AddObservation(
+                    observations,
+                    budget,
+                    observation);
+            }
+
+            foreach (DocumentContainerEntry child in inspection.EmbeddedObjects)
+            {
+                InspectChild(
+                    child,
+                    depth,
+                    budget,
+                    observations,
+                    cancellationToken);
+            }
+
+            return;
+        }
+
+        IDocumentContainerAdapter? adapter =
+            adapters.FirstOrDefault(
+                item => item.CanExpand(classification));
+
+        if (adapter is null)
+        {
+            return;
+        }
+
+        foreach (DocumentContainerEntry child in adapter.Expand(
+                    embeddedObject,
+                    cancellationToken))
+        {
+            InspectChild(
+                child,
+                depth,
                 budget,
                 observations,
                 cancellationToken);
         }
     }
 
-    private static void AddObservation(
+    private void InspectChild(
+        DocumentContainerEntry child,
+        int parentDepth,
+        DocumentSecurityInspectionBudget budget,
+        List<DocumentSecurityObservation> observations,
+        CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        DocumentContainerEntry entry = child;
+
+        if (entry.EmbeddedObject.CompressedLength is null)
+        {
+            entry = new DocumentContainerEntry(
+                new DocumentEmbeddedObject(
+                    entry.EmbeddedObject.Content,
+                    entry.EmbeddedObject.LogicalPath,
+                    entry.CompressedLength,
+                    entry.EmbeddedObject.DeclaredMediaType,
+                    entry.EmbeddedObject.DeclaredFileName),
+                entry.CompressedLength,
+                entry.BudgetAccounted);
+        }
+
+        InspectOne(
+            entry.EmbeddedObject,
+            checked(parentDepth + 1),
+            isEmbeddedObject: true,
+            entry.BudgetAccounted,
+            budget,
+            observations,
+            cancellationToken);
+    }
+
+    private static void AddClassificationObservation(
         List<DocumentSecurityObservation> observations,
         DocumentSecurityInspectionBudget budget,
-        DocumentSecurityObservationCategory category,
-        string kind,
-        string description,
         DocumentEmbeddedObjectClassification classification,
         DocumentEmbeddedObject embeddedObject)
     {
-        budget.ConsumeObservation();
-
-        observations.Add(
+        AddObservation(
+            observations,
+            budget,
             new DocumentSecurityObservation(
-                category,
-                kind,
-                description,
+                classification.IsExecutable
+                    ? DocumentSecurityObservationCategory.ExecutableContent
+                    : DocumentSecurityObservationCategory.EmbeddedContent,
+                classification.IsExecutable
+                    ? "EmbeddedExecutableContent"
+                    : "EmbeddedObject",
+                classification.IsExecutable
+                    ? $"Embedded content at '{embeddedObject.LogicalPath}' is executable or script content."
+                    : $"Embedded content at '{embeddedObject.LogicalPath}' was classified as {classification.FormatIdentifier}.",
                 classification.FormatIdentifier,
                 new DocumentSecuritySourceLocation
                 {
@@ -135,5 +238,15 @@ public sealed class DocumentEmbeddedInspectionEngine
                     ["DeclaredFileName"] = embeddedObject.DeclaredFileName ?? string.Empty,
                     ["DeclaredMediaType"] = embeddedObject.DeclaredMediaType ?? string.Empty
                 }));
+    }
+
+    private static void AddObservation(
+        List<DocumentSecurityObservation> observations,
+        DocumentSecurityInspectionBudget budget,
+        DocumentSecurityObservation observation)
+    {
+        ArgumentNullException.ThrowIfNull(observation);
+        budget.ConsumeObservation();
+        observations.Add(observation);
     }
 }
