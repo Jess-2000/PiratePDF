@@ -28,6 +28,9 @@
 
     <ProjectReference
       Include="..\BlackFlag.Engine.Rendering\BlackFlag.Engine.Rendering.csproj" />
+
+    <ProjectReference
+      Include="..\BlackFlag.Engine.Security\BlackFlag.Engine.Security.csproj" />
   </ItemGroup>
 
 </Project>
