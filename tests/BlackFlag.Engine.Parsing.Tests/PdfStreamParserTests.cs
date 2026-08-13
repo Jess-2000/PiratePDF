@@ -1,9 +1,5 @@
 #nullable enable
-
-
-
 using System.IO;
-
 using System.Text;
 using BlackFlag.Engine.IO.RandomAccess;
 using BlackFlag.Engine.Objects;

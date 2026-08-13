@@ -7,6 +7,7 @@ public static class PluginCompatibility
     {
         ArgumentNullException.ThrowIfNull(manifest);
         ArgumentNullException.ThrowIfNull(hostSdkVersion);
-        return hostSdkVersion.Major == manifest.MinimumSdkVersion.Major && hostSdkVersion >= manifest.MinimumSdkVersion;
+        return hostSdkVersion.Major == manifest.MinimumSdkVersion.Major
+            && PluginVersionComparison.Compare(hostSdkVersion, manifest.MinimumSdkVersion) >= 0;
     }
 }

@@ -4,8 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BlackFlag.Engine.Plugins.Discovery;
-using BlackFlag.Engine.SDK.Plugins;
-
 namespace BlackFlag.Engine.Plugins.Tests.Discovery;
 
 public sealed class PluginDiscoveryServiceTests : IDisposable

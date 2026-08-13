@@ -25,6 +25,7 @@
 | BF-1049T | [BF-1049T — Silent Fingerprint-Backed Trusted-Document Opening](milestones/BF-1049T-Silent-Fingerprint-Backed-Trusted-Document-Opening.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
 | BF-1050A | [BF-1050A — Plugin Contracts, Identity, Manifest, Compatibility, and Initial SDK Boundary Separation](milestones/BF-1050A-Plugin-Contracts-Identity-Manifest-Compatibility-and-SDK-Boundary.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
 | BF-1050B | [BF-1050B — Plugin Discovery and Catalog](milestones/BF-1050B-Plugin-Discovery-and-Catalog.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1050C | [BF-1050C — Dependency Resolution and Activation Planning](milestones/BF-1050C-Dependency-Resolution-and-Activation-Planning.md) | Milestone | 1.1 | Implemented | 2026-08-13 |
 | BF-DOC-0004 | [BlackFlag Engine — Parser Infrastructure RC1](Parser-Infrastructure-RC1.md) | Architecture | 0.4.0 | Tested | 2026-07-30 |
 | BF-DOC-0005 | [BlackFlag Engine 0.5.0 — PDF Object Model RC1](PDF-Object-Model-RC1.md) | Architecture | 0.5.0 | In Development | 2026-07-30 |
 | BF-DOC-1001 | [Documentation Template RC1](Documentation-Template-RC1.md) | Developer Documentation | 0.1.0 | In Development | 2026-07-30 |
@@ -68,7 +69,7 @@
 | PP-SPEC-012 | [BlackFlag Engine I/O Specification](Technical-Specifications/BlackFlag-Engine/IO.md) | Technical Specification | 1.0 | In Development | 2026-07-24 |
 | PP-SPEC-013 | [BlackFlag Engine Syntax Specification](Technical-Specifications/BlackFlag-Engine/Syntax.md) | Technical Specification | 1.0 | In Development | 2026-07-24 |
 | PP-SPEC-014 | [BlackFlag Engine Document Model Specification](Technical-Specifications/BlackFlag-Engine/Document.md) | Technical Specification | 1.0 | In Development | 2026-07-24 |
-| PP-SPEC-015 | [BlackFlag Engine SDK Specification](Technical-Specifications/BlackFlag-Engine/SDK.md) | Technical Specification | 1.3 | In Development | 2026-08-13 |
+| PP-SPEC-015 | [BlackFlag Engine SDK Specification](Technical-Specifications/BlackFlag-Engine/SDK.md) | Technical Specification | 1.4 | In Development | 2026-08-13 |
 | PP-SPEC-BF-1036 | [BF-1036 — Collection Parser](milestones/BF-1036-Collection-Parser.md) | Technical Specification | 1.0 | Approved | 2026-07-30 |
 | PP-SPEC-BF-1037 | [BF-1037 — Indirect Objects and References](milestones/BF-1037-Indirect-Objects-and-References.md) | Technical Specification | 1.0 | Tested | 2026-07-31 |
 | PP-SPEC-BF-1038 | [BF-1038 — Traditional Cross-Reference Tables and Trailers](milestones/BF-1038-Traditional-Cross-Reference-Tables.md) | Technical Specification | 1.0 | Tested | 2026-07-31 |
