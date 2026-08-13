@@ -38,6 +38,9 @@
   <ItemGroup>
     <ProjectReference
       Include="..\..\src\BlackFlag.Engine.Parsing\BlackFlag.Engine.Parsing.csproj" />
+
+    <ProjectReference
+      Include="..\..\src\BlackFlag.Engine.Security\BlackFlag.Engine.Security.csproj" />
   </ItemGroup>
 
 </Project>

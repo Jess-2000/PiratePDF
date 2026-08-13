@@ -11,6 +11,18 @@
 | BF-1048F | [BF-1048F - Patterns, Shadings, and Type 3](milestones/BF-1048F-Patterns-Shadings-and-Type3.md) | Milestone | 1.0 | Implemented | 2026-08-10 |
 | BF-1048G | [BF-1048G - Final Rendering Integration and Regression](milestones/BF-1048G-Final-Rendering-Integration-and-Regression.md) | Milestone | 1.0 | Implemented | 2026-08-10 |
 | BF-1048R | [BF-1048R - Cross-Reference Recovery and Damaged-PDF Opening](milestones/BF-1048R-Cross-Reference-Recovery-and-Damaged-PDF-Opening.md) | Milestone | 1.0 | Implemented | 2026-08-10 |
+| BF-1049A | [BF-1049A - Security Model, Policy, and Limits](milestones/BF-1049A-Security-Model-Policy-and-Limits.md) | Milestone | 1.0 | Implemented | 2026-08-11 |
+| BF-1049B | [BF-1049B - PDF Active and Embedded Content Analysis](milestones/BF-1049B-PDF-Active-and-Embedded-Content-Analysis.md) | Milestone | 1.0 | Implemented | 2026-08-11 |
+| BF-1049C | [BF-1049C - Shared Container Recursion and Embedded Object Classification](milestones/BF-1049C-Shared-Container-Recursion-and-Embedded-Object-Classification.md) | Milestone | 1.0 | Implemented | 2026-08-12 |
+| BF-1049D | [BF-1049D - OOXML DOCX/DOCM Security Analysis](milestones/BF-1049D-OOXML-DOCX-DOCM-Security-Analysis.md) | Milestone | 1.0 | Implemented | 2026-08-12 |
+| BF-1049E | [BF-1049E - ODT Security Analysis](milestones/BF-1049E-ODT-Security-Analysis.md) | Milestone | 1.0 | Implemented | 2026-08-12 |
+| BF-1049F | [BF-1049F - Legacy DOC/OLE + RTF/Markdown Security Adapters](milestones/BF-1049F-Legacy-DOC-OLE-RTF-Markdown-Security-Adapters.md) | Milestone | 1.0 | Implemented | 2026-08-12 |
+| BF-1049G | [BF-1049G - PDF Password / Security-Handler Integration](milestones/BF-1049G-PDF-Password-Security-Handler-Integration.md) | Milestone | 1.0 | Implemented | 2026-08-12 |
+| BF-1049H | [BF-1049H — Remediation and Passive Conversion Security](milestones/BF-1049H-Remediation-and-Passive-Conversion-Security.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1049I | [BF-1049I — Security Reporting, Services, and SDK Integration](milestones/BF-1049I-Security-Reporting-Services-and-SDK-Integration.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1049J | [BF-1049J — Adversarial, Fuzz, and Integration Hardening](milestones/BF-1049J-Adversarial-Fuzz-and-Integration-Hardening.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1049K | [BF-1049K - PDF Standard Security Handler Authentication and Decryption](milestones/BF-1049K-PDF-Standard-Security-Handler-Authentication-and-Decryption.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1049T | [BF-1049T — Silent Fingerprint-Backed Trusted-Document Opening](milestones/BF-1049T-Silent-Fingerprint-Backed-Trusted-Document-Opening.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
 | BF-DOC-0004 | [BlackFlag Engine — Parser Infrastructure RC1](Parser-Infrastructure-RC1.md) | Architecture | 0.4.0 | Tested | 2026-07-30 |
 | BF-DOC-0005 | [BlackFlag Engine 0.5.0 — PDF Object Model RC1](PDF-Object-Model-RC1.md) | Architecture | 0.5.0 | In Development | 2026-07-30 |
 | BF-DOC-1001 | [Documentation Template RC1](Documentation-Template-RC1.md) | Developer Documentation | 0.1.0 | In Development | 2026-07-30 |
