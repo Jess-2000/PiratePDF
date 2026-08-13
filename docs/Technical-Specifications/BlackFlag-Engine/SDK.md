@@ -14,7 +14,7 @@
 ---
 
 **Status:** Draft  
-**Version:** 1.0
+**Version:** 1.1
 
 ## Purpose
 
@@ -40,8 +40,20 @@
 - Saving.
 - Events.
 - Options.
+## Document security API
+
+`DocumentSecuritySdkService` exposes normalized BlackFlag security-policy
+results without exposing PDF parser implementation types. SDK results are
+immutable snapshots containing reportable findings, requested interaction
+names, blocked state, manual-inspection state, and conditional report metadata.
+
+Automatic clean evaluations remain silent and do not create a report. The SDK
+does not persist reports or perform UI interaction. Format-specific analyzers
+remain responsible for producing normalized observations.
+
 ## Revision History
 
 | Version | Date | Description |
 |---|---|---|
+| 1.1 | 2026-08-13 | Added document security reporting and SDK service surface. |
 | 1.0 | 2026-07-24 | Standardized specification metadata and governance structure. |

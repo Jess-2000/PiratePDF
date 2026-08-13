@@ -19,6 +19,7 @@
 | BF-1049F | [BF-1049F - Legacy DOC/OLE + RTF/Markdown Security Adapters](milestones/BF-1049F-Legacy-DOC-OLE-RTF-Markdown-Security-Adapters.md) | Milestone | 1.0 | Implemented | 2026-08-12 |
 | BF-1049G | [BF-1049G - PDF Password / Security-Handler Integration](milestones/BF-1049G-PDF-Password-Security-Handler-Integration.md) | Milestone | 1.0 | Implemented | 2026-08-12 |
 | BF-1049H | [BF-1049H — Remediation and Passive Conversion Security](milestones/BF-1049H-Remediation-and-Passive-Conversion-Security.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1049I | [BF-1049I — Security Reporting, Services, and SDK Integration](milestones/BF-1049I-Security-Reporting-Services-and-SDK-Integration.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
 | BF-DOC-0004 | [BlackFlag Engine — Parser Infrastructure RC1](Parser-Infrastructure-RC1.md) | Architecture | 0.4.0 | Tested | 2026-07-30 |
 | BF-DOC-0005 | [BlackFlag Engine 0.5.0 — PDF Object Model RC1](PDF-Object-Model-RC1.md) | Architecture | 0.5.0 | In Development | 2026-07-30 |
 | BF-DOC-1001 | [Documentation Template RC1](Documentation-Template-RC1.md) | Developer Documentation | 0.1.0 | In Development | 2026-07-30 |

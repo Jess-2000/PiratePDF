@@ -1,4 +1,3 @@
-
 using BlackFlag.Engine.Security.Inspection;
 
 namespace BlackFlag.Engine.Security.Reporting;
@@ -24,6 +23,8 @@ public static class DocumentSecurityReportFactory
 
         return new DocumentSecurityReport(
             assessment.Findings,
+            assessment.Interactions,
+            assessment.ManualInspection,
             generatedAtUtc);
     }
 }
