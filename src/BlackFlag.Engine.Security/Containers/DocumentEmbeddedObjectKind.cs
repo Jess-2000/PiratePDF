@@ -10,6 +10,7 @@ public enum DocumentEmbeddedObjectKind
     OpenDocumentPackage,
     OleCompoundDocument,
     Rtf,
+    Markdown,
     Executable,
     Script,
     Image

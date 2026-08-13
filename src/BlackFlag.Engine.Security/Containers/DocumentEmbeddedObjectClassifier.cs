@@ -97,6 +97,12 @@ public sealed class DocumentEmbeddedObjectClassifier : IDocumentEmbeddedObjectCl
             return Rtf();
         }
 
+        if (IsMarkdownFileName(embeddedObject.DeclaredFileName) ||
+            ContainsMediaType(embeddedObject.DeclaredMediaType, "markdown"))
+        {
+            return Markdown(embeddedObject.DeclaredMediaType);
+        }
+
         if (LooksLikeScript(embeddedObject, bytes))
         {
             return Script(embeddedObject.DeclaredMediaType);
@@ -254,6 +260,13 @@ public sealed class DocumentEmbeddedObjectClassifier : IDocumentEmbeddedObjectCl
             _ => false
         };
 
+    private static bool IsMarkdownFileName(string? fileName) =>
+        GetExtension(fileName) switch
+        {
+            ".md" or ".markdown" => true,
+            _ => false
+        };
+
     private static bool IsScriptFileName(string? fileName) =>
         GetExtension(fileName) switch
         {
@@ -323,9 +336,18 @@ public sealed class DocumentEmbeddedObjectClassifier : IDocumentEmbeddedObjectCl
         Classification(
             DocumentEmbeddedObjectKind.Rtf,
             "rtf",
-            isContainer: false,
+            isContainer: true,
             isExecutable: false,
             "application/rtf");
+
+    private static DocumentEmbeddedObjectClassification Markdown(
+        string? mediaType) =>
+        Classification(
+            DocumentEmbeddedObjectKind.Markdown,
+            "markdown",
+            isContainer: true,
+            isExecutable: false,
+            mediaType ?? "text/markdown");
 
     private static DocumentEmbeddedObjectClassification Script(
         string? mediaType) =>

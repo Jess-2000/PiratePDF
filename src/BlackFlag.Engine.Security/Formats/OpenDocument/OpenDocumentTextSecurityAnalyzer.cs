@@ -1,4 +1,5 @@
 using BlackFlag.Engine.Security.Containers;
+using BlackFlag.Engine.Security.Formats;
 using BlackFlag.Engine.Security.Inspection;
 
 namespace BlackFlag.Engine.Security.Formats.OpenDocument;
@@ -46,9 +47,8 @@ public sealed class OpenDocumentTextSecurityAnalyzer
 
         var engine = new DocumentEmbeddedInspectionEngine(
             securityAdapters:
-            [
-                new OpenDocumentTextContainerSecurityAdapter(options)
-            ]);
+                DocumentSecurityFormatAdapterFactory.Create(
+                    openDocumentOptions: options));
 
         DocumentEmbeddedInspectionResult result =
             engine.InspectRoot(root, budget, cancellationToken);

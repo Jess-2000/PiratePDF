@@ -1,4 +1,5 @@
 using BlackFlag.Engine.Security.Containers;
+using BlackFlag.Engine.Security.Formats;
 using BlackFlag.Engine.Security.Inspection;
 
 namespace BlackFlag.Engine.Security.Formats.Ooxml;
@@ -35,12 +36,11 @@ public sealed class OoxmlWordSecurityAnalyzer
             declaredMediaType: GetDeclaredMediaType(fileName),
             declaredFileName: fileName);
 
-        var adapter =
-            new OoxmlWordContainerSecurityAdapter(options);
-
         var engine =
             new DocumentEmbeddedInspectionEngine(
-                securityAdapters: [adapter]);
+                securityAdapters:
+                    DocumentSecurityFormatAdapterFactory.Create(
+                        ooxmlOptions: options));
 
         DocumentEmbeddedInspectionResult result =
             engine.InspectRoot(

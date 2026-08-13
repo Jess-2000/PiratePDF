@@ -76,4 +76,35 @@ public sealed class DocumentEmbeddedObjectClassifierTests
         Assert.Equal(DocumentEmbeddedObjectKind.Script, result.Kind);
         Assert.True(result.IsExecutable);
     }
+
+    [Fact]
+    public void RtfIsClassifiedAsInspectableContainer()
+    {
+        DocumentEmbeddedObjectClassification result =
+            new DocumentEmbeddedObjectClassifier()
+                .Classify(
+                    new DocumentEmbeddedObject(
+                        "{\\rtf1 clean}"u8.ToArray(),
+                        "/document.rtf",
+                        declaredFileName: "document.rtf"));
+
+        Assert.Equal(DocumentEmbeddedObjectKind.Rtf, result.Kind);
+        Assert.True(result.IsContainer);
+    }
+
+    [Fact]
+    public void MarkdownFileNameIsClassifiedAsInspectableContainer()
+    {
+        DocumentEmbeddedObjectClassification result =
+            new DocumentEmbeddedObjectClassifier()
+                .Classify(
+                    new DocumentEmbeddedObject(
+                        "# heading"u8.ToArray(),
+                        "/document.md",
+                        declaredFileName: "document.md"));
+
+        Assert.Equal(DocumentEmbeddedObjectKind.Markdown, result.Kind);
+        Assert.True(result.IsContainer);
+    }
+
 }
