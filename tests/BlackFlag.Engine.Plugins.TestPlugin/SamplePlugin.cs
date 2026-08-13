@@ -1,0 +1,9 @@
+using BlackFlag.Engine.SDK.Plugins;
+namespace BlackFlag.Engine.Plugins.TestPlugin;
+public sealed class SamplePlugin : IBlackFlagPlugin, IDisposable
+{
+    public ValueTask InitializeAsync(PluginInitializationContext context, CancellationToken cancellationToken)
+    { cancellationToken.ThrowIfCancellationRequested(); if (context.PluginId.Value == "org.sample.fail") throw new InvalidOperationException("Requested test failure."); return ValueTask.CompletedTask; }
+    public ValueTask DeactivateAsync(CancellationToken cancellationToken) => ValueTask.CompletedTask;
+    public void Dispose() { }
+}

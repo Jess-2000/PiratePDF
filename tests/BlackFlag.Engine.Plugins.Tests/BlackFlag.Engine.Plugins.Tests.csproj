@@ -12,5 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\BlackFlag.Engine.Plugins\BlackFlag.Engine.Plugins.csproj" />
+    <ProjectReference Include="..\BlackFlag.Engine.Plugins.TestPlugin\BlackFlag.Engine.Plugins.TestPlugin.csproj" />
   </ItemGroup>
 </Project>

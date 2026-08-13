@@ -4,7 +4,7 @@
 |---|---|
 | **Document ID** | PP-SPEC-015 |
 | **Category** | Technical Specification |
-| **Version** | 1.4 |
+| **Version** | 1.5 |
 | **Status** | In Development |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1000, BF-8000, BF-1050 |
@@ -14,7 +14,7 @@
 ---
 
 **Status:** Draft  
-**Version:** 1.4
+**Version:** 1.5
 
 ## Purpose
 
@@ -56,12 +56,13 @@ remain responsible for producing normalized observations.
 
 ## Plugin Discovery Boundary
 
-`BlackFlag.Engine.Plugins` owns runtime-side plugin discovery and cataloging while depending only on public SDK contracts at this stage. Discovery examines only explicitly configured roots, treats each immediate child directory as a candidate package, reads `plugin.json` under bounded limits, and never loads plugin assemblies. Invalid or duplicate packages produce structured discovery issues without preventing unrelated valid packages from being cataloged. Dependency declarations use stable plugin identities and bounded version ranges. Dependency resolution and activation planning validate SDK compatibility, missing or incompatible dependencies, cycles, graph bounds, and deterministic dependency-first ordering without loading plugin assemblies. Managed assembly loading remains later BF-1050 work.
+`BlackFlag.Engine.Plugins` owns runtime-side plugin discovery and cataloging while depending only on public SDK contracts at this stage. Discovery examines only explicitly configured roots, treats each immediate child directory as a candidate package, reads `plugin.json` under bounded limits, and never loads plugin assemblies. Invalid or duplicate packages produce structured discovery issues without preventing unrelated valid packages from being cataloged. Dependency declarations use stable plugin identities and bounded version ranges. Dependency resolution and activation planning validate SDK compatibility, missing or incompatible dependencies, cycles, graph bounds, and deterministic dependency-first ordering without loading plugin assemblies. Managed loading uses collectible per-plugin load contexts after activation planning. Plugin lifecycle contracts remain SDK-owned; runtime orchestration is host-owned. Load contexts provide dependency isolation and unloadability, not a hostile-code security sandbox.
 
 ## Revision History
 
 | Version | Date | Description |
 |---|---|---|
+| 1.5 | 2026-08-13 | Added managed plugin lifecycle contracts and collectible runtime loading for BF-1050D. |
 | 1.4 | 2026-08-13 | Added bounded plugin dependency contracts and deterministic non-executing activation planning for BF-1050C. |
 | 1.3 | 2026-08-13 | Added bounded deterministic plugin discovery and catalog boundary for BF-1050B. |
 | 1.2 | 2026-08-13 | Established plugin contract boundary and separated SDK security contracts from the internal service adapter. |
