@@ -16,18 +16,34 @@ public sealed class PluginManifest
         ArgumentNullException.ThrowIfNull(version);
         ArgumentNullException.ThrowIfNull(minimumSdkVersion);
         ArgumentException.ThrowIfNullOrWhiteSpace(entryPoint);
+
+        PluginCapability[] required = requiredCapabilities?.ToArray() ?? [];
+        PluginCapability[] optional = optionalCapabilities?.ToArray() ?? [];
+        PluginDependency[] dependencyArray = dependencies?.ToArray() ?? [];
+
+        ValidateCapabilities(required, nameof(requiredCapabilities));
+        ValidateCapabilities(optional, nameof(optionalCapabilities));
+        if (required.Length + optional.Length > PluginManifestLimits.DefaultMaximumCapabilities)
+            throw new ArgumentOutOfRangeException(nameof(requiredCapabilities), $"A plugin cannot declare more than {PluginManifestLimits.DefaultMaximumCapabilities} capabilities.");
+        if (required.Intersect(optional).Any())
+            throw new ArgumentException("A capability cannot be both required and optional.", nameof(optionalCapabilities));
+        if (dependencyArray.Length > PluginManifestLimits.DefaultMaximumDependencies)
+            throw new ArgumentOutOfRangeException(nameof(dependencies), $"A plugin cannot declare more than {PluginManifestLimits.DefaultMaximumDependencies} dependencies.");
+        if (dependencyArray.Any(static dependency => dependency is null))
+            throw new ArgumentException("Plugin dependencies cannot contain null entries.", nameof(dependencies));
+        if (dependencyArray.Select(static dependency => dependency.Id).Distinct().Count() != dependencyArray.Length)
+            throw new ArgumentException("Plugin dependencies must have unique plugin IDs.", nameof(dependencies));
+        if (dependencyArray.Any(dependency => dependency.Id == id))
+            throw new ArgumentException("A plugin cannot depend on itself.", nameof(dependencies));
+
         Id = id;
         Name = name;
         Version = version;
         MinimumSdkVersion = minimumSdkVersion;
         EntryPoint = entryPoint;
-        this.requiredCapabilities = requiredCapabilities?.Distinct().ToArray() ?? [];
-        this.optionalCapabilities = optionalCapabilities?.Distinct().ToArray() ?? [];
-        this.dependencies = dependencies?.ToArray() ?? [];
-        if (this.dependencies.Select(static dependency => dependency.Id).Distinct().Count() != this.dependencies.Length)
-            throw new ArgumentException("Plugin dependencies must have unique plugin IDs.", nameof(dependencies));
-        if (this.dependencies.Any(dependency => dependency.Id == id))
-            throw new ArgumentException("A plugin cannot depend on itself.", nameof(dependencies));
+        this.requiredCapabilities = required;
+        this.optionalCapabilities = optional;
+        this.dependencies = dependencyArray;
     }
 
     public PluginId Id { get; }
@@ -38,4 +54,12 @@ public sealed class PluginManifest
     public IReadOnlyList<PluginCapability> RequiredCapabilities => requiredCapabilities;
     public IReadOnlyList<PluginCapability> OptionalCapabilities => optionalCapabilities;
     public IReadOnlyList<PluginDependency> Dependencies => dependencies;
+
+    private static void ValidateCapabilities(PluginCapability[] capabilities, string parameterName)
+    {
+        if (capabilities.Any(static capability => capability is null))
+            throw new ArgumentException("Plugin capabilities cannot contain null entries.", parameterName);
+        if (capabilities.Distinct().Count() != capabilities.Length)
+            throw new ArgumentException("Plugin capabilities must be unique.", parameterName);
+    }
 }
