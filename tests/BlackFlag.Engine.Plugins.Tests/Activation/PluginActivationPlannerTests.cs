@@ -47,6 +47,20 @@ public sealed class PluginActivationPlannerTests : IDisposable
         Assert.Empty(plan.ActivationOrder); Assert.Contains(plan.Issues, static issue => issue.Kind == PluginActivationIssueKind.SdkIncompatible); Assert.Contains(plan.Issues, static issue => issue.Kind == PluginActivationIssueKind.DependencyBlocked);
     }
     [Fact]
+    public async Task CycleBlockingPropagatesThroughLongDependentChain()
+    {
+        Write("a", "org.sample.a", "1.0.0", """[{"id":"org.sample.b","minimumVersion":"1.0.0"}]""");
+        Write("b", "org.sample.b", "1.0.0", """[{"id":"org.sample.a","minimumVersion":"1.0.0"}]""");
+        Write("c", "org.sample.c", "1.0.0", """[{"id":"org.sample.a","minimumVersion":"1.0.0"}]""");
+        Write("d", "org.sample.d", "1.0.0", """[{"id":"org.sample.c","minimumVersion":"1.0.0"}]""");
+        Write("good", "org.sample.good", "1.0.0");
+        PluginActivationPlan plan = PluginActivationPlanner.Plan(await PluginDiscoveryService.DiscoverAsync([root]), new Version(1,0));
+        Assert.Equal("org.sample.good", Assert.Single(plan.ActivationOrder).Manifest.Id.Value);
+        Assert.Equal(4, plan.BlockedPlugins.Count);
+        Assert.Contains(plan.Issues, static issue => issue.Kind == PluginActivationIssueKind.DependencyBlocked && issue.PluginId.Value == "org.sample.d");
+    }
+
+    [Fact]
     public async Task CancellationIsPropagated()
     {
         Write("a", "org.sample.a", "1.0.0"); PluginCatalog catalog = await PluginDiscoveryService.DiscoverAsync([root]); using var cts = new CancellationTokenSource(); cts.Cancel();

@@ -8,15 +8,18 @@ public sealed class PluginExtensionRegistry
 {
     private readonly object sync = new();
     private readonly Dictionary<string, List<Entry>> entries = new(StringComparer.Ordinal);
+    private readonly Dictionary<PluginId, HashSet<string>> pointsByOwner = [];
+
     public IReadOnlyList<T> GetExtensions<T>(PluginExtensionPoint<T> extensionPoint) where T : class, IPluginExtension
     {
         ArgumentNullException.ThrowIfNull(extensionPoint);
         lock (sync)
         {
             if (!entries.TryGetValue(extensionPoint.Id, out List<Entry>? list)) return [];
-            return list.Where(static e => e.ContractType == typeof(T)).Select(static e => (T)e.Extension).ToArray();
+            return [.. list.Where(static e => e.ContractType == typeof(T)).Select(static e => (T)e.Extension)];
         }
     }
+
     internal void Commit(IReadOnlyList<PendingExtension> pending)
     {
         lock (sync)
@@ -32,20 +35,26 @@ public sealed class PluginExtensionRegistry
             {
                 if (!entries.TryGetValue(item.PointId, out List<Entry>? list)) entries.Add(item.PointId, list = []);
                 list.Add(new(item.Owner, item.ContractType, item.Extension));
+                if (!pointsByOwner.TryGetValue(item.Owner, out HashSet<string>? ownedPoints)) pointsByOwner.Add(item.Owner, ownedPoints = new(StringComparer.Ordinal));
+                ownedPoints.Add(item.PointId);
             }
         }
     }
+
     internal void RemoveOwnedBy(PluginId owner)
     {
         lock (sync)
         {
-            foreach (string key in entries.Keys.ToArray())
+            if (!pointsByOwner.Remove(owner, out HashSet<string>? ownedPoints)) return;
+            foreach (string key in ownedPoints)
             {
-                entries[key].RemoveAll(e => e.Owner == owner);
-                if (entries[key].Count == 0) entries.Remove(key);
+                if (!entries.TryGetValue(key, out List<Entry>? list)) continue;
+                list.RemoveAll(e => e.Owner == owner);
+                if (list.Count == 0) entries.Remove(key);
             }
         }
     }
+
     private sealed record Entry(PluginId Owner, Type ContractType, object Extension);
 }
 

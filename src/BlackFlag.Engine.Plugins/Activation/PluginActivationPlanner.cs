@@ -12,7 +12,7 @@ public static class PluginActivationPlanner
     {
         ArgumentNullException.ThrowIfNull(catalog); ArgumentNullException.ThrowIfNull(hostSdkVersion);
         options ??= new PluginActivationPlanningOptions(); options.Validate();
-        PluginDescriptor[] plugins = catalog.Plugins.OrderBy(static p => p.Manifest.Id.Value, StringComparer.Ordinal).ToArray();
+        PluginDescriptor[] plugins = [.. catalog.Plugins.OrderBy(static p => p.Manifest.Id.Value, StringComparer.Ordinal)];
         if (plugins.Length > options.MaximumPlugins)
         {
             var limitIssues = plugins.Select(static p => new PluginActivationIssue(PluginActivationIssueKind.PluginLimitExceeded, p.Manifest.Id, null, "Plugin count exceeds the configured activation-planning limit.")).ToArray();
@@ -85,23 +85,38 @@ public static class PluginActivationPlanner
             if (!issues.Any(issue => issue.Kind == PluginActivationIssueKind.DependencyCycle && issue.PluginId == id))
                 issues.Add(new(PluginActivationIssueKind.DependencyCycle, id, null, "Plugin participates in a dependency cycle."));
         }
-        // Remove any plugin that was initially appended before a later cycle classification and propagate blocked state to dependents.
-        order.RemoveAll(plugin => states[plugin.Manifest.Id] != VisitState.Ready);
-        bool changed;
-        do
+
+        // A cycle can be discovered after a dependency was provisionally marked ready. Propagate
+        // those late blocked states through reverse dependency edges once, avoiding repeated graph scans.
+        var dependents = new Dictionary<PluginId, List<PluginId>>();
+        foreach (PluginDescriptor plugin in plugins)
         {
-            changed = false;
-            foreach (PluginDescriptor plugin in plugins)
+            foreach (PluginDependency dependency in plugin.Manifest.Dependencies)
             {
-                if (states[plugin.Manifest.Id] != VisitState.Ready) continue;
-                if (plugin.Manifest.Dependencies.Any(dependency => states.TryGetValue(dependency.Id, out VisitState state) && state == VisitState.Blocked))
-                {
-                    states[plugin.Manifest.Id] = VisitState.Blocked; order.Remove(plugin);
-                    issues.Add(new(PluginActivationIssueKind.DependencyBlocked, plugin.Manifest.Id, null, "A required plugin dependency is blocked.")); changed = true;
-                }
+                if (!byId.ContainsKey(dependency.Id)) continue;
+                if (!dependents.TryGetValue(dependency.Id, out List<PluginId>? list)) dependents.Add(dependency.Id, list = []);
+                list.Add(plugin.Manifest.Id);
             }
-        } while (changed);
-        PluginDescriptor[] blocked = plugins.Where(plugin => states[plugin.Manifest.Id] == VisitState.Blocked).ToArray();
+        }
+        var blockedQueue = new Queue<PluginId>(states.Where(static pair => pair.Value == VisitState.Blocked).Select(static pair => pair.Key));
+        var propagated = new HashSet<PluginId>(blockedQueue);
+        while (blockedQueue.Count > 0)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            PluginId blockedId = blockedQueue.Dequeue();
+            if (!dependents.TryGetValue(blockedId, out List<PluginId>? dependentIds)) continue;
+            foreach (PluginId dependentId in dependentIds)
+            {
+                if (states[dependentId] != VisitState.Ready) continue;
+                states[dependentId] = VisitState.Blocked;
+                if (!issues.Any(issue => issue.PluginId == dependentId))
+                    issues.Add(new(PluginActivationIssueKind.DependencyBlocked, dependentId, blockedId, "A required plugin dependency is blocked."));
+                if (propagated.Add(dependentId)) blockedQueue.Enqueue(dependentId);
+            }
+        }
+
+        order.RemoveAll(plugin => states[plugin.Manifest.Id] != VisitState.Ready);
+        PluginDescriptor[] blocked = [.. plugins.Where(plugin => states[plugin.Manifest.Id] == VisitState.Blocked)];
         issues.Sort(static (a,b) => { int c=StringComparer.Ordinal.Compare(a.PluginId.Value,b.PluginId.Value); if(c!=0)return c; c=a.Kind.CompareTo(b.Kind); return c!=0?c:StringComparer.Ordinal.Compare(a.DependencyId?.Value,b.DependencyId?.Value); });
         return new PluginActivationPlan(order, blocked, issues);
     }
