@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <ProjectReference Include="..\BlackFlag.Engine.SDK\BlackFlag.Engine.SDK.csproj" />
+    <ProjectReference Include="..\BlackFlag.Engine.Security\BlackFlag.Engine.Security.csproj" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>

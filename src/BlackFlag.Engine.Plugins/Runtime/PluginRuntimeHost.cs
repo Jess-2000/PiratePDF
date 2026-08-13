@@ -3,6 +3,8 @@ using BlackFlag.Engine.Plugins.Activation;
 using BlackFlag.Engine.Plugins.Discovery;
 using BlackFlag.Engine.Plugins.Capabilities;
 using BlackFlag.Engine.Plugins.Extensions;
+using BlackFlag.Engine.Plugins.Security;
+using BlackFlag.Engine.Security.Plugins;
 using BlackFlag.Engine.SDK.Plugins;
 
 namespace BlackFlag.Engine.Plugins.Runtime;
@@ -40,7 +42,8 @@ public static class PluginRuntimeHost
         string packageRoot = Path.GetFullPath(descriptor.PackagePath + Path.DirectorySeparatorChar);
         if (!assemblyPath.StartsWith(packageRoot, StringComparison.OrdinalIgnoreCase) || !File.Exists(assemblyPath))
         { issues.Add(new(PluginRuntimeIssueKind.AssemblyUnavailable, id, "Plugin entry assembly is unavailable.")); return null; }
-        PluginLoadContext? context = null; IBlackFlagPlugin? plugin = null;
+        PluginLoadContext? context = null;
+
         try
         {
             context = new PluginLoadContext(assemblyPath);
@@ -48,20 +51,28 @@ public static class PluginRuntimeHost
             Type? type = assembly.GetType(entryPoint.TypeName, throwOnError: false, ignoreCase: false);
             if (type is null || type.IsAbstract || !typeof(IBlackFlagPlugin).IsAssignableFrom(type) || type.GetConstructor(Type.EmptyTypes) is null)
             { issues.Add(new(PluginRuntimeIssueKind.EntryPointInvalid, id, "Plugin entry point must be a concrete IBlackFlagPlugin with a public parameterless constructor.")); context.Unload(); return null; }
+            IBlackFlagPlugin? plugin;
+
             try { plugin = (IBlackFlagPlugin)Activator.CreateInstance(type)!; }
             catch { issues.Add(new(PluginRuntimeIssueKind.EntryPointCreationFailed, id, "Plugin entry point could not be created.")); context.Unload(); return null; }
             foreach (PluginCapability capability in descriptor.Manifest.RequiredCapabilities)
             {
-                if (!environment.Capabilities.Contains(capability.Value))
+                if (!environment.Capabilities.TryGetSensitivity(capability.Value, out PluginSecuritySensitivity sensitivity))
                 {
                     issues.Add(new(PluginRuntimeIssueKind.RequiredCapabilityUnavailable, id, $"Required capability '{capability.Value}' is unavailable."));
                     await CleanupFailedAsync(plugin).ConfigureAwait(false); context.Unload(); return null;
                 }
+                try { PluginSecurityAuthorization.Demand(environment.SecurityPolicy, id, PluginSecurityOperation.CapabilityAccess, capability.Value, sensitivity); }
+                catch (PluginSecurityPolicyDeniedException ex)
+                {
+                    issues.Add(new(PluginRuntimeIssueKind.SecurityPolicyDenied, id, ex.Message));
+                    await CleanupFailedAsync(plugin).ConfigureAwait(false); context.Unload(); return null;
+                }
             }
-            var registrations = new PluginExtensionTransaction(id, options.MaximumExtensionsPerPlugin);
+            var registrations = new PluginExtensionTransaction(id, options.MaximumExtensionsPerPlugin, environment.SecurityPolicy, environment.ExtensionSecurity);
             try
             {
-                var capabilities = new PluginCapabilityAccess(environment.Capabilities, descriptor.Manifest);
+                var capabilities = new PluginCapabilityAccess(environment.Capabilities, environment.SecurityPolicy, descriptor.Manifest);
                 await plugin.InitializeAsync(new PluginInitializationContext(id, descriptor.Manifest.Version, hostSdkVersion, capabilities, registrations), cancellationToken).ConfigureAwait(false);
                 try { registrations.Commit(environment.Extensions); }
                 catch
@@ -72,6 +83,8 @@ public static class PluginRuntimeHost
             }
             catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
             { registrations.Rollback(); await CleanupFailedAsync(plugin).ConfigureAwait(false); context.Unload(); throw; }
+            catch (PluginSecurityPolicyDeniedException ex)
+            { registrations.Rollback(); issues.Add(new(PluginRuntimeIssueKind.SecurityPolicyDenied, id, ex.Message)); await CleanupFailedAsync(plugin).ConfigureAwait(false); context.Unload(); return null; }
             catch
             { registrations.Rollback(); issues.Add(new(PluginRuntimeIssueKind.InitializationFailed, id, "Plugin initialization failed.")); await CleanupFailedAsync(plugin).ConfigureAwait(false); context.Unload(); return null; }
             return new PluginRuntimeHandle(descriptor, context, plugin);

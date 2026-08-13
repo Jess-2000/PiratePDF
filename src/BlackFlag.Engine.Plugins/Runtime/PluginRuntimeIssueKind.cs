@@ -4,6 +4,7 @@ public enum PluginRuntimeIssueKind
 {
     DependencyUnavailable,
     RequiredCapabilityUnavailable,
+    SecurityPolicyDenied,
     EntryPointInvalid,
     AssemblyUnavailable,
     AssemblyLoadFailed,
