@@ -21,6 +21,7 @@
 | BF-1049H | [BF-1049H — Remediation and Passive Conversion Security](milestones/BF-1049H-Remediation-and-Passive-Conversion-Security.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
 | BF-1049I | [BF-1049I — Security Reporting, Services, and SDK Integration](milestones/BF-1049I-Security-Reporting-Services-and-SDK-Integration.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
 | BF-1049J | [BF-1049J — Adversarial, Fuzz, and Integration Hardening](milestones/BF-1049J-Adversarial-Fuzz-and-Integration-Hardening.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1049K | [BF-1049K - PDF Standard Security Handler Authentication and Decryption](milestones/BF-1049K-PDF-Standard-Security-Handler-Authentication-and-Decryption.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
 | BF-1049T | [BF-1049T — Silent Fingerprint-Backed Trusted-Document Opening](milestones/BF-1049T-Silent-Fingerprint-Backed-Trusted-Document-Opening.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
 | BF-DOC-0004 | [BlackFlag Engine — Parser Infrastructure RC1](Parser-Infrastructure-RC1.md) | Architecture | 0.4.0 | Tested | 2026-07-30 |
 | BF-DOC-0005 | [BlackFlag Engine 0.5.0 — PDF Object Model RC1](PDF-Object-Model-RC1.md) | Architecture | 0.5.0 | In Development | 2026-07-30 |
