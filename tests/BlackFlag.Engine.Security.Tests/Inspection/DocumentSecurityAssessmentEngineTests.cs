@@ -1,4 +1,3 @@
-
 using BlackFlag.Engine.Security.Inspection;
 using BlackFlag.Engine.Security.Model;
 using BlackFlag.Engine.Security.Policy;

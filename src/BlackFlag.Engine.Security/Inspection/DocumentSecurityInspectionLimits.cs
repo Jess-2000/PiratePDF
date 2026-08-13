@@ -1,4 +1,3 @@
-
 namespace BlackFlag.Engine.Security.Inspection;
 
 /// <summary>Defines bounded shared limits for document security inspection.</summary>

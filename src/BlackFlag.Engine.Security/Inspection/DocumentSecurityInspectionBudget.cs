@@ -1,4 +1,3 @@
-
 namespace BlackFlag.Engine.Security.Inspection;
 
 /// <summary>
@@ -62,15 +61,21 @@ public sealed class DocumentSecurityInspectionBudget
                 $"Embedded object size {expandedLength} exceeds the configured maximum of {limits.MaximumSingleEmbeddedObjectBytes} bytes.");
         }
 
-        int count = Interlocked.Increment(ref embeddedObjects);
-        if (count > limits.MaximumEmbeddedObjects)
+        ConsumeBounded(
+            ref embeddedObjects,
+            1,
+            limits.MaximumEmbeddedObjects,
+            "Security inspection exceeded the configured embedded-object limit.");
+
+        try
+        {
+            ConsumeExpandedBytes(expandedLength);
+        }
+        catch
         {
             Interlocked.Decrement(ref embeddedObjects);
-            throw new InvalidDataException(
-                "Security inspection exceeded the configured embedded-object limit.");
+            throw;
         }
-
-        ConsumeExpandedBytes(expandedLength);
     }
 
     /// <summary>Accounts for expanded container bytes.</summary>
@@ -78,13 +83,11 @@ public sealed class DocumentSecurityInspectionBudget
     {
         ArgumentOutOfRangeException.ThrowIfNegative(byteCount);
 
-        long value = Interlocked.Add(ref expandedBytes, byteCount);
-        if (value > limits.MaximumExpandedBytes)
-        {
-            Interlocked.Add(ref expandedBytes, -byteCount);
-            throw new InvalidDataException(
-                "Security inspection exceeded the configured expanded-byte limit.");
-        }
+        ConsumeBounded(
+            ref expandedBytes,
+            byteCount,
+            limits.MaximumExpandedBytes,
+            "Security inspection exceeded the configured expanded-byte limit.");
     }
 
     /// <summary>Validates a compressed-to-expanded size relationship.</summary>
@@ -120,13 +123,11 @@ public sealed class DocumentSecurityInspectionBudget
     /// <summary>Accounts for one normalized observation.</summary>
     public void ConsumeObservation()
     {
-        int count = Interlocked.Increment(ref observations);
-        if (count > limits.MaximumObservations)
-        {
-            Interlocked.Decrement(ref observations);
-            throw new InvalidDataException(
-                "Security inspection exceeded the configured observation limit.");
-        }
+        ConsumeBounded(
+            ref observations,
+            1,
+            limits.MaximumObservations,
+            "Security inspection exceeded the configured observation limit.");
     }
 
     /// <summary>Accounts for shared inspection work.</summary>
@@ -134,12 +135,66 @@ public sealed class DocumentSecurityInspectionBudget
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(units);
 
-        long value = Interlocked.Add(ref workUnits, units);
-        if (value > limits.MaximumInspectionWorkUnits)
+        ConsumeBounded(
+            ref workUnits,
+            units,
+            limits.MaximumInspectionWorkUnits,
+            "Security inspection exceeded the configured work-unit limit.");
+    }
+
+    private static void ConsumeBounded(
+        ref long counter,
+        long amount,
+        long maximum,
+        string failureMessage)
+    {
+        while (true)
         {
-            Interlocked.Add(ref workUnits, -units);
-            throw new InvalidDataException(
-                "Security inspection exceeded the configured work-unit limit.");
+            long current = Interlocked.Read(ref counter);
+
+            // Subtraction avoids overflowing current + amount when a caller
+            // deliberately configures a limit at or near Int64.MaxValue.
+            if (current > maximum - amount)
+            {
+                throw new InvalidDataException(failureMessage);
+            }
+
+            long next = current + amount;
+
+            if (Interlocked.CompareExchange(
+                    ref counter,
+                    next,
+                    current) == current)
+            {
+                return;
+            }
+        }
+    }
+
+    private static void ConsumeBounded(
+        ref int counter,
+        int amount,
+        int maximum,
+        string failureMessage)
+    {
+        while (true)
+        {
+            int current = Volatile.Read(ref counter);
+
+            if (current > maximum - amount)
+            {
+                throw new InvalidDataException(failureMessage);
+            }
+
+            int next = current + amount;
+
+            if (Interlocked.CompareExchange(
+                    ref counter,
+                    next,
+                    current) == current)
+            {
+                return;
+            }
         }
     }
 }
