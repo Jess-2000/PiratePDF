@@ -1,17 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <ItemGroup>
-    <ProjectReference Include="..\BlackFlag.Engine.Core\BlackFlag.Engine.Core.csproj" />
-    <ProjectReference Include="..\BlackFlag.Engine.Document\BlackFlag.Engine.Document.csproj" />
-    <ProjectReference Include="..\BlackFlag.Engine.Abstractions\BlackFlag.Engine.Abstractions.csproj" />
-    <ProjectReference Include="..\BlackFlag.Engine.Security\BlackFlag.Engine.Security.csproj" />
-    <ProjectReference Include="..\BlackFlag.Engine.Services\BlackFlag.Engine.Services.csproj" />
-  </ItemGroup>
-
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
 </Project>

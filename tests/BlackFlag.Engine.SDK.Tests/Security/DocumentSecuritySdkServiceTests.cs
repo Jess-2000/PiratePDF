@@ -1,62 +1,25 @@
 using BlackFlag.Engine.SDK.Security;
-using BlackFlag.Engine.Security.Model;
-using BlackFlag.Engine.Security.Policy;
 
 namespace BlackFlag.Engine.SDK.Tests.Security;
 
 public sealed class DocumentSecuritySdkServiceTests
 {
     [Fact]
-    public void SdkMapsSecurityFindingWithoutParserTypes()
+    public void ObservationCopiesProperties()
     {
-        var service = new DocumentSecuritySdkService();
-
-        DocumentSecuritySdkResult result =
-            service.Evaluate(
-                [
-                    new(
-                        DocumentSecurityObservationCategory.ScriptContent,
-                        "VbaProject",
-                        "The document contains VBA.",
-                        "docm",
-                        new DocumentSecuritySourceLocation
-                        {
-                            LogicalPath = "/word/vbaProject.bin"
-                        })
-                ],
-                DocumentSecurityOperation.Open,
-                DateTimeOffset.UnixEpoch);
-
-        DocumentSecuritySdkFinding finding =
-            Assert.Single(result.Findings);
-
-        Assert.Equal("VbaProject", finding.Kind);
-        Assert.Equal("docm", finding.SourceFormat);
-        Assert.Equal(
-            "/word/vbaProject.bin",
-            finding.LogicalPath);
-        Assert.True(result.HasReport);
-        Assert.False(result.ManualInspection);
-        Assert.Equal(
-            DateTimeOffset.UnixEpoch,
-            result.ReportGeneratedAtUtc);
+        var source = new Dictionary<string, string> { ["key"] = "value" };
+        var observation = new DocumentSecuritySdkObservation(DocumentSecuritySdkObservationCategory.ActiveContent,
+            "JavaScript", "Contains JavaScript.", "pdf", properties: source);
+        source["key"] = "changed";
+        Assert.Equal("value", observation.Properties["key"]);
     }
 
     [Fact]
-    public void CleanAutomaticSdkResultIsSilent()
+    public void ResultCopiesCollections()
     {
-        var service = new DocumentSecuritySdkService();
-
-        DocumentSecuritySdkResult result =
-            service.Evaluate(
-                [],
-                DocumentSecurityOperation.Open,
-                DateTimeOffset.UnixEpoch);
-
-        Assert.Empty(result.Findings);
-        Assert.Empty(result.Interactions);
-        Assert.False(result.IsBlocked);
-        Assert.False(result.HasReport);
-        Assert.Null(result.ReportGeneratedAtUtc);
+        var findings = new List<DocumentSecuritySdkFinding> { new("JavaScript", "Contains JavaScript.", "pdf", "Warning", "Report", null) };
+        var result = new DocumentSecuritySdkResult(findings, ["None"], false, true, false, DateTimeOffset.UnixEpoch);
+        findings.Clear();
+        Assert.Single(result.Findings);
     }
 }
