@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using BlackFlag.Engine.Plugins.Activation;
 using BlackFlag.Engine.Plugins.Discovery;
 using BlackFlag.Engine.Plugins.Runtime;
+using BlackFlag.Engine.SDK.Plugins.Capabilities;
+using BlackFlag.Engine.SDK.Plugins.Extensions;
 
 namespace BlackFlag.Engine.Plugins.Tests.Runtime;
 
@@ -58,18 +60,85 @@ public sealed class PluginRuntimeHostTests
         finally { Directory.Delete(Path.GetDirectoryName(root)!, true); }
     }
 
+
+    [Fact]
+    public async Task SuccessfulInitializationCommitsOwnedExtensionAndDisposalRemovesIt()
+    {
+        string root = CreatePackage("org.sample.extension");
+        var environment = new PluginRuntimeEnvironment();
+        var point = new PluginExtensionPoint<IPluginExtension>("test.extension");
+        try
+        {
+            PluginCatalog catalog = await PluginDiscoveryService.DiscoverAsync([Path.GetDirectoryName(root)!]);
+            PluginActivationPlan plan = PluginActivationPlanner.Plan(catalog, new Version(1,0));
+            PluginRuntimeSession session = await PluginRuntimeHost.ActivateAsync(plan, new Version(1,0), environment: environment);
+            Assert.Single(environment.Extensions.GetExtensions(point));
+            await session.DisposeAsync();
+            Assert.Empty(environment.Extensions.GetExtensions(point));
+        }
+        finally { Directory.Delete(Path.GetDirectoryName(root)!, true); }
+    }
+
+    [Fact]
+    public async Task FailedInitializationRollsBackPendingExtensions()
+    {
+        string root = CreatePackage("org.sample.fail");
+        var environment = new PluginRuntimeEnvironment();
+        var point = new PluginExtensionPoint<IPluginExtension>("test.extension");
+        try
+        {
+            PluginCatalog catalog = await PluginDiscoveryService.DiscoverAsync([Path.GetDirectoryName(root)!]);
+            PluginActivationPlan plan = PluginActivationPlanner.Plan(catalog, new Version(1,0));
+            await using PluginRuntimeSession session = await PluginRuntimeHost.ActivateAsync(plan, new Version(1,0), environment: environment);
+            Assert.Empty(environment.Extensions.GetExtensions(point));
+        }
+        finally { Directory.Delete(Path.GetDirectoryName(root)!, true); }
+    }
+
+    [Fact]
+    public async Task RequiredCapabilityMustBeAvailableBeforeInitialization()
+    {
+        string root = CreatePackage("org.sample.capability", requiredCapabilities: "[\"test.capability\"]");
+        try
+        {
+            PluginCatalog catalog = await PluginDiscoveryService.DiscoverAsync([Path.GetDirectoryName(root)!]);
+            PluginActivationPlan plan = PluginActivationPlanner.Plan(catalog, new Version(1,0));
+            await using PluginRuntimeSession session = await PluginRuntimeHost.ActivateAsync(plan, new Version(1,0));
+            Assert.Empty(session.ActivePlugins);
+            Assert.Contains(session.Issues, issue => issue.Kind == PluginRuntimeIssueKind.RequiredCapabilityUnavailable);
+        }
+        finally { Directory.Delete(Path.GetDirectoryName(root)!, true); }
+    }
+
+    [Fact]
+    public async Task DeclaredCapabilityResolvesThroughTypedHostRegistry()
+    {
+        string root = CreatePackage("org.sample.capability", requiredCapabilities: "[\"test.capability\"]");
+        var environment = new PluginRuntimeEnvironment();
+        environment.Capabilities.Register(new PluginCapabilityKey<IPluginCapability>("test.capability"), new TestCapability());
+        try
+        {
+            PluginCatalog catalog = await PluginDiscoveryService.DiscoverAsync([Path.GetDirectoryName(root)!]);
+            PluginActivationPlan plan = PluginActivationPlanner.Plan(catalog, new Version(1,0));
+            await using PluginRuntimeSession session = await PluginRuntimeHost.ActivateAsync(plan, new Version(1,0), environment: environment);
+            Assert.Single(session.ActivePlugins);
+        }
+        finally { Directory.Delete(Path.GetDirectoryName(root)!, true); }
+    }
+
     private static bool CanOpenForExclusiveWrite(string path)
     {
         using FileStream stream = new(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
         return stream.CanWrite;
     }
 
-    private static string CreatePackage(string id, string entryPoint = "BlackFlag.Engine.Plugins.TestPlugin.SamplePlugin, BlackFlag.Engine.Plugins.TestPlugin")
+    private static string CreatePackage(string id, string entryPoint = "BlackFlag.Engine.Plugins.TestPlugin.SamplePlugin, BlackFlag.Engine.Plugins.TestPlugin", string requiredCapabilities = "[]")
     {
         string root = Path.Combine(Path.GetTempPath(), "blackflag-runtime-" + Guid.NewGuid().ToString("N"));
         string package = Path.Combine(root, "plugin"); Directory.CreateDirectory(package);
         File.Copy(Path.Combine(AppContext.BaseDirectory, "BlackFlag.Engine.Plugins.TestPlugin.dll"), Path.Combine(package, "BlackFlag.Engine.Plugins.TestPlugin.dll"));
-        File.WriteAllText(Path.Combine(package, "plugin.json"), $$"""{"manifestVersion":1,"id":"{{id}}","name":"Runtime Test","version":"1.0.0","minimumSdkVersion":"1.0.0","entryPoint":"{{entryPoint}}"}""");
+        File.WriteAllText(Path.Combine(package, "plugin.json"), $$"""{"manifestVersion":1,"id":"{{id}}","name":"Runtime Test","version":"1.0.0","minimumSdkVersion":"1.0.0","entryPoint":"{{entryPoint}}","requiredCapabilities":{{requiredCapabilities}}}""");
         return package;
     }
+    private sealed class TestCapability : IPluginCapability { }
 }

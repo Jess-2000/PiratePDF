@@ -1,6 +1,8 @@
 using System.Reflection;
 using BlackFlag.Engine.Plugins.Activation;
 using BlackFlag.Engine.Plugins.Discovery;
+using BlackFlag.Engine.Plugins.Capabilities;
+using BlackFlag.Engine.Plugins.Extensions;
 using BlackFlag.Engine.SDK.Plugins;
 
 namespace BlackFlag.Engine.Plugins.Runtime;
@@ -8,10 +10,11 @@ namespace BlackFlag.Engine.Plugins.Runtime;
 /// <summary>Loads and initializes a validated activation plan using collectible per-plugin load contexts.</summary>
 public static class PluginRuntimeHost
 {
-    public static async Task<PluginRuntimeSession> ActivateAsync(PluginActivationPlan plan, Version hostSdkVersion, PluginRuntimeOptions? options = null, CancellationToken cancellationToken = default)
+    public static async Task<PluginRuntimeSession> ActivateAsync(PluginActivationPlan plan, Version hostSdkVersion, PluginRuntimeOptions? options = null, PluginRuntimeEnvironment? environment = null, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(plan); ArgumentNullException.ThrowIfNull(hostSdkVersion);
         options ??= new PluginRuntimeOptions(); options.Validate();
+        environment ??= new PluginRuntimeEnvironment();
         var active = new List<PluginRuntimeHandle>(Math.Min(plan.ActivationOrder.Count, options.MaximumActivePlugins));
         var issues = new List<PluginRuntimeIssue>();
         var activeIds = new HashSet<PluginId>();
@@ -21,14 +24,14 @@ public static class PluginRuntimeHost
             if (active.Count >= options.MaximumActivePlugins) break;
             if (descriptor.Manifest.Dependencies.Any(dependency => !activeIds.Contains(dependency.Id)))
             { issues.Add(new(PluginRuntimeIssueKind.DependencyUnavailable, descriptor.Manifest.Id, "A required plugin dependency did not become active.")); continue; }
-            PluginRuntimeHandle? handle = await TryActivateAsync(descriptor, hostSdkVersion, issues, cancellationToken).ConfigureAwait(false);
+            PluginRuntimeHandle? handle = await TryActivateAsync(descriptor, hostSdkVersion, options, environment, issues, cancellationToken).ConfigureAwait(false);
             if (handle is null) continue;
             active.Add(handle); activeIds.Add(descriptor.Manifest.Id);
         }
-        return new PluginRuntimeSession(active, issues);
+        return new PluginRuntimeSession(active, issues, environment.Extensions);
     }
 
-    private static async Task<PluginRuntimeHandle?> TryActivateAsync(PluginDescriptor descriptor, Version hostSdkVersion, List<PluginRuntimeIssue> issues, CancellationToken cancellationToken)
+    private static async Task<PluginRuntimeHandle?> TryActivateAsync(PluginDescriptor descriptor, Version hostSdkVersion, PluginRuntimeOptions options, PluginRuntimeEnvironment environment, List<PluginRuntimeIssue> issues, CancellationToken cancellationToken)
     {
         PluginId id = descriptor.Manifest.Id;
         if (!PluginEntryPoint.TryParse(descriptor.Manifest.EntryPoint, out PluginEntryPoint entryPoint))
@@ -47,14 +50,30 @@ public static class PluginRuntimeHost
             { issues.Add(new(PluginRuntimeIssueKind.EntryPointInvalid, id, "Plugin entry point must be a concrete IBlackFlagPlugin with a public parameterless constructor.")); context.Unload(); return null; }
             try { plugin = (IBlackFlagPlugin)Activator.CreateInstance(type)!; }
             catch { issues.Add(new(PluginRuntimeIssueKind.EntryPointCreationFailed, id, "Plugin entry point could not be created.")); context.Unload(); return null; }
+            foreach (PluginCapability capability in descriptor.Manifest.RequiredCapabilities)
+            {
+                if (!environment.Capabilities.Contains(capability.Value))
+                {
+                    issues.Add(new(PluginRuntimeIssueKind.RequiredCapabilityUnavailable, id, $"Required capability '{capability.Value}' is unavailable."));
+                    await CleanupFailedAsync(plugin).ConfigureAwait(false); context.Unload(); return null;
+                }
+            }
+            var registrations = new PluginExtensionTransaction(id, options.MaximumExtensionsPerPlugin);
             try
             {
-                await plugin.InitializeAsync(new PluginInitializationContext(id, descriptor.Manifest.Version, hostSdkVersion), cancellationToken).ConfigureAwait(false);
+                var capabilities = new PluginCapabilityAccess(environment.Capabilities, descriptor.Manifest);
+                await plugin.InitializeAsync(new PluginInitializationContext(id, descriptor.Manifest.Version, hostSdkVersion, capabilities, registrations), cancellationToken).ConfigureAwait(false);
+                try { registrations.Commit(environment.Extensions); }
+                catch
+                {
+                    registrations.Rollback(); issues.Add(new(PluginRuntimeIssueKind.ExtensionRegistrationFailed, id, "Plugin extension registration could not be committed."));
+                    await CleanupFailedAsync(plugin).ConfigureAwait(false); context.Unload(); return null;
+                }
             }
             catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
-            { await CleanupFailedAsync(plugin).ConfigureAwait(false); context.Unload(); throw; }
+            { registrations.Rollback(); await CleanupFailedAsync(plugin).ConfigureAwait(false); context.Unload(); throw; }
             catch
-            { issues.Add(new(PluginRuntimeIssueKind.InitializationFailed, id, "Plugin initialization failed.")); await CleanupFailedAsync(plugin).ConfigureAwait(false); context.Unload(); return null; }
+            { registrations.Rollback(); issues.Add(new(PluginRuntimeIssueKind.InitializationFailed, id, "Plugin initialization failed.")); await CleanupFailedAsync(plugin).ConfigureAwait(false); context.Unload(); return null; }
             return new PluginRuntimeHandle(descriptor, context, plugin);
         }
         catch (OperationCanceledException) { throw; }

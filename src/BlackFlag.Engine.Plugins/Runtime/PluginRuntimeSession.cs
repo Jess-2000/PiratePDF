@@ -1,12 +1,15 @@
+using BlackFlag.Engine.Plugins.Extensions;
+
 namespace BlackFlag.Engine.Plugins.Runtime;
 
 public sealed class PluginRuntimeSession : IAsyncDisposable
 {
     private readonly List<PluginRuntimeHandle> activePlugins;
     private readonly List<PluginRuntimeIssue> issues;
+    private readonly PluginExtensionRegistry extensions;
     private bool disposed;
-    internal PluginRuntimeSession(List<PluginRuntimeHandle> activePlugins, List<PluginRuntimeIssue> issues)
-    { this.activePlugins = activePlugins; this.issues = issues; }
+    internal PluginRuntimeSession(List<PluginRuntimeHandle> activePlugins, List<PluginRuntimeIssue> issues, PluginExtensionRegistry extensions)
+    { this.activePlugins = activePlugins; this.issues = issues; this.extensions = extensions; }
     public IReadOnlyList<PluginRuntimeHandle> ActivePlugins => activePlugins;
     public IReadOnlyList<PluginRuntimeIssue> Issues => issues;
 
@@ -25,7 +28,7 @@ public sealed class PluginRuntimeSession : IAsyncDisposable
                 else if (handle.Plugin is IDisposable disposable) disposable.Dispose();
             }
             catch { issues.Add(new(PluginRuntimeIssueKind.DisposalFailed, handle.Descriptor.Manifest.Id, "Plugin disposal failed.")); }
-            finally { handle.Release(); }
+            finally { extensions.RemoveOwnedBy(handle.Descriptor.Manifest.Id); handle.Release(); }
         }
         activePlugins.Clear();
     }
