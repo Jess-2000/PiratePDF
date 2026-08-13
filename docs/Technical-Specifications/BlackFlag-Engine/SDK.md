@@ -4,7 +4,7 @@
 |---|---|
 | **Document ID** | PP-SPEC-015 |
 | **Category** | Technical Specification |
-| **Version** | 1.2 |
+| **Version** | 1.3 |
 | **Status** | In Development |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1000, BF-8000, BF-1050 |
@@ -54,10 +54,15 @@ Automatic clean evaluations remain silent and do not create a report. The SDK
 does not persist reports or perform UI interaction. Format-specific analyzers
 remain responsible for producing normalized observations.
 
+## Plugin Discovery Boundary
+
+`BlackFlag.Engine.Plugins` owns runtime-side plugin discovery and cataloging while depending only on public SDK contracts at this stage. Discovery examines only explicitly configured roots, treats each immediate child directory as a candidate package, reads `plugin.json` under bounded limits, and never loads plugin assemblies. Invalid or duplicate packages produce structured discovery issues without preventing unrelated valid packages from being cataloged. Dependency resolution and activation remain later BF-1050 work.
+
 ## Revision History
 
 | Version | Date | Description |
 |---|---|---|
+| 1.3 | 2026-08-13 | Added bounded deterministic plugin discovery and catalog boundary for BF-1050B. |
 | 1.2 | 2026-08-13 | Established plugin contract boundary and separated SDK security contracts from the internal service adapter. |
 | 1.1 | 2026-08-13 | Added document security reporting and SDK service surface. |
 | 1.0 | 2026-07-24 | Standardized specification metadata and governance structure. |
