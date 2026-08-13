@@ -1,0 +1,13 @@
+{
+  "manifestVersion": 1,
+  "id": "org.piratepdf.blackflag.reference",
+  "name": "BlackFlag Reference Plugin",
+  "version": "1.0.0",
+  "minimumSdkVersion": "1.0.0",
+  "entryPoint": "BlackFlag.Engine.ReferencePlugin.ReferencePlugin, BlackFlag.Engine.ReferencePlugin",
+  "requiredCapabilities": [],
+  "optionalCapabilities": [
+    "blackflag.reference.optional"
+  ],
+  "dependencies": []
+}

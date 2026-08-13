@@ -18,6 +18,9 @@
     <Project Path="src/BlackFlag.Engine.Syntax/BlackFlag.Engine.Syntax.csproj" />
     <Project Path="src/BlackFlag.Engine.Writing/BlackFlag.Engine.Writing.csproj" />
   </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/BlackFlag.Engine.ReferencePlugin/BlackFlag.Engine.ReferencePlugin.csproj" />
+  </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/BlackFlag.Engine.Abstractions.Tests/BlackFlag.Engine.Abstractions.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.Core.Tests/BlackFlag.Engine.Core.Tests.csproj" />
