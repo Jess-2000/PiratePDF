@@ -16,6 +16,12 @@ public sealed class PdfPage :
     private byte[] contentData = [];
     private readonly PdfDictionary resources = [];
     private PdfPageTree? parent;
+    private PdfEffectiveValue<PdfPageBox> mediaBox;
+    private PdfEffectiveValue<PdfPageBox> cropBox;
+    private PdfEffectiveValue<PdfPageBox> bleedBox;
+    private PdfEffectiveValue<PdfPageBox> trimBox;
+    private PdfEffectiveValue<PdfPageBox> artBox;
+    private PdfEffectiveValue<PdfPageRotation> rotationState;
 
     public PdfPage(
         double width,
@@ -33,18 +39,35 @@ public sealed class PdfPage :
         ValidateRotation(rotation);
 
         Id = Guid.NewGuid();
-        Width = width;
-        Height = height;
-        Rotation = rotation;
+        mediaBox = new PdfEffectiveValue<PdfPageBox>(
+            new PdfPageBox(0, 0, width, height),
+            PdfPageValueOrigin.Explicit);
+        cropBox = new PdfEffectiveValue<PdfPageBox>(
+            mediaBox.Value,
+            PdfPageValueOrigin.Defaulted);
+        bleedBox = new PdfEffectiveValue<PdfPageBox>(
+            cropBox.Value,
+            PdfPageValueOrigin.Defaulted);
+        trimBox = new PdfEffectiveValue<PdfPageBox>(
+            cropBox.Value,
+            PdfPageValueOrigin.Defaulted);
+        artBox = new PdfEffectiveValue<PdfPageBox>(
+            cropBox.Value,
+            PdfPageValueOrigin.Defaulted);
+        rotationState = new PdfEffectiveValue<PdfPageRotation>(
+            rotation,
+            rotation == PdfPageRotation.None
+                ? PdfPageValueOrigin.Defaulted
+                : PdfPageValueOrigin.Explicit);
     }
 
     public Guid Id { get; }
 
-    public double Width { get; }
+    public double Width => mediaBox.Value.Width;
 
-    public double Height { get; }
+    public double Height => mediaBox.Value.Height;
 
-    public PdfPageRotation Rotation { get; private set; }
+    public PdfPageRotation Rotation => rotationState.Value;
 
     /// <summary>
     /// Gets whether this page currently owns content-stream data.
@@ -83,7 +106,88 @@ public sealed class PdfPage :
         PdfPageRotation rotation)
     {
         ValidateRotation(rotation);
-        Rotation = rotation;
+        rotationState = new PdfEffectiveValue<PdfPageRotation>(
+            rotation,
+            PdfPageValueOrigin.Explicit);
+    }
+
+    internal PdfEffectiveValue<PdfPageRotation> GetRotationState() =>
+        rotationState;
+
+    internal void RestoreRotationState(
+        PdfEffectiveValue<PdfPageRotation> state)
+    {
+        ValidateRotation(state.Value);
+        rotationState = state;
+    }
+
+    internal PdfEffectiveValue<PdfPageBox> GetBox(
+        PdfPageBoxKind kind) => kind switch
+        {
+            PdfPageBoxKind.MediaBox => mediaBox,
+            PdfPageBoxKind.CropBox => cropBox,
+            PdfPageBoxKind.BleedBox => bleedBox,
+            PdfPageBoxKind.TrimBox => trimBox,
+            PdfPageBoxKind.ArtBox => artBox,
+            _ => throw new ArgumentOutOfRangeException(nameof(kind), kind, "The page-box kind is not supported.")
+        };
+
+    internal void SetBox(
+        PdfPageBoxKind kind,
+        PdfEffectiveValue<PdfPageBox> state)
+    {
+        switch (kind)
+        {
+            case PdfPageBoxKind.MediaBox:
+                mediaBox = state;
+                RefreshDefaultedGeometry();
+                break;
+            case PdfPageBoxKind.CropBox:
+                cropBox = state;
+                RefreshDefaultedProductionBoxes();
+                break;
+            case PdfPageBoxKind.BleedBox:
+                bleedBox = state;
+                break;
+            case PdfPageBoxKind.TrimBox:
+                trimBox = state;
+                break;
+            case PdfPageBoxKind.ArtBox:
+                artBox = state;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(kind), kind, "The page-box kind is not supported.");
+        }
+    }
+
+    private void RefreshDefaultedGeometry()
+    {
+        if (cropBox.Origin == PdfPageValueOrigin.Defaulted)
+        {
+            cropBox = new PdfEffectiveValue<PdfPageBox>(
+                mediaBox.Value,
+                PdfPageValueOrigin.Defaulted);
+        }
+
+        RefreshDefaultedProductionBoxes();
+    }
+
+    private void RefreshDefaultedProductionBoxes()
+    {
+        if (bleedBox.Origin == PdfPageValueOrigin.Defaulted)
+        {
+            bleedBox = new PdfEffectiveValue<PdfPageBox>(cropBox.Value, PdfPageValueOrigin.Defaulted);
+        }
+
+        if (trimBox.Origin == PdfPageValueOrigin.Defaulted)
+        {
+            trimBox = new PdfEffectiveValue<PdfPageBox>(cropBox.Value, PdfPageValueOrigin.Defaulted);
+        }
+
+        if (artBox.Origin == PdfPageValueOrigin.Defaulted)
+        {
+            artBox = new PdfEffectiveValue<PdfPageBox>(cropBox.Value, PdfPageValueOrigin.Defaulted);
+        }
     }
 
     /// <summary>
@@ -243,17 +347,19 @@ public sealed class PdfPage :
                 PdfNames.Type,
                 PdfNames.Page
             },
-            {
-                PdfNames.MediaBox,
-                CreateMediaBox()
-            }
         };
 
-        if (Rotation != PdfPageRotation.None)
+        AddExplicitBox(dictionary, PdfNames.MediaBox, mediaBox);
+        AddExplicitBox(dictionary, PdfNames.CropBox, cropBox);
+        AddExplicitBox(dictionary, PdfNames.BleedBox, bleedBox);
+        AddExplicitBox(dictionary, PdfNames.TrimBox, trimBox);
+        AddExplicitBox(dictionary, PdfNames.ArtBox, artBox);
+
+        if (rotationState.Origin == PdfPageValueOrigin.Explicit)
         {
             dictionary.Add(
                 PdfNames.Rotate,
-                new PdfInteger((int)Rotation));
+                new PdfInteger((int)rotationState.Value));
         }
 
         if (contentData.Length > 0)
@@ -308,15 +414,26 @@ public sealed class PdfPage :
         return snapshot;
     }
 
-    private PdfArray CreateMediaBox()
+    private static void AddExplicitBox(
+        PdfDictionary dictionary,
+        PdfName name,
+        PdfEffectiveValue<PdfPageBox> state)
     {
-        return new PdfArray(
-        [
-            new PdfInteger(0),
-            new PdfInteger(0),
-            CreateNumber(Width),
-            CreateNumber(Height)
-        ]);
+        if (state.Origin != PdfPageValueOrigin.Explicit)
+        {
+            return;
+        }
+
+        var box = state.Value;
+        dictionary.Add(
+            name,
+            new PdfArray(
+            [
+                CreateNumber(box.Left),
+                CreateNumber(box.Bottom),
+                CreateNumber(box.Right),
+                CreateNumber(box.Top)
+            ]));
     }
 
     private static PdfObject CreateNumber(

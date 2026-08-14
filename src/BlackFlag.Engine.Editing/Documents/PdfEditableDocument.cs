@@ -3,6 +3,8 @@ using BlackFlag.Engine.Document.Objects;
 using BlackFlag.Engine.Document.Objects.Primitives;
 using BlackFlag.Engine.Document.Pages;
 using BlackFlag.Engine.Editing.Operations;
+using BlackFlag.Engine.Editing.Geometry;
+using BlackFlag.Engine.Editing.Structural;
 using BlackFlag.Engine.Editing.Ownership;
 using BlackFlag.Engine.Editing.Pages;
 
@@ -241,8 +243,11 @@ public sealed class PdfEditableDocument
                 "The PDF page rotation is not supported.");
         }
 
+        var sourcePage =
+            page.GetSourcePage();
+
         var previousRotation =
-            page.Rotation;
+            sourcePage.GetRotationState();
 
         var operation =
             new PdfPageEditOperation(
@@ -253,15 +258,129 @@ public sealed class PdfEditableDocument
 
         session.ValidateOperation(operation);
 
-        page.GetSourcePage()
-            .SetRotation(rotation);
+        sourcePage.SetRotation(rotation);
 
         session.RecordChange(
             operation,
-            () => page.GetSourcePage().SetRotation(previousRotation),
-            () => page.GetSourcePage().SetRotation(rotation));
+            () => sourcePage.RestoreRotationState(previousRotation),
+            () => sourcePage.SetRotation(rotation));
 
         return operation;
+    }
+
+
+    /// <summary>Sets one standard page box explicitly.</summary>
+    public PdfPageGeometryEditOperation SetPageBox(
+        PdfEditablePage page,
+        PdfPageBoxKind kind,
+        PdfPageBox box)
+    {
+        return SetPageBoxCore(
+            page,
+            kind,
+            box,
+            PdfPageGeometryMutationKind.SetBox);
+    }
+
+    /// <summary>Changes the visible crop boundary without moving or scaling content.</summary>
+    public PdfPageGeometryEditOperation CropPage(
+        PdfEditablePage page,
+        PdfPageBox cropBox)
+    {
+        return SetPageBoxCore(
+            page,
+            PdfPageBoxKind.CropBox,
+            cropBox,
+            PdfPageGeometryMutationKind.Crop);
+    }
+
+    private PdfPageGeometryEditOperation SetPageBoxCore(
+        PdfEditablePage page,
+        PdfPageBoxKind kind,
+        PdfPageBox box,
+        PdfPageGeometryMutationKind mutationKind)
+    {
+        EnsureOwnership(page);
+        var sourcePage = page.GetSourcePage();
+        var previous = sourcePage.GetBox(kind);
+        var current = new PdfEffectiveValue<PdfPageBox>(box, PdfPageValueOrigin.Explicit);
+        var operation = new PdfPageGeometryEditOperation(
+            owner,
+            mutationKind,
+            page.Id,
+            kind,
+            MapState(previous),
+            MapState(current));
+
+        session.ValidateOperation(operation);
+        sourcePage.SetBox(kind, current);
+        session.RecordChange(
+            operation,
+            () => sourcePage.SetBox(kind, previous),
+            () => sourcePage.SetBox(kind, current));
+        return operation;
+    }
+
+    /// <summary>Resizes page geometry without scaling page content.</summary>
+    public PdfPageGeometryEditOperation ResizePage(
+        PdfEditablePage page,
+        double width,
+        double height,
+        PdfPageResizeAnchor anchor = PdfPageResizeAnchor.LowerLeft)
+    {
+        EnsureOwnership(page);
+        if (!double.IsFinite(width) || width <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(width));
+        }
+        if (!double.IsFinite(height) || height <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(height));
+        }
+        if (!Enum.IsDefined(anchor))
+        {
+            throw new ArgumentOutOfRangeException(nameof(anchor));
+        }
+
+        var sourcePage = page.GetSourcePage();
+        var previous = sourcePage.GetBox(PdfPageBoxKind.MediaBox);
+        var old = previous.Value;
+        var left = anchor == PdfPageResizeAnchor.Center
+            ? old.Left + ((old.Width - width) / 2)
+            : old.Left;
+        var bottom = anchor == PdfPageResizeAnchor.Center
+            ? old.Bottom + ((old.Height - height) / 2)
+            : old.Bottom;
+        var resized = new PdfPageBox(left, bottom, left + width, bottom + height);
+        var current = new PdfEffectiveValue<PdfPageBox>(resized, PdfPageValueOrigin.Explicit);
+        var operation = new PdfPageGeometryEditOperation(
+            owner,
+            PdfPageGeometryMutationKind.Resize,
+            page.Id,
+            PdfPageBoxKind.MediaBox,
+            MapState(previous),
+            MapState(current),
+            anchor);
+
+        session.ValidateOperation(operation);
+        sourcePage.SetBox(PdfPageBoxKind.MediaBox, current);
+        session.RecordChange(
+            operation,
+            () => sourcePage.SetBox(PdfPageBoxKind.MediaBox, previous),
+            () => sourcePage.SetBox(PdfPageBoxKind.MediaBox, current));
+        return operation;
+    }
+
+    private static PdfStructuralValueState<T> MapState<T>(PdfEffectiveValue<T> state)
+        where T : notnull
+    {
+        return state.Origin switch
+        {
+            PdfPageValueOrigin.Explicit => PdfStructuralValueState.Explicit(state.Value),
+            PdfPageValueOrigin.Inherited => PdfStructuralValueState.Inherited(state.Value),
+            PdfPageValueOrigin.Defaulted => PdfStructuralValueState.Defaulted(state.Value),
+            _ => throw new ArgumentOutOfRangeException(nameof(state), state.Origin, "The page-value origin is not supported.")
+        };
     }
 
 
