@@ -1,4 +1,5 @@
 using BlackFlag.Engine.Document.Objects.Primitives;
+using BlackFlag.Engine.Editing.Annotations;
 using BlackFlag.Engine.Document.Pages;
 using BlackFlag.Engine.Editing.Ownership;
 using BlackFlag.Engine.Editing.Structural;
@@ -61,6 +62,7 @@ public sealed class PdfEditablePage
         Owner = owner;
         Origin = origin;
         SourceIndex = sourceIndex;
+        Annotations = new PdfEditableAnnotationCollection(page, owner);
     }
 
     /// <summary>
@@ -104,6 +106,9 @@ public sealed class PdfEditablePage
     /// </summary>
     public bool HasResources =>
         page.HasResources;
+
+    /// <summary>Gets the editable annotations currently attached to this page.</summary>
+    public PdfEditableAnnotationCollection Annotations { get; }
 
     /// <summary>
     /// Returns a defensive copy of the current page content-stream bytes.

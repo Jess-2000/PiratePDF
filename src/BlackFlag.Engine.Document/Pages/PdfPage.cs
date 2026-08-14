@@ -1,3 +1,6 @@
+using System.Collections.ObjectModel;
+
+using BlackFlag.Engine.Document.Annotations;
 using BlackFlag.Engine.Document.Model;
 using BlackFlag.Engine.Document.Objects;
 using BlackFlag.Engine.Document.Objects.Primitives;
@@ -15,6 +18,8 @@ public sealed class PdfPage :
 
     private byte[] contentData = [];
     private readonly PdfDictionary resources = [];
+    private readonly List<PdfAnnotation> annotations = [];
+    private readonly ReadOnlyCollection<PdfAnnotation> readOnlyAnnotations;
     private PdfPageTree? parent;
     private PdfEffectiveValue<PdfPageBox> mediaBox;
     private PdfEffectiveValue<PdfPageBox> cropBox;
@@ -39,6 +44,7 @@ public sealed class PdfPage :
         ValidateRotation(rotation);
 
         Id = Guid.NewGuid();
+        readOnlyAnnotations = annotations.AsReadOnly();
         mediaBox = new PdfEffectiveValue<PdfPageBox>(
             new PdfPageBox(0, 0, width, height),
             PdfPageValueOrigin.Explicit);
@@ -80,6 +86,10 @@ public sealed class PdfPage :
     /// </summary>
     public bool HasResources =>
         resources.Count > 0;
+
+    /// <summary>Gets the annotations currently attached to this page.</summary>
+    public IReadOnlyList<PdfAnnotation> Annotations =>
+        readOnlyAnnotations;
 
     public bool IsLandscape
     {
@@ -188,6 +198,52 @@ public sealed class PdfPage :
         {
             artBox = new PdfEffectiveValue<PdfPageBox>(cropBox.Value, PdfPageValueOrigin.Defaulted);
         }
+    }
+
+    internal void InsertAnnotation(
+        int index,
+        PdfAnnotation annotation)
+    {
+        ArgumentNullException.ThrowIfNull(annotation);
+
+        if (index < 0 || index > annotations.Count)
+        {
+            throw new ArgumentOutOfRangeException(nameof(index));
+        }
+
+        if (annotations.Contains(annotation))
+        {
+            throw new InvalidOperationException(
+                "The annotation is already attached to this page.");
+        }
+
+        if (annotation.Parent is not null)
+        {
+            throw new InvalidOperationException(
+                "The annotation is already attached to another page.");
+        }
+
+        annotations.Insert(index, annotation);
+        annotation.AttachToPage(this);
+    }
+
+    internal int RemoveAnnotation(
+        PdfAnnotation annotation)
+    {
+        ArgumentNullException.ThrowIfNull(annotation);
+
+        var index = annotations.IndexOf(annotation);
+
+        if (index < 0)
+        {
+            throw new InvalidOperationException(
+                "The annotation is not attached to this page.");
+        }
+
+        annotations.RemoveAt(index);
+        annotation.DetachFromPage(this);
+
+        return index;
     }
 
     /// <summary>
