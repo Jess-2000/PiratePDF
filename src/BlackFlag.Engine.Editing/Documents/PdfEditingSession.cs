@@ -22,7 +22,7 @@ public sealed class PdfEditingSession :
 
     private static readonly ConditionalWeakTable<PdfDocument, object>
         ActiveDocuments =
-            new();
+            [];
 
     private readonly PdfDocument document;
     private PdfEditTransaction? activeTransaction;
@@ -159,10 +159,7 @@ public sealed class PdfEditingSession :
             return;
         }
 
-        if (activeTransaction is not null)
-        {
-            activeTransaction.Rollback();
-        }
+        activeTransaction?.Rollback();
 
         lock (OwnershipGate)
         {

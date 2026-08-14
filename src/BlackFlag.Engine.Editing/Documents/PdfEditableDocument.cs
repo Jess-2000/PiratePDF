@@ -1,4 +1,6 @@
 using BlackFlag.Engine.Document.Model;
+using BlackFlag.Engine.Document.Objects;
+using BlackFlag.Engine.Document.Objects.Primitives;
 using BlackFlag.Engine.Document.Pages;
 using BlackFlag.Engine.Editing.Operations;
 using BlackFlag.Engine.Editing.Ownership;
@@ -215,6 +217,155 @@ public sealed class PdfEditableDocument
             operation,
             () => page.GetSourcePage().SetRotation(previousRotation),
             () => page.GetSourcePage().SetRotation(rotation));
+
+        return operation;
+    }
+
+
+    /// <summary>
+    /// Replaces the complete content-stream byte sequence owned by a page.
+    /// </summary>
+    public PdfContentEditOperation ReplacePageContent(
+        PdfEditablePage page,
+        ReadOnlySpan<byte> replacement)
+    {
+        EnsureOwnership(page);
+
+        var sourcePage =
+            page.GetSourcePage();
+
+        var previous =
+            sourcePage.GetContentBytes();
+
+        sourcePage.ReplaceContent(replacement);
+
+        var replacementCopy =
+            replacement.ToArray();
+
+        var operation =
+            new PdfContentEditOperation(
+                owner,
+                PdfContentMutationKind.Replace,
+                page.Id,
+                previous.Length,
+                replacementCopy.Length);
+
+        session.RecordChange(
+            operation,
+            () => sourcePage.ReplaceContent(previous),
+            () => sourcePage.ReplaceContent(replacementCopy));
+
+        return operation;
+    }
+
+    /// <summary>
+    /// Adds or replaces one named resource in a direct page resource category.
+    /// </summary>
+    public PdfResourceEditOperation SetPageResource(
+        PdfEditablePage page,
+        PdfName category,
+        PdfName name,
+        PdfObject resource)
+    {
+        EnsureOwnership(page);
+        ArgumentNullException.ThrowIfNull(category);
+        ArgumentNullException.ThrowIfNull(name);
+        ArgumentNullException.ThrowIfNull(resource);
+
+        var sourcePage =
+            page.GetSourcePage();
+
+        var replacedExisting =
+            sourcePage.TryGetResource(
+                category,
+                name,
+                out var previous);
+
+        sourcePage.SetResource(
+            category,
+            name,
+            resource);
+
+        var operation =
+            new PdfResourceEditOperation(
+                owner,
+                PdfResourceMutationKind.Set,
+                page.Id,
+                category,
+                name,
+                replacedExisting);
+
+        session.RecordChange(
+            operation,
+            () =>
+            {
+                if (replacedExisting)
+                {
+                    sourcePage.SetResource(
+                        category,
+                        name,
+                        previous!);
+                    return;
+                }
+
+                _ = sourcePage.RemoveResource(
+                    category,
+                    name);
+            },
+            () => sourcePage.SetResource(
+                category,
+                name,
+                resource));
+
+        return operation;
+    }
+
+    /// <summary>
+    /// Removes one named resource from a direct page resource category.
+    /// </summary>
+    public PdfResourceEditOperation RemovePageResource(
+        PdfEditablePage page,
+        PdfName category,
+        PdfName name)
+    {
+        EnsureOwnership(page);
+        ArgumentNullException.ThrowIfNull(category);
+        ArgumentNullException.ThrowIfNull(name);
+
+        var sourcePage =
+            page.GetSourcePage();
+
+        if (!sourcePage.TryGetResource(
+                category,
+                name,
+                out var previous))
+        {
+            throw new KeyNotFoundException(
+                $"Page resource '{category}/{name.GetLatin1Text()}' does not exist.");
+        }
+
+        _ = sourcePage.RemoveResource(
+            category,
+            name);
+
+        var operation =
+            new PdfResourceEditOperation(
+                owner,
+                PdfResourceMutationKind.Remove,
+                page.Id,
+                category,
+                name,
+                replacedExisting: true);
+
+        session.RecordChange(
+            operation,
+            () => sourcePage.SetResource(
+                category,
+                name,
+                previous!),
+            () => sourcePage.RemoveResource(
+                category,
+                name));
 
         return operation;
     }

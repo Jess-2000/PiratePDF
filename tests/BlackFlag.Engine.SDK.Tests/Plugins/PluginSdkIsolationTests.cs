@@ -1,3 +1,5 @@
+#nullable enable
+
 using System.Linq;
 using System.Reflection;
 using BlackFlag.Engine.SDK.Plugins;

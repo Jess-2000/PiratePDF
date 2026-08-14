@@ -1,3 +1,4 @@
+using BlackFlag.Engine.Document.Objects.Primitives;
 using BlackFlag.Engine.Document.Pages;
 using BlackFlag.Engine.Editing.Ownership;
 
@@ -90,6 +91,40 @@ public sealed class PdfEditablePage
     /// </summary>
     public bool IsLandscape =>
         page.IsLandscape;
+
+    /// <summary>
+    /// Gets whether the page currently owns content-stream data.
+    /// </summary>
+    public bool HasContent =>
+        page.HasContent;
+
+    /// <summary>
+    /// Gets whether the page currently owns any direct resource entries.
+    /// </summary>
+    public bool HasResources =>
+        page.HasResources;
+
+    /// <summary>
+    /// Returns a defensive copy of the current page content-stream bytes.
+    /// </summary>
+    public byte[] GetContentBytes() =>
+        page.GetContentBytes();
+
+    /// <summary>
+    /// Determines whether a named resource exists in a direct page resource
+    /// category.
+    /// </summary>
+    public bool ContainsResource(
+        PdfName category,
+        PdfName name)
+    {
+        ArgumentNullException.ThrowIfNull(category);
+        ArgumentNullException.ThrowIfNull(name);
+
+        return page.ContainsResource(
+            category,
+            name);
+    }
 
     /// <summary>
     /// Gets how the page entered the editing session.

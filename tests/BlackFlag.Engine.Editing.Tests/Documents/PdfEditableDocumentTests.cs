@@ -17,7 +17,7 @@ public sealed class PdfEditableDocumentTests
 
         Assert.Equal(PdfVersion.Pdf20, session.Document.Version);
         Assert.Equal(1, session.Document.PageCount);
-        Assert.Equal(1, session.Document.Pages.Count);
+        Assert.Single(session.Document.Pages);
     }
 
     [Fact]
