@@ -1,4 +1,4 @@
-﻿[CmdletBinding()]
+[CmdletBinding()]
 param(
     [ValidateSet("Release", "Debug")]
     [string]$Configuration = "Release"
@@ -94,8 +94,12 @@ Write-Host "PiratePDF Release Gate"
 Write-Host "Repository:    $RepositoryRoot"
 Write-Host "Configuration: $Configuration"
 
-Write-GateStep "Release build"
-& dotnet build $SolutionPath --configuration $Configuration
+Write-GateStep "Dependency restore"
+& dotnet restore $SolutionPath
+Assert-LastExitCode "Restore"
+
+Write-GateStep "$Configuration build"
+& dotnet build $SolutionPath --configuration $Configuration --no-restore
 Assert-LastExitCode "Build"
 
 Write-GateStep "Test suite"
@@ -105,7 +109,8 @@ Assert-LastExitCode "Tests"
 Write-GateStep "Documentation generation and validation"
 & dotnet run `
     --project $DocGenProject `
-    --configuration $Configuration
+    --configuration $Configuration `
+    -- all
 Assert-LastExitCode "Documentation generation"
 
 Write-GateStep "Documentation repair preview"
@@ -133,8 +138,9 @@ Assert-LastExitCode "git status"
 
 Write-Host ""
 Write-Host "PiratePDF release gate completed successfully."
-Write-Host "Build:                PASS"
-Write-Host "Tests:                PASS"
-Write-Host "Documentation:        PASS"
-Write-Host "Repair preview:       PASS (0 proposed changes)"
+Write-Host "Restore:               PASS"
+Write-Host "Build:                 PASS"
+Write-Host "Tests:                 PASS"
+Write-Host "Documentation:         PASS"
+Write-Host "Repair preview:        PASS (0 proposed changes)"
 Write-Host "Whitespace validation: PASS"
