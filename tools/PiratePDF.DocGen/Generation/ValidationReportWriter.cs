@@ -192,7 +192,7 @@ internal static class ValidationReportWriter
 
         try
         {
-            File.WriteAllText(
+            TrackedGeneratedFileWriter.WriteIfChanged(
                 temporaryPath,
                 content,
                 new UTF8Encoding(

@@ -1,3 +1,4 @@
+using PiratePDF.DocGen.Generation;
 using System.Globalization;
 using System.Text;
 
@@ -324,7 +325,7 @@ internal static class DocumentationHealthReportWriter
 
         try
         {
-            File.WriteAllText(
+            TrackedGeneratedFileWriter.WriteIfChanged(
                 temporaryPath,
                 content,
                 new UTF8Encoding(

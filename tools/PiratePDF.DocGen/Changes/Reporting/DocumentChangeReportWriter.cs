@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text;
+using PiratePDF.DocGen.Generation;
 
 namespace PiratePDF.DocGen.Changes.Reporting;
 
@@ -192,7 +193,7 @@ internal static class DocumentChangeReportWriter
 
         try
         {
-            File.WriteAllText(
+            TrackedGeneratedFileWriter.WriteIfChanged(
                 temporaryPath,
                 content,
                 new UTF8Encoding(
