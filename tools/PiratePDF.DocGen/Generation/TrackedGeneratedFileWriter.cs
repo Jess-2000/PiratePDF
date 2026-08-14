@@ -25,15 +25,44 @@ internal static class TrackedGeneratedFileWriter
             }
         }
 
-        File.WriteAllText(path, content, encoding);
+        string? directory = Path.GetDirectoryName(path);
+
+        if (!string.IsNullOrEmpty(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+
+        string temporaryPath = Path.Combine(
+            directory ?? string.Empty,
+            $".{Path.GetFileName(path)}.{Guid.NewGuid():N}.tmp");
+
+        try
+        {
+            File.WriteAllText(
+                temporaryPath,
+                content,
+                encoding);
+
+            File.Move(
+                temporaryPath,
+                path,
+                overwrite: true);
+        }
+        finally
+        {
+            if (File.Exists(temporaryPath))
+            {
+                File.Delete(temporaryPath);
+            }
+        }
     }
 
     private static bool HasEquivalentSubstantiveContent(
         string existingContent,
         string generatedContent)
     {
-        string normalizedExisting = NormalizeGeneratedTimestamp(existingContent);
-        string normalizedGenerated = NormalizeGeneratedTimestamp(generatedContent);
+        string normalizedExisting = Normalize(existingContent);
+        string normalizedGenerated = Normalize(generatedContent);
 
         return string.Equals(
             normalizedExisting,
@@ -41,11 +70,13 @@ internal static class TrackedGeneratedFileWriter
             StringComparison.Ordinal);
     }
 
-    private static string NormalizeGeneratedTimestamp(string content)
+    private static string Normalize(string content)
     {
-        string[] lines = content
+        string normalized = content
             .Replace("\r\n", "\n", StringComparison.Ordinal)
-            .Split('\n');
+            .Replace('\r', '\n');
+
+        string[] lines = normalized.Split('\n');
 
         for (int index = 0; index < lines.Length; index++)
         {
@@ -58,6 +89,6 @@ internal static class TrackedGeneratedFileWriter
             }
         }
 
-        return string.Join('\n', lines);
+        return string.Join('\n', lines).TrimEnd('\n');
     }
 }
