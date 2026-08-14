@@ -55,6 +55,9 @@ public sealed class PdfEditingSession :
         this.document = document;
         Options = resolvedOptions;
         Id = Guid.NewGuid();
+        Document = new PdfEditableDocument(
+            document,
+            new PdfEditingOwnershipToken(Id));
     }
 
     /// <summary>
@@ -66,6 +69,11 @@ public sealed class PdfEditingSession :
     /// Gets the options applied to this editing session.
     /// </summary>
     public PdfEditingSessionOptions Options { get; }
+
+    /// <summary>
+    /// Gets the controlled editable view owned by this session.
+    /// </summary>
+    public PdfEditableDocument Document { get; }
 
     /// <summary>
     /// Gets whether the editing session has been disposed.
