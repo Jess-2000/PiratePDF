@@ -82,6 +82,9 @@ public sealed class PdfEditableDocument
         PdfEditablePage page)
     {
         EnsureOwnership(page);
+        Pages.EnsureCanInsert(
+            index,
+            page);
 
         var operation =
             new PdfPageEditOperation(
@@ -114,7 +117,7 @@ public sealed class PdfEditableDocument
         EnsureOwnership(page);
 
         var sourceIndex =
-            Pages.IndexOf(page);
+            Pages.EnsureCanRemove(page);
 
         var operation =
             new PdfPageEditOperation(
@@ -148,7 +151,9 @@ public sealed class PdfEditableDocument
         EnsureOwnership(page);
 
         var sourceIndex =
-            Pages.IndexOf(page);
+            Pages.EnsureCanMove(
+                page,
+                destinationIndex);
 
         var operation =
             new PdfPageEditOperation(
@@ -187,7 +192,9 @@ public sealed class PdfEditableDocument
         EnsureOwnership(replacement);
 
         var sourceIndex =
-            Pages.IndexOf(target);
+            Pages.EnsureCanReplace(
+                target,
+                replacement);
 
         var operation =
             new PdfPageEditOperation(
@@ -225,6 +232,14 @@ public sealed class PdfEditableDocument
         PdfPageRotation rotation)
     {
         EnsureOwnership(page);
+
+        if (!Enum.IsDefined(rotation))
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(rotation),
+                rotation,
+                "The PDF page rotation is not supported.");
+        }
 
         var previousRotation =
             page.Rotation;

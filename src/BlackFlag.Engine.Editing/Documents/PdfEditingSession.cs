@@ -27,7 +27,7 @@ public sealed class PdfEditingSession :
             [];
 
     private readonly PdfDocument document;
-    private readonly IPdfEditingValidator[] validators;
+    private readonly System.Collections.ObjectModel.ReadOnlyCollection<IPdfEditingValidator> validators;
     private readonly PdfEditingPreservationContract preservationContract;
     private PdfEditTransaction? activeTransaction;
     private bool disposed;
@@ -60,10 +60,25 @@ public sealed class PdfEditingSession :
         }
 
         this.document = document;
-        validators = resolvedOptions.Validators.ToArray();
+
+        var validatorSnapshot =
+            resolvedOptions.Validators.ToArray();
+
+        validators =
+            Array.AsReadOnly(
+                validatorSnapshot);
+
         preservationContract =
             PdfEditingPreservationContract.Default;
-        Options = resolvedOptions;
+
+        Options =
+            new PdfEditingSessionOptions
+            {
+                PreservationMode =
+                    resolvedOptions.PreservationMode,
+                Validators =
+                    validators
+            };
         Id = Guid.NewGuid();
         Document = new PdfEditableDocument(
             document,
@@ -195,7 +210,7 @@ public sealed class PdfEditingSession :
         EnsureActive();
         EnsureOwnership(operation);
 
-        for (var index = 0; index < validators.Length; index++)
+        for (var index = 0; index < validators.Count; index++)
         {
             validators[index].Validate(
                 this,
@@ -259,26 +274,75 @@ public sealed class PdfEditingSession :
 
         replayingChanges = true;
 
+        var appliedChanges =
+            new List<PdfEditChange>(
+                changes.Count);
+
         try
         {
-            if (undo)
+            try
             {
-                for (var index = changes.Count - 1; index >= 0; index--)
+                if (undo)
                 {
-                    changes[index].Undo();
+                    for (var index = changes.Count - 1; index >= 0; index--)
+                    {
+                        changes[index].Undo();
+                        appliedChanges.Add(
+                            changes[index]);
+                    }
+
+                    return;
                 }
 
-                return;
+                for (var index = 0; index < changes.Count; index++)
+                {
+                    changes[index].Redo();
+                    appliedChanges.Add(
+                        changes[index]);
+                }
             }
-
-            for (var index = 0; index < changes.Count; index++)
+            catch (Exception replayException)
             {
-                changes[index].Redo();
+                try
+                {
+                    CompensateReplay(
+                        appliedChanges,
+                        undo);
+                }
+                catch (Exception compensationException)
+                {
+                    throw new AggregateException(
+                        "Editing replay failed and its compensation also failed.",
+                        replayException,
+                        compensationException);
+                }
+
+                throw;
             }
         }
         finally
         {
             replayingChanges = false;
+        }
+    }
+
+    private static void CompensateReplay(
+        List<PdfEditChange> appliedChanges,
+        bool undo)
+    {
+        if (undo)
+        {
+            for (var index = appliedChanges.Count - 1; index >= 0; index--)
+            {
+                appliedChanges[index].Redo();
+            }
+
+            return;
+        }
+
+        for (var index = appliedChanges.Count - 1; index >= 0; index--)
+        {
+            appliedChanges[index].Undo();
         }
     }
 

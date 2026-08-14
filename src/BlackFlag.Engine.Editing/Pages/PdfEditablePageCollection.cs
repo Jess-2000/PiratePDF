@@ -69,6 +69,80 @@ public sealed class PdfEditablePageCollection :
     IEnumerator IEnumerable.GetEnumerator() =>
         GetEnumerator();
 
+    internal void EnsureCanInsert(
+        int index,
+        PdfEditablePage page)
+    {
+        ArgumentNullException.ThrowIfNull(page);
+        EnsureSynchronized();
+
+        if (index < 0 || index > pages.Count)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(index));
+        }
+
+        if (pages.Contains(page))
+        {
+            throw new InvalidOperationException(
+                "The editable page is already attached to this document.");
+        }
+    }
+
+    internal int EnsureCanRemove(
+        PdfEditablePage page)
+    {
+        ArgumentNullException.ThrowIfNull(page);
+        EnsureSynchronized();
+
+        var index =
+            pages.IndexOf(page);
+
+        if (index < 0)
+        {
+            throw new InvalidOperationException(
+                "The editable page is not attached to this document.");
+        }
+
+        return index;
+    }
+
+    internal int EnsureCanMove(
+        PdfEditablePage page,
+        int destinationIndex)
+    {
+        var sourceIndex =
+            EnsureCanRemove(page);
+
+        if (
+            destinationIndex < 0 ||
+            destinationIndex >= pages.Count)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(destinationIndex));
+        }
+
+        return sourceIndex;
+    }
+
+    internal int EnsureCanReplace(
+        PdfEditablePage target,
+        PdfEditablePage replacement)
+    {
+        ArgumentNullException.ThrowIfNull(replacement);
+
+        var index =
+            EnsureCanRemove(target);
+
+        if (pages.Contains(replacement))
+        {
+            throw new InvalidOperationException(
+                "The replacement editable page is already attached to this document.");
+        }
+
+        return index;
+    }
+
     internal void Insert(
         int index,
         PdfEditablePage page)
