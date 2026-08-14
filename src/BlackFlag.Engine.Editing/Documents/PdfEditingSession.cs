@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
-
 using BlackFlag.Engine.Document.Model;
+using BlackFlag.Engine.Editing.History;
 using BlackFlag.Engine.Editing.Operations;
 using BlackFlag.Engine.Editing.Ownership;
 using BlackFlag.Engine.Editing.Transactions;
@@ -62,6 +62,7 @@ public sealed class PdfEditingSession :
             document,
             new PdfEditingOwnershipToken(Id),
             this);
+        History = new PdfEditHistory(this);
     }
 
     /// <summary>
@@ -78,6 +79,11 @@ public sealed class PdfEditingSession :
     /// Gets the controlled editable view owned by this session.
     /// </summary>
     public PdfEditableDocument Document { get; }
+
+    /// <summary>
+    /// Gets the committed undo and redo history owned by this session.
+    /// </summary>
+    public PdfEditHistory History { get; }
 
     /// <summary>
     /// Gets whether the editing session has been disposed.
@@ -243,6 +249,43 @@ public sealed class PdfEditingSession :
         {
             replayingChanges = false;
         }
+    }
+
+    internal void RecordCommittedChangeSet(
+        PdfEditChangeSet changeSet)
+    {
+        ArgumentNullException.ThrowIfNull(changeSet);
+        EnsureActive();
+        History.RecordCommitted(changeSet);
+    }
+
+    internal void EnsureHistoryReplayAllowed()
+    {
+        EnsureActive();
+
+        if (activeTransaction is not null)
+        {
+            throw new InvalidOperationException(
+                "Undo and redo are not allowed while an edit transaction is active.");
+        }
+
+        if (replayingChanges)
+        {
+            throw new InvalidOperationException(
+                "Editing changes are already being replayed.");
+        }
+    }
+
+    internal void ReplayChangeSet(
+        PdfEditChangeSet changeSet,
+        bool undo)
+    {
+        ArgumentNullException.ThrowIfNull(changeSet);
+        EnsureHistoryReplayAllowed();
+
+        ReplayChanges(
+            changeSet.GetChanges(),
+            undo);
     }
 
     internal PdfDocument GetDocument()

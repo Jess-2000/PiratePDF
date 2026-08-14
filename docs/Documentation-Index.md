@@ -36,6 +36,7 @@
 | BF-1051B | [BF-1051B — Editable Document and Page Model](milestones/BF-1051B-Editable-Document-and-Page-Model.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
 | BF-1051C | [BF-1051C — Core Mutation Primitives](milestones/BF-1051C-Core-Mutation-Primitives.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
 | BF-1051D | [BF-1051D — Transactions and Change Sets](milestones/BF-1051D-Transactions-and-Change-Sets.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1051E | [BF-1051E — Undo/Redo Foundation](milestones/BF-1051E-Undo-Redo-Foundation.md) | Milestone | 1.0 | Implemented | 2026-08-14 |
 | BF-DOC-0004 | [BlackFlag Engine — Parser Infrastructure RC1](Parser-Infrastructure-RC1.md) | Architecture | 0.4.0 | Tested | 2026-07-30 |
 | BF-DOC-0005 | [BlackFlag Engine 0.5.0 — PDF Object Model RC1](PDF-Object-Model-RC1.md) | Architecture | 0.5.0 | In Development | 2026-07-30 |
 | BF-DOC-1001 | [Documentation Template RC1](Documentation-Template-RC1.md) | Developer Documentation | 0.1.0 | In Development | 2026-07-30 |

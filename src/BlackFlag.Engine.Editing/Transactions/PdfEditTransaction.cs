@@ -53,6 +53,7 @@ public sealed class PdfEditTransaction :
 
         State = PdfEditTransactionState.Committed;
         session.CompleteTransaction(this);
+        session.RecordCommittedChangeSet(changeSet);
 
         return changeSet;
     }
