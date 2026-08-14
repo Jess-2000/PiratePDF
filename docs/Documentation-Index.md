@@ -32,6 +32,16 @@
 | BF-1050G | [BF-1050G — SDK Isolation Audit and Public Surface Hardening](milestones/BF-1050G-SDK-Isolation-Audit-and-Public-Surface-Hardening.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
 | BF-1050H | [BF-1050H — Reference Plugin and Developer Contract](milestones/BF-1050H-Reference-Plugin-and-Developer-Contract.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
 | BF-1050I | [BF-1050I — Adversarial, Integration, Performance and Unload Hardening](milestones/BF-1050I-Adversarial-Integration-Performance-and-Unload-Hardening.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1051A | [BF-1051A — Editing Architecture, Contracts, and Ownership Boundaries](milestones/BF-1051A-Editing-Architecture-Contracts-and-Ownership-Boundaries.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1051B | [BF-1051B — Editable Document and Page Model](milestones/BF-1051B-Editable-Document-and-Page-Model.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1051C | [BF-1051C — Core Mutation Primitives](milestones/BF-1051C-Core-Mutation-Primitives.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1051D | [BF-1051D — Transactions and Change Sets](milestones/BF-1051D-Transactions-and-Change-Sets.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1051E | [BF-1051E — Undo/Redo Foundation](milestones/BF-1051E-Undo-Redo-Foundation.md) | Milestone | 1.0 | Implemented | 2026-08-14 |
+| BF-1051F | [BF-1051F — Content and Resource Mutation](milestones/BF-1051F-Content-and-Resource-Mutation.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1051G | [BF-1051G — Validation and Invariants](milestones/BF-1051G-Validation-and-Invariants.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1051H | [BF-1051H — FusionPro Preservation Contracts](milestones/BF-1051H-FusionPro-Preservation-Contracts.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1051I | [BF-1051I — SDK and Service Boundaries](milestones/BF-1051I-SDK-and-Service-Boundaries.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1051J | [BF-1051J — Adversarial Testing, Performance, and Hardening](milestones/BF-1051J-Adversarial-Performance-and-Hardening.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
 | BF-DOC-0004 | [BlackFlag Engine — Parser Infrastructure RC1](Parser-Infrastructure-RC1.md) | Architecture | 0.4.0 | Tested | 2026-07-30 |
 | BF-DOC-0005 | [BlackFlag Engine 0.5.0 — PDF Object Model RC1](PDF-Object-Model-RC1.md) | Architecture | 0.5.0 | In Development | 2026-07-30 |
 | BF-DOC-1001 | [Documentation Template RC1](Documentation-Template-RC1.md) | Developer Documentation | 0.1.0 | In Development | 2026-07-30 |

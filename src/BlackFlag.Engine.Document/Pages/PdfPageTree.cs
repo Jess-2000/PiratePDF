@@ -14,7 +14,7 @@ public sealed class PdfPageTree :
     IPdfDictionaryBackedModel
 {
     private readonly List<PdfPage> pages =
-        new();
+        [];
 
     private readonly PdfObjectBinding binding =
         new();
@@ -141,19 +141,21 @@ public sealed class PdfPageTree :
 
     internal PdfDictionary CreateDictionarySnapshot()
     {
-        var dictionary = new PdfDictionary();
-
-        dictionary.Add(
-            PdfNames.Type,
-            PdfNames.Pages);
-
-        dictionary.Add(
-            PdfNames.Count,
-            new PdfInteger(Count));
-
-        dictionary.Add(
-            PdfNames.Kids,
-            CreateKidsArray());
+        var dictionary = new PdfDictionary
+        {
+            {
+                PdfNames.Type,
+                PdfNames.Pages
+            },
+            {
+                PdfNames.Count,
+                new PdfInteger(Count)
+            },
+            {
+                PdfNames.Kids,
+                CreateKidsArray()
+            }
+        };
 
         return dictionary;
     }

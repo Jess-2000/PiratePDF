@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text;
+using PiratePDF.DocGen.Generation;
 
 namespace PiratePDF.DocGen.Changes.Reporting;
 
@@ -185,31 +186,11 @@ internal static class DocumentChangeReportWriter
 
         Directory.CreateDirectory(directory);
 
-        var temporaryPath = Path.Combine(
-            directory,
-            $".{Path.GetFileName(fullOutputPath)}." +
-            $"{Guid.NewGuid():N}.tmp");
-
-        try
-        {
-            File.WriteAllText(
-                temporaryPath,
-                content,
-                new UTF8Encoding(
-                    encoderShouldEmitUTF8Identifier: false));
-
-            File.Move(
-                temporaryPath,
-                fullOutputPath,
-                overwrite: true);
-        }
-        finally
-        {
-            if (File.Exists(temporaryPath))
-            {
-                File.Delete(temporaryPath);
-            }
-        }
+        TrackedGeneratedFileWriter.WriteIfChanged(
+            fullOutputPath,
+            content,
+            new UTF8Encoding(
+                encoderShouldEmitUTF8Identifier: false));
     }
 
     // =========================================================================
