@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BlackFlag.Engine.SDK\BlackFlag.Engine.SDK.csproj" />
+    <ProjectReference Include="..\BlackFlag.Engine.Security\BlackFlag.Engine.Security.csproj" />
+    <ProjectReference Include="..\BlackFlag.Engine.Services\BlackFlag.Engine.Services.csproj" />
+  </ItemGroup>
+</Project>

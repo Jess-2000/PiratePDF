@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector"><PrivateAssets>all</PrivateAssets><IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets></PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio"><PrivateAssets>all</PrivateAssets><IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets></PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\BlackFlag.Engine.Plugins\BlackFlag.Engine.Plugins.csproj" />
+    <ProjectReference Include="..\..\src\BlackFlag.Engine.Security\BlackFlag.Engine.Security.csproj" />
+    <ProjectReference Include="..\BlackFlag.Engine.Plugins.TestPlugin\BlackFlag.Engine.Plugins.TestPlugin.csproj" />
+    <ProjectReference Include="..\..\samples\BlackFlag.Engine.ReferencePlugin\BlackFlag.Engine.ReferencePlugin.csproj" />
+  </ItemGroup>
+</Project>

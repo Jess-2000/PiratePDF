@@ -23,6 +23,15 @@
 | BF-1049J | [BF-1049J — Adversarial, Fuzz, and Integration Hardening](milestones/BF-1049J-Adversarial-Fuzz-and-Integration-Hardening.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
 | BF-1049K | [BF-1049K - PDF Standard Security Handler Authentication and Decryption](milestones/BF-1049K-PDF-Standard-Security-Handler-Authentication-and-Decryption.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
 | BF-1049T | [BF-1049T — Silent Fingerprint-Backed Trusted-Document Opening](milestones/BF-1049T-Silent-Fingerprint-Backed-Trusted-Document-Opening.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1050A | [BF-1050A — Plugin Contracts, Identity, Manifest, Compatibility, and Initial SDK Boundary Separation](milestones/BF-1050A-Plugin-Contracts-Identity-Manifest-Compatibility-and-SDK-Boundary.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1050B | [BF-1050B — Plugin Discovery and Catalog](milestones/BF-1050B-Plugin-Discovery-and-Catalog.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1050C | [BF-1050C — Dependency Resolution and Activation Planning](milestones/BF-1050C-Dependency-Resolution-and-Activation-Planning.md) | Milestone | 1.1 | Implemented | 2026-08-13 |
+| BF-1050D | [BF-1050D — Managed Plugin Loading and Lifecycle](milestones/BF-1050D-Managed-Plugin-Loading-and-Lifecycle.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1050E | [BF-1050E — Capability and Extension Registration](milestones/BF-1050E-Capability-and-Extension-Registration.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1050F | [BF-1050F — Security Boundary and Policy Integration](milestones/BF-1050F-Security-Boundary-and-Policy-Integration.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1050G | [BF-1050G — SDK Isolation Audit and Public Surface Hardening](milestones/BF-1050G-SDK-Isolation-Audit-and-Public-Surface-Hardening.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1050H | [BF-1050H — Reference Plugin and Developer Contract](milestones/BF-1050H-Reference-Plugin-and-Developer-Contract.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1050I | [BF-1050I — Adversarial, Integration, Performance and Unload Hardening](milestones/BF-1050I-Adversarial-Integration-Performance-and-Unload-Hardening.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
 | BF-DOC-0004 | [BlackFlag Engine — Parser Infrastructure RC1](Parser-Infrastructure-RC1.md) | Architecture | 0.4.0 | Tested | 2026-07-30 |
 | BF-DOC-0005 | [BlackFlag Engine 0.5.0 — PDF Object Model RC1](PDF-Object-Model-RC1.md) | Architecture | 0.5.0 | In Development | 2026-07-30 |
 | BF-DOC-1001 | [Documentation Template RC1](Documentation-Template-RC1.md) | Developer Documentation | 0.1.0 | In Development | 2026-07-30 |
@@ -48,6 +57,7 @@
 | PP-ARCH-MEM-001 | [BlackFlag Memory and Resource Architecture](Architecture/MEMORY-ARCHITECTURE.md) | Architecture | 1.0 | In Development | 2026-08-06 |
 | PP-CHARTER-001 | [PiratePDF Project Charter](Project-Charter.md) | Project Charter | 1.1 | Approved | 2026-08-09 |
 | PP-DEV-001 | [PiratePDF Master Blueprint - Volume IV: Engineering Standards](Blueprint/Volume-IV-Engineering-Standards.md) | Developer Documentation | 1.0 | Approved | 2026-07-24 |
+| PP-DEV-002 | [BlackFlag Engine Plugin Development Contract](04-Developer/Plugin-Development.md) | Developer Documentation | 1.0 | Implemented | 2026-08-13 |
 | PP-DOC-000 | [PiratePDF Documentation](README.md) | Documentation Index | 1.0 | Approved | 2026-07-24 |
 | PP-GOV-002 | [PiratePDF Documentation Standards](05-Governance/Documentation-Standards.md) | Governance | 1.0 | Approved | 2026-07-23 |
 | PP-GOV-003 | [Documentation Validation Rules](05-Governance/Documentation-Validation-Rules.md) | Governance | 1.0 | Approved | 2026-07-24 |
@@ -66,7 +76,7 @@
 | PP-SPEC-012 | [BlackFlag Engine I/O Specification](Technical-Specifications/BlackFlag-Engine/IO.md) | Technical Specification | 1.0 | In Development | 2026-07-24 |
 | PP-SPEC-013 | [BlackFlag Engine Syntax Specification](Technical-Specifications/BlackFlag-Engine/Syntax.md) | Technical Specification | 1.0 | In Development | 2026-07-24 |
 | PP-SPEC-014 | [BlackFlag Engine Document Model Specification](Technical-Specifications/BlackFlag-Engine/Document.md) | Technical Specification | 1.0 | In Development | 2026-07-24 |
-| PP-SPEC-015 | [BlackFlag Engine SDK Specification](Technical-Specifications/BlackFlag-Engine/SDK.md) | Technical Specification | 1.0 | In Development | 2026-07-24 |
+| PP-SPEC-015 | [BlackFlag Engine SDK Specification](Technical-Specifications/BlackFlag-Engine/SDK.md) | Technical Specification | 1.5 | In Development | 2026-08-13 |
 | PP-SPEC-BF-1036 | [BF-1036 — Collection Parser](milestones/BF-1036-Collection-Parser.md) | Technical Specification | 1.0 | Approved | 2026-07-30 |
 | PP-SPEC-BF-1037 | [BF-1037 — Indirect Objects and References](milestones/BF-1037-Indirect-Objects-and-References.md) | Technical Specification | 1.0 | Tested | 2026-07-31 |
 | PP-SPEC-BF-1038 | [BF-1038 — Traditional Cross-Reference Tables and Trailers](milestones/BF-1038-Traditional-Cross-Reference-Tables.md) | Technical Specification | 1.0 | Tested | 2026-07-31 |
