@@ -3,6 +3,7 @@ using BlackFlag.Engine.Document.Model;
 using BlackFlag.Engine.Editing.History;
 using BlackFlag.Engine.Editing.Operations;
 using BlackFlag.Engine.Editing.Ownership;
+using BlackFlag.Engine.Editing.Preservation;
 using BlackFlag.Engine.Editing.Transactions;
 using BlackFlag.Engine.Editing.Validation;
 
@@ -27,6 +28,7 @@ public sealed class PdfEditingSession :
 
     private readonly PdfDocument document;
     private readonly IPdfEditingValidator[] validators;
+    private readonly PdfEditingPreservationContract preservationContract;
     private PdfEditTransaction? activeTransaction;
     private bool disposed;
     private bool replayingChanges;
@@ -59,6 +61,8 @@ public sealed class PdfEditingSession :
 
         this.document = document;
         validators = resolvedOptions.Validators.ToArray();
+        preservationContract =
+            PdfEditingPreservationContract.Default;
         Options = resolvedOptions;
         Id = Guid.NewGuid();
         Document = new PdfEditableDocument(
@@ -77,6 +81,12 @@ public sealed class PdfEditingSession :
     /// Gets the options applied to this editing session.
     /// </summary>
     public PdfEditingSessionOptions Options { get; }
+
+    /// <summary>
+    /// Gets the preservation contract enforced by this editing session.
+    /// </summary>
+    public PdfEditingPreservationContract PreservationContract =>
+        preservationContract;
 
     /// <summary>
     /// Gets the controlled editable view owned by this session.
