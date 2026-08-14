@@ -4,6 +4,7 @@ using BlackFlag.Engine.Editing.History;
 using BlackFlag.Engine.Editing.Operations;
 using BlackFlag.Engine.Editing.Ownership;
 using BlackFlag.Engine.Editing.Transactions;
+using BlackFlag.Engine.Editing.Validation;
 
 namespace BlackFlag.Engine.Editing.Documents;
 
@@ -25,6 +26,7 @@ public sealed class PdfEditingSession :
             [];
 
     private readonly PdfDocument document;
+    private readonly IPdfEditingValidator[] validators;
     private PdfEditTransaction? activeTransaction;
     private bool disposed;
     private bool replayingChanges;
@@ -56,6 +58,7 @@ public sealed class PdfEditingSession :
         }
 
         this.document = document;
+        validators = resolvedOptions.Validators.ToArray();
         Options = resolvedOptions;
         Id = Guid.NewGuid();
         Document = new PdfEditableDocument(
@@ -84,6 +87,12 @@ public sealed class PdfEditingSession :
     /// Gets the committed undo and redo history owned by this session.
     /// </summary>
     public PdfEditHistory History { get; }
+
+    /// <summary>
+    /// Gets the validators captured when this editing session was created.
+    /// </summary>
+    public IReadOnlyList<IPdfEditingValidator> Validators =>
+        validators;
 
     /// <summary>
     /// Gets whether the editing session has been disposed.
@@ -167,6 +176,21 @@ public sealed class PdfEditingSession :
         }
 
         disposed = true;
+    }
+
+    internal void ValidateOperation(
+        IPdfEditOperation operation)
+    {
+        ArgumentNullException.ThrowIfNull(operation);
+        EnsureActive();
+        EnsureOwnership(operation);
+
+        for (var index = 0; index < validators.Length; index++)
+        {
+            validators[index].Validate(
+                this,
+                operation);
+        }
     }
 
     internal void RecordChange(
@@ -307,6 +331,18 @@ public sealed class PdfEditingSession :
                 nameof(options),
                 options.PreservationMode,
                 "The PDF editing preservation mode is not supported.");
+        }
+
+        ArgumentNullException.ThrowIfNull(options.Validators);
+
+        for (var index = 0; index < options.Validators.Count; index++)
+        {
+            if (options.Validators[index] is null)
+            {
+                throw new ArgumentException(
+                    "Editing validators cannot contain null entries.",
+                    nameof(options));
+            }
         }
     }
 }

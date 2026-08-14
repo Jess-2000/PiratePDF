@@ -82,9 +82,6 @@ public sealed class PdfEditableDocument
         PdfEditablePage page)
     {
         EnsureOwnership(page);
-        Pages.Insert(
-            index,
-            page);
 
         var operation =
             new PdfPageEditOperation(
@@ -92,6 +89,12 @@ public sealed class PdfEditableDocument
                 PdfPageMutationKind.Insert,
                 page.Id,
                 destinationIndex: index);
+
+        session.ValidateOperation(operation);
+
+        Pages.Insert(
+            index,
+            page);
 
         session.RecordChange(
             operation,
@@ -111,14 +114,21 @@ public sealed class PdfEditableDocument
         EnsureOwnership(page);
 
         var sourceIndex =
-            Pages.Remove(page);
+            Pages.IndexOf(page);
 
         var operation =
             new PdfPageEditOperation(
                 owner,
                 PdfPageMutationKind.Remove,
                 page.Id,
-                sourceIndex: sourceIndex);
+                sourceIndex: sourceIndex >= 0
+                    ? sourceIndex
+                    : null);
+
+        session.ValidateOperation(operation);
+
+        sourceIndex =
+            Pages.Remove(page);
 
         session.RecordChange(
             operation,
@@ -138,17 +148,24 @@ public sealed class PdfEditableDocument
         EnsureOwnership(page);
 
         var sourceIndex =
-            Pages.Move(
-                page,
-                destinationIndex);
+            Pages.IndexOf(page);
 
         var operation =
             new PdfPageEditOperation(
                 owner,
                 PdfPageMutationKind.Move,
                 page.Id,
-                sourceIndex: sourceIndex,
+                sourceIndex: sourceIndex >= 0
+                    ? sourceIndex
+                    : null,
                 destinationIndex: destinationIndex);
+
+        session.ValidateOperation(operation);
+
+        sourceIndex =
+            Pages.Move(
+                page,
+                destinationIndex);
 
         session.RecordChange(
             operation,
@@ -170,9 +187,7 @@ public sealed class PdfEditableDocument
         EnsureOwnership(replacement);
 
         var sourceIndex =
-            Pages.Replace(
-                target,
-                replacement);
+            Pages.IndexOf(target);
 
         var operation =
             new PdfPageEditOperation(
@@ -180,8 +195,19 @@ public sealed class PdfEditableDocument
                 PdfPageMutationKind.Replace,
                 target.Id,
                 relatedPageId: replacement.Id,
-                sourceIndex: sourceIndex,
-                destinationIndex: sourceIndex);
+                sourceIndex: sourceIndex >= 0
+                    ? sourceIndex
+                    : null,
+                destinationIndex: sourceIndex >= 0
+                    ? sourceIndex
+                    : null);
+
+        session.ValidateOperation(operation);
+
+        sourceIndex =
+            Pages.Replace(
+                target,
+                replacement);
 
         session.RecordChange(
             operation,
@@ -203,15 +229,17 @@ public sealed class PdfEditableDocument
         var previousRotation =
             page.Rotation;
 
-        page.GetSourcePage()
-            .SetRotation(rotation);
-
         var operation =
             new PdfPageEditOperation(
                 owner,
                 PdfPageMutationKind.SetRotation,
                 page.Id,
                 rotation: rotation);
+
+        session.ValidateOperation(operation);
+
+        page.GetSourcePage()
+            .SetRotation(rotation);
 
         session.RecordChange(
             operation,
@@ -237,8 +265,6 @@ public sealed class PdfEditableDocument
         var previous =
             sourcePage.GetContentBytes();
 
-        sourcePage.ReplaceContent(replacement);
-
         var replacementCopy =
             replacement.ToArray();
 
@@ -249,6 +275,10 @@ public sealed class PdfEditableDocument
                 page.Id,
                 previous.Length,
                 replacementCopy.Length);
+
+        session.ValidateOperation(operation);
+
+        sourcePage.ReplaceContent(replacementCopy);
 
         session.RecordChange(
             operation,
@@ -281,11 +311,6 @@ public sealed class PdfEditableDocument
                 name,
                 out var previous);
 
-        sourcePage.SetResource(
-            category,
-            name,
-            resource);
-
         var operation =
             new PdfResourceEditOperation(
                 owner,
@@ -294,6 +319,13 @@ public sealed class PdfEditableDocument
                 category,
                 name,
                 replacedExisting);
+
+        session.ValidateOperation(operation);
+
+        sourcePage.SetResource(
+            category,
+            name,
+            resource);
 
         session.RecordChange(
             operation,
@@ -344,10 +376,6 @@ public sealed class PdfEditableDocument
                 $"Page resource '{category}/{name.GetLatin1Text()}' does not exist.");
         }
 
-        _ = sourcePage.RemoveResource(
-            category,
-            name);
-
         var operation =
             new PdfResourceEditOperation(
                 owner,
@@ -356,6 +384,12 @@ public sealed class PdfEditableDocument
                 category,
                 name,
                 replacedExisting: true);
+
+        session.ValidateOperation(operation);
+
+        _ = sourcePage.RemoveResource(
+            category,
+            name);
 
         session.RecordChange(
             operation,

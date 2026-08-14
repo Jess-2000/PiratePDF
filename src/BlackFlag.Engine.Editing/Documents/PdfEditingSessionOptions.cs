@@ -1,3 +1,5 @@
+using BlackFlag.Engine.Editing.Validation;
+
 namespace BlackFlag.Engine.Editing.Documents;
 
 /// <summary>
@@ -10,4 +12,11 @@ public sealed class PdfEditingSessionOptions
     /// </summary>
     public PdfEditingPreservationMode PreservationMode { get; init; } =
         PdfEditingPreservationMode.PreserveUntargetedStructure;
+
+    /// <summary>
+    /// Gets or initializes validators that must approve each controlled
+    /// operation before document state is mutated.
+    /// </summary>
+    public IReadOnlyList<IPdfEditingValidator> Validators { get; init; } =
+        [];
 }
