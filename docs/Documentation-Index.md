@@ -32,6 +32,7 @@
 | BF-1050G | [BF-1050G — SDK Isolation Audit and Public Surface Hardening](milestones/BF-1050G-SDK-Isolation-Audit-and-Public-Surface-Hardening.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
 | BF-1050H | [BF-1050H — Reference Plugin and Developer Contract](milestones/BF-1050H-Reference-Plugin-and-Developer-Contract.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
 | BF-1050I | [BF-1050I — Adversarial, Integration, Performance and Unload Hardening](milestones/BF-1050I-Adversarial-Integration-Performance-and-Unload-Hardening.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
+| BF-1051A | [BF-1051A — Editing Architecture, Contracts, and Ownership Boundaries](milestones/BF-1051A-Editing-Architecture-Contracts-and-Ownership-Boundaries.md) | Milestone | 1.0 | Implemented | 2026-08-13 |
 | BF-DOC-0004 | [BlackFlag Engine — Parser Infrastructure RC1](Parser-Infrastructure-RC1.md) | Architecture | 0.4.0 | Tested | 2026-07-30 |
 | BF-DOC-0005 | [BlackFlag Engine 0.5.0 — PDF Object Model RC1](PDF-Object-Model-RC1.md) | Architecture | 0.5.0 | In Development | 2026-07-30 |
 | BF-DOC-1001 | [Documentation Template RC1](Documentation-Template-RC1.md) | Developer Documentation | 0.1.0 | In Development | 2026-07-30 |
