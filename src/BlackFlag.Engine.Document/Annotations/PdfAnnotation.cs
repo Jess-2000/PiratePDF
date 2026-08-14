@@ -1,3 +1,4 @@
+using BlackFlag.Engine.Document.Forms;
 using BlackFlag.Engine.Document.Pages;
 
 namespace BlackFlag.Engine.Document.Annotations;
@@ -31,6 +32,33 @@ public sealed class PdfAnnotation
     public PdfAnnotationOptions Flags { get; internal set; }
 
     internal PdfPage? Parent => parent;
+    internal PdfFormField? FormField { get; private set; }
+
+    internal void AttachToFormField(PdfFormField field)
+    {
+        ArgumentNullException.ThrowIfNull(field);
+
+        if (FormField is not null)
+        {
+            throw new InvalidOperationException(
+                "The annotation is already associated with a form field.");
+        }
+
+        FormField = field;
+    }
+
+    internal void DetachFromFormField(PdfFormField field)
+    {
+        ArgumentNullException.ThrowIfNull(field);
+
+        if (!ReferenceEquals(FormField, field))
+        {
+            throw new InvalidOperationException(
+                "The annotation is not associated with the supplied form field.");
+        }
+
+        FormField = null;
+    }
 
     internal void AttachToPage(PdfPage page)
     {

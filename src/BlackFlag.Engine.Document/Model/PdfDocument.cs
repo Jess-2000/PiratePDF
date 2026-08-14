@@ -1,3 +1,4 @@
+using BlackFlag.Engine.Document.Forms;
 using BlackFlag.Engine.Document.Metadata;
 using BlackFlag.Engine.Document.Objects;
 using BlackFlag.Engine.Document.Pages;
@@ -24,6 +25,7 @@ public sealed class PdfDocument
         Trailer = trailer;
         Objects = objects;
         Information = new PdfDocumentInformation();
+        AcroForm = new PdfAcroForm();
     }
 
     public PdfVersion Version { get; private set; }
@@ -36,6 +38,9 @@ public sealed class PdfDocument
 
     /// <summary>Gets the authoritative logical document-information metadata.</summary>
     public PdfDocumentInformation Information { get; }
+
+    /// <summary>Gets the authoritative logical AcroForm state.</summary>
+    public PdfAcroForm AcroForm { get; }
 
     public PdfPageTree Pages =>
         Catalog.Pages;
