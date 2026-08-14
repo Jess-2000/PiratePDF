@@ -1,3 +1,5 @@
+#nullable enable
+
 using System.Text;
 
 using BlackFlag.Engine.Document.Model;
