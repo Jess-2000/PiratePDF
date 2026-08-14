@@ -13,6 +13,8 @@ public sealed class PdfPage :
     private readonly PdfObjectBinding binding =
         new();
 
+    private byte[] contentData = [];
+    private readonly PdfDictionary resources = [];
     private PdfPageTree? parent;
 
     public PdfPage(
@@ -44,6 +46,18 @@ public sealed class PdfPage :
 
     public PdfPageRotation Rotation { get; private set; }
 
+    /// <summary>
+    /// Gets whether this page currently owns content-stream data.
+    /// </summary>
+    public bool HasContent =>
+        contentData.Length > 0;
+
+    /// <summary>
+    /// Gets whether this page currently owns any direct resource entries.
+    /// </summary>
+    public bool HasResources =>
+        resources.Count > 0;
+
     public bool IsLandscape
     {
         get
@@ -70,6 +84,116 @@ public sealed class PdfPage :
     {
         ValidateRotation(rotation);
         Rotation = rotation;
+    }
+
+    /// <summary>
+    /// Returns a defensive copy of the page content-stream bytes.
+    /// </summary>
+    public byte[] GetContentBytes() =>
+        contentData.ToArray();
+
+    internal void ReplaceContent(
+        ReadOnlySpan<byte> replacement)
+    {
+        contentData = replacement.ToArray();
+    }
+
+    internal bool ContainsResource(
+        PdfName category,
+        PdfName name)
+    {
+        ArgumentNullException.ThrowIfNull(category);
+        ArgumentNullException.ThrowIfNull(name);
+
+        return resources.TryGetValue(
+                category,
+                out var categoryValue) &&
+            categoryValue is PdfDictionary categoryDictionary &&
+            categoryDictionary.ContainsKey(name);
+    }
+
+    internal bool TryGetResource(
+        PdfName category,
+        PdfName name,
+        out PdfObject? resource)
+    {
+        ArgumentNullException.ThrowIfNull(category);
+        ArgumentNullException.ThrowIfNull(name);
+
+        if (
+            resources.TryGetValue(
+                category,
+                out var categoryValue) &&
+            categoryValue is PdfDictionary categoryDictionary &&
+            categoryDictionary.TryGetValue(
+                name,
+                out var value))
+        {
+            resource = value;
+            return true;
+        }
+
+        resource = null;
+        return false;
+    }
+
+    internal void SetResource(
+        PdfName category,
+        PdfName name,
+        PdfObject resource)
+    {
+        ArgumentNullException.ThrowIfNull(category);
+        ArgumentNullException.ThrowIfNull(name);
+        ArgumentNullException.ThrowIfNull(resource);
+
+        if (!resources.TryGetValue(
+                category,
+                out var categoryValue))
+        {
+            categoryValue = new PdfDictionary();
+            resources.Add(
+                category,
+                categoryValue);
+        }
+
+        if (categoryValue is not PdfDictionary categoryDictionary)
+        {
+            throw new InvalidOperationException(
+                $"Page resource category '{category}' is not a PDF dictionary.");
+        }
+
+        categoryDictionary.Set(
+            name,
+            resource);
+    }
+
+    internal bool RemoveResource(
+        PdfName category,
+        PdfName name)
+    {
+        ArgumentNullException.ThrowIfNull(category);
+        ArgumentNullException.ThrowIfNull(name);
+
+        if (
+            !resources.TryGetValue(
+                category,
+                out var categoryValue) ||
+            categoryValue is not PdfDictionary categoryDictionary)
+        {
+            return false;
+        }
+
+        var removed =
+            categoryDictionary.Remove(name);
+
+        if (
+            removed &&
+            categoryDictionary.Count == 0)
+        {
+            _ = resources.Remove(category);
+        }
+
+        return removed;
     }
 
     internal void BindObjectIdentifier(
@@ -113,21 +237,39 @@ public sealed class PdfPage :
 
     internal PdfDictionary CreateDictionarySnapshot()
     {
-        var dictionary = new PdfDictionary();
-
-        dictionary.Add(
-            PdfNames.Type,
-            PdfNames.Page);
-
-        dictionary.Add(
-            PdfNames.MediaBox,
-            CreateMediaBox());
+        var dictionary = new PdfDictionary
+        {
+            {
+                PdfNames.Type,
+                PdfNames.Page
+            },
+            {
+                PdfNames.MediaBox,
+                CreateMediaBox()
+            }
+        };
 
         if (Rotation != PdfPageRotation.None)
         {
             dictionary.Add(
                 PdfNames.Rotate,
                 new PdfInteger((int)Rotation));
+        }
+
+        if (contentData.Length > 0)
+        {
+            dictionary.Add(
+                PdfNames.Contents,
+                new PdfStream(
+                    [],
+                    contentData));
+        }
+
+        if (resources.Count > 0)
+        {
+            dictionary.Add(
+                PdfNames.Resources,
+                CreateResourceSnapshot());
         }
 
         if (parent is not null)
@@ -142,6 +284,28 @@ public sealed class PdfPage :
         }
 
         return dictionary;
+    }
+
+    private PdfDictionary CreateResourceSnapshot()
+    {
+        var snapshot = new PdfDictionary();
+
+        foreach (var category in resources)
+        {
+            if (category.Value is not PdfDictionary categoryDictionary)
+            {
+                snapshot.Add(
+                    category.Key,
+                    category.Value);
+                continue;
+            }
+
+            snapshot.Add(
+                category.Key,
+                categoryDictionary.CreateCopy());
+        }
+
+        return snapshot;
     }
 
     private PdfArray CreateMediaBox()
@@ -159,8 +323,8 @@ public sealed class PdfPage :
         double value)
     {
         return value == Math.Truncate(value) &&
-               value >= long.MinValue &&
-               value <= long.MaxValue
+            value >= long.MinValue &&
+            value <= long.MaxValue
             ? new PdfInteger((long)value)
             : new PdfReal(value);
     }

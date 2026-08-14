@@ -1,3 +1,4 @@
+using PiratePDF.DocGen.Generation;
 using System.Globalization;
 using System.Text;
 
@@ -317,31 +318,11 @@ internal static class DocumentationHealthReportWriter
 
         Directory.CreateDirectory(outputDirectory);
 
-        var temporaryPath = Path.Combine(
-            outputDirectory,
-            $".{Path.GetFileName(fullOutputPath)}." +
-            $"{Guid.NewGuid():N}.tmp");
-
-        try
-        {
-            File.WriteAllText(
-                temporaryPath,
-                content,
-                new UTF8Encoding(
-                    encoderShouldEmitUTF8Identifier: false));
-
-            File.Move(
-                temporaryPath,
-                fullOutputPath,
-                overwrite: true);
-        }
-        finally
-        {
-            if (File.Exists(temporaryPath))
-            {
-                File.Delete(temporaryPath);
-            }
-        }
+        TrackedGeneratedFileWriter.WriteIfChanged(
+            fullOutputPath,
+            content,
+            new UTF8Encoding(
+                encoderShouldEmitUTF8Identifier: false));
     }
 
     // =========================================================================
