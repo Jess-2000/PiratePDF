@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using BlackFlag.Engine.Document.Model;
 using BlackFlag.Engine.Editing.Operations;
 using BlackFlag.Engine.Editing.Ownership;
+using BlackFlag.Engine.Editing.Transactions;
 
 namespace BlackFlag.Engine.Editing.Documents;
 
@@ -24,7 +25,9 @@ public sealed class PdfEditingSession :
             new();
 
     private readonly PdfDocument document;
+    private PdfEditTransaction? activeTransaction;
     private bool disposed;
+    private bool replayingChanges;
 
     public PdfEditingSession(
         PdfDocument document,
@@ -57,7 +60,8 @@ public sealed class PdfEditingSession :
         Id = Guid.NewGuid();
         Document = new PdfEditableDocument(
             document,
-            new PdfEditingOwnershipToken(Id));
+            new PdfEditingOwnershipToken(Id),
+            this);
     }
 
     /// <summary>
@@ -80,6 +84,31 @@ public sealed class PdfEditingSession :
     /// </summary>
     public bool IsDisposed =>
         disposed;
+
+    /// <summary>
+    /// Gets whether this editing session currently owns an active transaction.
+    /// </summary>
+    public bool HasActiveTransaction =>
+        activeTransaction is not null;
+
+    /// <summary>
+    /// Begins a new transaction for mutations performed through this session.
+    /// </summary>
+    public PdfEditTransaction BeginTransaction()
+    {
+        EnsureActive();
+
+        if (activeTransaction is not null)
+        {
+            throw new InvalidOperationException(
+                "The editing session already has an active transaction.");
+        }
+
+        activeTransaction =
+            new PdfEditTransaction(this);
+
+        return activeTransaction;
+    }
 
     /// <summary>
     /// Creates an ownership token for state created by this editing session.
@@ -124,12 +153,96 @@ public sealed class PdfEditingSession :
             return;
         }
 
+        if (activeTransaction is not null)
+        {
+            activeTransaction.Rollback();
+        }
+
         lock (OwnershipGate)
         {
             ActiveDocuments.Remove(document);
         }
 
         disposed = true;
+    }
+
+    internal void RecordChange(
+        IPdfEditOperation operation,
+        Action undo,
+        Action redo)
+    {
+        ArgumentNullException.ThrowIfNull(operation);
+        ArgumentNullException.ThrowIfNull(undo);
+        ArgumentNullException.ThrowIfNull(redo);
+        EnsureActive();
+
+        if (
+            replayingChanges ||
+            activeTransaction is null)
+        {
+            return;
+        }
+
+        activeTransaction.Record(
+            new PdfEditChange(
+                operation,
+                undo,
+                redo));
+    }
+
+    internal void CompleteTransaction(
+        PdfEditTransaction transaction)
+    {
+        ArgumentNullException.ThrowIfNull(transaction);
+        EnsureActive();
+
+        if (!ReferenceEquals(
+                activeTransaction,
+                transaction))
+        {
+            throw new InvalidOperationException(
+                "The transaction does not belong to the active editing scope.");
+        }
+
+        activeTransaction = null;
+    }
+
+    internal void ReplayChanges(
+        IReadOnlyList<PdfEditChange> changes,
+        bool undo)
+    {
+        ArgumentNullException.ThrowIfNull(changes);
+        EnsureActive();
+
+        if (replayingChanges)
+        {
+            throw new InvalidOperationException(
+                "Editing changes are already being replayed.");
+        }
+
+        replayingChanges = true;
+
+        try
+        {
+            if (undo)
+            {
+                for (var index = changes.Count - 1; index >= 0; index--)
+                {
+                    changes[index].Undo();
+                }
+
+                return;
+            }
+
+            for (var index = 0; index < changes.Count; index++)
+            {
+                changes[index].Redo();
+            }
+        }
+        finally
+        {
+            replayingChanges = false;
+        }
     }
 
     internal PdfDocument GetDocument()

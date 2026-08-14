@@ -18,15 +18,19 @@ public sealed class PdfEditableDocument
 {
     private readonly PdfDocument document;
     private readonly PdfEditingOwnershipToken owner;
+    private readonly PdfEditingSession session;
 
     internal PdfEditableDocument(
         PdfDocument document,
-        PdfEditingOwnershipToken owner)
+        PdfEditingOwnershipToken owner,
+        PdfEditingSession session)
     {
         ArgumentNullException.ThrowIfNull(document);
+        ArgumentNullException.ThrowIfNull(session);
 
         this.document = document;
         this.owner = owner;
+        this.session = session;
         Pages = new PdfEditablePageCollection(
             document.Pages,
             owner);
@@ -80,11 +84,19 @@ public sealed class PdfEditableDocument
             index,
             page);
 
-        return new PdfPageEditOperation(
-            owner,
-            PdfPageMutationKind.Insert,
-            page.Id,
-            destinationIndex: index);
+        var operation =
+            new PdfPageEditOperation(
+                owner,
+                PdfPageMutationKind.Insert,
+                page.Id,
+                destinationIndex: index);
+
+        session.RecordChange(
+            operation,
+            () => Pages.Remove(page),
+            () => Pages.Insert(index, page));
+
+        return operation;
     }
 
     /// <summary>
@@ -99,11 +111,19 @@ public sealed class PdfEditableDocument
         var sourceIndex =
             Pages.Remove(page);
 
-        return new PdfPageEditOperation(
-            owner,
-            PdfPageMutationKind.Remove,
-            page.Id,
-            sourceIndex: sourceIndex);
+        var operation =
+            new PdfPageEditOperation(
+                owner,
+                PdfPageMutationKind.Remove,
+                page.Id,
+                sourceIndex: sourceIndex);
+
+        session.RecordChange(
+            operation,
+            () => Pages.Insert(sourceIndex, page),
+            () => Pages.Remove(page));
+
+        return operation;
     }
 
     /// <summary>
@@ -120,12 +140,20 @@ public sealed class PdfEditableDocument
                 page,
                 destinationIndex);
 
-        return new PdfPageEditOperation(
-            owner,
-            PdfPageMutationKind.Move,
-            page.Id,
-            sourceIndex: sourceIndex,
-            destinationIndex: destinationIndex);
+        var operation =
+            new PdfPageEditOperation(
+                owner,
+                PdfPageMutationKind.Move,
+                page.Id,
+                sourceIndex: sourceIndex,
+                destinationIndex: destinationIndex);
+
+        session.RecordChange(
+            operation,
+            () => Pages.Move(page, sourceIndex),
+            () => Pages.Move(page, destinationIndex));
+
+        return operation;
     }
 
     /// <summary>
@@ -144,13 +172,21 @@ public sealed class PdfEditableDocument
                 target,
                 replacement);
 
-        return new PdfPageEditOperation(
-            owner,
-            PdfPageMutationKind.Replace,
-            target.Id,
-            relatedPageId: replacement.Id,
-            sourceIndex: sourceIndex,
-            destinationIndex: sourceIndex);
+        var operation =
+            new PdfPageEditOperation(
+                owner,
+                PdfPageMutationKind.Replace,
+                target.Id,
+                relatedPageId: replacement.Id,
+                sourceIndex: sourceIndex,
+                destinationIndex: sourceIndex);
+
+        session.RecordChange(
+            operation,
+            () => Pages.Replace(replacement, target),
+            () => Pages.Replace(target, replacement));
+
+        return operation;
     }
 
     /// <summary>
@@ -162,14 +198,25 @@ public sealed class PdfEditableDocument
     {
         EnsureOwnership(page);
 
+        var previousRotation =
+            page.Rotation;
+
         page.GetSourcePage()
             .SetRotation(rotation);
 
-        return new PdfPageEditOperation(
-            owner,
-            PdfPageMutationKind.SetRotation,
-            page.Id,
-            rotation: rotation);
+        var operation =
+            new PdfPageEditOperation(
+                owner,
+                PdfPageMutationKind.SetRotation,
+                page.Id,
+                rotation: rotation);
+
+        session.RecordChange(
+            operation,
+            () => page.GetSourcePage().SetRotation(previousRotation),
+            () => page.GetSourcePage().SetRotation(rotation));
+
+        return operation;
     }
 
     internal PdfDocument GetSourceDocument() =>
