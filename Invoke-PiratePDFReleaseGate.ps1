@@ -113,6 +113,13 @@ Write-GateStep "Documentation generation and validation"
     -- all
 Assert-LastExitCode "Documentation generation"
 
+Write-GateStep "Documentation health analysis"
+& dotnet run `
+    --project $DocGenProject `
+    --configuration $Configuration `
+    -- health
+Assert-LastExitCode "Documentation health analysis"
+
 Write-GateStep "Documentation repair preview"
 & dotnet run `
     --project $DocGenProject `
