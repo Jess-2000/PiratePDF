@@ -51,7 +51,7 @@ jobs:
       - name: Install SkiaSharp dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libskia libharfbuzz0b libfontconfig1
+          sudo apt-get install -y libfontconfig1 libfreetype6 libharfbuzz0b
 
       - name: Display .NET information
         run: dotnet --info
