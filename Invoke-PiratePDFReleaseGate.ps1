@@ -66,7 +66,7 @@ function Assert-DocumentationRepairPreviewIsClean {
     $Files = [int]$FilesMatch.Groups[1].Value
 
     if ($Changes -ne 0 -or $Files -ne 0) {
-        throw "Documentation repair preview found $Changes proposed change(s) across $Files file(s). Run DocGen repair --apply, review the changes, and rerun the release gate."
+        throw "Documentation repair preview found $Changes proposed change(s) across $Files file(s). Run 'dotnet run --project .\tools\PiratePDF.DocGen\PiratePDF.DocGen.csproj --configuration $Configuration -- repair --apply', review the changes, and rerun the release gate."
     }
 }
 

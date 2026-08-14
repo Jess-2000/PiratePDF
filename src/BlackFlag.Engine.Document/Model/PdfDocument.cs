@@ -1,3 +1,4 @@
+using BlackFlag.Engine.Document.Metadata;
 using BlackFlag.Engine.Document.Objects;
 using BlackFlag.Engine.Document.Pages;
 
@@ -22,6 +23,7 @@ public sealed class PdfDocument
         Catalog = catalog;
         Trailer = trailer;
         Objects = objects;
+        Information = new PdfDocumentInformation();
     }
 
     public PdfVersion Version { get; private set; }
@@ -31,6 +33,9 @@ public sealed class PdfDocument
     public PdfTrailer Trailer { get; }
 
     public PdfObjectStore Objects { get; }
+
+    /// <summary>Gets the authoritative logical document-information metadata.</summary>
+    public PdfDocumentInformation Information { get; }
 
     public PdfPageTree Pages =>
         Catalog.Pages;
