@@ -117,16 +117,21 @@ public sealed class PdfFullRewriteWriterTests
     }
 
     [Fact]
-    public void WriteRejectsCrossReferenceStreamPlan()
+    public void WriteSupportsCrossReferenceStreamPlan()
     {
         var options = new PdfWriteOptions
         {
             CrossReferenceMode = PdfCrossReferenceWriteMode.CrossReferenceStream
         };
 
-        Assert.Throws<NotSupportedException>(
-            () => PdfFullRewriteWriter.Write(
+        string text = Encoding.Latin1.GetString(
+            PdfFullRewriteWriter.Write(
                 PdfWritePlanner.Create(CreateDocument(), options)));
+
+        Assert.Contains("/Type /XRef", text, StringComparison.Ordinal);
+        Assert.DoesNotContain("\nxref\n", text, StringComparison.Ordinal);
+        Assert.DoesNotContain("trailer\n", text, StringComparison.Ordinal);
+        Assert.EndsWith("%%EOF\n", text, StringComparison.Ordinal);
     }
 
     [Fact]

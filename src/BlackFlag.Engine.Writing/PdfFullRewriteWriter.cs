@@ -7,7 +7,7 @@ using BlackFlag.Engine.Document.Objects.Primitives;
 
 namespace BlackFlag.Engine.Writing;
 
-/// <summary>Writes a complete replacement PDF revision using a traditional cross-reference table.</summary>
+/// <summary>Writes a complete replacement PDF revision.</summary>
 public static class PdfFullRewriteWriter
 {
     private static readonly byte[] BinaryComment =
@@ -52,19 +52,20 @@ public static class PdfFullRewriteWriter
             PdfIndirectObjectSerializer.Write(output, identifier, value);
         }
 
-        long crossReferenceOffset = output.BytesWritten;
-        int highestObjectNumber = GetHighestObjectNumber(plan.ExistingObjectIdentifiers);
+        switch (ResolveCrossReferenceMode(plan))
+        {
+            case PdfCrossReferenceWriteMode.TraditionalTable:
+                WriteTraditionalFinalization(output, plan, offsets);
+                break;
 
-        PdfTraditionalCrossReferenceWriter.Write(
-            output,
-            offsets,
-            highestObjectNumber);
+            case PdfCrossReferenceWriteMode.CrossReferenceStream:
+                WriteCrossReferenceStreamFinalization(output, plan, offsets);
+                break;
 
-        WriteTrailer(
-            output,
-            plan,
-            highestObjectNumber + 1,
-            crossReferenceOffset);
+            default:
+                throw new InvalidOperationException(
+                    "The resolved cross-reference write mode is not supported.");
+        }
     }
 
     private static void ValidateSupportedPlan(PdfWritePlan plan)
@@ -72,19 +73,20 @@ public static class PdfFullRewriteWriter
         if (plan.Mode != PdfWriteMode.FullRewrite)
         {
             throw new NotSupportedException(
-                "BF-1053C supports complete full-rewrite output only. Incremental updates are deferred.");
-        }
-
-        if (plan.CrossReferenceMode == PdfCrossReferenceWriteMode.CrossReferenceStream)
-        {
-            throw new NotSupportedException(
-                "BF-1053C supports traditional cross-reference tables only. Cross-reference streams are deferred.");
+                "BF-1053D supports complete full-rewrite output only. Incremental updates are deferred.");
         }
 
         if (plan.EncryptionObject.HasValue)
         {
             throw new NotSupportedException(
                 "Encrypted PDF output is deferred until encryption-aware Writing is implemented.");
+        }
+
+        if (plan.CrossReferenceMode == PdfCrossReferenceWriteMode.CrossReferenceStream &&
+            plan.Document.Version < new PdfVersion(1, 5))
+        {
+            throw new NotSupportedException(
+                "Cross-reference streams require PDF 1.5 or later.");
         }
 
         foreach (PdfObjectIdentifier identifier in plan.ExistingObjectIdentifiers)
@@ -95,6 +97,59 @@ public static class PdfFullRewriteWriter
                     $"The planned object '{identifier}' is no longer present in the document object store.");
             }
         }
+    }
+
+    private static PdfCrossReferenceWriteMode ResolveCrossReferenceMode(PdfWritePlan plan)
+    {
+        return plan.CrossReferenceMode switch
+        {
+            PdfCrossReferenceWriteMode.PreserveSource =>
+                PdfCrossReferenceWriteMode.TraditionalTable,
+            PdfCrossReferenceWriteMode.TraditionalTable =>
+                PdfCrossReferenceWriteMode.TraditionalTable,
+            PdfCrossReferenceWriteMode.CrossReferenceStream =>
+                PdfCrossReferenceWriteMode.CrossReferenceStream,
+            _ => throw new InvalidOperationException(
+                "The requested cross-reference write mode is not supported.")
+        };
+    }
+
+    private static void WriteTraditionalFinalization(
+        Stream destination,
+        PdfWritePlan plan,
+        IReadOnlyDictionary<PdfObjectIdentifier, long> offsets)
+    {
+        long crossReferenceOffset = ((PdfCountingWriteStream)destination).BytesWritten;
+        int highestObjectNumber = GetHighestObjectNumber(plan.ExistingObjectIdentifiers);
+
+        PdfTraditionalCrossReferenceWriter.Write(
+            destination,
+            offsets,
+            highestObjectNumber);
+
+        WriteTrailer(
+            destination,
+            plan,
+            highestObjectNumber + 1,
+            crossReferenceOffset);
+    }
+
+    private static void WriteCrossReferenceStreamFinalization(
+        PdfCountingWriteStream destination,
+        PdfWritePlan plan,
+        IReadOnlyDictionary<PdfObjectIdentifier, long> offsets)
+    {
+        long crossReferenceOffset = destination.BytesWritten;
+        var crossReferenceIdentifier = new PdfObjectIdentifier(plan.NextObjectNumber);
+
+        PdfCrossReferenceStreamWriter.Write(
+            destination,
+            plan,
+            offsets,
+            crossReferenceIdentifier,
+            crossReferenceOffset);
+
+        WriteStartXrefAndEof(destination, crossReferenceOffset);
     }
 
     private static int GetHighestObjectNumber(
@@ -121,9 +176,11 @@ public static class PdfFullRewriteWriter
         int size,
         long crossReferenceOffset)
     {
-        var trailer = new PdfDictionary();
-        trailer.Add(PdfNames.Size, new PdfInteger(size));
-        trailer.Add(PdfNames.Root, new PdfIndirectReference(plan.RootObject));
+        var trailer = new PdfDictionary
+        {
+            { PdfNames.Size, new PdfInteger(size) },
+            { PdfNames.Root, new PdfIndirectReference(plan.RootObject) }
+        };
 
         if (plan.InformationObject is { } informationObject)
         {
@@ -132,11 +189,19 @@ public static class PdfFullRewriteWriter
 
         WriteAscii(destination, "trailer\n");
         PdfObjectSerializer.Write(destination, trailer);
+        WriteAscii(destination, "\n");
+        WriteStartXrefAndEof(destination, crossReferenceOffset);
+    }
+
+    private static void WriteStartXrefAndEof(
+        Stream destination,
+        long crossReferenceOffset)
+    {
         WriteAscii(
             destination,
             string.Create(
                 CultureInfo.InvariantCulture,
-                $"\nstartxref\n{crossReferenceOffset}\n%%EOF\n"));
+                $"startxref\n{crossReferenceOffset}\n%%EOF\n"));
     }
 
     private static void WriteAscii(Stream destination, string value)
