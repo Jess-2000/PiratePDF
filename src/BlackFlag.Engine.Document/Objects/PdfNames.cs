@@ -31,6 +31,18 @@ public static class PdfNames
     public static PdfName MediaBox { get; } =
         PdfName.FromLatin1("MediaBox");
 
+    public static PdfName CropBox { get; } =
+        PdfName.FromLatin1("CropBox");
+
+    public static PdfName BleedBox { get; } =
+        PdfName.FromLatin1("BleedBox");
+
+    public static PdfName TrimBox { get; } =
+        PdfName.FromLatin1("TrimBox");
+
+    public static PdfName ArtBox { get; } =
+        PdfName.FromLatin1("ArtBox");
+
     public static PdfName Resources { get; } =
         PdfName.FromLatin1("Resources");
 

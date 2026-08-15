@@ -117,4 +117,48 @@ public sealed class PdfEditingSdkSessionTests
                     StringComparison.Ordinal) &&
                 name != "BlackFlag.Engine.SDK");
     }
+
+    [Fact]
+    public void DetachedPageCanBeCreatedAndInsertedThroughSdkIdentity()
+    {
+        var document = PdfDocument.CreateEmpty();
+
+        using IPdfEditingSdkSession sdk =
+            new PdfEditingSdkSession(document);
+
+        var created = sdk.CreatePage(612, 792);
+        _ = sdk.InsertPage(0, created.Id);
+
+        Assert.Equal(created.Id, Assert.Single(sdk.Pages).Id);
+    }
+
+    [Fact]
+    public void AdapterExposesMetadataGeometrySummaryAndConsistencyWithoutModelLeakage()
+    {
+        var document = PdfDocument.CreateEmpty();
+        document.Pages.Add(new PdfPage(612, 792));
+
+        using IPdfEditingSdkSession sdk =
+            new PdfEditingSdkSession(document);
+
+        var page = Assert.Single(sdk.Pages);
+        _ = sdk.SetDocumentInformation(
+            PdfEditingSdkDocumentInformationField.Title,
+            "PiratePDF");
+        _ = sdk.SetPageBox(
+            page.Id,
+            PdfEditingSdkPageBoxKind.CropBox,
+            new PdfEditingSdkPageBox(18, 18, 594, 774));
+
+        var state = sdk.GetPageBox(page.Id, PdfEditingSdkPageBoxKind.CropBox);
+        var summary = sdk.StructureSummary;
+
+        Assert.Equal("PiratePDF", sdk.GetDocumentInformation(PdfEditingSdkDocumentInformationField.Title));
+        Assert.Equal(PdfEditingSdkStructuralValueOrigin.Explicit, state.Origin);
+        Assert.Equal(18, state.Value.Left);
+        Assert.Equal(1, summary.ExplicitDocumentInformationCount);
+        Assert.Equal(1, summary.PageCount);
+
+        sdk.ValidateConsistency();
+    }
 }

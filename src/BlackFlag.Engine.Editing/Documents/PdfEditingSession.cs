@@ -185,6 +185,15 @@ public sealed class PdfEditingSession :
         }
     }
 
+    /// <summary>
+    /// Validates cross-structure editing invariants for the current logical document state.
+    /// </summary>
+    public void ValidateConsistency()
+    {
+        EnsureActive();
+        PdfEditingConsistencyValidator.Validate(document);
+    }
+
     /// <inheritdoc />
     public void Dispose()
     {

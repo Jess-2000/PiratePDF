@@ -12,6 +12,8 @@ public interface IPdfEditingSdkSession :
 
     IReadOnlyList<PdfEditingSdkPage> Pages { get; }
 
+    PdfEditingSdkStructureSummary StructureSummary { get; }
+
     bool CanUndo { get; }
 
     bool CanRedo { get; }
@@ -43,6 +45,37 @@ public interface IPdfEditingSdkSession :
     PdfEditingSdkOperation ReplacePageContent(
         Guid pageId,
         ReadOnlyMemory<byte> replacement);
+
+    string? GetDocumentInformation(
+        PdfEditingSdkDocumentInformationField field);
+
+    PdfEditingSdkOperation SetDocumentInformation(
+        PdfEditingSdkDocumentInformationField field,
+        string value);
+
+    PdfEditingSdkOperation ClearDocumentInformation(
+        PdfEditingSdkDocumentInformationField field);
+
+    PdfEditingSdkPageBoxState GetPageBox(
+        Guid pageId,
+        PdfEditingSdkPageBoxKind kind);
+
+    PdfEditingSdkOperation SetPageBox(
+        Guid pageId,
+        PdfEditingSdkPageBoxKind kind,
+        PdfEditingSdkPageBox box);
+
+    PdfEditingSdkOperation CropPage(
+        Guid pageId,
+        PdfEditingSdkPageBox cropBox);
+
+    PdfEditingSdkOperation ResizePage(
+        Guid pageId,
+        double width,
+        double height,
+        PdfEditingSdkPageResizeAnchor anchor = PdfEditingSdkPageResizeAnchor.LowerLeft);
+
+    void ValidateConsistency();
 
     void BeginTransaction();
 
