@@ -1,3 +1,4 @@
+using BlackFlag.Engine.Document.Decorations;
 using BlackFlag.Engine.Document.Forms;
 using BlackFlag.Engine.Document.Metadata;
 using BlackFlag.Engine.Document.Outlines;
@@ -26,6 +27,7 @@ public sealed class PdfDocument
         Trailer = trailer;
         Objects = objects;
         Information = new PdfDocumentInformation();
+        PageDecorations = new PdfPageDecorations();
         AcroForm = new PdfAcroForm();
         Outline = new PdfOutline();
     }
@@ -40,6 +42,9 @@ public sealed class PdfDocument
 
     /// <summary>Gets the authoritative logical document-information metadata.</summary>
     public PdfDocumentInformation Information { get; }
+
+    /// <summary>Gets the authoritative logical reusable page-decoration definitions.</summary>
+    public PdfPageDecorations PageDecorations { get; }
 
     /// <summary>Gets the authoritative logical AcroForm state.</summary>
     public PdfAcroForm AcroForm { get; }
