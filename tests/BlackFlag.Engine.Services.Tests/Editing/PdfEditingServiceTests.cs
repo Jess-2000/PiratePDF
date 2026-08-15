@@ -24,4 +24,15 @@ public sealed class PdfEditingServiceTests
             document.PageCount,
             session.Document.PageCount);
     }
+
+    [Fact]
+    public void ValidateConsistencyUsesControlledEditingSession()
+    {
+        var document = PdfDocument.CreateEmpty();
+
+        using var session =
+            PdfEditingService.OpenSession(document);
+
+        PdfEditingService.ValidateConsistency(session);
+    }
 }

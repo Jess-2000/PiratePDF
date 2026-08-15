@@ -18,4 +18,11 @@ public sealed class PdfEditingService
             document,
             options);
     }
+
+    /// <summary>Validates cross-structure consistency for a controlled editing session.</summary>
+    public static void ValidateConsistency(PdfEditingSession session)
+    {
+        ArgumentNullException.ThrowIfNull(session);
+        session.ValidateConsistency();
+    }
 }

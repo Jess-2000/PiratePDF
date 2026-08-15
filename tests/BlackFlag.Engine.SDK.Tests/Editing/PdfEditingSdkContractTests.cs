@@ -43,4 +43,33 @@ public sealed class PdfEditingSdkContractTests
             operation,
             Assert.Single(changeSet.Operations));
     }
+
+    [Fact]
+    public void StructuralContractsRemainSdkOwned()
+    {
+        var box =
+            new PdfEditingSdkPageBox(0, 0, 612, 792);
+
+        var state =
+            new PdfEditingSdkPageBoxState(
+                PdfEditingSdkStructuralValueOrigin.Explicit,
+                box);
+
+        var summary =
+            new PdfEditingSdkStructureSummary(
+                1,
+                2,
+                1,
+                3,
+                1,
+                4,
+                2,
+                1);
+
+        Assert.Equal(612, state.Value.Right);
+        Assert.Equal(3, summary.TotalFormFieldCount);
+        Assert.Equal(
+            PdfEditingSdkDocumentInformationField.Title,
+            PdfEditingSdkDocumentInformationField.Title);
+    }
 }
