@@ -76,7 +76,7 @@
 | PP-ARCH-CONV-001 | [Passive Document Conversion Architecture](Architecture/PASSIVE-DOCUMENT-CONVERSION.md) | Architecture | 1.0 | Approved | 2026-08-06 |
 | PP-ARCH-MEM-001 | [BlackFlag Memory and Resource Architecture](Architecture/MEMORY-ARCHITECTURE.md) | Architecture | 1.0 | In Development | 2026-08-06 |
 | PP-CHARTER-001 | [PiratePDF Project Charter](Project-Charter.md) | Project Charter | 1.1 | Approved | 2026-08-09 |
-| PP-DEV-001 | [PiratePDF Master Blueprint - Volume IV: Engineering Standards](Blueprint/Volume-IV-Engineering-Standards.md) | Developer Documentation | 1.0 | Approved | 2026-07-24 |
+| PP-DEV-001 | [PiratePDF Master Blueprint - Volume IV: Engineering Standards](Blueprint/Volume-IV-Engineering-Standards.md) | Developer Documentation | 1.1 | Approved | 2026-08-15 |
 | PP-DEV-002 | [BlackFlag Engine Plugin Development Contract](04-Developer/Plugin-Development.md) | Developer Documentation | 1.0 | Implemented | 2026-08-13 |
 | PP-DOC-000 | [PiratePDF Documentation](README.md) | Documentation Index | 1.0 | Approved | 2026-07-24 |
 | PP-GOV-002 | [PiratePDF Documentation Standards](05-Governance/Documentation-Standards.md) | Governance | 1.0 | Approved | 2026-07-23 |

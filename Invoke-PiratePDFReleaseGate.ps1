@@ -94,6 +94,10 @@ Write-Host "PiratePDF Release Gate"
 Write-Host "Repository:    $RepositoryRoot"
 Write-Host "Configuration: $Configuration"
 
+Write-GateStep "Source-file size validation"
+& (Join-Path $RepositoryRoot "Test-PiratePDFSourceFileSizes.ps1")
+Assert-LastExitCode "Source-file size validation"
+
 Write-GateStep "Dependency restore"
 & dotnet restore $SolutionPath
 Assert-LastExitCode "Restore"
@@ -145,6 +149,7 @@ Assert-LastExitCode "git status"
 
 Write-Host ""
 Write-Host "PiratePDF release gate completed successfully."
+Write-Host "Source file sizes:     PASS"
 Write-Host "Restore:               PASS"
 Write-Host "Build:                 PASS"
 Write-Host "Tests:                 PASS"
