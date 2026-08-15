@@ -1,7 +1,12 @@
+using BlackFlag.Engine.Document.Metadata;
 using BlackFlag.Engine.Document.Model;
 using BlackFlag.Engine.Document.Pages;
 using BlackFlag.Engine.Editing.Documents;
+using BlackFlag.Engine.Editing.Forms;
+using BlackFlag.Engine.Editing.Geometry;
 using BlackFlag.Engine.Editing.Operations;
+using BlackFlag.Engine.Editing.Outlines;
+using BlackFlag.Engine.Editing.Structural;
 using BlackFlag.Engine.Editing.Pages;
 using BlackFlag.Engine.Editing.Transactions;
 using BlackFlag.Engine.SDK.Editing;
@@ -16,6 +21,7 @@ public sealed class PdfEditingSdkSession :
     IPdfEditingSdkSession
 {
     private readonly PdfEditingSession session;
+    private readonly Dictionary<Guid, PdfEditablePage> pagesById = [];
     private PdfEditTransaction? transaction;
 
     public PdfEditingSdkSession(
@@ -36,6 +42,12 @@ public sealed class PdfEditingSdkSession :
                     PreservationMode =
                         PdfEditingPreservationMode.PreserveUntargetedStructure
                 });
+
+        for (var index = 0; index < session.Document.Pages.Count; index++)
+        {
+            var page = session.Document.Pages[index];
+            pagesById.Add(page.Id, page);
+        }
     }
 
     public Guid Id =>
@@ -61,6 +73,9 @@ public sealed class PdfEditingSdkSession :
         }
     }
 
+    public PdfEditingSdkStructureSummary StructureSummary =>
+        CreateStructureSummary();
+
     public bool CanUndo =>
         session.History.CanUndo;
 
@@ -78,6 +93,7 @@ public sealed class PdfEditingSdkSession :
                 height,
                 MapRotation(rotation));
 
+        pagesById.Add(page.Id, page);
         return MapPage(page);
     }
 
@@ -126,6 +142,73 @@ public sealed class PdfEditingSdkSession :
             session.Document.ReplacePageContent(
                 FindPage(pageId),
                 replacement.Span));
+
+    public string? GetDocumentInformation(
+        PdfEditingSdkDocumentInformationField field)
+    {
+        var state =
+            session.Document.GetDocumentInformationState(
+                MapDocumentInformationField(field));
+
+        return state.HasValue ? state.Value : null;
+    }
+
+    public PdfEditingSdkOperation SetDocumentInformation(
+        PdfEditingSdkDocumentInformationField field,
+        string value) =>
+        MapOperation(
+            session.Document.SetDocumentInformation(
+                MapDocumentInformationField(field),
+                value));
+
+    public PdfEditingSdkOperation ClearDocumentInformation(
+        PdfEditingSdkDocumentInformationField field) =>
+        MapOperation(
+            session.Document.ClearDocumentInformation(
+                MapDocumentInformationField(field)));
+
+    public PdfEditingSdkPageBoxState GetPageBox(
+        Guid pageId,
+        PdfEditingSdkPageBoxKind kind)
+    {
+        var state = FindPage(pageId).GetBoxState(MapPageBoxKind(kind));
+        return new PdfEditingSdkPageBoxState(
+            MapOrigin(state.Origin),
+            MapPageBox(state.Value));
+    }
+
+    public PdfEditingSdkOperation SetPageBox(
+        Guid pageId,
+        PdfEditingSdkPageBoxKind kind,
+        PdfEditingSdkPageBox box) =>
+        MapOperation(
+            session.Document.SetPageBox(
+                FindPage(pageId),
+                MapPageBoxKind(kind),
+                MapPageBox(box)));
+
+    public PdfEditingSdkOperation CropPage(
+        Guid pageId,
+        PdfEditingSdkPageBox cropBox) =>
+        MapOperation(
+            session.Document.CropPage(
+                FindPage(pageId),
+                MapPageBox(cropBox)));
+
+    public PdfEditingSdkOperation ResizePage(
+        Guid pageId,
+        double width,
+        double height,
+        PdfEditingSdkPageResizeAnchor anchor = PdfEditingSdkPageResizeAnchor.LowerLeft) =>
+        MapOperation(
+            session.Document.ResizePage(
+                FindPage(pageId),
+                width,
+                height,
+                MapResizeAnchor(anchor)));
+
+    public void ValidateConsistency() =>
+        PdfEditingService.ValidateConsistency(session);
 
     public void BeginTransaction()
     {
@@ -184,19 +267,13 @@ public sealed class PdfEditingSdkSession :
     private PdfEditablePage FindPage(
         Guid pageId)
     {
-        for (var index = 0; index < session.Document.Pages.Count; index++)
+        if (pagesById.TryGetValue(pageId, out var page))
         {
-            var page =
-                session.Document.Pages[index];
-
-            if (page.Id == pageId)
-            {
-                return page;
-            }
+            return page;
         }
 
         throw new KeyNotFoundException(
-            $"Editable page '{pageId}' is not attached to the document.");
+            $"Editable page '{pageId}' does not belong to this SDK editing session.");
     }
 
     private static PdfEditingSdkPage MapPage(
@@ -234,6 +311,38 @@ public sealed class PdfEditingSdkSession :
                     resource.Kind.ToString(),
                     resource.PageId),
 
+            PdfPageGeometryEditOperation geometry =>
+                new PdfEditingSdkOperation(
+                    geometry.Scope.ToString(),
+                    geometry.Kind.ToString(),
+                    geometry.PageId),
+
+            PdfDocumentInformationEditOperation information =>
+                new PdfEditingSdkOperation(
+                    information.Scope.ToString(),
+                    information.Kind.ToString()),
+
+            PdfAnnotationEditOperation annotation =>
+                new PdfEditingSdkOperation(
+                    annotation.Scope.ToString(),
+                    annotation.Kind.ToString(),
+                    annotation.PageId),
+
+            PdfFormFieldEditOperation formField =>
+                new PdfEditingSdkOperation(
+                    formField.Scope.ToString(),
+                    formField.Kind.ToString()),
+
+            PdfOutlineEditOperation outline =>
+                new PdfEditingSdkOperation(
+                    outline.Scope.ToString(),
+                    outline.Kind.ToString()),
+
+            PdfPageDecorationEditOperation decoration =>
+                new PdfEditingSdkOperation(
+                    decoration.Scope.ToString(),
+                    decoration.Kind.ToString()),
+
             _ =>
                 new PdfEditingSdkOperation(
                     operation.Scope.ToString(),
@@ -257,6 +366,108 @@ public sealed class PdfEditingSdkSession :
             changeSet.TransactionId,
             operations);
     }
+
+    private PdfEditingSdkStructureSummary CreateStructureSummary()
+    {
+        var annotationCount = 0;
+        for (var pageIndex = 0; pageIndex < session.Document.Pages.Count; pageIndex++)
+        {
+            annotationCount += session.Document.Pages[pageIndex].Annotations.Count;
+        }
+
+        var formFieldCount = CountFormFields(session.Document.FormFields);
+        var outlineItemCount = CountOutlineItems(session.Document.OutlineItems);
+        var informationCount = 0;
+        foreach (var field in Enum.GetValues<PdfDocumentInformationField>())
+        {
+            if (session.Document.GetDocumentInformationState(field).HasValue)
+            {
+                informationCount++;
+            }
+        }
+
+        return new PdfEditingSdkStructureSummary(
+            session.Document.PageCount,
+            annotationCount,
+            session.Document.FormFields.Count,
+            formFieldCount,
+            session.Document.OutlineItems.Count,
+            outlineItemCount,
+            session.Document.PageDecorations.Count,
+            informationCount);
+    }
+
+    private static int CountFormFields(PdfEditableFormFieldCollection fields)
+    {
+        var count = fields.Count;
+        for (var index = 0; index < fields.Count; index++)
+        {
+            count += CountFormFields(fields[index].Children);
+        }
+
+        return count;
+    }
+
+    private static int CountOutlineItems(PdfEditableOutlineItemCollection items)
+    {
+        var count = items.Count;
+        for (var index = 0; index < items.Count; index++)
+        {
+            count += CountOutlineItems(items[index].Children);
+        }
+
+        return count;
+    }
+
+    private static PdfDocumentInformationField MapDocumentInformationField(
+        PdfEditingSdkDocumentInformationField field) =>
+        field switch
+        {
+            PdfEditingSdkDocumentInformationField.Title => PdfDocumentInformationField.Title,
+            PdfEditingSdkDocumentInformationField.Author => PdfDocumentInformationField.Author,
+            PdfEditingSdkDocumentInformationField.Subject => PdfDocumentInformationField.Subject,
+            PdfEditingSdkDocumentInformationField.Keywords => PdfDocumentInformationField.Keywords,
+            PdfEditingSdkDocumentInformationField.Creator => PdfDocumentInformationField.Creator,
+            PdfEditingSdkDocumentInformationField.Producer => PdfDocumentInformationField.Producer,
+            PdfEditingSdkDocumentInformationField.CreationDate => PdfDocumentInformationField.CreationDate,
+            PdfEditingSdkDocumentInformationField.ModificationDate => PdfDocumentInformationField.ModificationDate,
+            _ => throw new ArgumentOutOfRangeException(nameof(field), field, "The document-information field is not supported by the SDK adapter.")
+        };
+
+    private static PdfPageBoxKind MapPageBoxKind(PdfEditingSdkPageBoxKind kind) =>
+        kind switch
+        {
+            PdfEditingSdkPageBoxKind.MediaBox => PdfPageBoxKind.MediaBox,
+            PdfEditingSdkPageBoxKind.CropBox => PdfPageBoxKind.CropBox,
+            PdfEditingSdkPageBoxKind.BleedBox => PdfPageBoxKind.BleedBox,
+            PdfEditingSdkPageBoxKind.TrimBox => PdfPageBoxKind.TrimBox,
+            PdfEditingSdkPageBoxKind.ArtBox => PdfPageBoxKind.ArtBox,
+            _ => throw new ArgumentOutOfRangeException(nameof(kind), kind, "The page-box kind is not supported by the SDK adapter.")
+        };
+
+    private static PdfPageBox MapPageBox(PdfEditingSdkPageBox box) =>
+        new(box.Left, box.Bottom, box.Right, box.Top);
+
+    private static PdfEditingSdkPageBox MapPageBox(PdfPageBox box) =>
+        new(box.Left, box.Bottom, box.Right, box.Top);
+
+    private static PdfEditingSdkStructuralValueOrigin MapOrigin(PdfStructuralValueOrigin origin) =>
+        origin switch
+        {
+            PdfStructuralValueOrigin.Absent => PdfEditingSdkStructuralValueOrigin.Absent,
+            PdfStructuralValueOrigin.Explicit => PdfEditingSdkStructuralValueOrigin.Explicit,
+            PdfStructuralValueOrigin.Inherited => PdfEditingSdkStructuralValueOrigin.Inherited,
+            PdfStructuralValueOrigin.Defaulted => PdfEditingSdkStructuralValueOrigin.Defaulted,
+            _ => throw new ArgumentOutOfRangeException(nameof(origin), origin, "The structural value origin is not supported by the SDK adapter.")
+        };
+
+    private static PdfPageResizeAnchor MapResizeAnchor(PdfEditingSdkPageResizeAnchor anchor) =>
+        anchor switch
+        {
+            PdfEditingSdkPageResizeAnchor.LowerLeft => PdfPageResizeAnchor.LowerLeft,
+            PdfEditingSdkPageResizeAnchor.Center => PdfPageResizeAnchor.Center,
+            _ => throw new ArgumentOutOfRangeException(nameof(anchor), anchor, "The page-resize anchor is not supported by the SDK adapter.")
+        };
 
     private static PdfEditingSdkPreservationMode ValidatePreservationMode(
         PdfEditingSdkPreservationMode preservationMode) =>

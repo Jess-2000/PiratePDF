@@ -73,6 +73,12 @@ jobs:
           --no-restore
           --logger "console;verbosity=normal"
 
+      - name: Build DocGen Release artifact
+        run: >
+          dotnet build "$DOCGEN_PROJECT_PATH"
+          --configuration "$CONFIGURATION"
+          --no-restore
+
       - name: Verify DocGen build artifact
         shell: bash
         run: |
@@ -99,8 +105,12 @@ jobs:
             echo "::error::Tracked generated files are out of date."
             echo
             echo "Run these commands locally and commit the resulting changes:"
-            echo "  dotnet build ./PiratePDF.slnx --configuration Release"
+            echo "  dotnet restore ./PiratePDF.slnx"
+            echo "  dotnet build ./PiratePDF.slnx --configuration Release --no-restore"
+            echo "  dotnet build ./tools/PiratePDF.DocGen/PiratePDF.DocGen.csproj --configuration Release --no-restore"
             echo "  dotnet ./tools/PiratePDF.DocGen/bin/Release/net10.0/PiratePDF.DocGen.dll all"
+            echo "  dotnet ./tools/PiratePDF.DocGen/bin/Release/net10.0/PiratePDF.DocGen.dll health"
+            echo "  dotnet ./tools/PiratePDF.DocGen/bin/Release/net10.0/PiratePDF.DocGen.dll repair"
             echo
             git diff --stat
             echo

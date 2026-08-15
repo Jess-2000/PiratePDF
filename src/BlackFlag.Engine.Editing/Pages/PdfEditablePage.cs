@@ -1,6 +1,8 @@
 using BlackFlag.Engine.Document.Objects.Primitives;
+using BlackFlag.Engine.Editing.Annotations;
 using BlackFlag.Engine.Document.Pages;
 using BlackFlag.Engine.Editing.Ownership;
+using BlackFlag.Engine.Editing.Structural;
 
 namespace BlackFlag.Engine.Editing.Pages;
 
@@ -60,6 +62,7 @@ public sealed class PdfEditablePage
         Owner = owner;
         Origin = origin;
         SourceIndex = sourceIndex;
+        Annotations = new PdfEditableAnnotationCollection(page, owner);
     }
 
     /// <summary>
@@ -104,6 +107,9 @@ public sealed class PdfEditablePage
     public bool HasResources =>
         page.HasResources;
 
+    /// <summary>Gets the editable annotations currently attached to this page.</summary>
+    public PdfEditableAnnotationCollection Annotations { get; }
+
     /// <summary>
     /// Returns a defensive copy of the current page content-stream bytes.
     /// </summary>
@@ -143,6 +149,31 @@ public sealed class PdfEditablePage
     /// </summary>
     public bool IsSourcePage =>
         Origin == PdfEditablePageOrigin.SourceDocument;
+
+
+    /// <summary>Gets the effective state of a standard page boundary box.</summary>
+    public PdfStructuralValueState<PdfPageBox> GetBoxState(
+        PdfPageBoxKind kind)
+    {
+        return MapState(page.GetBox(kind));
+    }
+
+    /// <summary>Gets the effective state of the page rotation.</summary>
+    public PdfStructuralValueState<PdfPageRotation> RotationState =>
+        MapState(page.GetRotationState());
+
+    private static PdfStructuralValueState<T> MapState<T>(
+        PdfEffectiveValue<T> state)
+        where T : notnull
+    {
+        return state.Origin switch
+        {
+            PdfPageValueOrigin.Explicit => PdfStructuralValueState.Explicit(state.Value),
+            PdfPageValueOrigin.Inherited => PdfStructuralValueState.Inherited(state.Value),
+            PdfPageValueOrigin.Defaulted => PdfStructuralValueState.Defaulted(state.Value),
+            _ => throw new ArgumentOutOfRangeException(nameof(state), state.Origin, "The page-value origin is not supported.")
+        };
+    }
 
     internal PdfEditingOwnershipToken Owner { get; }
 
