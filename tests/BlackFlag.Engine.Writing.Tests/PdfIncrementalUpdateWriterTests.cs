@@ -1,6 +1,5 @@
 using System.IO;
 using System.Text;
-
 using BlackFlag.Engine.Document.Model;
 using BlackFlag.Engine.Document.Objects;
 using BlackFlag.Engine.Document.Objects.Primitives;
@@ -85,7 +84,7 @@ public sealed class PdfIncrementalUpdateWriterTests
     }
 
     [Fact]
-    public void WriteRejectsIncrementalCrossReferenceStreamUntilSupported()
+    public void WriteSupportsIncrementalCrossReferenceStream()
     {
         PdfDocument document = CreateDocument();
         var options = new PdfWriteOptions
@@ -103,7 +102,79 @@ public sealed class PdfIncrementalUpdateWriterTests
             source,
             [new PdfObjectIdentifier(3)]);
 
-        Assert.Throws<NotSupportedException>(
+        byte[] bytes = PdfIncrementalUpdateWriter.Write(plan);
+        string appended = Encoding.Latin1.GetString(bytes[SourceBytes.Length..]);
+        long crossReferenceOffset = FindByteOffset(
+            bytes,
+            "4 0 obj\n",
+            SourceBytes.Length);
+
+        Assert.Contains("3 0 obj\n", appended, StringComparison.Ordinal);
+        Assert.Contains("4 0 obj\n", appended, StringComparison.Ordinal);
+        Assert.Contains("/Type /XRef", appended, StringComparison.Ordinal);
+        Assert.Contains("/Index [3 2]", appended, StringComparison.Ordinal);
+        Assert.Contains("/Length 22", appended, StringComparison.Ordinal);
+        Assert.Contains("/Prev 31", appended, StringComparison.Ordinal);
+        Assert.Contains("/Root 1 0 R", appended, StringComparison.Ordinal);
+        Assert.Contains("/Size 5", appended, StringComparison.Ordinal);
+        Assert.DoesNotContain("trailer\n", appended, StringComparison.Ordinal);
+        Assert.Contains(
+            $"startxref\n{crossReferenceOffset}\n%%EOF\n",
+            appended,
+            StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void WritePreserveSourceUsesIncrementalCrossReferenceStreamWhenSourceDoes()
+    {
+        PdfDocument document = CreateDocument();
+        var options = new PdfWriteOptions
+        {
+            Mode = PdfWriteMode.IncrementalUpdate,
+            CrossReferenceMode = PdfCrossReferenceWriteMode.PreserveSource
+        };
+        PdfWritePlan writePlan = PdfWritePlanner.Create(document, options);
+        var source = new PdfMemorySourceRevision(
+            SourceBytes,
+            31,
+            PdfCrossReferenceWriteMode.CrossReferenceStream);
+        PdfIncrementalWritePlan plan = PdfIncrementalWritePlanner.Create(
+            writePlan,
+            source,
+            [new PdfObjectIdentifier(3)]);
+
+        string appended = Encoding.Latin1.GetString(
+            PdfIncrementalUpdateWriter.Write(plan)[SourceBytes.Length..]);
+
+        Assert.Equal(
+            PdfCrossReferenceWriteMode.CrossReferenceStream,
+            plan.CrossReferenceMode);
+        Assert.Contains("/Type /XRef", appended, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void WriteRejectsCrossReferenceStreamObjectNumberCollisionAfterPlanning()
+    {
+        PdfDocument document = CreateDocument();
+        var options = new PdfWriteOptions
+        {
+            Mode = PdfWriteMode.IncrementalUpdate,
+            CrossReferenceMode = PdfCrossReferenceWriteMode.CrossReferenceStream
+        };
+        PdfWritePlan writePlan = PdfWritePlanner.Create(document, options);
+        document.Objects.Add(
+            new PdfObjectIdentifier(writePlan.NextObjectNumber),
+            new PdfString(Encoding.ASCII.GetBytes("late object")));
+        var source = new PdfMemorySourceRevision(
+            SourceBytes,
+            31,
+            PdfCrossReferenceWriteMode.TraditionalTable);
+        PdfIncrementalWritePlan plan = PdfIncrementalWritePlanner.Create(
+            writePlan,
+            source,
+            [new PdfObjectIdentifier(3)]);
+
+        Assert.Throws<InvalidOperationException>(
             () => PdfIncrementalUpdateWriter.Write(plan));
     }
 

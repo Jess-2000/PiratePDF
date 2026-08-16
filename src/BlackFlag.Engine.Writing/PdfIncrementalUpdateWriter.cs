@@ -5,7 +5,7 @@ using BlackFlag.Engine.Document.Objects.Primitives;
 
 namespace BlackFlag.Engine.Writing;
 
-/// <summary>Appends a traditional incremental update while preserving the preceding revision bytes.</summary>
+/// <summary>Appends a preservation-aware incremental PDF revision.</summary>
 public static class PdfIncrementalUpdateWriter
 {
     /// <summary>Writes the complete source revision followed by the planned incremental update.</summary>
@@ -61,9 +61,20 @@ public static class PdfIncrementalUpdateWriter
             PdfIndirectObjectSerializer.Write(output, identifier, value);
         }
 
-        long crossReferenceOffset = output.BytesWritten;
-        PdfIncrementalTraditionalCrossReferenceWriter.Write(output, offsets);
-        WriteTrailer(output, plan, CalculateTrailerSize(plan), crossReferenceOffset);
+        switch (plan.CrossReferenceMode)
+        {
+            case PdfCrossReferenceWriteMode.TraditionalTable:
+                WriteTraditionalFinalization(output, plan, offsets);
+                break;
+
+            case PdfCrossReferenceWriteMode.CrossReferenceStream:
+                WriteCrossReferenceStreamFinalization(output, plan, offsets);
+                break;
+
+            default:
+                throw new InvalidOperationException(
+                    "The resolved incremental cross-reference write mode is not supported.");
+        }
     }
 
     private static void ValidateSupportedPlan(PdfIncrementalWritePlan plan)
@@ -74,22 +85,90 @@ public static class PdfIncrementalUpdateWriter
                 "PdfIncrementalUpdateWriter requires an incremental write plan.");
         }
 
-        if (plan.CrossReferenceMode != PdfCrossReferenceWriteMode.TraditionalTable)
-        {
-            throw new NotSupportedException(
-                "BF-1053F emits traditional incremental cross-reference tables only. Incremental cross-reference streams are deferred.");
-        }
-
         if (plan.WritePlan.EncryptionObject.HasValue)
         {
             throw new NotSupportedException(
                 "Encrypted incremental output is deferred until encryption-aware Writing is implemented.");
         }
+
+        if (plan.CrossReferenceMode == PdfCrossReferenceWriteMode.CrossReferenceStream &&
+            plan.WritePlan.Document.Version < new Document.Model.PdfVersion(1, 5))
+        {
+            throw new NotSupportedException(
+                "Cross-reference streams require PDF 1.5 or later.");
+        }
+
+        if (plan.CrossReferenceMode is not
+            (PdfCrossReferenceWriteMode.TraditionalTable or
+            PdfCrossReferenceWriteMode.CrossReferenceStream))
+        {
+            throw new InvalidOperationException(
+                "The resolved incremental cross-reference write mode is not supported.");
+        }
+
+        foreach (PdfObjectIdentifier identifier in plan.ChangedObjectIdentifiers)
+        {
+            if (!plan.WritePlan.Document.Objects.Contains(identifier))
+            {
+                throw new InvalidOperationException(
+                    $"Changed object '{identifier}' is no longer present in the document object store.");
+            }
+        }
     }
 
-    private static int CalculateTrailerSize(PdfIncrementalWritePlan plan)
+    private static void WriteTraditionalFinalization(
+        PdfCountingWriteStream destination,
+        PdfIncrementalWritePlan plan,
+        IReadOnlyDictionary<PdfObjectIdentifier, long> offsets)
     {
-        int highestObjectNumber = 0;
+        long crossReferenceOffset = destination.BytesWritten;
+        PdfIncrementalTraditionalCrossReferenceWriter.Write(
+            destination,
+            offsets);
+        WriteTrailer(
+            destination,
+            plan,
+            CalculateTrailerSize(plan, additionalObjectNumber: null),
+            crossReferenceOffset);
+    }
+
+    private static void WriteCrossReferenceStreamFinalization(
+        PdfCountingWriteStream destination,
+        PdfIncrementalWritePlan plan,
+        IReadOnlyDictionary<PdfObjectIdentifier, long> offsets)
+    {
+        var crossReferenceIdentifier = new PdfObjectIdentifier(
+            plan.WritePlan.NextObjectNumber);
+
+        if (plan.WritePlan.Document.Objects.Identifiers.Any(
+                identifier =>
+                    identifier.ObjectNumber == crossReferenceIdentifier.ObjectNumber))
+        {
+            throw new InvalidOperationException(
+                "The planned cross-reference stream object number is no longer available.");
+        }
+
+        long crossReferenceOffset = destination.BytesWritten;
+        int size = CalculateTrailerSize(
+            plan,
+            crossReferenceIdentifier.ObjectNumber);
+
+        PdfIncrementalCrossReferenceStreamWriter.Write(
+            destination,
+            plan,
+            offsets,
+            crossReferenceIdentifier,
+            crossReferenceOffset,
+            size);
+
+        WriteStartXrefAndEof(destination, crossReferenceOffset);
+    }
+
+    private static int CalculateTrailerSize(
+        PdfIncrementalWritePlan plan,
+        int? additionalObjectNumber)
+    {
+        int highestObjectNumber = additionalObjectNumber ?? 0;
 
         foreach (PdfObjectIdentifier identifier in plan.WritePlan.Document.Objects.Identifiers)
         {
@@ -126,11 +205,19 @@ public static class PdfIncrementalUpdateWriter
 
         WriteAscii(destination, "trailer\n");
         PdfObjectSerializer.Write(destination, trailer);
+        WriteAscii(destination, "\n");
+        WriteStartXrefAndEof(destination, crossReferenceOffset);
+    }
+
+    private static void WriteStartXrefAndEof(
+        Stream destination,
+        long crossReferenceOffset)
+    {
         WriteAscii(
             destination,
             string.Create(
                 CultureInfo.InvariantCulture,
-                $"\nstartxref\n{crossReferenceOffset}\n%%EOF\n"));
+                $"startxref\n{crossReferenceOffset}\n%%EOF\n"));
     }
 
     private static void WriteAscii(Stream destination, string value)
