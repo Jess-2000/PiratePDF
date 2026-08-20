@@ -10,20 +10,34 @@ public sealed class PdfObjectWriteProjectionSet
     public PdfObjectWriteProjectionSet(IEnumerable<PdfObjectWriteProjection> projections)
     {
         ArgumentNullException.ThrowIfNull(projections);
-        PdfObjectWriteProjection[] snapshot = [.. projections
-            .OrderBy(item => item.Identifier.ObjectNumber)
-            .ThenBy(item => item.Identifier.GenerationNumber)];
+        PdfObjectWriteProjection[] snapshot = [.. projections];
 
         if (snapshot.Length == 0)
         {
             throw new ArgumentException("A write projection set cannot be empty.", nameof(projections));
         }
 
+        for (int index = 0; index < snapshot.Length; index++)
+        {
+            _ = snapshot[index]
+                ?? throw new ArgumentException("Write projections cannot contain null entries.", nameof(projections));
+        }
+
+        Array.Sort(
+            snapshot,
+            static (left, right) =>
+            {
+                int objectNumberComparison =
+                    left.Identifier.ObjectNumber.CompareTo(right.Identifier.ObjectNumber);
+                return objectNumberComparison != 0
+                    ? objectNumberComparison
+                    : left.Identifier.GenerationNumber.CompareTo(right.Identifier.GenerationNumber);
+            });
+
         var objectNumbers = new HashSet<int>();
         for (int index = 0; index < snapshot.Length; index++)
         {
-            PdfObjectWriteProjection projection = snapshot[index]
-                ?? throw new ArgumentException("Write projections cannot contain null entries.", nameof(projections));
+            PdfObjectWriteProjection projection = snapshot[index];
 
             if (!objectNumbers.Add(projection.Identifier.ObjectNumber))
             {

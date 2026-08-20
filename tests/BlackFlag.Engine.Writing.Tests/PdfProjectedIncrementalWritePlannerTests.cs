@@ -1,5 +1,5 @@
+#nullable enable
 using System.Text;
-
 using BlackFlag.Engine.Document.Model;
 using BlackFlag.Engine.Document.Objects;
 using BlackFlag.Engine.Document.Objects.Primitives;
@@ -69,6 +69,68 @@ public sealed class PdfProjectedIncrementalWritePlannerTests
                 new PdfObjectWriteProjection(new PdfObjectIdentifier(4, 0), new PdfDictionary()),
                 new PdfObjectWriteProjection(new PdfObjectIdentifier(4, 1), new PdfDictionary())
             ]));
+    }
+
+
+    [Fact]
+    public void CreateRejectsNewProjectionUsingDifferentGenerationOfExistingObjectNumber()
+    {
+        PdfDocument document = CreateDocument();
+        PdfWritePlan writePlan = CreateWritePlan(document);
+        var projections = new PdfObjectWriteProjectionSet(
+        [
+            new PdfObjectWriteProjection(new PdfObjectIdentifier(3, 1), new PdfDictionary())
+        ]);
+
+        Assert.Throws<InvalidOperationException>(
+            () => PdfProjectedIncrementalWritePlanner.Create(
+                writePlan, CreateSource(), projections));
+
+        Assert.False(document.Objects.Contains(new PdfObjectIdentifier(3, 1)));
+    }
+
+    [Fact]
+    public void CreateRollsBackProjectionsWhenIncrementalPlanningFails()
+    {
+        PdfDocument document = PdfDocument.CreateEmpty(new PdfVersion(1, 4));
+        document.Objects.Add(new PdfObjectIdentifier(1), new PdfDictionary());
+        var original = new PdfDictionary();
+        document.Objects.Add(new PdfObjectIdentifier(3), original);
+        document.Trailer.SetRootObject(new PdfObjectIdentifier(1));
+
+        PdfWritePlan writePlan = PdfWritePlanner.Create(
+            document,
+            new PdfWriteOptions
+            {
+                Mode = PdfWriteMode.IncrementalUpdate,
+                CrossReferenceMode = PdfCrossReferenceWriteMode.CrossReferenceStream
+            });
+        var newIdentifier = new PdfObjectIdentifier(writePlan.NextObjectNumber);
+        var projections = new PdfObjectWriteProjectionSet(
+        [
+            new PdfObjectWriteProjection(new PdfObjectIdentifier(3), new PdfDictionary()),
+            new PdfObjectWriteProjection(newIdentifier, new PdfDictionary())
+        ]);
+
+        Assert.Throws<NotSupportedException>(
+            () => PdfProjectedIncrementalWritePlanner.Create(
+                writePlan, CreateSource(), projections));
+
+        Assert.Same(original, document.Objects.Get(new PdfObjectIdentifier(3)));
+        Assert.False(document.Objects.Contains(newIdentifier));
+    }
+
+    [Fact]
+    public void ProjectionSetRejectsNullBeforeDeterministicSorting()
+    {
+        PdfObjectWriteProjection?[] projections =
+        [
+            new PdfObjectWriteProjection(new PdfObjectIdentifier(4), new PdfDictionary()),
+            null
+        ];
+
+        Assert.Throws<ArgumentException>(
+            () => new PdfObjectWriteProjectionSet(projections!));
     }
 
     private static PdfDocument CreateDocument()
