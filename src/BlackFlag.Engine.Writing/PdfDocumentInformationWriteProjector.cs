@@ -38,6 +38,53 @@ public static class PdfDocumentInformationWriteProjector
         ArgumentNullException.ThrowIfNull(document);
         ArgumentNullException.ThrowIfNull(fields);
 
+        PdfDocumentInformationField[] targets = CreateTargets(fields);
+
+        PdfObjectIdentifier identifier =
+            document.Trailer.InformationObject ??
+            throw new NotSupportedException(
+                "Creating a new document-information indirect object requires a write plan and reserved object identifier.");
+
+        if (!document.Objects.TryGet(identifier, out PdfObject? current) ||
+            current is null)
+        {
+            throw new InvalidOperationException(
+                $"The document-information object '{identifier}' is not present in the object store.");
+        }
+
+        if (current is not PdfDictionary currentDictionary)
+        {
+            throw new InvalidOperationException(
+                $"The document-information object '{identifier}' must be a PDF dictionary.");
+        }
+
+        return CreateProjectionSet(
+            document,
+            targets,
+            identifier,
+            currentDictionary);
+    }
+
+    internal static PdfObjectWriteProjectionSet CreateNew(
+        PdfDocument document,
+        IEnumerable<PdfDocumentInformationField> fields,
+        PdfObjectIdentifier identifier)
+    {
+        ArgumentNullException.ThrowIfNull(document);
+        ArgumentNullException.ThrowIfNull(fields);
+
+        PdfDocumentInformationField[] targets = CreateTargets(fields);
+        var dictionary = new PdfDictionary();
+        return CreateProjectionSet(
+            document,
+            targets,
+            identifier,
+            dictionary);
+    }
+
+    private static PdfDocumentInformationField[] CreateTargets(
+        IEnumerable<PdfDocumentInformationField> fields)
+    {
         PdfDocumentInformationField[] targets =
         [
             .. fields
@@ -63,25 +110,16 @@ public static class PdfDocumentInformationWriteProjector
             }
         }
 
-        PdfObjectIdentifier identifier =
-            document.Trailer.InformationObject ??
-            throw new NotSupportedException(
-                "Creating a new document-information indirect object is deferred until write-plan allocation supports reserved projected objects.");
+        return targets;
+    }
 
-        if (!document.Objects.TryGet(identifier, out PdfObject? current) ||
-            current is null)
-        {
-            throw new InvalidOperationException(
-                $"The document-information object '{identifier}' is not present in the object store.");
-        }
-
-        if (current is not PdfDictionary currentDictionary)
-        {
-            throw new InvalidOperationException(
-                $"The document-information object '{identifier}' must be a PDF dictionary.");
-        }
-
-        PdfDictionary projectedDictionary = currentDictionary.CreateCopy();
+    private static PdfObjectWriteProjectionSet CreateProjectionSet(
+        PdfDocument document,
+        PdfDocumentInformationField[] targets,
+        PdfObjectIdentifier identifier,
+        PdfDictionary sourceDictionary)
+    {
+        PdfDictionary projectedDictionary = sourceDictionary.CreateCopy();
 
         for (int index = 0; index < targets.Length; index++)
         {
