@@ -60,6 +60,16 @@ public sealed class PdfWritePlan
     public int NextObjectNumber { get; }
 
     /// <summary>
+    /// Creates a reservation-aware allocator for new indirect objects associated
+    /// with this plan. Callers reserving multiple objects should share one
+    /// allocator instance.
+    /// </summary>
+    public PdfWriteObjectAllocator CreateObjectAllocator()
+    {
+        return new PdfWriteObjectAllocator(this);
+    }
+
+    /// <summary>
     /// Gets whether execution requires access to the original source revision.
     /// Incremental update always requires the preceding bytes.
     /// </summary>

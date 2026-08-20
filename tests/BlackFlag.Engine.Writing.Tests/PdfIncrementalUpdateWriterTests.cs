@@ -153,7 +153,7 @@ public sealed class PdfIncrementalUpdateWriterTests
     }
 
     [Fact]
-    public void WriteRejectsCrossReferenceStreamObjectNumberCollisionAfterPlanning()
+    public void WriteReservesCrossReferenceStreamAfterLateAllocatedObject()
     {
         PdfDocument document = CreateDocument();
         var options = new PdfWriteOptions
@@ -162,8 +162,10 @@ public sealed class PdfIncrementalUpdateWriterTests
             CrossReferenceMode = PdfCrossReferenceWriteMode.CrossReferenceStream
         };
         PdfWritePlan writePlan = PdfWritePlanner.Create(document, options);
+        var lateIdentifier = new PdfObjectIdentifier(
+            writePlan.NextObjectNumber);
         document.Objects.Add(
-            new PdfObjectIdentifier(writePlan.NextObjectNumber),
+            lateIdentifier,
             new PdfString(Encoding.ASCII.GetBytes("late object")));
         var source = new PdfMemorySourceRevision(
             SourceBytes,
@@ -172,10 +174,25 @@ public sealed class PdfIncrementalUpdateWriterTests
         PdfIncrementalWritePlan plan = PdfIncrementalWritePlanner.Create(
             writePlan,
             source,
-            [new PdfObjectIdentifier(3)]);
+            [new PdfObjectIdentifier(3), lateIdentifier]);
 
-        Assert.Throws<InvalidOperationException>(
-            () => PdfIncrementalUpdateWriter.Write(plan));
+        string appended = Encoding.Latin1.GetString(
+            PdfIncrementalUpdateWriter.Write(plan)[SourceBytes.Length..]);
+        int crossReferenceObjectNumber =
+            checked(lateIdentifier.ObjectNumber + 1);
+
+        Assert.Contains(
+            $"{lateIdentifier.ObjectNumber} 0 obj\n",
+            appended,
+            StringComparison.Ordinal);
+        Assert.Contains(
+            $"{crossReferenceObjectNumber} 0 obj\n",
+            appended,
+            StringComparison.Ordinal);
+        Assert.Contains(
+            $"/Size {crossReferenceObjectNumber + 1}",
+            appended,
+            StringComparison.Ordinal);
     }
 
     [Fact]

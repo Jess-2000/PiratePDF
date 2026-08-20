@@ -137,16 +137,10 @@ public static class PdfIncrementalUpdateWriter
         PdfIncrementalWritePlan plan,
         IReadOnlyDictionary<PdfObjectIdentifier, long> offsets)
     {
-        var crossReferenceIdentifier = new PdfObjectIdentifier(
-            plan.WritePlan.NextObjectNumber);
-
-        if (plan.WritePlan.Document.Objects.Identifiers.Any(
-                identifier =>
-                    identifier.ObjectNumber == crossReferenceIdentifier.ObjectNumber))
-        {
-            throw new InvalidOperationException(
-                "The planned cross-reference stream object number is no longer available.");
-        }
+        PdfObjectIdentifier crossReferenceIdentifier =
+            plan.WritePlan
+                .CreateObjectAllocator()
+                .ReserveNext();
 
         long crossReferenceOffset = destination.BytesWritten;
         int size = CalculateTrailerSize(

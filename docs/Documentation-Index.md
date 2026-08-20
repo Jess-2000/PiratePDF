@@ -61,6 +61,7 @@
 | BF-1053G | [BF-1053G — Incremental Cross-Reference Stream Serialization](milestones/BF-1053G-Incremental-Cross-Reference-Stream-Serialization.md) | Milestone | 1.0 | Implemented | 2026-08-16 |
 | BF-1053H | [BF-1053H — Indirect-Object Write Projection Foundation](milestones/BF-1053H-Indirect-Object-Write-Projection-Foundation.md) | Milestone | 1.0 | Implemented | 2026-08-16 |
 | BF-1053I | [BF-1053I — Document Information Dictionary Projection](milestones/BF-1053I-Document-Information-Dictionary-Projection.md) | Milestone | 1.0 | Implemented | 2026-08-16 |
+| BF-1053J | [BF-1053J — Reservation-Aware Object Allocation and Documentation Contract Hardening](milestones/BF-1053J-Reservation-Aware-Object-Allocation-and-Documentation-Contract-Hardening.md) | Milestone | 1.0 | Implemented | 2026-08-16 |
 | BF-DOC-0004 | [BlackFlag Engine — Parser Infrastructure RC1](Parser-Infrastructure-RC1.md) | Architecture | 0.4.0 | Tested | 2026-07-30 |
 | BF-DOC-0005 | [BlackFlag Engine 0.5.0 — PDF Object Model RC1](PDF-Object-Model-RC1.md) | Architecture | 0.5.0 | In Development | 2026-07-30 |
 | BF-DOC-1001 | [Documentation Template RC1](Documentation-Template-RC1.md) | Developer Documentation | 0.1.0 | In Development | 2026-07-30 |
@@ -88,7 +89,7 @@
 | PP-DEV-001 | [PiratePDF Master Blueprint - Volume IV: Engineering Standards](Blueprint/Volume-IV-Engineering-Standards.md) | Developer Documentation | 1.1 | Approved | 2026-08-15 |
 | PP-DEV-002 | [BlackFlag Engine Plugin Development Contract](04-Developer/Plugin-Development.md) | Developer Documentation | 1.0 | Implemented | 2026-08-13 |
 | PP-DOC-000 | [PiratePDF Documentation](README.md) | Documentation Index | 1.0 | Approved | 2026-07-24 |
-| PP-GOV-002 | [PiratePDF Documentation Standards](05-Governance/Documentation-Standards.md) | Governance | 1.0 | Approved | 2026-07-23 |
+| PP-GOV-002 | [PiratePDF Documentation Standards](05-Governance/Documentation-Standards.md) | Governance | 1.1 | Approved | 2026-08-16 |
 | PP-GOV-003 | [Documentation Validation Rules](05-Governance/Documentation-Validation-Rules.md) | Governance | 1.0 | Approved | 2026-07-24 |
 | PP-HIST-001 | [Building BlackFlag](BUILDING-BLACKFLAG.md) | Developer Guide | 0.1 | In Development | 2026-08-06 |
 | PP-HIST-BF-1040 | [BF-1040 Milestone Reflection](releases/BF-1040/Milestone-Reflection.md) | Project History | 1.0 | Tested | 2026-08-06 |
