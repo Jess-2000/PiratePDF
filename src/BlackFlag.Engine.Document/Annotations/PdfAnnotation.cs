@@ -1,4 +1,6 @@
 using BlackFlag.Engine.Document.Forms;
+using BlackFlag.Engine.Document.Model;
+using BlackFlag.Engine.Document.Objects;
 using BlackFlag.Engine.Document.Pages;
 
 namespace BlackFlag.Engine.Document.Annotations;
@@ -6,6 +8,7 @@ namespace BlackFlag.Engine.Document.Annotations;
 /// <summary>Represents the authoritative logical state of one PDF annotation.</summary>
 public sealed class PdfAnnotation
 {
+    private readonly PdfObjectBinding binding = new();
     private PdfPage? parent;
 
     public PdfAnnotation(
@@ -31,8 +34,17 @@ public sealed class PdfAnnotation
     public string? Contents { get; internal set; }
     public PdfAnnotationOptions Flags { get; internal set; }
 
+    internal PdfObjectIdentifier? ObjectIdentifier =>
+        binding.Identifier;
+
     internal PdfPage? Parent => parent;
     internal PdfFormField? FormField { get; private set; }
+
+    internal void BindObjectIdentifier(
+        PdfObjectIdentifier identifier)
+    {
+        binding.Bind(identifier);
+    }
 
     internal void AttachToFormField(PdfFormField field)
     {
