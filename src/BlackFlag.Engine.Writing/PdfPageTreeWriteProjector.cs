@@ -25,6 +25,19 @@ public static class PdfPageTreeWriteProjector
     {
         ArgumentNullException.ThrowIfNull(document);
 
+        return Create(
+            document,
+            new Dictionary<PdfPage, PdfObjectIdentifier>());
+    }
+
+    internal static PdfObjectWriteProjectionSet Create(
+        PdfDocument document,
+        IReadOnlyDictionary<PdfPage, PdfObjectIdentifier>
+            pendingPageBindings)
+    {
+        ArgumentNullException.ThrowIfNull(document);
+        ArgumentNullException.ThrowIfNull(pendingPageBindings);
+
         PdfObjectIdentifier pageTreeIdentifier =
             document.Pages.GetRequiredObjectIdentifier();
 
@@ -43,7 +56,9 @@ public static class PdfPageTreeWriteProjector
                 $"Page-tree object '{pageTreeIdentifier}' must be a PDF dictionary.");
         }
 
-        PdfArray kids = CreateKids(document);
+        PdfArray kids = CreateKids(
+            document,
+            pendingPageBindings);
         PdfDictionary projected = currentDictionary.CreateCopy();
 
         projected.Set(KidsName, kids);
@@ -60,30 +75,36 @@ public static class PdfPageTreeWriteProjector
     }
 
     private static PdfArray CreateKids(
-        PdfDocument document)
+        PdfDocument document,
+        IReadOnlyDictionary<PdfPage, PdfObjectIdentifier>
+            pendingPageBindings)
     {
         var kids = new PdfArray();
 
         foreach (PdfPage page in document.Pages)
         {
             PdfObjectIdentifier identifier =
-                page.ObjectIdentifier ??
-                throw new InvalidOperationException(
-                    $"Page '{page.Id}' has not been assigned an indirect-object identifier.");
+                ResolvePageIdentifier(
+                    page,
+                    pendingPageBindings);
 
-            if (!document.Objects.TryGet(
+            if (document.Objects.TryGet(
                     identifier,
-                    out PdfObject? current) ||
-                current is null)
+                    out PdfObject? current))
+            {
+                if (current is not PdfDictionary)
+                {
+                    throw new InvalidOperationException(
+                        $"Page object '{identifier}' must be a PDF dictionary.");
+                }
+            }
+            else if (!pendingPageBindings.TryGetValue(
+                        page,
+                        out PdfObjectIdentifier pendingIdentifier) ||
+                    pendingIdentifier != identifier)
             {
                 throw new InvalidOperationException(
                     $"Page object '{identifier}' is not present in the object store.");
-            }
-
-            if (current is not PdfDictionary)
-            {
-                throw new InvalidOperationException(
-                    $"Page object '{identifier}' must be a PDF dictionary.");
             }
 
             kids.Add(
@@ -91,5 +112,26 @@ public static class PdfPageTreeWriteProjector
         }
 
         return kids;
+    }
+
+    private static PdfObjectIdentifier ResolvePageIdentifier(
+        PdfPage page,
+        IReadOnlyDictionary<PdfPage, PdfObjectIdentifier>
+            pendingPageBindings)
+    {
+        if (page.ObjectIdentifier.HasValue)
+        {
+            return page.ObjectIdentifier.Value;
+        }
+
+        if (pendingPageBindings.TryGetValue(
+                page,
+                out PdfObjectIdentifier pendingIdentifier))
+        {
+            return pendingIdentifier;
+        }
+
+        throw new InvalidOperationException(
+            $"Page '{page.Id}' has not been assigned an indirect-object identifier.");
     }
 }
