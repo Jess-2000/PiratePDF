@@ -66,13 +66,11 @@ The broader documentation library is available from [docs/README.md](docs/README
 
 ## Repository Layout
 
-```text
 src/        BlackFlag Engine and PiratePDF source projects
 tests/      Automated test projects
 tools/      Repository tooling, including documentation generation
 samples/    Reference samples and plugin examples
 docs/       Architecture, roadmap, governance, specifications, and milestones
-```
 
 ## Open Source and Contributions
 
