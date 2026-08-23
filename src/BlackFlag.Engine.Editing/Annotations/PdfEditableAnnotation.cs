@@ -31,5 +31,11 @@ public sealed class PdfEditableAnnotation
     internal PdfObjectIdentifier? ObjectIdentifier =>
         annotation.ObjectIdentifier;
 
+    internal void BindObjectIdentifier(
+        PdfObjectIdentifier identifier)
+    {
+        annotation.BindObjectIdentifier(identifier);
+    }
+
     internal PdfAnnotation GetSourceAnnotation() => annotation;
 }
