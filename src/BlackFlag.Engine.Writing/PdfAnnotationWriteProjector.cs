@@ -105,6 +105,32 @@ public static class PdfAnnotationWriteProjector
             includePageProjection: true);
     }
 
+    internal static PdfObjectWriteProjectionSet Create(
+        PdfDocument document,
+        PdfObjectIdentifier pageIdentifier,
+        IReadOnlyDictionary<PdfAnnotation, PdfObjectIdentifier>
+            pendingAnnotationBindings,
+        IEnumerable<PdfObjectIdentifier> annotationIdentifiers,
+        bool includePageProjection)
+    {
+        ArgumentNullException.ThrowIfNull(document);
+        ArgumentNullException.ThrowIfNull(pendingAnnotationBindings);
+        ArgumentNullException.ThrowIfNull(annotationIdentifiers);
+
+        PdfObjectIdentifier[] targets =
+        [
+            .. annotationIdentifiers.Concat(
+                pendingAnnotationBindings.Values)
+        ];
+
+        return CreateCore(
+            document,
+            pageIdentifier,
+            pendingAnnotationBindings,
+            targets,
+            includePageProjection);
+    }
+
     private static PdfObjectWriteProjectionSet CreateCore(
         PdfDocument document,
         PdfObjectIdentifier pageIdentifier,
