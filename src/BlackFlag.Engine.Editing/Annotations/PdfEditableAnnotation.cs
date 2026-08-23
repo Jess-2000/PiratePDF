@@ -1,4 +1,5 @@
 using BlackFlag.Engine.Document.Annotations;
+using BlackFlag.Engine.Document.Objects;
 using BlackFlag.Engine.Editing.Ownership;
 
 namespace BlackFlag.Engine.Editing.Annotations;
@@ -26,5 +27,9 @@ public sealed class PdfEditableAnnotation
     public bool IsAttached => annotation.Parent is not null;
 
     internal PdfEditingOwnershipToken Owner { get; }
+
+    internal PdfObjectIdentifier? ObjectIdentifier =>
+        annotation.ObjectIdentifier;
+
     internal PdfAnnotation GetSourceAnnotation() => annotation;
 }

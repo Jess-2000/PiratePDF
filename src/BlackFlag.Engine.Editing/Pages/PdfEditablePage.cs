@@ -1,3 +1,4 @@
+using BlackFlag.Engine.Document.Objects;
 using BlackFlag.Engine.Document.Objects.Primitives;
 using BlackFlag.Engine.Editing.Annotations;
 using BlackFlag.Engine.Document.Pages;
@@ -176,6 +177,9 @@ public sealed class PdfEditablePage
     }
 
     internal PdfEditingOwnershipToken Owner { get; }
+
+    internal PdfObjectIdentifier? ObjectIdentifier =>
+        page.ObjectIdentifier;
 
     internal PdfPage GetSourcePage() =>
         page;

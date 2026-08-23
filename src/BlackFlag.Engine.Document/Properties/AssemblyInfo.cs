@@ -11,3 +11,6 @@ using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo(
     "BlackFlag.Engine.Writing.Tests")]
+
+[assembly: InternalsVisibleTo(
+    "BlackFlag.Engine.Services.Tests")]
