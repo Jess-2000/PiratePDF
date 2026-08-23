@@ -102,11 +102,16 @@ public sealed class PdfNewAnnotationWritePlannerTests
     {
         (PdfDocument document, PdfPage page) =
             CreateBoundDocument(PdfVersion.Pdf17);
+        PdfAnnotation existing =
+            AddBoundAnnotation(
+                document,
+                page,
+                new PdfObjectIdentifier(4));
         var annotation =
             new PdfAnnotation(
                 PdfAnnotationSubtype.Highlight,
                 new PdfAnnotationRectangle(1, 2, 30, 40));
-        page.InsertAnnotation(0, annotation);
+        page.InsertAnnotation(1, annotation);
 
         PdfWritePlan basePlan =
             PdfWritePlanner.Create(
@@ -129,6 +134,9 @@ public sealed class PdfNewAnnotationWritePlannerTests
             plan.ChangedObjectIdentifiers);
         Assert.Contains(
             page.ObjectIdentifier.Value,
+            plan.ChangedObjectIdentifiers);
+        Assert.DoesNotContain(
+            existing.ObjectIdentifier!.Value,
             plan.ChangedObjectIdentifiers);
     }
 

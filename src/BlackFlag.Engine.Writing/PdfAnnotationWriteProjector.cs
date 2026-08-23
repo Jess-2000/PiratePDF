@@ -32,10 +32,39 @@ public static class PdfAnnotationWriteProjector
     {
         ArgumentNullException.ThrowIfNull(document);
 
+        PdfPage page = FindPage(document, pageIdentifier);
+        PdfObjectIdentifier[] targets =
+        [
+            .. page.Annotations.Select(
+                annotation =>
+                    annotation.ObjectIdentifier ??
+                    throw new InvalidOperationException(
+                        $"Annotation '{annotation.Id}' has not been assigned an indirect-object identifier."))
+        ];
+
         return Create(
             document,
             pageIdentifier,
-            new Dictionary<PdfAnnotation, PdfObjectIdentifier>());
+            targets);
+    }
+
+    /// <summary>
+    /// Projects the owning page's authoritative `/Annots` array and only the
+    /// explicitly targeted bound annotation dictionaries.
+    /// </summary>
+    public static PdfObjectWriteProjectionSet Create(
+        PdfDocument document,
+        PdfObjectIdentifier pageIdentifier,
+        IEnumerable<PdfObjectIdentifier> annotationIdentifiers)
+    {
+        ArgumentNullException.ThrowIfNull(document);
+        ArgumentNullException.ThrowIfNull(annotationIdentifiers);
+
+        return CreateCore(
+            document,
+            pageIdentifier,
+            new Dictionary<PdfAnnotation, PdfObjectIdentifier>(),
+            annotationIdentifiers);
     }
 
     internal static PdfObjectWriteProjectionSet Create(
@@ -47,13 +76,29 @@ public static class PdfAnnotationWriteProjector
         ArgumentNullException.ThrowIfNull(document);
         ArgumentNullException.ThrowIfNull(pendingAnnotationBindings);
 
+        return CreateCore(
+            document,
+            pageIdentifier,
+            pendingAnnotationBindings,
+            pendingAnnotationBindings.Values);
+    }
+
+    private static PdfObjectWriteProjectionSet CreateCore(
+        PdfDocument document,
+        PdfObjectIdentifier pageIdentifier,
+        IReadOnlyDictionary<PdfAnnotation, PdfObjectIdentifier>
+            pendingAnnotationBindings,
+        IEnumerable<PdfObjectIdentifier> targetedIdentifiers)
+    {
         PdfPage page = FindPage(document, pageIdentifier);
         PdfDictionary sourcePage =
             GetDictionary(document, pageIdentifier, "Page");
+        var remainingTargets =
+            targetedIdentifiers.ToHashSet();
 
         var projections =
             new List<PdfObjectWriteProjection>(
-                page.Annotations.Count + 1);
+                remainingTargets.Count + 1);
         var annotationReferences = new PdfArray();
 
         for (int index = 0; index < page.Annotations.Count; index++)
@@ -63,6 +108,15 @@ public static class PdfAnnotationWriteProjector
                 ResolveAnnotationIdentifier(
                     annotation,
                     pendingAnnotationBindings);
+
+            annotationReferences.Add(
+                new PdfIndirectReference(
+                    annotationIdentifier));
+
+            if (!remainingTargets.Remove(annotationIdentifier))
+            {
+                continue;
+            }
 
             PdfDictionary projectedAnnotation;
 
@@ -97,9 +151,19 @@ public static class PdfAnnotationWriteProjector
                 new PdfObjectWriteProjection(
                     annotationIdentifier,
                     projectedAnnotation));
-            annotationReferences.Add(
-                new PdfIndirectReference(
-                    annotationIdentifier));
+        }
+
+        if (remainingTargets.Count != 0)
+        {
+            PdfObjectIdentifier missing =
+                remainingTargets.OrderBy(
+                    identifier => identifier.ObjectNumber)
+                    .ThenBy(
+                        identifier => identifier.GenerationNumber)
+                    .First();
+
+            throw new InvalidOperationException(
+                $"Targeted annotation object '{missing}' is not attached to page '{pageIdentifier}'.");
         }
 
         PdfDictionary projectedPage = sourcePage.CreateCopy();

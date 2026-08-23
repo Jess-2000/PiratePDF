@@ -71,6 +71,7 @@
 | BF-1053Q | [BF-1053Q — Reservation-Aware New-Page Projection and Binding](milestones/BF-1053Q-Reservation-Aware-New-Page-Projection-and-Binding.md) | Milestone | 1.0 | Implemented | 2026-08-22 |
 | BF-1053R | [BF-1053R — Bound Annotation Common-State Projection](milestones/BF-1053R-Bound-Annotation-Common-State-Projection.md) | Milestone | 1.0 | Implemented | 2026-08-22 |
 | BF-1053S | [BF-1053S — Reservation-Aware New-Annotation Projection and Binding](milestones/BF-1053S-Reservation-Aware-New-Annotation-Projection-and-Binding.md) | Milestone | 1.0 | Implemented | 2026-08-23 |
+| BF-1053T | [BF-1053T — Explicit Annotation Targeting and Minimal Write Planning](milestones/BF-1053T-Explicit-Annotation-Targeting-and-Minimal-Write-Planning.md) | Milestone | 1.0 | Implemented | 2026-08-23 |
 | BF-DOC-0004 | [BlackFlag Engine — Parser Infrastructure RC1](Parser-Infrastructure-RC1.md) | Architecture | 0.4.0 | Tested | 2026-07-30 |
 | BF-DOC-0005 | [BlackFlag Engine 0.5.0 — PDF Object Model RC1](PDF-Object-Model-RC1.md) | Architecture | 0.5.0 | In Development | 2026-07-30 |
 | BF-DOC-1001 | [Documentation Template RC1](Documentation-Template-RC1.md) | Developer Documentation | 0.1.0 | In Development | 2026-07-30 |
