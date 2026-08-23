@@ -64,7 +64,28 @@ public static class PdfAnnotationWriteProjector
             document,
             pageIdentifier,
             new Dictionary<PdfAnnotation, PdfObjectIdentifier>(),
-            annotationIdentifiers);
+            annotationIdentifiers,
+            includePageProjection: true);
+    }
+
+    /// <summary>
+    /// Projects only the explicitly targeted bound annotation dictionaries.
+    /// The owning page dictionary is not rewritten.
+    /// </summary>
+    public static PdfObjectWriteProjectionSet CreateAnnotationObjects(
+        PdfDocument document,
+        PdfObjectIdentifier pageIdentifier,
+        IEnumerable<PdfObjectIdentifier> annotationIdentifiers)
+    {
+        ArgumentNullException.ThrowIfNull(document);
+        ArgumentNullException.ThrowIfNull(annotationIdentifiers);
+
+        return CreateCore(
+            document,
+            pageIdentifier,
+            new Dictionary<PdfAnnotation, PdfObjectIdentifier>(),
+            annotationIdentifiers,
+            includePageProjection: false);
     }
 
     internal static PdfObjectWriteProjectionSet Create(
@@ -80,7 +101,8 @@ public static class PdfAnnotationWriteProjector
             document,
             pageIdentifier,
             pendingAnnotationBindings,
-            pendingAnnotationBindings.Values);
+            pendingAnnotationBindings.Values,
+            includePageProjection: true);
     }
 
     private static PdfObjectWriteProjectionSet CreateCore(
@@ -88,7 +110,8 @@ public static class PdfAnnotationWriteProjector
         PdfObjectIdentifier pageIdentifier,
         IReadOnlyDictionary<PdfAnnotation, PdfObjectIdentifier>
             pendingAnnotationBindings,
-        IEnumerable<PdfObjectIdentifier> targetedIdentifiers)
+        IEnumerable<PdfObjectIdentifier> targetedIdentifiers,
+        bool includePageProjection)
     {
         PdfPage page = FindPage(document, pageIdentifier);
         PdfDictionary sourcePage =
@@ -166,23 +189,26 @@ public static class PdfAnnotationWriteProjector
                 $"Targeted annotation object '{missing}' is not attached to page '{pageIdentifier}'.");
         }
 
-        PdfDictionary projectedPage = sourcePage.CreateCopy();
-
-        if (annotationReferences.Count == 0)
+        if (includePageProjection)
         {
-            _ = projectedPage.Remove(AnnotsName);
-        }
-        else
-        {
-            projectedPage.Set(
-                AnnotsName,
-                annotationReferences);
-        }
+            PdfDictionary projectedPage = sourcePage.CreateCopy();
 
-        projections.Add(
-            new PdfObjectWriteProjection(
-                pageIdentifier,
-                projectedPage));
+            if (annotationReferences.Count == 0)
+            {
+                _ = projectedPage.Remove(AnnotsName);
+            }
+            else
+            {
+                projectedPage.Set(
+                    AnnotsName,
+                    annotationReferences);
+            }
+
+            projections.Add(
+                new PdfObjectWriteProjection(
+                    pageIdentifier,
+                    projectedPage));
+        }
 
         return new PdfObjectWriteProjectionSet(projections);
     }
