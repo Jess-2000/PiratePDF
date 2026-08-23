@@ -32,6 +32,21 @@ public static class PdfAnnotationWriteProjector
     {
         ArgumentNullException.ThrowIfNull(document);
 
+        return Create(
+            document,
+            pageIdentifier,
+            new Dictionary<PdfAnnotation, PdfObjectIdentifier>());
+    }
+
+    internal static PdfObjectWriteProjectionSet Create(
+        PdfDocument document,
+        PdfObjectIdentifier pageIdentifier,
+        IReadOnlyDictionary<PdfAnnotation, PdfObjectIdentifier>
+            pendingAnnotationBindings)
+    {
+        ArgumentNullException.ThrowIfNull(document);
+        ArgumentNullException.ThrowIfNull(pendingAnnotationBindings);
+
         PdfPage page = FindPage(document, pageIdentifier);
         PdfDictionary sourcePage =
             GetDictionary(document, pageIdentifier, "Page");
@@ -45,17 +60,34 @@ public static class PdfAnnotationWriteProjector
         {
             PdfAnnotation annotation = page.Annotations[index];
             PdfObjectIdentifier annotationIdentifier =
-                annotation.ObjectIdentifier ??
-                throw new InvalidOperationException(
-                    $"Annotation '{annotation.Id}' has not been assigned an indirect-object identifier.");
+                ResolveAnnotationIdentifier(
+                    annotation,
+                    pendingAnnotationBindings);
 
-            PdfDictionary sourceAnnotation =
-                GetDictionary(
-                    document,
+            PdfDictionary projectedAnnotation;
+
+            if (document.Objects.TryGet(
                     annotationIdentifier,
-                    "Annotation");
-            PdfDictionary projectedAnnotation =
-                sourceAnnotation.CreateCopy();
+                    out PdfObject? current))
+            {
+                projectedAnnotation =
+                    current is PdfDictionary sourceAnnotation
+                        ? sourceAnnotation.CreateCopy()
+                        : throw new InvalidOperationException(
+                            $"Annotation object '{annotationIdentifier}' must be a PDF dictionary.");
+            }
+            else if (pendingAnnotationBindings.TryGetValue(
+                        annotation,
+                        out PdfObjectIdentifier pendingIdentifier) &&
+                    pendingIdentifier == annotationIdentifier)
+            {
+                projectedAnnotation = new PdfDictionary();
+            }
+            else
+            {
+                throw new InvalidOperationException(
+                    $"Annotation object '{annotationIdentifier}' is not present in the object store.");
+            }
 
             ProjectCommonState(
                 projectedAnnotation,
@@ -118,6 +150,27 @@ public static class PdfAnnotationWriteProjector
         dictionary.Set(
             FlagsName,
             new PdfInteger((int)annotation.Flags));
+    }
+
+    private static PdfObjectIdentifier ResolveAnnotationIdentifier(
+        PdfAnnotation annotation,
+        IReadOnlyDictionary<PdfAnnotation, PdfObjectIdentifier>
+            pendingAnnotationBindings)
+    {
+        if (annotation.ObjectIdentifier.HasValue)
+        {
+            return annotation.ObjectIdentifier.Value;
+        }
+
+        if (pendingAnnotationBindings.TryGetValue(
+                annotation,
+                out PdfObjectIdentifier pendingIdentifier))
+        {
+            return pendingIdentifier;
+        }
+
+        throw new InvalidOperationException(
+            $"Annotation '{annotation.Id}' has not been assigned an indirect-object identifier.");
     }
 
     private static PdfPage FindPage(
