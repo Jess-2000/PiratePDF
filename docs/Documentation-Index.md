@@ -76,6 +76,7 @@
 | BF-1053V | [BF-1053V — Editing Change-Set Annotation Writing Orchestration](milestones/BF-1053V-Editing-Change-Set-Annotation-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-23 |
 | BF-1053W | [BF-1053W — Structural Annotation Change-Set Writing Orchestration](milestones/BF-1053W-Structural-Annotation-Change-Set-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-23 |
 | BF-1053X | [BF-1053X — Unified Annotation Transaction Writing Orchestration](milestones/BF-1053X-Unified-Annotation-Transaction-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-23 |
+| BF-1053Y | [BF-1053Y — Page Geometry Change-Set Writing Orchestration](milestones/BF-1053Y-Page-Geometry-Change-Set-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-25 |
 | BF-DOC-0004 | [BlackFlag Engine — Parser Infrastructure RC1](Parser-Infrastructure-RC1.md) | Architecture | 0.4.0 | Tested | 2026-07-30 |
 | BF-DOC-0005 | [BlackFlag Engine 0.5.0 — PDF Object Model RC1](PDF-Object-Model-RC1.md) | Architecture | 0.5.0 | In Development | 2026-07-30 |
 | BF-DOC-1001 | [Documentation Template RC1](Documentation-Template-RC1.md) | Developer Documentation | 0.1.0 | In Development | 2026-07-30 |
