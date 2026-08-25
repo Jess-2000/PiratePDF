@@ -181,6 +181,15 @@ public sealed class PdfEditablePage
     internal PdfObjectIdentifier? ObjectIdentifier =>
         page.ObjectIdentifier;
 
+    internal void BindObjectIdentifier(
+        PdfObjectIdentifier identifier)
+    {
+        page.BindObjectIdentifier(identifier);
+    }
+
+    internal PdfDictionary CreateDictionarySnapshot() =>
+        page.CreateDictionarySnapshot();
+
     internal PdfPage GetSourcePage() =>
         page;
 }
