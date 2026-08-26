@@ -1,4 +1,3 @@
-@'
 # Document Title
 
 | Field | Value |
@@ -39,7 +38,7 @@ Document known risks, tradeoffs, and limitations.
 
 ## Related Documents
 
-- PP-XXXX-000 â€” Related document
+- PP-XXXX-000 — Related document
 
 ## Related BF Work Items
 
@@ -49,7 +48,4 @@ Document known risks, tradeoffs, and limitations.
 
 | Version | Date | Description |
 |---|---|---|
-| 0.1 | YYYY-MM-DD | Initial draft |
-'@ | Set-Content `
-    -Path .\docs\04-Developer\Document-Template.md `
-    -Encoding utf8
+| 0.1 | YYYY-MM-DD | Initial draft. |

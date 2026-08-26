@@ -1,3 +1,4 @@
+using BlackFlag.Engine.Document.Objects;
 using BlackFlag.Engine.Document.Pages;
 using BlackFlag.Engine.Editing.Ownership;
 
@@ -16,7 +17,9 @@ public sealed class PdfPageEditOperation :
         Guid? relatedPageId = null,
         int? sourceIndex = null,
         int? destinationIndex = null,
-        PdfPageRotation? rotation = null)
+        PdfPageRotation? rotation = null,
+        PdfObjectIdentifier? objectIdentifier = null,
+        PdfObjectIdentifier? relatedObjectIdentifier = null)
     {
         Owner = owner;
         Kind = kind;
@@ -25,6 +28,8 @@ public sealed class PdfPageEditOperation :
         SourceIndex = sourceIndex;
         DestinationIndex = destinationIndex;
         Rotation = rotation;
+        ObjectIdentifier = objectIdentifier;
+        RelatedObjectIdentifier = relatedObjectIdentifier;
     }
 
     /// <inheritdoc />
@@ -63,4 +68,8 @@ public sealed class PdfPageEditOperation :
     /// Gets the requested page rotation when applicable.
     /// </summary>
     public PdfPageRotation? Rotation { get; }
+
+    internal PdfObjectIdentifier? ObjectIdentifier { get; }
+
+    internal PdfObjectIdentifier? RelatedObjectIdentifier { get; }
 }

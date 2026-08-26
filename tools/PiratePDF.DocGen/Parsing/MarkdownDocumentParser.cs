@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 
 using PiratePDF.DocGen.Library;
+using PiratePDF.DocGen.Models;
 
 namespace PiratePDF.DocGen.Parsing;
 
@@ -11,9 +12,6 @@ internal static partial class MarkdownDocumentParser
 
     private const string RelatedWorkItemsHeading =
         "Related BF Work Items";
-
-    private const string RevisionHistoryHeading =
-        "Revision History";
 
     // =========================================================================
     // Public API
@@ -214,8 +212,8 @@ internal static partial class MarkdownDocumentParser
         if (section is not null)
         {
             foreach (var line in EnumerateSectionLines(
-                         lines,
-                         section))
+                        lines,
+                        section))
             {
                 AddPatternMatches(
                     workItems,
@@ -241,7 +239,7 @@ internal static partial class MarkdownDocumentParser
     {
         var section = FindSection(
             sections,
-            RevisionHistoryHeading);
+            DocumentationContract.RevisionHistoryHeading);
 
         if (section is null)
         {
@@ -251,8 +249,8 @@ internal static partial class MarkdownDocumentParser
         var entries = new List<RevisionHistoryEntry>();
 
         foreach (var line in EnumerateSectionLines(
-                     lines,
-                     section))
+                    lines,
+                    section))
         {
             if (!TrySplitTableRow(
                     line,

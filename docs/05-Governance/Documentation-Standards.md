@@ -1,16 +1,15 @@
-@'
 # PiratePDF Documentation Standards
 
 | Field | Value |
 |---|---|
 | **Document ID** | PP-GOV-002 |
 | **Category** | Governance |
-| **Version** | 1.0 |
+| **Version** | 1.1 |
 | **Status** | Approved |
 | **Owner** | PiratePDF Project |
-| **Related BF Work Items** | BF-1026 |
-| **Last Updated** | 2026-07-23 |
-| **Next Review** | 2026-10-23 |
+| **Related BF Work Items** | BF-1026; BF-1053 |
+| **Last Updated** | 2026-08-16 |
+| **Next Review** | 2026-11-16 |
 
 ---
 
@@ -18,9 +17,7 @@
 
 This document defines the required structure, metadata, naming conventions, status values, and maintenance rules for PiratePDF and BlackFlag Engine documentation.
 
-Markdown files in the repository are the editable source of truth.
-
-Generated Word, PDF, HTML, and in-application documentation are publications derived from the Markdown sources.
+Markdown files in the repository are the editable source of truth. Generated Word, PDF, HTML, and in-application documentation are publications derived from the Markdown sources.
 
 ## Document Categories
 
@@ -47,13 +44,15 @@ Every authoritative Markdown document must include:
 - Version
 - Status
 - Owner
-- Related BF work items
-- Last updated date
-- Next review date
+- Related BF Work Items
+- Last Updated
+- Next Review
+
+Dates use `YYYY-MM-DD`. For newly authored documents, the default `Next Review` date is three calendar months after `Last Updated`. DocGen may repair a missing `Next Review` from a valid `Last Updated` using that deterministic cadence.
 
 ## Standard Header
 
-markdown
+```markdown
 # Document Title
 
 | Field | Value |
@@ -64,44 +63,30 @@ markdown
 | **Status** | Draft |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-2200 |
-| **Last Updated** | 2026-07-23 |
-| **Next Review** | 2026-10-23 |
+| **Last Updated** | 2026-08-16 |
+| **Next Review** | 2026-11-16 |
+```
 
----
+## Revision History Requirement
 
-## Revision History
+Every authoritative document must contain a `## Revision History` section. Validation and repair use the same requirement: a missing section is a validation error and may also receive a repair proposal.
 
-| Version | Date | Description |
-|---|---|---|
-| 1.0 | 2026-07-25 | Added missing revision history section. |
+This alignment prevents a document from passing validation while later failing the release gate solely because repair discovers a separately encoded structural requirement.
 
-## Revision History
+## Canonical Tooling Contract
 
-| Version | Date | Description |
-|---|---|---|
-| 1.0 | 2026-07-25 | Added missing revision history section. |
+DocGen parsing, validation, and repair share canonical metadata names and the Revision History heading through one code-level documentation contract.
 
-## Revision History
+When a mandatory canonical rule is introduced, its parser or validator behavior, safe repair behavior, template, and regression tests must be updated together.
 
-| Version | Date | Description |
-|---|---|---|
-| 1.0 | 2026-07-25 | Added missing revision history section. |
+A canonical newly authored milestone must satisfy both conditions:
+
+1. Documentation validation reports no issues.
+2. Documentation repair proposes no changes.
 
 ## Revision History
 
 | Version | Date | Description |
 |---|---|---|
-| 1.0 | 2026-07-25 | Added missing revision history section. |
-
-## Revision History
-
-| Version | Date | Description |
-|---|---|---|
-| 1.0 | 2026-07-25 | Added missing revision history section. |
-
-## Revision History
-
-| Version | Date | Description |
-|---|---|---|
-| 1.0 | 2026-07-25 | Added missing revision history section. |
-
+| 1.0 | 2026-07-23 | Established documentation standards. |
+| 1.1 | 2026-08-16 | Aligned validation, repair, template, and deterministic review-date policy. |

@@ -40,6 +40,8 @@
       Include="..\..\src\BlackFlag.Engine.Services\BlackFlag.Engine.Services.csproj" />
     <ProjectReference
       Include="..\..\src\BlackFlag.Engine.Editing\BlackFlag.Engine.Editing.csproj" />
+    <ProjectReference
+      Include="..\..\src\BlackFlag.Engine.Writing\BlackFlag.Engine.Writing.csproj" />
   </ItemGroup>
 
 </Project>

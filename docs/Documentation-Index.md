@@ -52,6 +52,43 @@
 | BF-1052H | [BF-1052H — Cross-Structure Validation, Preservation, and Transactional Consistency](milestones/BF-1052H-Cross-Structure-Validation-Preservation-and-Transactional-Consistency.md) | Milestone | 1.0 | Implemented | 2026-08-15 |
 | BF-1052I | [BF-1052I — Services, SDK Exposure, and Integration Contracts](milestones/BF-1052I-Services-SDK-Exposure-and-Integration-Contracts.md) | Milestone | 1.0 | Implemented | 2026-08-15 |
 | BF-1052J | [BF-1052J — Adversarial, Integration, Performance, and Preservation Hardening](milestones/BF-1052J-Adversarial-Integration-Performance-and-Preservation-Hardening.md) | Milestone | 1.0 | Implemented | 2026-08-15 |
+| BF-1053A | [BF-1053A — Writing Architecture, Preservation Contracts, and Write Planning](milestones/BF-1053A-Writing-Architecture-Preservation-Contracts-and-Write-Planning.md) | Milestone | 1.0 | Implemented | 2026-08-15 |
+| BF-1053AA | [BF-1053AA — Unified Page-State Change-Set Writing Orchestration](milestones/BF-1053AA-Unified-Page-State-Change-Set-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-25 |
+| BF-1053AB | [BF-1053AB — Page-Tree Structural Change-Set Writing Orchestration](milestones/BF-1053AB-Page-Tree-Structural-Change-Set-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-25 |
+| BF-1053AC | [BF-1053AC — Unified Page Transaction Writing Orchestration](milestones/BF-1053AC-Unified-Page-Transaction-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-25 |
+| BF-1053AD | [BF-1053AD — Existing Nested Page-Tree Hierarchy Projection](milestones/BF-1053AD-Existing-Nested-Page-Tree-Hierarchy-Projection.md) | Milestone | 1.0 | Implemented | 2026-08-25 |
+| BF-1053AE | [BF-1053AE — Nested Page-Tree Insert/Remove Structural Projection](milestones/BF-1053AE-Nested-Page-Tree-Insert-Remove-Structural-Projection.md) | Milestone | 1.0 | Implemented | 2026-08-26 |
+| BF-1053AF | [BF-1053AF — Nested Page-Tree Cross-Node Move/Replace Projection](milestones/BF-1053AF-Nested-Page-Tree-Cross-Node-Move-Replace-Projection.md) | Milestone | 1.0 | Implemented | 2026-08-26 |
+| BF-1053AG | [BF-1053AG — Services-Layer Nested Page-Tree Structural Orchestration](milestones/BF-1053AG-Services-Layer-Nested-Page-Tree-Structural-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-26 |
+| BF-1053AH | [BF-1053AH — Nested Page Transaction Integration and Hardening](milestones/BF-1053AH-Nested-Page-Transaction-Integration-Hardening.md) | Milestone | 1.0 | Implemented | 2026-08-26 |
+| BF-1053AI | [BF-1053AI — Page-Tree Topology Management](milestones/BF-1053AI-Page-Tree-Topology-Management.md) | Milestone | 1.0 | Implemented | 2026-08-26 |
+| BF-1053AJ | [BF-1053AJ — Public Writing/Save Orchestration](milestones/BF-1053AJ-Public-Writing-Save-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-26 |
+| BF-1053AK | [BF-1053AK — End-to-End Preservation Conformance and Milestone Closure](milestones/BF-1053AK-End-to-End-Preservation-Conformance-and-Milestone-Closure.md) | Milestone | 1.0 | Implemented | 2026-08-26 |
+| BF-1053B | [BF-1053B — Primitive, Composite, and Indirect-Object Serialization](milestones/BF-1053B-Primitive-Composite-and-Indirect-Object-Serialization.md) | Milestone | 1.0 | Implemented | 2026-08-15 |
+| BF-1053C | [BF-1053C — Classic Full Rewrite and Cross-Reference Assembly](milestones/BF-1053C-Classic-Full-Rewrite-and-Cross-Reference-Assembly.md) | Milestone | 1.0 | Implemented | 2026-08-15 |
+| BF-1053D | [BF-1053D — Cross-Reference Stream Full-Rewrite Output](milestones/BF-1053D-Cross-Reference-Stream-Full-Rewrite-Output.md) | Milestone | 1.0 | Implemented | 2026-08-15 |
+| BF-1053E | [BF-1053E — Original Source Revision and Incremental Write Planning](milestones/BF-1053E-Original-Source-Revision-and-Incremental-Write-Planning.md) | Milestone | 1.0 | Implemented | 2026-08-15 |
+| BF-1053F | [BF-1053F — Traditional Incremental Update Serialization](milestones/BF-1053F-Traditional-Incremental-Update-Serialization.md) | Milestone | 1.0 | Implemented | 2026-08-16 |
+| BF-1053G | [BF-1053G — Incremental Cross-Reference Stream Serialization](milestones/BF-1053G-Incremental-Cross-Reference-Stream-Serialization.md) | Milestone | 1.0 | Implemented | 2026-08-16 |
+| BF-1053H | [BF-1053H — Indirect-Object Write Projection Foundation](milestones/BF-1053H-Indirect-Object-Write-Projection-Foundation.md) | Milestone | 1.0 | Implemented | 2026-08-16 |
+| BF-1053I | [BF-1053I — Document Information Dictionary Projection](milestones/BF-1053I-Document-Information-Dictionary-Projection.md) | Milestone | 1.0 | Implemented | 2026-08-16 |
+| BF-1053J | [BF-1053J — Reservation-Aware Object Allocation and Documentation Contract Hardening](milestones/BF-1053J-Reservation-Aware-Object-Allocation-and-Documentation-Contract-Hardening.md) | Milestone | 1.0 | Implemented | 2026-08-16 |
+| BF-1053K | [BF-1053K — Transactional Projection Planning and Object-Generation Safety](milestones/BF-1053K-Transactional-Projection-Planning-and-Object-Generation-Safety.md) | Milestone | 1.0 | Implemented | 2026-08-20 |
+| BF-1053L | [BF-1053L — Missing Document Information Object Creation](milestones/BF-1053L-Missing-Document-Information-Object-Creation.md) | Milestone | 1.0 | Implemented | 2026-08-20 |
+| BF-1053M | [BF-1053M — Projection-Aware Full-Rewrite Planning and Root README Correction](milestones/BF-1053M-Projection-Aware-Full-Rewrite-Planning-and-Root-README-Correction.md) | Milestone | 1.0 | Implemented | 2026-08-22 |
+| BF-1053N | [BF-1053N — Page Geometry Dictionary Projection](milestones/BF-1053N-Page-Geometry-Dictionary-Projection.md) | Milestone | 1.0 | Implemented | 2026-08-22 |
+| BF-1053O | [BF-1053O — Document Information Full-Rewrite Planning](milestones/BF-1053O-Document-Information-Full-Rewrite-Planning.md) | Milestone | 1.0 | Implemented | 2026-08-22 |
+| BF-1053P | [BF-1053P — Bound Page-Tree Dictionary Projection](milestones/BF-1053P-Bound-Page-Tree-Dictionary-Projection.md) | Milestone | 1.0 | Implemented | 2026-08-22 |
+| BF-1053Q | [BF-1053Q — Reservation-Aware New-Page Projection and Binding](milestones/BF-1053Q-Reservation-Aware-New-Page-Projection-and-Binding.md) | Milestone | 1.0 | Implemented | 2026-08-22 |
+| BF-1053R | [BF-1053R — Bound Annotation Common-State Projection](milestones/BF-1053R-Bound-Annotation-Common-State-Projection.md) | Milestone | 1.0 | Implemented | 2026-08-22 |
+| BF-1053S | [BF-1053S — Reservation-Aware New-Annotation Projection and Binding](milestones/BF-1053S-Reservation-Aware-New-Annotation-Projection-and-Binding.md) | Milestone | 1.0 | Implemented | 2026-08-23 |
+| BF-1053T | [BF-1053T — Explicit Annotation Targeting and Minimal Write Planning](milestones/BF-1053T-Explicit-Annotation-Targeting-and-Minimal-Write-Planning.md) | Milestone | 1.0 | Implemented | 2026-08-23 |
+| BF-1053U | [BF-1053U — Annotation Common-State Object-Only Planning](milestones/BF-1053U-Annotation-Common-State-Object-Only-Planning.md) | Milestone | 1.0 | Implemented | 2026-08-23 |
+| BF-1053V | [BF-1053V — Editing Change-Set Annotation Writing Orchestration](milestones/BF-1053V-Editing-Change-Set-Annotation-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-23 |
+| BF-1053W | [BF-1053W — Structural Annotation Change-Set Writing Orchestration](milestones/BF-1053W-Structural-Annotation-Change-Set-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-23 |
+| BF-1053X | [BF-1053X — Unified Annotation Transaction Writing Orchestration](milestones/BF-1053X-Unified-Annotation-Transaction-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-23 |
+| BF-1053Y | [BF-1053Y — Page Geometry Change-Set Writing Orchestration](milestones/BF-1053Y-Page-Geometry-Change-Set-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-25 |
+| BF-1053Z | [BF-1053Z — Page Rotation Change-Set Writing Orchestration](milestones/BF-1053Z-Page-Rotation-Change-Set-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-25 |
 | BF-DOC-0004 | [BlackFlag Engine — Parser Infrastructure RC1](Parser-Infrastructure-RC1.md) | Architecture | 0.4.0 | Tested | 2026-07-30 |
 | BF-DOC-0005 | [BlackFlag Engine 0.5.0 — PDF Object Model RC1](PDF-Object-Model-RC1.md) | Architecture | 0.5.0 | In Development | 2026-07-30 |
 | BF-DOC-1001 | [Documentation Template RC1](Documentation-Template-RC1.md) | Developer Documentation | 0.1.0 | In Development | 2026-07-30 |
@@ -79,7 +116,7 @@
 | PP-DEV-001 | [PiratePDF Master Blueprint - Volume IV: Engineering Standards](Blueprint/Volume-IV-Engineering-Standards.md) | Developer Documentation | 1.1 | Approved | 2026-08-15 |
 | PP-DEV-002 | [BlackFlag Engine Plugin Development Contract](04-Developer/Plugin-Development.md) | Developer Documentation | 1.0 | Implemented | 2026-08-13 |
 | PP-DOC-000 | [PiratePDF Documentation](README.md) | Documentation Index | 1.0 | Approved | 2026-07-24 |
-| PP-GOV-002 | [PiratePDF Documentation Standards](05-Governance/Documentation-Standards.md) | Governance | 1.0 | Approved | 2026-07-23 |
+| PP-GOV-002 | [PiratePDF Documentation Standards](05-Governance/Documentation-Standards.md) | Governance | 1.1 | Approved | 2026-08-16 |
 | PP-GOV-003 | [Documentation Validation Rules](05-Governance/Documentation-Validation-Rules.md) | Governance | 1.0 | Approved | 2026-07-24 |
 | PP-HIST-001 | [Building BlackFlag](BUILDING-BLACKFLAG.md) | Developer Guide | 0.1 | In Development | 2026-08-06 |
 | PP-HIST-BF-1040 | [BF-1040 Milestone Reflection](releases/BF-1040/Milestone-Reflection.md) | Project History | 1.0 | Tested | 2026-08-06 |
