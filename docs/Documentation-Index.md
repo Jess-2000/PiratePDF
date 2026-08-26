@@ -63,6 +63,7 @@
 | BF-1053AH | [BF-1053AH — Nested Page Transaction Integration and Hardening](milestones/BF-1053AH-Nested-Page-Transaction-Integration-Hardening.md) | Milestone | 1.0 | Implemented | 2026-08-26 |
 | BF-1053AI | [BF-1053AI — Page-Tree Topology Management](milestones/BF-1053AI-Page-Tree-Topology-Management.md) | Milestone | 1.0 | Implemented | 2026-08-26 |
 | BF-1053AJ | [BF-1053AJ — Public Writing/Save Orchestration](milestones/BF-1053AJ-Public-Writing-Save-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-26 |
+| BF-1053AK | [BF-1053AK — End-to-End Preservation Conformance and Milestone Closure](milestones/BF-1053AK-End-to-End-Preservation-Conformance-and-Milestone-Closure.md) | Milestone | 1.0 | Implemented | 2026-08-26 |
 | BF-1053B | [BF-1053B — Primitive, Composite, and Indirect-Object Serialization](milestones/BF-1053B-Primitive-Composite-and-Indirect-Object-Serialization.md) | Milestone | 1.0 | Implemented | 2026-08-15 |
 | BF-1053C | [BF-1053C — Classic Full Rewrite and Cross-Reference Assembly](milestones/BF-1053C-Classic-Full-Rewrite-and-Cross-Reference-Assembly.md) | Milestone | 1.0 | Implemented | 2026-08-15 |
 | BF-1053D | [BF-1053D — Cross-Reference Stream Full-Rewrite Output](milestones/BF-1053D-Cross-Reference-Stream-Full-Rewrite-Output.md) | Milestone | 1.0 | Implemented | 2026-08-15 |

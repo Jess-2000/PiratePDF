@@ -1,6 +1,5 @@
 using System.Globalization;
 using System.Text;
-
 using BlackFlag.Engine.Document.Model;
 using BlackFlag.Engine.Document.Objects;
 using BlackFlag.Engine.Document.Objects.Primitives;
@@ -73,7 +72,7 @@ public static class PdfFullRewriteWriter
         if (plan.Mode != PdfWriteMode.FullRewrite)
         {
             throw new NotSupportedException(
-                "BF-1053D supports complete full-rewrite output only. Incremental updates are deferred.");
+                "PdfFullRewriteWriter requires a full-rewrite write plan.");
         }
 
         if (plan.EncryptionObject.HasValue)
