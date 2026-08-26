@@ -86,6 +86,23 @@ public sealed class PdfPageTreeHierarchySnapshot
     public static PdfPageTreeHierarchySnapshot Create(
         PdfDocument document)
     {
+        return CreateCore(
+            document,
+            validateAuthoritativePageOrder: true);
+    }
+
+    internal static PdfPageTreeHierarchySnapshot CreateTopology(
+        PdfDocument document)
+    {
+        return CreateCore(
+            document,
+            validateAuthoritativePageOrder: false);
+    }
+
+    private static PdfPageTreeHierarchySnapshot CreateCore(
+        PdfDocument document,
+        bool validateAuthoritativePageOrder)
+    {
         ArgumentNullException.ThrowIfNull(document);
 
         PdfObjectIdentifier rootIdentifier =
@@ -109,9 +126,12 @@ public sealed class PdfPageTreeHierarchySnapshot
             active,
             visited);
 
-        ValidateAuthoritativePageOrder(
-            document,
-            leaves);
+        if (validateAuthoritativePageOrder)
+        {
+            ValidateAuthoritativePageOrder(
+                document,
+                leaves);
+        }
 
         return new PdfPageTreeHierarchySnapshot(
             rootIdentifier,

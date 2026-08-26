@@ -47,7 +47,8 @@ public sealed partial class PdfEditableDocument
                 owner,
                 PdfPageMutationKind.Insert,
                 page.Id,
-                destinationIndex: index);
+                destinationIndex: index,
+                objectIdentifier: page.ObjectIdentifier);
 
         session.ValidateOperation(operation);
 
@@ -88,7 +89,8 @@ public sealed partial class PdfEditableDocument
                 page.Id,
                 sourceIndex: sourceIndex >= 0
                     ? sourceIndex
-                    : null);
+                    : null,
+                objectIdentifier: page.ObjectIdentifier);
 
         session.ValidateOperation(operation);
 
@@ -125,7 +127,8 @@ public sealed partial class PdfEditableDocument
                 sourceIndex: sourceIndex >= 0
                     ? sourceIndex
                     : null,
-                destinationIndex: destinationIndex);
+                destinationIndex: destinationIndex,
+                objectIdentifier: page.ObjectIdentifier);
 
         session.ValidateOperation(operation);
 
@@ -169,7 +172,9 @@ public sealed partial class PdfEditableDocument
                     : null,
                 destinationIndex: sourceIndex >= 0
                     ? sourceIndex
-                    : null);
+                    : null,
+                objectIdentifier: target.ObjectIdentifier,
+                relatedObjectIdentifier: replacement.ObjectIdentifier);
 
         session.ValidateOperation(operation);
 
@@ -227,7 +232,6 @@ public sealed partial class PdfEditableDocument
 
         return operation;
     }
-
 
     /// <summary>Sets one standard page box explicitly.</summary>
     public PdfPageGeometryEditOperation SetPageBox(
@@ -342,7 +346,6 @@ public sealed partial class PdfEditableDocument
             _ => throw new ArgumentOutOfRangeException(nameof(state), state.Origin, "The page-value origin is not supported.")
         };
     }
-
 
     /// <summary>
     /// Replaces the complete content-stream byte sequence owned by a page.

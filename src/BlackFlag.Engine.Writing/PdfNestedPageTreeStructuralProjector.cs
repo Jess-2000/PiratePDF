@@ -32,6 +32,27 @@ public static class PdfNestedPageTreeStructuralProjector
         PdfPageTreeHierarchySnapshot hierarchy =
             PdfPageTreeHierarchySnapshot.Create(document);
 
+        return Create(
+            document,
+            hierarchy,
+            targetNodeIdentifier,
+            finalChildIdentifiers,
+            pendingPageBindings);
+    }
+
+    internal static PdfObjectWriteProjectionSet Create(
+        PdfDocument document,
+        PdfPageTreeHierarchySnapshot hierarchy,
+        PdfObjectIdentifier targetNodeIdentifier,
+        IReadOnlyList<PdfObjectIdentifier> finalChildIdentifiers,
+        IReadOnlyDictionary<PdfPage, PdfObjectIdentifier>
+            pendingPageBindings)
+    {
+        ArgumentNullException.ThrowIfNull(document);
+        ArgumentNullException.ThrowIfNull(hierarchy);
+        ArgumentNullException.ThrowIfNull(finalChildIdentifiers);
+        ArgumentNullException.ThrowIfNull(pendingPageBindings);
+
         PdfPageTreeHierarchySnapshot.Node targetNode =
             hierarchy.GetRequiredNode(targetNodeIdentifier);
 

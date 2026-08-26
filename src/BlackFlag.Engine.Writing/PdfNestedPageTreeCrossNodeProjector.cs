@@ -41,6 +41,38 @@ public static class PdfNestedPageTreeCrossNodeProjector
         PdfPageTreeHierarchySnapshot hierarchy =
             PdfPageTreeHierarchySnapshot.Create(document);
 
+        return Create(
+            document,
+            hierarchy,
+            sourceNodeIdentifier,
+            finalSourceChildren,
+            destinationNodeIdentifier,
+            finalDestinationChildren,
+            pendingPageBindings);
+    }
+
+    internal static PdfObjectWriteProjectionSet Create(
+        PdfDocument document,
+        PdfPageTreeHierarchySnapshot hierarchy,
+        PdfObjectIdentifier sourceNodeIdentifier,
+        IReadOnlyList<PdfObjectIdentifier> finalSourceChildren,
+        PdfObjectIdentifier destinationNodeIdentifier,
+        IReadOnlyList<PdfObjectIdentifier> finalDestinationChildren,
+        IReadOnlyDictionary<PdfPage, PdfObjectIdentifier>
+            pendingPageBindings)
+    {
+        ArgumentNullException.ThrowIfNull(document);
+        ArgumentNullException.ThrowIfNull(hierarchy);
+        ArgumentNullException.ThrowIfNull(finalSourceChildren);
+        ArgumentNullException.ThrowIfNull(finalDestinationChildren);
+        ArgumentNullException.ThrowIfNull(pendingPageBindings);
+
+        if (sourceNodeIdentifier == destinationNodeIdentifier)
+        {
+            throw new ArgumentException(
+                "Cross-node projection requires distinct source and destination nodes.");
+        }
+
         PdfPageTreeHierarchySnapshot.Node sourceNode =
             hierarchy.GetRequiredNode(sourceNodeIdentifier);
         PdfPageTreeHierarchySnapshot.Node destinationNode =
