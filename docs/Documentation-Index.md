@@ -57,6 +57,7 @@
 | BF-1053AB | [BF-1053AB — Page-Tree Structural Change-Set Writing Orchestration](milestones/BF-1053AB-Page-Tree-Structural-Change-Set-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-25 |
 | BF-1053AC | [BF-1053AC — Unified Page Transaction Writing Orchestration](milestones/BF-1053AC-Unified-Page-Transaction-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-25 |
 | BF-1053AD | [BF-1053AD — Existing Nested Page-Tree Hierarchy Projection](milestones/BF-1053AD-Existing-Nested-Page-Tree-Hierarchy-Projection.md) | Milestone | 1.0 | Implemented | 2026-08-25 |
+| BF-1053AE | [BF-1053AE — Nested Page-Tree Insert/Remove Structural Projection](milestones/BF-1053AE-Nested-Page-Tree-Insert-Remove-Structural-Projection.md) | Milestone | 1.0 | Implemented | 2026-08-26 |
 | BF-1053B | [BF-1053B — Primitive, Composite, and Indirect-Object Serialization](milestones/BF-1053B-Primitive-Composite-and-Indirect-Object-Serialization.md) | Milestone | 1.0 | Implemented | 2026-08-15 |
 | BF-1053C | [BF-1053C — Classic Full Rewrite and Cross-Reference Assembly](milestones/BF-1053C-Classic-Full-Rewrite-and-Cross-Reference-Assembly.md) | Milestone | 1.0 | Implemented | 2026-08-15 |
 | BF-1053D | [BF-1053D — Cross-Reference Stream Full-Rewrite Output](milestones/BF-1053D-Cross-Reference-Stream-Full-Rewrite-Output.md) | Milestone | 1.0 | Implemented | 2026-08-15 |

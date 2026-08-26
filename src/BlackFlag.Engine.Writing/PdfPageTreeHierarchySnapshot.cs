@@ -50,6 +50,36 @@ public sealed class PdfPageTreeHierarchySnapshot
     public IReadOnlyList<Leaf> Leaves =>
         leaves;
 
+    internal Node GetRequiredNode(
+        PdfObjectIdentifier identifier)
+    {
+        for (int index = 0; index < nodes.Count; index++)
+        {
+            if (nodes[index].Identifier == identifier)
+            {
+                return nodes[index];
+            }
+        }
+
+        throw new InvalidOperationException(
+            $"Page-tree node '{identifier}' is not present in the validated hierarchy.");
+    }
+
+    internal Leaf GetRequiredLeaf(
+        PdfObjectIdentifier identifier)
+    {
+        for (int index = 0; index < leaves.Count; index++)
+        {
+            if (leaves[index].Identifier == identifier)
+            {
+                return leaves[index];
+            }
+        }
+
+        throw new InvalidOperationException(
+            $"Page leaf '{identifier}' is not present in the validated hierarchy.");
+    }
+
     /// <summary>
     /// Reads and validates the existing indirect page-tree topology.
     /// </summary>
