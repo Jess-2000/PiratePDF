@@ -124,39 +124,16 @@ public static class PdfNestedPageTreeStructuralWritingService
                 placements,
                 pending);
 
-        PdfObjectIdentifier[] affectedParents =
-            DetermineAffectedParents(
-                hierarchy,
-                finalByParent);
-
-        if (affectedParents.Length == 0)
-        {
-            throw new InvalidOperationException(
-                "The committed nested structural transaction produced no page-tree change.");
-        }
+        _ = DetermineAffectedParents(
+            hierarchy,
+            finalByParent);
 
         PdfObjectWriteProjectionSet projections =
-            affectedParents.Length switch
-            {
-                1 => PdfNestedPageTreeStructuralProjector.Create(
-                    document,
-                    hierarchy,
-                    affectedParents[0],
-                    finalByParent[affectedParents[0]],
-                    pending),
-
-                2 => PdfNestedPageTreeCrossNodeProjector.Create(
-                    document,
-                    hierarchy,
-                    affectedParents[0],
-                    finalByParent[affectedParents[0]],
-                    affectedParents[1],
-                    finalByParent[affectedParents[1]],
-                    pending),
-
-                _ => throw new NotSupportedException(
-                    "Nested structural page Writing currently supports transactions affecting at most two existing leaf-bearing /Pages nodes.")
-            };
+            PdfNestedPageTreeTopologyProjector.Create(
+                document,
+                hierarchy,
+                finalByParent,
+                pending);
 
         return new ProjectionBatch(
             projections,
@@ -280,6 +257,12 @@ public static class PdfNestedPageTreeStructuralWritingService
                 affected.Add(
                     node.Identifier);
             }
+        }
+
+        if (affected.Count == 0)
+        {
+            throw new InvalidOperationException(
+                "The committed nested structural transaction produced no page-tree change.");
         }
 
         return

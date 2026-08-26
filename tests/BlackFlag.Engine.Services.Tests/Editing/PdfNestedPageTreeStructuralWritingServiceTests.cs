@@ -166,7 +166,7 @@ public sealed class PdfNestedPageTreeStructuralWritingServiceTests
     }
 
     [Fact]
-    public void ThreeAffectedLeafNodesAreRejected()
+    public void ThreeAffectedLeafNodesAreSupported()
     {
         PdfDocument document =
             CreateThreeBranchDocument();
@@ -185,11 +185,21 @@ public sealed class PdfNestedPageTreeStructuralWritingServiceTests
             changeSet = transaction.Commit();
         }
 
-        Assert.Throws<NotSupportedException>(
-            () => PdfNestedPageTreeStructuralWritingService.CreateFullRewritePlan(
+        PdfWritePlan plan =
+            PdfNestedPageTreeStructuralWritingService.CreateFullRewritePlan(
                 session,
                 changeSet,
-                PdfWritePlanner.Create(document)));
+                PdfWritePlanner.Create(document));
+
+        Assert.Contains(
+            new PdfObjectIdentifier(3),
+            plan.ExistingObjectIdentifiers);
+        Assert.Contains(
+            new PdfObjectIdentifier(4),
+            plan.ExistingObjectIdentifiers);
+        Assert.Contains(
+            new PdfObjectIdentifier(5),
+            plan.ExistingObjectIdentifiers);
     }
 
     private static PdfDocument CreateSingleBranchDocument()

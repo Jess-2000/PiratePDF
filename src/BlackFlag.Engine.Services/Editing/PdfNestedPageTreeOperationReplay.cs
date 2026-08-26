@@ -32,6 +32,9 @@ internal static class PdfNestedPageTreeOperationReplay
         PdfEditChangeSet changeSet,
         List<PdfNestedPageTreePlacement> placements)
     {
+        var vacatedParents =
+            new Dictionary<int, PdfObjectIdentifier>();
+
         for (int index = 0; index < changeSet.Count; index++)
         {
             if (changeSet[index] is not PdfPageEditOperation operation)
@@ -47,13 +50,15 @@ internal static class PdfNestedPageTreeOperationReplay
                 case PdfPageMutationKind.Insert:
                     ReplayInsert(
                         operation,
-                        placements);
+                        placements,
+                        vacatedParents);
                     break;
 
                 case PdfPageMutationKind.Remove:
                     ReplayRemove(
                         operation,
-                        placements);
+                        placements,
+                        vacatedParents);
                     break;
 
                 case PdfPageMutationKind.Move:
@@ -81,17 +86,27 @@ internal static class PdfNestedPageTreeOperationReplay
 
     private static void ReplayInsert(
         PdfPageEditOperation operation,
-        List<PdfNestedPageTreePlacement> placements)
+        List<PdfNestedPageTreePlacement> placements,
+        Dictionary<int, PdfObjectIdentifier> vacatedParents)
     {
         int index =
             operation.DestinationIndex ??
             throw new InvalidOperationException(
                 "Insert operation is missing its destination index.");
 
-        PdfObjectIdentifier parent =
-            ResolveInsertionParent(
+        PdfObjectIdentifier parent;
+
+        if (vacatedParents.TryGetValue(index, out var vacatedParent))
+        {
+            parent = vacatedParent;
+            _ = vacatedParents.Remove(index);
+        }
+        else
+        {
+            parent = ResolveInsertionParent(
                 placements,
                 index);
+        }
 
         placements.Insert(
             index,
@@ -102,7 +117,8 @@ internal static class PdfNestedPageTreeOperationReplay
 
     private static void ReplayRemove(
         PdfPageEditOperation operation,
-        List<PdfNestedPageTreePlacement> placements)
+        List<PdfNestedPageTreePlacement> placements,
+        Dictionary<int, PdfObjectIdentifier> vacatedParents)
     {
         int index =
             operation.SourceIndex ??
@@ -117,6 +133,9 @@ internal static class PdfNestedPageTreeOperationReplay
         ValidateOperationIdentity(
             operation,
             removed);
+
+        vacatedParents[index] =
+            removed.ParentIdentifier;
 
         placements.RemoveAt(index);
     }
