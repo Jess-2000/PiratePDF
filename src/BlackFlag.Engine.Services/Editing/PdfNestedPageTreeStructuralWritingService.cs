@@ -33,7 +33,7 @@ public static class PdfNestedPageTreeStructuralWritingService
         }
 
         ProjectionBatch batch =
-            CreateBatch(session, changeSet, writePlan);
+            CreateProjectionBatch(session, changeSet, writePlan);
 
         PdfIncrementalWritePlan result =
             PdfProjectedIncrementalWritePlanner.Create(
@@ -61,7 +61,7 @@ public static class PdfNestedPageTreeStructuralWritingService
         }
 
         ProjectionBatch batch =
-            CreateBatch(session, changeSet, writePlan);
+            CreateProjectionBatch(session, changeSet, writePlan);
 
         PdfWritePlan result =
             PdfProjectedFullRewritePlanner.Create(
@@ -72,7 +72,7 @@ public static class PdfNestedPageTreeStructuralWritingService
         return result;
     }
 
-    private static ProjectionBatch CreateBatch(
+    internal static ProjectionBatch CreateProjectionBatch(
         PdfEditingSession session,
         PdfEditChangeSet changeSet,
         PdfWritePlan writePlan)
@@ -168,7 +168,7 @@ public static class PdfNestedPageTreeStructuralWritingService
         IReadOnlyList<PdfNestedPageTreePlacement> placements,
         PdfWriteObjectAllocator allocator,
         Dictionary<PdfPage, PdfObjectIdentifier> pending,
-        ICollection<PendingBinding> bindings)
+        List<PendingBinding> bindings)
     {
         foreach (PdfNestedPageTreePlacement placement in placements)
         {
@@ -290,11 +290,11 @@ public static class PdfNestedPageTreeStructuralWritingService
         ];
     }
 
-    private sealed class ProjectionBatch
+    internal sealed class ProjectionBatch
     {
         private readonly IReadOnlyList<PendingBinding> bindings;
 
-        public ProjectionBatch(
+        internal ProjectionBatch(
             PdfObjectWriteProjectionSet projections,
             IReadOnlyList<PendingBinding> bindings)
         {
@@ -323,7 +323,7 @@ public static class PdfNestedPageTreeStructuralWritingService
         }
     }
 
-    private sealed record PendingBinding(
+    internal sealed record PendingBinding(
         PdfEditablePage Page,
         PdfObjectIdentifier Identifier);
 }
