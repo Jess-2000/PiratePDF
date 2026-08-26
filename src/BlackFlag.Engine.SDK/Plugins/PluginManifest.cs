@@ -1,11 +1,13 @@
+using System.Collections.ObjectModel;
+
 namespace BlackFlag.Engine.SDK.Plugins;
 
 /// <summary>Describes a validated plugin without loading executable code.</summary>
 public sealed class PluginManifest
 {
-    private readonly PluginCapability[] requiredCapabilities;
-    private readonly PluginCapability[] optionalCapabilities;
-    private readonly PluginDependency[] dependencies;
+    private readonly ReadOnlyCollection<PluginCapability> requiredCapabilities;
+    private readonly ReadOnlyCollection<PluginCapability> optionalCapabilities;
+    private readonly ReadOnlyCollection<PluginDependency> dependencies;
 
     public PluginManifest(PluginId id, string name, Version version, Version minimumSdkVersion, string entryPoint,
         IEnumerable<PluginCapability>? requiredCapabilities = null, IEnumerable<PluginCapability>? optionalCapabilities = null,
@@ -41,9 +43,9 @@ public sealed class PluginManifest
         Version = version;
         MinimumSdkVersion = minimumSdkVersion;
         EntryPoint = entryPoint;
-        this.requiredCapabilities = required;
-        this.optionalCapabilities = optional;
-        this.dependencies = dependencyArray;
+        this.requiredCapabilities = Array.AsReadOnly(required);
+        this.optionalCapabilities = Array.AsReadOnly(optional);
+        this.dependencies = Array.AsReadOnly(dependencyArray);
     }
 
     public PluginId Id { get; }

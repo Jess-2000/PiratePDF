@@ -13,7 +13,7 @@ internal sealed class PluginLoadContext : AssemblyLoadContext
     internal PluginLoadContext(string entryAssemblyPath) : base(isCollectible: true)
     {
         resolver = new AssemblyDependencyResolver(entryAssemblyPath);
-        packageRoot = Path.GetFullPath(Path.GetDirectoryName(entryAssemblyPath)! + Path.DirectorySeparatorChar);
+        packageRoot = Path.GetFullPath(Path.GetDirectoryName(entryAssemblyPath)!);
     }
 
     internal Assembly LoadEntryAssembly(string entryAssemblyPath) => LoadManagedAssembly(ValidateResolvedPath(entryAssemblyPath));
@@ -40,8 +40,27 @@ internal sealed class PluginLoadContext : AssemblyLoadContext
     private string ValidateResolvedPath(string path)
     {
         string full = Path.GetFullPath(path);
-        if (!full.StartsWith(packageRoot, StringComparison.OrdinalIgnoreCase))
+        if (!PluginPackagePath.Contains(packageRoot, full))
             throw new FileLoadException("Plugin dependency resolved outside its package directory.");
         return full;
+    }
+}
+
+internal static class PluginPackagePath
+{
+    internal static bool Contains(string packageRoot, string candidatePath)
+    {
+        string fullRoot = Path.GetFullPath(packageRoot);
+        string fullCandidate = Path.GetFullPath(candidatePath);
+        string relative = Path.GetRelativePath(fullRoot, fullCandidate);
+
+        return !Path.IsPathRooted(relative)
+            && !string.Equals(relative, "..", StringComparison.Ordinal)
+            && !relative.StartsWith(
+                $"..{Path.DirectorySeparatorChar}",
+                StringComparison.Ordinal)
+            && !relative.StartsWith(
+                $"..{Path.AltDirectorySeparatorChar}",
+                StringComparison.Ordinal);
     }
 }

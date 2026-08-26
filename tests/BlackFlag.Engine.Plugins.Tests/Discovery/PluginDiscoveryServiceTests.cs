@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -21,6 +22,18 @@ public sealed class PluginDiscoveryServiceTests : IDisposable
 
         Assert.Equal(["org.sample.a", "org.sample.z"], catalog.Plugins.Select(static p => p.Manifest.Id.Value));
         Assert.Empty(catalog.Issues);
+    }
+
+    [Fact]
+    public async Task CatalogExposesStableReadOnlyCollections()
+    {
+        WriteManifest("a-package", "org.sample.a");
+        WriteManifest("duplicate-package", "org.sample.a");
+
+        PluginCatalog catalog = await PluginDiscoveryService.DiscoverAsync([root]);
+
+        AssertReadOnly(catalog.Plugins);
+        AssertReadOnly(catalog.Issues);
     }
 
 
@@ -77,6 +90,15 @@ public sealed class PluginDiscoveryServiceTests : IDisposable
         File.WriteAllText(Path.Combine(directory, "plugin.json"), $$"""
         {"manifestVersion":1,"id":"{{id}}","name":"Sample","version":"1.0.0","minimumSdkVersion":"1.0.0","entryPoint":"Sample.Plugin"}
         """);
+    }
+
+    private static void AssertReadOnly<T>(IReadOnlyList<T> values)
+    {
+        Assert.NotEmpty(values);
+        Assert.IsNotType<T[]>(values);
+        IList<T> list = Assert.IsAssignableFrom<IList<T>>(values);
+        Assert.True(list.IsReadOnly);
+        Assert.Throws<NotSupportedException>(() => list.Clear());
     }
 
     public void Dispose()
