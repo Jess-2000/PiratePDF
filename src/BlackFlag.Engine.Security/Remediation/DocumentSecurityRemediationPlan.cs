@@ -1,9 +1,11 @@
+using System.Collections.ObjectModel;
+
 namespace BlackFlag.Engine.Security.Remediation;
 
 /// <summary>Describes the deterministic remediation boundary for one sanitizing operation.</summary>
 public sealed class DocumentSecurityRemediationPlan
 {
-    private readonly DocumentSecurityRemediationAction[] actions;
+    private readonly ReadOnlyCollection<DocumentSecurityRemediationAction> actions;
 
     /// <summary>Initializes a remediation plan.</summary>
     public DocumentSecurityRemediationPlan(
@@ -11,7 +13,7 @@ public sealed class DocumentSecurityRemediationPlan
         bool isBlocked)
     {
         ArgumentNullException.ThrowIfNull(actions);
-        this.actions = actions.ToArray();
+        this.actions = Array.AsReadOnly(actions.ToArray());
         IsBlocked = isBlocked;
     }
 

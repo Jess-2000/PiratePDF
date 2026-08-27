@@ -39,8 +39,7 @@ public static class PluginRuntimeHost
         if (!PluginEntryPoint.TryParse(descriptor.Manifest.EntryPoint, out PluginEntryPoint entryPoint))
         { issues.Add(new(PluginRuntimeIssueKind.EntryPointInvalid, id, "Plugin entry point must be an assembly-qualified type name.")); return null; }
         string assemblyPath = Path.GetFullPath(Path.Combine(descriptor.PackagePath, entryPoint.AssemblyName + ".dll"));
-        string packageRoot = Path.GetFullPath(descriptor.PackagePath + Path.DirectorySeparatorChar);
-        if (!assemblyPath.StartsWith(packageRoot, StringComparison.OrdinalIgnoreCase) || !File.Exists(assemblyPath))
+        if (!PluginPackagePath.Contains(descriptor.PackagePath, assemblyPath) || !File.Exists(assemblyPath))
         { issues.Add(new(PluginRuntimeIssueKind.AssemblyUnavailable, id, "Plugin entry assembly is unavailable.")); return null; }
         PluginLoadContext? context = null;
 

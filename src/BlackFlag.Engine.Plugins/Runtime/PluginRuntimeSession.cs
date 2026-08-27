@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using BlackFlag.Engine.Plugins.Extensions;
 
 namespace BlackFlag.Engine.Plugins.Runtime;
@@ -6,12 +7,20 @@ public sealed class PluginRuntimeSession : IAsyncDisposable
 {
     private readonly List<PluginRuntimeHandle> activePlugins;
     private readonly List<PluginRuntimeIssue> issues;
+    private readonly ReadOnlyCollection<PluginRuntimeHandle> activePluginView;
+    private readonly ReadOnlyCollection<PluginRuntimeIssue> issueView;
     private readonly PluginExtensionRegistry extensions;
     private bool disposed;
     internal PluginRuntimeSession(List<PluginRuntimeHandle> activePlugins, List<PluginRuntimeIssue> issues, PluginExtensionRegistry extensions)
-    { this.activePlugins = activePlugins; this.issues = issues; this.extensions = extensions; }
-    public IReadOnlyList<PluginRuntimeHandle> ActivePlugins => activePlugins;
-    public IReadOnlyList<PluginRuntimeIssue> Issues => issues;
+    {
+        this.activePlugins = activePlugins;
+        this.issues = issues;
+        activePluginView = activePlugins.AsReadOnly();
+        issueView = issues.AsReadOnly();
+        this.extensions = extensions;
+    }
+    public IReadOnlyList<PluginRuntimeHandle> ActivePlugins => activePluginView;
+    public IReadOnlyList<PluginRuntimeIssue> Issues => issueView;
 
     public async ValueTask DisposeAsync()
     {

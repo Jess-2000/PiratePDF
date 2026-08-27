@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using BlackFlag.Engine.Plugins.Discovery;
 using BlackFlag.Engine.SDK.Plugins;
 namespace BlackFlag.Engine.Plugins.Activation;
@@ -5,12 +6,14 @@ namespace BlackFlag.Engine.Plugins.Activation;
 /// <summary>Immutable, non-executing result describing safe plugin activation order and blocked plugins.</summary>
 public sealed class PluginActivationPlan
 {
-    private readonly PluginDescriptor[] activationOrder;
-    private readonly PluginDescriptor[] blockedPlugins;
-    private readonly PluginActivationIssue[] issues;
+    private readonly ReadOnlyCollection<PluginDescriptor> activationOrder;
+    private readonly ReadOnlyCollection<PluginDescriptor> blockedPlugins;
+    private readonly ReadOnlyCollection<PluginActivationIssue> issues;
     internal PluginActivationPlan(IEnumerable<PluginDescriptor> activationOrder, IEnumerable<PluginDescriptor> blockedPlugins, IEnumerable<PluginActivationIssue> issues)
     {
-        this.activationOrder = activationOrder.ToArray(); this.blockedPlugins = blockedPlugins.ToArray(); this.issues = issues.ToArray();
+        this.activationOrder = Array.AsReadOnly(activationOrder.ToArray());
+        this.blockedPlugins = Array.AsReadOnly(blockedPlugins.ToArray());
+        this.issues = Array.AsReadOnly(issues.ToArray());
     }
     public IReadOnlyList<PluginDescriptor> ActivationOrder => activationOrder;
     public IReadOnlyList<PluginDescriptor> BlockedPlugins => blockedPlugins;
