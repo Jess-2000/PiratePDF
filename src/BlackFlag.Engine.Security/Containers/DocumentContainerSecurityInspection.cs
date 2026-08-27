@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using BlackFlag.Engine.Security.Model;
 
 namespace BlackFlag.Engine.Security.Containers;
@@ -8,15 +9,17 @@ namespace BlackFlag.Engine.Security.Containers;
 /// </summary>
 public sealed class DocumentContainerSecurityInspection
 {
-    private readonly DocumentSecurityObservation[] observations;
-    private readonly DocumentContainerEntry[] embeddedObjects;
+    private readonly ReadOnlyCollection<DocumentSecurityObservation> observations;
+    private readonly ReadOnlyCollection<DocumentContainerEntry> embeddedObjects;
 
     public DocumentContainerSecurityInspection(
         IEnumerable<DocumentSecurityObservation>? observations = null,
         IEnumerable<DocumentContainerEntry>? embeddedObjects = null)
     {
-        this.observations = observations?.ToArray() ?? [];
-        this.embeddedObjects = embeddedObjects?.ToArray() ?? [];
+        this.observations = Array.AsReadOnly(
+            observations?.ToArray() ?? Array.Empty<DocumentSecurityObservation>());
+        this.embeddedObjects = Array.AsReadOnly(
+            embeddedObjects?.ToArray() ?? Array.Empty<DocumentContainerEntry>());
     }
 
     public IReadOnlyList<DocumentSecurityObservation> Observations => observations;

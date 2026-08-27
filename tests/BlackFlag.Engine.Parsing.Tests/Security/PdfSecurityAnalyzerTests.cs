@@ -12,6 +12,31 @@ namespace BlackFlag.Engine.Parsing.Tests.Security;
 public sealed class PdfSecurityAnalyzerTests
 {
     [Fact]
+    public void AnalysisResultObservationsCannotBeMutated()
+    {
+        var original = new DocumentSecurityObservation(
+            DocumentSecurityObservationCategory.ActiveContent,
+            "Original",
+            "Original description.",
+            "pdf");
+        var replacement = new DocumentSecurityObservation(
+            DocumentSecurityObservationCategory.ExternalReference,
+            "Replacement",
+            "Replacement description.",
+            "pdf");
+        var result = new PdfSecurityAnalysisResult([original]);
+
+        Assert.False(result.Observations is DocumentSecurityObservation[]);
+        IList<DocumentSecurityObservation> mutableView =
+            Assert.IsAssignableFrom<IList<DocumentSecurityObservation>>(
+                result.Observations);
+        Assert.True(mutableView.IsReadOnly);
+        Assert.Throws<NotSupportedException>(() => mutableView[0] = replacement);
+        Assert.Same(original, result.Observations[0]);
+        Assert.Same(result.Observations, result.Observations);
+    }
+
+    [Fact]
     public void DetectsAutomaticJavaScriptWithoutExecutingIt()
     {
         PdfDictionary action = Dictionary(

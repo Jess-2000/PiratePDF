@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using BlackFlag.Engine.Security.Findings;
 using BlackFlag.Engine.Security.Policy;
 
@@ -6,8 +7,8 @@ namespace BlackFlag.Engine.Security.Inspection;
 /// <summary>Contains the final shared-policy assessment for one inspection.</summary>
 public sealed class DocumentSecurityAssessment
 {
-    private readonly DocumentSecurityFinding[] findings;
-    private readonly DocumentSecurityInteraction[] interactions;
+    private readonly ReadOnlyCollection<DocumentSecurityFinding> findings;
+    private readonly ReadOnlyCollection<DocumentSecurityInteraction> interactions;
 
     /// <summary>Initializes an assessment.</summary>
     public DocumentSecurityAssessment(
@@ -18,11 +19,12 @@ public sealed class DocumentSecurityAssessment
         ArgumentNullException.ThrowIfNull(findings);
         ArgumentNullException.ThrowIfNull(interactions);
 
-        this.findings = findings.ToArray();
-        this.interactions = interactions
-            .Where(static interaction => interaction != DocumentSecurityInteraction.None)
-            .Distinct()
-            .ToArray();
+        this.findings = Array.AsReadOnly(findings.ToArray());
+        this.interactions = Array.AsReadOnly(
+            interactions
+                .Where(static interaction => interaction != DocumentSecurityInteraction.None)
+                .Distinct()
+                .ToArray());
 
         ManualInspection = manualInspection;
     }
@@ -42,7 +44,7 @@ public sealed class DocumentSecurityAssessment
     /// </summary>
     public bool ShouldGenerateReport =>
         ManualInspection ||
-        findings.Length > 0;
+        findings.Count > 0;
 
     /// <summary>Gets whether any finding blocks the requested operation.</summary>
     public bool IsBlocked =>

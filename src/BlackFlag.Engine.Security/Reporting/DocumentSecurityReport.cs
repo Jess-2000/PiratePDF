@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using BlackFlag.Engine.Security.Findings;
 using BlackFlag.Engine.Security.Policy;
 
@@ -6,8 +7,8 @@ namespace BlackFlag.Engine.Security.Reporting;
 /// <summary>Represents an ephemeral security report for one inspected document.</summary>
 public sealed class DocumentSecurityReport
 {
-    private readonly DocumentSecurityFinding[] findings;
-    private readonly DocumentSecurityInteraction[] interactions;
+    private readonly ReadOnlyCollection<DocumentSecurityFinding> findings;
+    private readonly ReadOnlyCollection<DocumentSecurityInteraction> interactions;
 
     /// <summary>Initializes a security report.</summary>
     public DocumentSecurityReport(
@@ -31,14 +32,14 @@ public sealed class DocumentSecurityReport
         ArgumentNullException.ThrowIfNull(findings);
         ArgumentNullException.ThrowIfNull(interactions);
 
-        this.findings = findings.ToArray();
-        this.interactions =
+        this.findings = Array.AsReadOnly(findings.ToArray());
+        this.interactions = Array.AsReadOnly(
             interactions
                 .Where(
                     static interaction =>
                         interaction != DocumentSecurityInteraction.None)
                 .Distinct()
-                .ToArray();
+                .ToArray());
 
         ManualInspection = manualInspection;
         GeneratedAtUtc = generatedAtUtc;
