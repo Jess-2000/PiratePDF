@@ -112,6 +112,14 @@
 | PP-ARCH-001 | [PiratePDF Master Blueprint - Volume II: BlackFlag Engine Architecture](Blueprint/Volume-II-BlackFlag-Engine-Architecture.md) | Architecture | 1.1 | Approved | 2026-08-09 |
 | PP-ARCH-CONV-001 | [Passive Document Conversion Architecture](Architecture/PASSIVE-DOCUMENT-CONVERSION.md) | Architecture | 1.0 | Approved | 2026-08-06 |
 | PP-ARCH-MEM-001 | [BlackFlag Memory and Resource Architecture](Architecture/MEMORY-ARCHITECTURE.md) | Architecture | 1.0 | In Development | 2026-08-06 |
+| PP-AUD-001 | [Pre-BF-1054 C# Repository Engineering Audit](reviews/Pre-BF-1054-CSharp-Repository-Audit.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
+| PP-AUD-002 | [Pre-BF-1054 Batch 1 — Plugin Boundary Hardening](reviews/Pre-BF-1054-Batch-1-Plugin-Boundary-Hardening.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
+| PP-AUD-003 | [Pre-BF-1054 Batch 1 — Completion Report](reviews/Pre-BF-1054-Batch-1-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
+| PP-AUD-004 | [Pre-BF-1054 Batch 2 — Security Result Hardening](reviews/Pre-BF-1054-Batch-2-Security-Result-Hardening.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
+| PP-AUD-005 | [Pre-BF-1054 Batch 2 — Completion Report](reviews/Pre-BF-1054-Batch-2-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
+| PP-AUD-006 | [Pre-BF-1054 Batch 3 — Abstractions Test Quality](reviews/Pre-BF-1054-Batch-3-Abstractions-Test-Quality.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
+| PP-AUD-007 | [Pre-BF-1054 Batch 3 — Completion Report](reviews/Pre-BF-1054-Batch-3-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
+| PP-AUD-008 | [Pre-BF-1054 Structural-Refactoring Necessity Assessment](reviews/Pre-BF-1054-Structural-Refactoring-Necessity-Assessment.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
 | PP-CHARTER-001 | [PiratePDF Project Charter](Project-Charter.md) | Project Charter | 1.1 | Approved | 2026-08-09 |
 | PP-DEV-001 | [PiratePDF Master Blueprint - Volume IV: Engineering Standards](Blueprint/Volume-IV-Engineering-Standards.md) | Developer Documentation | 1.1 | Approved | 2026-08-15 |
 | PP-DEV-002 | [BlackFlag Engine Plugin Development Contract](04-Developer/Plugin-Development.md) | Developer Documentation | 1.0 | Implemented | 2026-08-13 |
