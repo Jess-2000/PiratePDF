@@ -210,7 +210,7 @@ public sealed class PdfExistingTextDiscoveryServiceTests
     }
 
     [Fact]
-    public void CompositeTextArrayIsNotPrematurelyDeclaredDirectlyEditable()
+    public void CompositeTextArrayUsesPositionPreservingClassification()
     {
         using PdfEditingSession session =
             CreateSession();
@@ -269,12 +269,15 @@ public sealed class PdfExistingTextDiscoveryServiceTests
                     source));
 
         Assert.Equal(
-            PdfExistingTextEditability.ReadOnlyAmbiguous,
+            PdfExistingTextEditability.EditableWithPositionPreservation,
+            descriptor.Editability);
+        Assert.NotEqual(
+            PdfExistingTextEditability.DirectlyEditable,
             descriptor.Editability);
         Assert.Contains(
-            "BF-1054D",
+            "position",
             descriptor.EditabilityReason,
-            StringComparison.Ordinal);
+            StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]

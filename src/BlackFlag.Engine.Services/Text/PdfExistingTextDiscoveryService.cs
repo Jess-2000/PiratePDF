@@ -255,8 +255,8 @@ public static class PdfExistingTextDiscoveryService
                 }
 
                 return (
-                    PdfExistingTextEditability.ReadOnlyAmbiguous,
-                    "Composite TJ positioning requires the dedicated BF-1054D editing strategy.");
+                    PdfExistingTextEditability.EditableWithPositionPreservation,
+                    "Composite TJ text requires the position-preserving editing strategy.");
 
             default:
                 return (

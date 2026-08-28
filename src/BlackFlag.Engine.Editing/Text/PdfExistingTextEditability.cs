@@ -28,5 +28,11 @@ public enum PdfExistingTextEditability
     ReadOnlyNonText = 6,
 
     /// <summary>The source structure is malformed and cannot be safely mutated.</summary>
-    ReadOnlyMalformedSource = 7
+    ReadOnlyMalformedSource = 7,
+
+    /// <summary>
+    /// The source can be edited only while preserving its existing positioned
+    /// text-array element boundaries and numeric adjustments.
+    /// </summary>
+    EditableWithPositionPreservation = 8
 }
