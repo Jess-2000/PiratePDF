@@ -41,6 +41,8 @@
     <ProjectReference
       Include="..\..\src\BlackFlag.Engine.Editing\BlackFlag.Engine.Editing.csproj" />
     <ProjectReference
+      Include="..\..\src\BlackFlag.Engine.Rendering\BlackFlag.Engine.Rendering.csproj" />
+    <ProjectReference
       Include="..\..\src\BlackFlag.Engine.Writing\BlackFlag.Engine.Writing.csproj" />
   </ItemGroup>
 

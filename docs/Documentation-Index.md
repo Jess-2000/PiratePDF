@@ -90,6 +90,7 @@
 | BF-1053Y | [BF-1053Y — Page Geometry Change-Set Writing Orchestration](milestones/BF-1053Y-Page-Geometry-Change-Set-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-25 |
 | BF-1053Z | [BF-1053Z — Page Rotation Change-Set Writing Orchestration](milestones/BF-1053Z-Page-Rotation-Change-Set-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-25 |
 | BF-1054A | [BF-1054A — Existing Text Editing Architecture, Identity, and Preservation Contracts](milestones/BF-1054A-Existing-Text-Editing-Architecture-Identity-and-Preservation-Contracts.md) | Milestone | 1.0 | Implemented | 2026-08-27 |
+| BF-1054B | [BF-1054B — Existing Text Discovery and Provenance Mapping](milestones/BF-1054B-Existing-Text-Discovery-and-Provenance-Mapping.md) | Milestone | 1.0 | Implemented | 2026-08-27 |
 | BF-DOC-0004 | [BlackFlag Engine — Parser Infrastructure RC1](Parser-Infrastructure-RC1.md) | Architecture | 0.4.0 | Tested | 2026-07-30 |
 | BF-DOC-0005 | [BlackFlag Engine 0.5.0 — PDF Object Model RC1](PDF-Object-Model-RC1.md) | Architecture | 0.5.0 | In Development | 2026-07-30 |
 | BF-DOC-1001 | [Documentation Template RC1](Documentation-Template-RC1.md) | Developer Documentation | 0.1.0 | In Development | 2026-07-30 |
