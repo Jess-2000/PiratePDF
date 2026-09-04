@@ -3,6 +3,7 @@ using BlackFlag.Engine.Document.Objects;
 using BlackFlag.Engine.Editing.Text;
 using BlackFlag.Engine.Rendering.DisplayList;
 using BlackFlag.Engine.Rendering.Graphics;
+using BlackFlag.Engine.Rendering.Resources;
 
 namespace BlackFlag.Engine.Services.Text;
 
@@ -15,6 +16,9 @@ public sealed class PdfExistingTextDiscoverySource
     private readonly ReadOnlyCollection<PdfGraphicsOperation> operations;
     private readonly ReadOnlyCollection<PdfObjectIdentifier?>
         contentStreamIdentifiers;
+    private readonly ReadOnlyDictionary<
+        string,
+        PdfResolvedFont> availableFonts;
 
     /// <summary>Initializes an existing-text discovery source.</summary>
     public PdfExistingTextDiscoverySource(
@@ -23,7 +27,8 @@ public sealed class PdfExistingTextDiscoverySource
         IEnumerable<PdfGraphicsOperation> operations,
         PdfDisplayList displayList,
         IEnumerable<PdfObjectIdentifier?>? contentStreamIdentifiers = null,
-        bool hasSharedSourceImpact = false)
+        bool hasSharedSourceImpact = false,
+        IReadOnlyDictionary<string, PdfResolvedFont>? availableFonts = null)
     {
         ArgumentNullException.ThrowIfNull(operations);
         ArgumentNullException.ThrowIfNull(displayList);
@@ -81,6 +86,43 @@ public sealed class PdfExistingTextDiscoverySource
                 streamSnapshot);
         HasSharedSourceImpact =
             hasSharedSourceImpact;
+
+        var fontSnapshot =
+            new Dictionary<string, PdfResolvedFont>(
+                StringComparer.Ordinal);
+
+        if (availableFonts is not null)
+        {
+            foreach (KeyValuePair<string, PdfResolvedFont> pair
+                    in availableFonts)
+            {
+                if (string.IsNullOrWhiteSpace(pair.Key))
+                {
+                    throw new ArgumentException(
+                        "Available font resource names cannot be empty or whitespace.",
+                        nameof(availableFonts));
+                }
+
+                ArgumentNullException.ThrowIfNull(
+                    pair.Value,
+                    nameof(availableFonts));
+
+                if (!fontSnapshot.TryAdd(
+                        pair.Key,
+                        pair.Value))
+                {
+                    throw new ArgumentException(
+                        $"Duplicate available font resource name '{pair.Key}'.",
+                        nameof(availableFonts));
+                }
+            }
+        }
+
+        this.availableFonts =
+            new ReadOnlyDictionary<
+                string,
+                PdfResolvedFont>(
+                fontSnapshot);
     }
 
     /// <summary>Gets the indirect object that owns the source content.</summary>
@@ -108,6 +150,29 @@ public sealed class PdfExistingTextDiscoverySource
     /// placements.
     /// </summary>
     public bool HasSharedSourceImpact { get; }
+
+    /// <summary>
+    /// Gets the resolved font resources available in this source's active
+    /// resource scope, keyed by PDF resource name.
+    /// </summary>
+    public IReadOnlyDictionary<string, PdfResolvedFont> AvailableFonts =>
+        availableFonts;
+
+    internal PdfResolvedFont GetRequiredFont(
+        string resourceName)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(resourceName);
+
+        if (availableFonts.TryGetValue(
+                resourceName,
+                out PdfResolvedFont? font))
+        {
+            return font;
+        }
+
+        throw new KeyNotFoundException(
+            $"Font resource '/{resourceName}' is not available in this existing-text source scope.");
+    }
 
     internal PdfObjectIdentifier? GetContentStreamIdentifier(
         int streamIndex)
