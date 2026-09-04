@@ -84,8 +84,7 @@ public static class PdfExistingTextDiscoveryService
                 ConvertIndirectIdentity(
                     run.Font.Identity);
 
-            (PdfExistingTextEditability Editability, string? Reason)
-                classification =
+            (PdfExistingTextEditability Editability, string? Reason) =
                     Classify(
                         source,
                         source.Operations[operationIndex],
@@ -99,8 +98,15 @@ public static class PdfExistingTextDiscoveryService
                     fontResourceNames[operationIndex],
                     fontIdentifier,
                     run.FontSize,
-                    classification.Editability,
-                    classification.Reason));
+                    Editability,
+                    Reason,
+                    new PdfExistingTextTypography(
+                        run.GraphicsState.FontSize,
+                        run.GraphicsState.CharacterSpacing,
+                        run.GraphicsState.WordSpacing,
+                        run.GraphicsState.HorizontalScaling,
+                        run.GraphicsState.TextRenderingMode,
+                        run.GraphicsState.TextRise)));
         }
 
         return new ReadOnlyCollection<PdfExistingTextDescriptor>(

@@ -19,7 +19,8 @@ public sealed class PdfExistingTextDescriptor
         PdfObjectIdentifier? fontObjectIdentifier,
         double fontSize,
         PdfExistingTextEditability editability,
-        string? editabilityReason = null)
+        string? editabilityReason = null,
+        PdfExistingTextTypography? typography = null)
     {
         if (fontResourceName is not null &&
             string.IsNullOrWhiteSpace(fontResourceName))
@@ -61,6 +62,15 @@ public sealed class PdfExistingTextDescriptor
         FontSize = fontSize;
         Editability = editability;
         EditabilityReason = editabilityReason;
+        Typography =
+            typography ??
+            new PdfExistingTextTypography(
+                fontSize,
+                0,
+                0,
+                100,
+                0,
+                0);
     }
 
     /// <summary>Gets the provenance-backed identity of the text target.</summary>
@@ -80,6 +90,9 @@ public sealed class PdfExistingTextDescriptor
 
     /// <summary>Gets the interpreted font size associated with the target.</summary>
     public double FontSize { get; }
+
+    /// <summary>Gets the interpreted text-state snapshot at this target.</summary>
+    public PdfExistingTextTypography Typography { get; }
 
     /// <summary>Gets the current editability classification.</summary>
     public PdfExistingTextEditability Editability { get; }

@@ -94,6 +94,7 @@
 | BF-1054C | [BF-1054C — Same-Font Direct Text Replacement](milestones/BF-1054C-Same-Font-Direct-Text-Replacement.md) | Milestone | 1.0 | Implemented | 2026-08-27 |
 | BF-1054D | [BF-1054D — Composite TJ Editing and Position Preservation](milestones/BF-1054D-Composite-TJ-Editing-and-Position-Preservation.md) | Milestone | 1.0 | Implemented | 2026-08-27 |
 | BF-1054E | [BF-1054E — Find/Replace Transaction Integration](milestones/BF-1054E-Find-Replace-Transaction-Integration.md) | Milestone | 1.0 | Implemented | 2026-09-03 |
+| BF-1054F | [BF-1054F — Typography State Editing](milestones/BF-1054F-Typography-State-Editing.md) | Milestone | 1.0 | Implemented | 2026-09-03 |
 | BF-DOC-0004 | [BlackFlag Engine — Parser Infrastructure RC1](Parser-Infrastructure-RC1.md) | Architecture | 0.4.0 | Tested | 2026-07-30 |
 | BF-DOC-0005 | [BlackFlag Engine 0.5.0 — PDF Object Model RC1](PDF-Object-Model-RC1.md) | Architecture | 0.5.0 | In Development | 2026-07-30 |
 | BF-DOC-1001 | [Documentation Template RC1](Documentation-Template-RC1.md) | Developer Documentation | 0.1.0 | In Development | 2026-07-30 |
