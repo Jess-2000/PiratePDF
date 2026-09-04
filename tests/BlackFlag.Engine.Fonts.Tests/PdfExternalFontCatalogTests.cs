@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using BlackFlag.Engine.Fonts;
+using BlackFlag.Engine.Fonts.Sanitization;
 using Xunit;
 
 namespace BlackFlag.Engine.Fonts.Tests;
@@ -200,7 +201,7 @@ public sealed class PdfExternalFontCatalogTests
     }
 
     [Fact]
-    public void OpenFontProgramDelegatesToOwningProvider()
+    public void FontProgramIsExposedOnlyThroughSanitizerGateway()
     {
         var provider =
             new FakeProvider(
@@ -226,17 +227,43 @@ public sealed class PdfExternalFontCatalogTests
                         "Test Sans"),
                     "A"));
 
-        using Stream stream =
-            match.OpenFontProgram();
+        var sanitizer =
+            new CapturingSanitizer();
 
-        using var memory =
-            new MemoryStream();
-
-        stream.CopyTo(memory);
+        _ = match.SanitizeFontProgram(
+            sanitizer);
 
         Assert.Equal(
             [1, 2, 3, 4],
-            memory.ToArray());
+            sanitizer.ObservedBytes);
+    }
+
+    private sealed class CapturingSanitizer :
+        IPdfExternalFontSanitizer
+    {
+        public byte[] ObservedBytes { get; private set; } = [];
+
+        public PdfSanitizedExternalFontProgram Sanitize(
+            Stream untrustedFontProgram,
+            PdfExternalFontSanitizationOptions? options = null,
+            CancellationToken cancellationToken = default)
+        {
+            using var memory =
+                new MemoryStream();
+
+            untrustedFontProgram.CopyTo(memory);
+            ObservedBytes = memory.ToArray();
+
+            // The real sanitizer is covered separately. This test proves the
+            // matched-font API cannot return provider bytes directly.
+            using var minimal =
+                TestFontFactory.CreateMinimalTrueType();
+
+            return new PdfOpenTypeFontSanitizer().Sanitize(
+                minimal,
+                options,
+                cancellationToken);
+        }
     }
 
     private static PdfExternalFontFace Face(
