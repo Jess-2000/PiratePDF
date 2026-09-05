@@ -13,7 +13,16 @@ public sealed partial class PdfEditableDocument
     /// </summary>
     internal PdfExistingTextEditOperation ReplaceExistingTextStream(
         PdfExistingTextIdentity identity,
-        ReadOnlySpan<byte> replacementStreamData)
+        ReadOnlySpan<byte> replacementStreamData) =>
+        ReplaceExistingTextStream(
+            identity,
+            replacementStreamData,
+            allowFormXObjectSource: false);
+
+    internal PdfExistingTextEditOperation ReplaceExistingTextStream(
+        PdfExistingTextIdentity identity,
+        ReadOnlySpan<byte> replacementStreamData,
+        bool allowFormXObjectSource)
     {
         if (identity.SessionId !=
             owner.SessionId)
@@ -42,11 +51,20 @@ public sealed partial class PdfEditableDocument
                 "The existing-text identity refers to a page that is no longer attached to this editing document.");
         }
 
-        if (identity.SourceKind !=
-            PdfExistingTextSourceKind.PageContent)
+        if (identity.SourceKind ==
+                PdfExistingTextSourceKind.FormXObject &&
+            !allowFormXObjectSource)
         {
             throw new NotSupportedException(
-                "BF-1054C mutates page-owned text only; Form XObject mutation is deferred.");
+                "Form XObject mutation requires an explicit shared-Form editing path.");
+        }
+
+        if (identity.SourceKind is not
+            (PdfExistingTextSourceKind.PageContent or
+            PdfExistingTextSourceKind.FormXObject))
+        {
+            throw new NotSupportedException(
+                "The existing-text source kind is not supported for stream mutation.");
         }
 
         PdfObjectIdentifier streamIdentifier =
