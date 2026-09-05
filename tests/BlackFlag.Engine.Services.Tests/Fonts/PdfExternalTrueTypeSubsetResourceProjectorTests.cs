@@ -1,4 +1,4 @@
-﻿using System.Buffers.Binary;
+using System.Buffers.Binary;
 using System.IO;
 using System.Text;
 using BlackFlag.Engine.Document.Model;
@@ -88,7 +88,7 @@ public sealed class PdfExternalTrueTypeSubsetResourceProjectorTests
     }
 
     [Fact]
-    public void CompositeSelectedGlyphIsRejected()
+    public void CompositeSelectedGlyphRetainsItsComponentDependency()
     {
         TestContext context =
             CreateContext(
@@ -98,11 +98,13 @@ public sealed class PdfExternalTrueTypeSubsetResourceProjectorTests
         var subsetter =
             new PdfTrueTypeGlyphSubsetter();
 
-        Assert.Throws<NotSupportedException>(
-            () =>
-                subsetter.CreateSubset(
-                    context.Program,
-                    "A"));
+        PdfTrueTypeSubsetResult result =
+            subsetter.CreateSubset(
+                context.Program,
+                "A");
+
+        Assert.True(
+            result.Program.Bytes.Length > 0);
     }
 
     [Fact]
@@ -329,12 +331,23 @@ public sealed class PdfExternalTrueTypeSubsetResourceProjectorTests
     private static byte[] CompositeGlyph()
     {
         byte[] v =
-            new byte[10];
+            new byte[16];
 
         W16(
             v,
             0,
             unchecked((ushort)-1));
+
+        // ARGS_ARE_XY_VALUES, component glyph 2, byte arguments (0, 0).
+        W16(
+            v,
+            10,
+            0x0002);
+
+        W16(
+            v,
+            12,
+            2);
 
         return v;
     }
