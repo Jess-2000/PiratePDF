@@ -18,9 +18,6 @@ namespace BlackFlag.Engine.Services.Text;
 /// </summary>
 public static class PdfExistingTextFontService
 {
-    private static readonly PdfName FilterName =
-        PdfName.FromLatin1("Filter");
-
     public static PdfExistingTextEditOperation ChangeFont(
         PdfEditingSession session,
         PdfEditablePage displayedPage,
@@ -114,15 +111,10 @@ public static class PdfExistingTextFontService
                 $"Existing-text content stream '{streamIdentifier}' is not available in the authoritative object store.");
         }
 
-        if (stream.Dictionary.ContainsKey(
-                FilterName))
-        {
-            throw new NotSupportedException(
-                "BF-1054G font switching is limited to unfiltered content streams.");
-        }
-
         byte[] currentData =
-            stream.ToByteArray();
+            PdfContentStreamMutationCodec.Decode(
+                stream,
+                cancellationToken);
 
         byte[] reencoded =
             ReencodeText(
@@ -146,9 +138,15 @@ public static class PdfExistingTextFontService
                 originalResourceName,
                 descriptor.Typography.FontSize);
 
+        byte[] encodedReplacement =
+            PdfContentStreamMutationCodec.Encode(
+                stream,
+                replacementData,
+                cancellationToken);
+
         return session.Document.ReplaceExistingTextStream(
             descriptor.Identity,
-            replacementData);
+            encodedReplacement);
     }
 
     private static byte[] ReencodeText(

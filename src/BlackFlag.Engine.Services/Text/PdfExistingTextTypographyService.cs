@@ -16,9 +16,6 @@ namespace BlackFlag.Engine.Services.Text;
 /// </summary>
 public static class PdfExistingTextTypographyService
 {
-    private static readonly PdfName FilterName =
-        PdfName.FromLatin1("Filter");
-
     public static PdfExistingTextEditOperation Apply(
         PdfEditingSession session,
         PdfEditablePage displayedPage,
@@ -98,14 +95,10 @@ public static class PdfExistingTextTypographyService
                 $"Existing-text content stream '{streamIdentifier}' is not available in the authoritative object store.");
         }
 
-        if (stream.Dictionary.ContainsKey(FilterName))
-        {
-            throw new NotSupportedException(
-                "BF-1054F scoped typography editing is limited to unfiltered content streams.");
-        }
-
         byte[] currentData =
-            stream.ToByteArray();
+            PdfContentStreamMutationCodec.Decode(
+                stream,
+                default);
 
         ValidateSourceText(
             currentData,
@@ -118,9 +111,15 @@ public static class PdfExistingTextTypographyService
                 descriptor,
                 update);
 
+        byte[] encodedReplacement =
+            PdfContentStreamMutationCodec.Encode(
+                stream,
+                replacementData,
+                default);
+
         return session.Document.ReplaceExistingTextStream(
             descriptor.Identity,
-            replacementData);
+            encodedReplacement);
     }
 
     private static void ValidateSourceText(

@@ -181,15 +181,10 @@ public static class PdfPositionedTextReplacementService
                 $"Positioned-text content stream '{streamIdentifier}' is not available in the authoritative object store.");
         }
 
-        if (stream.Dictionary.ContainsKey(
-                PdfNames.Filter))
-        {
-            throw new NotSupportedException(
-                "BF-1054D positioned replacement is limited to unfiltered content streams so source offsets remain byte-preserving.");
-        }
-
         byte[] currentData =
-            stream.ToByteArray();
+            PdfContentStreamMutationCodec.Decode(
+                stream,
+                cancellationToken);
 
         byte[] replacementData =
             PdfTextArrayTokenEditor.Replace(
@@ -199,9 +194,15 @@ public static class PdfPositionedTextReplacementService
                 expected,
                 replacement);
 
+        byte[] encodedReplacement =
+            PdfContentStreamMutationCodec.Encode(
+                stream,
+                replacementData,
+                cancellationToken);
+
         return session.Document.ReplaceExistingTextStream(
             descriptor.Identity,
-            replacementData);
+            encodedReplacement);
     }
 
     private static void ValidateIdentity(

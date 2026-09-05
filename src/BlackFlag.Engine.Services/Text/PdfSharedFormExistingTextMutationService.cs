@@ -1,3 +1,5 @@
+using BlackFlag.Engine.Document.Model;
+using BlackFlag.Engine.Document.Objects;
 using BlackFlag.Engine.Editing.Documents;
 using BlackFlag.Engine.Editing.Operations;
 using BlackFlag.Engine.Editing.Pages;
@@ -63,9 +65,31 @@ public static class PdfSharedFormExistingTextMutationService
                 "The shared-Form target no longer maps to the supplied authoritative stream.");
         }
 
+        PdfObjectIdentifier streamIdentifier =
+            identity.ContentStreamIdentifier ??
+            throw new NotSupportedException(
+                "Shared Form mutation requires an indirect Form stream.");
+
+        PdfDocument document =
+            session.Document.GetSourceDocument();
+
+        if (!document.Objects.TryGet(
+                streamIdentifier,
+                out PdfObject? value) ||
+            value is not PdfStream stream)
+        {
+            throw new InvalidOperationException(
+                $"Shared Form stream '{streamIdentifier}' is unavailable.");
+        }
+
+        byte[] encodedReplacement =
+            PdfContentStreamMutationCodec.Encode(
+                stream,
+                replacementStreamData);
+
         return session.Document.ReplaceExistingTextStream(
             identity,
-            replacementStreamData,
+            encodedReplacement,
             allowFormXObjectSource: true);
     }
 }

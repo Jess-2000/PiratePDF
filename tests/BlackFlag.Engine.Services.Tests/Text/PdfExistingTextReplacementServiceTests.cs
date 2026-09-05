@@ -1,3 +1,4 @@
+using System.IO;
 using System.Text;
 using BlackFlag.Engine.Document.Model;
 using BlackFlag.Engine.Document.Objects;
@@ -191,7 +192,7 @@ public sealed class PdfExistingTextReplacementServiceTests
     }
 
     [Fact]
-    public void FilteredContentStreamIsRejectedWithoutChangingBytes()
+    public void MalformedFlateContentStreamIsRejectedWithoutChangingBytes()
     {
         TestContext context =
             CreateContext(
@@ -208,7 +209,7 @@ public sealed class PdfExistingTextReplacementServiceTests
                 session,
                 context);
 
-        Assert.Throws<NotSupportedException>(
+        Assert.Throws<InvalidDataException>(
             () =>
                 PdfExistingTextReplacementService.Replace(
                     session,

@@ -128,15 +128,10 @@ public static class PdfExistingTextReplacementService
                 $"Existing-text content stream '{streamIdentifier}' is not available in the authoritative object store.");
         }
 
-        if (stream.Dictionary.ContainsKey(
-                PdfNames.Filter))
-        {
-            throw new NotSupportedException(
-                "BF-1054C direct replacement is limited to unfiltered content streams so source offsets remain byte-preserving.");
-        }
-
         byte[] currentData =
-            stream.ToByteArray();
+            PdfContentStreamMutationCodec.Decode(
+                stream,
+                cancellationToken);
 
         byte[] replacementData =
             PdfTextStringTokenEditor.Replace(
@@ -145,9 +140,15 @@ public static class PdfExistingTextReplacementService
                 descriptor.EncodedBytes.Span,
                 replacementBytes);
 
+        byte[] encodedReplacement =
+            PdfContentStreamMutationCodec.Encode(
+                stream,
+                replacementData,
+                cancellationToken);
+
         return session.Document.ReplaceExistingTextStream(
             descriptor.Identity,
-            replacementData);
+            encodedReplacement);
     }
 
     private static void ValidateIdentity(

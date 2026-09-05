@@ -12,9 +12,6 @@ namespace BlackFlag.Engine.Services.Text;
 /// </summary>
 public static class PdfFormPlacementCloneProjector
 {
-    private static readonly PdfName FilterName =
-        PdfName.FromLatin1("Filter");
-
     private static readonly PdfName XObjectName =
         PdfName.FromLatin1("XObject");
 
@@ -33,23 +30,11 @@ public static class PdfFormPlacementCloneProjector
                 placement.FormIdentifier,
                 "source Form XObject");
 
-        if (sourceForm.Dictionary.ContainsKey(FilterName))
-        {
-            throw new NotSupportedException(
-                "BF-1054O placement-only cloning is limited to unfiltered Form streams until BF-1054P re-encoding is available.");
-        }
-
         PdfStream pageContent =
             GetStream(
                 writePlan,
                 placement.ContentStreamIdentifier,
                 "page content");
-
-        if (pageContent.Dictionary.ContainsKey(FilterName))
-        {
-            throw new NotSupportedException(
-                "BF-1054O placement-only cloning is limited to unfiltered page content streams until BF-1054P re-encoding is available.");
-        }
 
         PdfWriteObjectAllocator allocator =
             writePlan.CreateObjectAllocator();
@@ -57,10 +42,15 @@ public static class PdfFormPlacementCloneProjector
         PdfObjectIdentifier cloneIdentifier =
             allocator.ReserveNext();
 
+        byte[] encodedFormData =
+            PdfContentStreamMutationCodec.Encode(
+                sourceForm,
+                replacementFormData);
+
         var clonedForm =
             new PdfStream(
                 sourceForm.Dictionary,
-                replacementFormData);
+                encodedFormData);
 
         string preferred =
             preferredCloneResourceName ??
@@ -75,11 +65,20 @@ public static class PdfFormPlacementCloneProjector
                 new PdfIndirectReference(
                     cloneIdentifier));
 
-        byte[] projectedPageContent =
+        byte[] decodedPageContent =
+            PdfContentStreamMutationCodec.Decode(
+                pageContent);
+
+        byte[] projectedDecodedPageContent =
             RedirectPlacement(
-                pageContent.ToByteArray(),
+                decodedPageContent,
                 placement,
                 resourceProjection.ResourceName);
+
+        byte[] projectedPageContent =
+            PdfContentStreamMutationCodec.Encode(
+                pageContent,
+                projectedDecodedPageContent);
 
         var projectedContentStream =
             new PdfStream(
