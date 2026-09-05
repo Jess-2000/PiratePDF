@@ -6,6 +6,7 @@ internal static class PdfTrueTypeCmap
         ReadOnlySpan<byte> cmap)
     {
         int count = PdfTrueTypeBinary.U16(cmap, 2);
+        Func<int, int>? format12 = null;
         Func<int, int>? format4 = null;
         Func<int, int>? format0 = null;
 
@@ -21,7 +22,11 @@ internal static class PdfTrueTypeCmap
             ReadOnlySpan<byte> subtable = cmap[offset..];
             int format = PdfTrueTypeBinary.U16(subtable, 0);
 
-            if (format == 4 && format4 is null)
+            if (format == 12 && format12 is null)
+            {
+                format12 = CreateFormat12Mapper(subtable);
+            }
+            else if (format == 4 && format4 is null)
             {
                 format4 = CreateFormat4Mapper(subtable);
             }
@@ -31,10 +36,11 @@ internal static class PdfTrueTypeCmap
             }
         }
 
-        return format4 ??
+        return format12 ??
+            format4 ??
             format0 ??
             throw new NotSupportedException(
-                "BF-1054K requires cmap format 0 or 4 for WinAnsi subsetting.");
+                "The sanitized TrueType font has no supported Unicode cmap format (0, 4, or 12).");
     }
 
     public static byte[] BuildSubsetCmap(
@@ -326,4 +332,101 @@ internal static class PdfTrueTypeCmap
             return 0;
         };
     }
+
+    private static Func<int, int> CreateFormat12Mapper(
+        ReadOnlySpan<byte> table)
+    {
+        if (table.Length < 16)
+        {
+            throw new InvalidDataException(
+                "The cmap format 12 subtable is truncated.");
+        }
+
+        int length =
+            checked(
+                (int)PdfTrueTypeBinary.U32(
+                    table,
+                    4));
+
+        int groupCount =
+            checked(
+                (int)PdfTrueTypeBinary.U32(
+                    table,
+                    12));
+
+        if (length > table.Length ||
+            16L + groupCount * 12L > length)
+        {
+            throw new InvalidDataException(
+                "The cmap format 12 group array is invalid.");
+        }
+
+        byte[] data =
+            table[..length].ToArray();
+
+        return unicode =>
+        {
+            if (unicode < 0)
+            {
+                return 0;
+            }
+
+            uint scalar =
+                checked((uint)unicode);
+
+            int low = 0;
+            int high = groupCount - 1;
+
+            while (low <= high)
+            {
+                int middle =
+                    low +
+                    ((high - low) / 2);
+
+                int offset =
+                    16 +
+                    middle * 12;
+
+                uint start =
+                    PdfTrueTypeBinary.U32(
+                        data,
+                        offset);
+
+                uint end =
+                    PdfTrueTypeBinary.U32(
+                        data,
+                        offset + 4);
+
+                if (scalar < start)
+                {
+                    high = middle - 1;
+                    continue;
+                }
+
+                if (scalar > end)
+                {
+                    low = middle + 1;
+                    continue;
+                }
+
+                uint firstGlyph =
+                    PdfTrueTypeBinary.U32(
+                        data,
+                        offset + 8);
+
+                uint glyph =
+                    checked(
+                        firstGlyph +
+                        scalar -
+                        start);
+
+                return glyph <= int.MaxValue
+                    ? checked((int)glyph)
+                    : 0;
+            }
+
+            return 0;
+        };
+    }
+
 }

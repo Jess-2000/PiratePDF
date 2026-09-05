@@ -137,4 +137,72 @@ public static class PdfExternalFontEmbeddingWritingService
             projection.Projections);
     }
 
+
+    public static PdfWritePlan CreateUnicodeSubsetFullRewritePlan(
+        PdfWritePlan writePlan,
+        PdfObjectIdentifier pageIdentifier,
+        string resourceName,
+        PdfExternalFontFace face,
+        PdfSanitizedExternalFontProgram program,
+        string requiredText,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(writePlan);
+
+        if (writePlan.Mode != PdfWriteMode.FullRewrite)
+        {
+            throw new InvalidOperationException(
+                "Unicode external-font subset embedding requires a full-rewrite base plan.");
+        }
+
+        PdfExternalType0TrueTypeResourceProjection projection =
+            PdfExternalType0TrueTypeResourceProjector.Create(
+                writePlan,
+                pageIdentifier,
+                resourceName,
+                face,
+                program,
+                requiredText,
+                cancellationToken);
+
+        return PdfProjectedFullRewritePlanner.Create(
+            writePlan,
+            projection.Projections);
+    }
+
+    public static PdfIncrementalWritePlan CreateUnicodeSubsetIncrementalPlan(
+        PdfWritePlan writePlan,
+        IPdfOriginalSourceRevision sourceRevision,
+        PdfObjectIdentifier pageIdentifier,
+        string resourceName,
+        PdfExternalFontFace face,
+        PdfSanitizedExternalFontProgram program,
+        string requiredText,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(writePlan);
+        ArgumentNullException.ThrowIfNull(sourceRevision);
+
+        if (writePlan.Mode != PdfWriteMode.IncrementalUpdate)
+        {
+            throw new InvalidOperationException(
+                "Unicode external-font subset embedding requires an incremental base plan.");
+        }
+
+        PdfExternalType0TrueTypeResourceProjection projection =
+            PdfExternalType0TrueTypeResourceProjector.Create(
+                writePlan,
+                pageIdentifier,
+                resourceName,
+                face,
+                program,
+                requiredText,
+                cancellationToken);
+
+        return PdfProjectedIncrementalWritePlanner.Create(
+            writePlan,
+            sourceRevision,
+            projection.Projections);
+    }
+
 }
