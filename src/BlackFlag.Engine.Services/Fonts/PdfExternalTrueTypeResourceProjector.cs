@@ -159,6 +159,7 @@ public static class PdfExternalTrueTypeResourceProjector
             fontIdentifier,
             descriptorIdentifier,
             programIdentifier,
+            null,
             pageIdentifier,
             new PdfObjectWriteProjectionSet(
             [
@@ -263,7 +264,7 @@ public static class PdfExternalTrueTypeResourceProjector
                 key,
                 out PdfObject? value))
         {
-            return new PdfDictionary();
+            return [];
         }
 
         if (value is PdfDictionary dictionary)

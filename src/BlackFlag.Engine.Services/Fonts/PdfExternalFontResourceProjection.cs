@@ -14,6 +14,7 @@ public sealed class PdfExternalFontResourceProjection
         PdfObjectIdentifier fontIdentifier,
         PdfObjectIdentifier descriptorIdentifier,
         PdfObjectIdentifier programIdentifier,
+        PdfObjectIdentifier? toUnicodeIdentifier,
         PdfObjectIdentifier pageIdentifier,
         PdfObjectWriteProjectionSet projections)
     {
@@ -21,6 +22,7 @@ public sealed class PdfExternalFontResourceProjection
         FontIdentifier = fontIdentifier;
         DescriptorIdentifier = descriptorIdentifier;
         ProgramIdentifier = programIdentifier;
+        ToUnicodeIdentifier = toUnicodeIdentifier;
         PageIdentifier = pageIdentifier;
         Projections = projections;
     }
@@ -29,6 +31,7 @@ public sealed class PdfExternalFontResourceProjection
     public PdfObjectIdentifier FontIdentifier { get; }
     public PdfObjectIdentifier DescriptorIdentifier { get; }
     public PdfObjectIdentifier ProgramIdentifier { get; }
+    public PdfObjectIdentifier? ToUnicodeIdentifier { get; }
     public PdfObjectIdentifier PageIdentifier { get; }
     public PdfObjectWriteProjectionSet Projections { get; }
 }
