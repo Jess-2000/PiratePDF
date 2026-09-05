@@ -100,7 +100,7 @@ public sealed class PdfExistingTextTypographyServiceTests
     }
 
     [Fact]
-    public void QuoteOperatorIsRejectedWithoutMutation()
+    public void QuoteOperatorIsNormalizedWithScopedTypographyAndUndoRedo()
     {
         using TestContext context =
             CreateContext("'");
@@ -111,19 +111,31 @@ public sealed class PdfExistingTextTypographyServiceTests
         string original =
             ReadContent(context);
 
-        Assert.Throws<NotSupportedException>(
-            () =>
-                PdfExistingTextTypographyService.Apply(
-                    context.Session,
-                    context.Session.Document.Pages[0],
-                    context.Source,
-                    descriptor,
-                    new PdfExistingTextTypographyUpdate
-                    {
-                        FontSize = 18
-                    }));
+        using (var transaction = context.Session.BeginTransaction())
+        {
+            _ = PdfExistingTextTypographyService.Apply(
+                context.Session,
+                context.Session.Document.Pages[0],
+                context.Source,
+                descriptor,
+                new PdfExistingTextTypographyUpdate
+                {
+                    FontSize = 18
+                });
 
+            _ = transaction.Commit();
+        }
+
+        const string expected =
+            "BT\n/F1 12 Tf\n1 Tc\n2 Tw\n90 Tz\n0 Tr\n0 Ts\n" +
+            "/F1 18 Tf\nT*\n(Hello) Tj\n/F1 12 Tf\n(Next) Tj\nET\n";
+        Assert.Equal(expected, ReadContent(context));
+
+        _ = context.Session.History.Undo();
         Assert.Equal(original, ReadContent(context));
+
+        _ = context.Session.History.Redo();
+        Assert.Equal(expected, ReadContent(context));
     }
 
     [Fact]

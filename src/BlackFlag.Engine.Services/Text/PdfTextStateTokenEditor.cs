@@ -15,7 +15,18 @@ internal static class PdfTextStateTokenEditor
     public static byte[] Apply(
         ReadOnlySpan<byte> streamData,
         PdfExistingTextDescriptor descriptor,
-        PdfExistingTextTypographyUpdate update)
+        PdfExistingTextTypographyUpdate update) =>
+        Apply(
+            streamData,
+            descriptor,
+            update,
+            descriptor.Identity.EndOffset);
+
+    public static byte[] Apply(
+        ReadOnlySpan<byte> streamData,
+        PdfExistingTextDescriptor descriptor,
+        PdfExistingTextTypographyUpdate update,
+        long operationEndOffset)
     {
         ArgumentNullException.ThrowIfNull(descriptor);
         ArgumentNullException.ThrowIfNull(update);
@@ -32,7 +43,7 @@ internal static class PdfTextStateTokenEditor
         PdfExistingTextIdentity identity =
             descriptor.Identity;
 
-        if (identity.EndOffset > streamData.Length)
+        if (operationEndOffset > streamData.Length)
         {
             throw new InvalidOperationException(
                 "The existing-text source span lies outside the current content-stream data.");
@@ -52,7 +63,7 @@ internal static class PdfTextStateTokenEditor
         int start =
             checked((int)identity.StartOffset);
         int end =
-            checked((int)identity.EndOffset);
+            checked((int)operationEndOffset);
 
         byte[] result =
             new byte[

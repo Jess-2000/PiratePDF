@@ -67,10 +67,10 @@ public static class PdfExistingTextTypographyService
                 source,
                 descriptor.Identity);
 
-        if (operation.Operator.Code is not ("Tj" or "TJ"))
+        if (operation.Operator.Code is not ("Tj" or "TJ" or "'" or "\""))
         {
             throw new NotSupportedException(
-                "BF-1054F scoped typography editing supports Tj and TJ targets only.");
+                $"Scoped typography editing does not support operator '{operation.Operator.Code}'.");
         }
 
         PdfDisplayTextRun run =
@@ -105,11 +105,23 @@ public static class PdfExistingTextTypographyService
             descriptor,
             run);
 
+        byte[] normalizedData =
+            PdfCompoundTextOperatorNormalizer.Normalize(
+                currentData,
+                operation);
+
+        long normalizedEnd =
+            checked(
+                descriptor.Identity.EndOffset +
+                normalizedData.Length -
+                currentData.Length);
+
         byte[] replacementData =
             PdfTextStateTokenEditor.Apply(
-                currentData,
+                normalizedData,
                 descriptor,
-                update);
+                update,
+                normalizedEnd);
 
         byte[] encodedReplacement =
             PdfContentStreamMutationCodec.Encode(
