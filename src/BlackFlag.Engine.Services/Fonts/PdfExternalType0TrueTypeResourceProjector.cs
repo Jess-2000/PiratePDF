@@ -5,6 +5,7 @@ using BlackFlag.Engine.Document.Objects.Primitives;
 using BlackFlag.Engine.Fonts;
 using BlackFlag.Engine.Fonts.Embedding;
 using BlackFlag.Engine.Fonts.Sanitization;
+using BlackFlag.Engine.Services.Resources;
 using BlackFlag.Engine.Writing;
 
 namespace BlackFlag.Engine.Services.Fonts;
@@ -42,7 +43,6 @@ public static class PdfExternalType0TrueTypeResourceProjector
     private static readonly PdfName DescentName = PdfName.FromLatin1("Descent");
     private static readonly PdfName CapHeightName = PdfName.FromLatin1("CapHeight");
     private static readonly PdfName StemVName = PdfName.FromLatin1("StemV");
-    private static readonly PdfName ResourcesName = PdfName.FromLatin1("Resources");
     private static readonly PdfName FontCategoryName = PdfName.FromLatin1("Font");
 
     public static PdfExternalType0TrueTypeResourceProjection Create(
@@ -85,34 +85,6 @@ public static class PdfExternalType0TrueTypeResourceProjector
         {
             throw new NotSupportedException(
                 "The sanitized font program prohibits embedding.");
-        }
-
-        PdfDictionary projectedPage =
-            GetPageProjection(
-                writePlan,
-                pageIdentifier);
-
-        PdfDictionary resources =
-            GetDirectDictionaryCopy(
-                projectedPage,
-                ResourcesName,
-                "page /Resources");
-
-        PdfDictionary fonts =
-            GetDirectDictionaryCopy(
-                resources,
-                FontCategoryName,
-                "page /Resources /Font");
-
-        PdfName resourcePdfName =
-            PdfName.FromLatin1(
-                resourceName);
-
-        if (fonts.ContainsKey(
-                resourcePdfName))
-        {
-            throw new InvalidOperationException(
-                $"Page font resource '/{resourceName}' already exists.");
         }
 
         PdfWriteObjectAllocator allocator =
@@ -190,18 +162,14 @@ public static class PdfExternalType0TrueTypeResourceProjector
                 }
             };
 
-        fonts.Add(
-            resourcePdfName,
-            new PdfIndirectReference(
-                type0Identifier));
-
-        resources.Set(
-            FontCategoryName,
-            fonts);
-
-        projectedPage.Set(
-            ResourcesName,
-            resources);
+        PdfPageResourceMutationProjection resourceMutation =
+            PdfPageResourceMutationProjector.Create(
+                writePlan,
+                pageIdentifier,
+                FontCategoryName,
+                resourceName,
+                new PdfIndirectReference(
+                    type0Identifier));
 
         return new PdfExternalType0TrueTypeResourceProjection(
             resourceName,
@@ -215,9 +183,7 @@ public static class PdfExternalType0TrueTypeResourceProjector
             subset,
             new PdfObjectWriteProjectionSet(
             [
-                new PdfObjectWriteProjection(
-                    pageIdentifier,
-                    projectedPage),
+                resourceMutation.PageProjection,
                 new PdfObjectWriteProjection(
                     programIdentifier,
                     programStream),
@@ -386,43 +352,6 @@ public static class PdfExternalType0TrueTypeResourceProjector
         }
 
         return result;
-    }
-
-    private static PdfDictionary GetPageProjection(
-        PdfWritePlan writePlan,
-        PdfObjectIdentifier pageIdentifier)
-    {
-        if (!writePlan.Document.Objects.TryGet(
-                pageIdentifier,
-                out PdfObject? value) ||
-            value is not PdfDictionary page)
-        {
-            throw new InvalidOperationException(
-                $"Target page object '{pageIdentifier}' is not an indirect page dictionary.");
-        }
-
-        return page.CreateCopy();
-    }
-
-    private static PdfDictionary GetDirectDictionaryCopy(
-        PdfDictionary owner,
-        PdfName key,
-        string description)
-    {
-        if (!owner.TryGetValue(
-                key,
-                out PdfObject? value))
-        {
-            return [];
-        }
-
-        if (value is PdfDictionary dictionary)
-        {
-            return dictionary.CreateCopy();
-        }
-
-        throw new NotSupportedException(
-            $"BF-1054M requires {description} to be direct or absent.");
     }
 
     private static string CreateSubsetBaseFontName(

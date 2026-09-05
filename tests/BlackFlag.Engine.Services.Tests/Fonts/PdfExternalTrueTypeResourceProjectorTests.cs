@@ -1,4 +1,4 @@
-using System.Buffers.Binary;
+﻿using System.Buffers.Binary;
 using System.IO;
 using System.Text;
 using BlackFlag.Engine.Document.Model;
@@ -139,7 +139,7 @@ public sealed class PdfExternalTrueTypeResourceProjectorTests
     }
 
     [Fact]
-    public void IndirectPageResourcesAreRejectedRatherThanRewrittenAmbiguously()
+    public void IndirectPageResourcesAreCopiedOntoPageBeforeFontMutation()
     {
         TestContext context =
             CreateContext(
@@ -149,14 +149,39 @@ public sealed class PdfExternalTrueTypeResourceProjectorTests
             PdfWritePlanner.Create(
                 context.Document);
 
-        Assert.Throws<NotSupportedException>(
-            () =>
-                PdfExternalTrueTypeResourceProjector.Create(
-                    plan,
-                    context.PageIdentifier,
-                    "FExt1",
-                    context.Face,
-                    context.Program));
+        PdfExternalFontResourceProjection projection =
+            PdfExternalTrueTypeResourceProjector.Create(
+                plan,
+                context.PageIdentifier,
+                "FExt1",
+                context.Face,
+                context.Program);
+
+        PdfObjectWriteProjection pageProjection =
+            Assert.Single(
+                projection.Projections.Projections,
+                item =>
+                    item.Identifier ==
+                    context.PageIdentifier);
+
+        PdfDictionary page =
+            Assert.IsType<PdfDictionary>(
+                pageProjection.Value);
+
+        PdfDictionary resources =
+            Assert.IsType<PdfDictionary>(
+                page.Get(
+                    PdfName.FromLatin1("Resources")));
+
+        PdfDictionary fonts =
+            Assert.IsType<PdfDictionary>(
+                resources.Get(
+                    PdfName.FromLatin1("Font")));
+
+        Assert.True(
+            fonts.ContainsKey(
+                PdfName.FromLatin1(
+                    projection.ResourceName)));
     }
 
     private static TestContext CreateContext(
