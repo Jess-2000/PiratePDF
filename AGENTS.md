@@ -39,13 +39,12 @@ merely because later milestones superseded them. Reconcile current state in curr
 
 ## Current repository checkpoint
 
-The repository baseline immediately before the pre-BF-1054 optimization audit is expected to have:
-- BF-1053 completed and merged to `develop`.
-- The post-merge BF-1053 release gate passing.
-- Preservation-aware Writing established.
-- BF-1054 planned for existing text editing and typography, but feature implementation not yet begun.
+The current baseline is post-BF-1054:
+- BF-1054 Existing Text Editing & Typography is completed and merged to `develop`.
+- Preservation-aware Writing, transactional Editing, SDK/Services text-editing exposure, and BF-1054 closure hardening are established.
+- The next major feature workstream is canonical font editing architecture unless the user selects another approved roadmap item.
 
-Do not implement BF-1054 or other roadmap features during the optimization audit.
+Do not reopen completed BF-1054 behavior during unrelated maintenance. Historical milestone documents remain historical records.
 
 ## Non-negotiable engineering priorities
 
@@ -224,9 +223,20 @@ Protect against applicable risks including:
 
 Do not weaken validation, sanitization, capability checks, or least-privilege boundaries for speed.
 
+
+### Additional security-hardening rules
+- Treat hostile-file parsing and resource exhaustion as primary desktop threat surfaces. Bound lengths, offsets, object counts, recursion/depth, decompression, allocations, and aggregate work.
+- Fuzz high-risk byte-oriented boundaries and add deterministic regression fixtures for reproducible crashes, hangs, corruption, or invariant violations.
+- PDF JavaScript, launch actions, embedded executables/files, external commands, and network actions must not execute implicitly.
+- Minimize sensitive document/credential data lifetime and copies. Do not claim guaranteed erasure of arbitrary managed memory; clear mutable secret buffers only where technically meaningful.
+- Native/PInvoke boundaries must be narrow and validated. Do not rely on writable/current-directory native-library search paths; verify packaged DLL/dylib resolution.
+- Track dependency purpose/version/license/provenance/security-update path and release SBOM/third-party notices where applicable.
+- Native AOT/trimming/symbol stripping are deployment-hardening choices, not security or secrecy boundaries. Treat AOT/trimming warnings as engineering work and validate reflection, serialization, plugins, SkiaSharp/native assets, fonts/images, and platform adapters.
+- Official Windows release artifacts should be Authenticode-signed; official macOS artifacts should be code-signed/notarized. Protect signing credentials, record hashes/provenance, and pursue reproducible/deterministic release builds where practical.
+
 ## Git and change discipline
 
-For the pre-BF-1054 repository optimization:
+For repository optimization/hardening work:
 - Work only on the dedicated maintenance/optimization branch selected by the user.
 - Do not create or switch branches unless explicitly instructed.
 - Do not merge.

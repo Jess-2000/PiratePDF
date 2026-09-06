@@ -4,7 +4,7 @@ PiratePDF is a free and open-source PDF and document-workflow project built arou
 
 The project aims to make everyday PDF work easier while still supporting demanding professional and print-production workflows. PiratePDF is being designed as one complete product rather than a reduced free edition paired with a paid feature tier.
 
-> **Project status:** PiratePDF is under active development. BlackFlag Engine already contains substantial parser, document-model, rendering, security, plugin, editing, and preservation-aware writing foundations, while the complete end-user application and additional workflows remain in development.
+> **Project status:** PiratePDF is under active development. BlackFlag Engine already contains substantial parser, document-model, rendering, security, plugin, editing, and preservation-aware writing foundations, including completed BF-1054 existing-text editing/typography foundations, while the complete end-user application and additional workflows remain in development.
 
 ## What PiratePDF Aims to Do
 
@@ -41,7 +41,15 @@ Development to date includes substantial work in these areas:
 - document security analysis, passive remediation, standard-security authentication, and decryption foundations;
 - plugin discovery, compatibility, lifecycle, capabilities, extension registration, and SDK isolation boundaries;
 - transactional editing, undo/redo, structural editing, preservation contracts, and SDK/service boundaries; and
-- preservation-aware full-rewrite and incremental PDF serialization, including traditional cross-reference tables and cross-reference streams.
+- preservation-aware full-rewrite and incremental PDF serialization, including traditional cross-reference tables and cross-reference streams; and
+- existing-text discovery/editing, find/replace, typography/style/decorations, font embedding/subsetting paths, width-aware adjustment, and SDK/service exposure completed through BF-1054.
+
+
+## Security Posture
+
+PiratePDF is offline-first and treats documents, embedded resources, plugins, paths, metadata, and native/runtime boundaries as untrusted. Security work prioritizes bounded parsing and resource use, passive handling of active PDF content, fuzzing/adversarial corpus testing, least privilege, controlled native-library loading, plugin/SDK isolation, and minimizing sensitive document-data lifetime.
+
+Official release hardening is expected to include dependency/SBOM review, artifact provenance and hashes, Windows Authenticode signing, and macOS code signing/notarization. Native AOT may be evaluated for deployment hardening and performance characteristics, but it is **not** treated as an obfuscation guarantee or security boundary.
 
 ## Documentation
 
