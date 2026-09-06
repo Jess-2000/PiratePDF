@@ -17,8 +17,9 @@ namespace BlackFlag.Engine.SDK.Adapters.Editing;
 /// <summary>
 /// Adapts the isolated SDK editing contract to the internal editing subsystem.
 /// </summary>
-public sealed class PdfEditingSdkSession :
-    IPdfEditingSdkSession
+public sealed partial class PdfEditingSdkSession :
+    IPdfEditingSdkSession,
+    IPdfExistingTextSdkSession
 {
     private readonly PdfEditingSession session;
     private readonly Dictionary<Guid, PdfEditablePage> pagesById = [];
@@ -343,6 +344,18 @@ public sealed class PdfEditingSdkSession :
                     decoration.Scope.ToString(),
                     decoration.Kind.ToString()),
 
+            PdfExistingTextEditOperation existingText =>
+                new PdfEditingSdkOperation(
+                    existingText.Scope.ToString(),
+                    "ExistingText",
+                    existingText.Identity.PageId),
+
+            PdfExistingTextResourceChangeOperation existingTextResource =>
+                new PdfEditingSdkOperation(
+                    existingTextResource.Scope.ToString(),
+                    "ExistingTextResourceChange",
+                    existingTextResource.Identity.PageId),
+
             _ =>
                 new PdfEditingSdkOperation(
                     operation.Scope.ToString(),
@@ -528,4 +541,5 @@ public sealed class PdfEditingSdkSession :
                     rotation,
                     "The page rotation is not supported by the SDK.")
         };
+
 }
