@@ -32,8 +32,41 @@ public sealed class PdfExistingTextSdkColor
         IEnumerable<double> components)
     {
         ArgumentNullException.ThrowIfNull(components);
+        if (!Enum.IsDefined(colorSpace))
+        {
+            throw new ArgumentOutOfRangeException(nameof(colorSpace));
+        }
+
+        double[] values = [.. components];
+        int expected = colorSpace switch
+        {
+            PdfExistingTextSdkColorSpace.DeviceGray => 1,
+            PdfExistingTextSdkColorSpace.DeviceRgb => 3,
+            PdfExistingTextSdkColorSpace.DeviceCmyk => 4,
+            _ => throw new ArgumentOutOfRangeException(nameof(colorSpace))
+        };
+
+        if (values.Length != expected)
+        {
+            throw new ArgumentException(
+                $"The selected device color space requires {expected} components.",
+                nameof(components));
+        }
+
+        for (int index = 0; index < values.Length; index++)
+        {
+            double value = values[index];
+            if (!double.IsFinite(value) || value is < 0 or > 1)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(components),
+                    value,
+                    "Device color components must be finite values from 0 through 1.");
+            }
+        }
+
         ColorSpace = colorSpace;
-        this.components = Array.AsReadOnly(components.ToArray());
+        this.components = Array.AsReadOnly(values);
     }
 
     public PdfExistingTextSdkColorSpace ColorSpace { get; }
@@ -41,16 +74,46 @@ public sealed class PdfExistingTextSdkColor
 }
 
 /// <summary>SDK-owned local underline or strikeout description.</summary>
-public sealed class PdfExistingTextSdkDecoration(
-    PdfExistingTextSdkDecorationKind kind,
-    double? advanceWidth = null,
-    double? offset = null,
-    double? thickness = null)
+public sealed class PdfExistingTextSdkDecoration
 {
-    public PdfExistingTextSdkDecorationKind Kind { get; } = kind;
-    public double? AdvanceWidth { get; } = advanceWidth;
-    public double? Offset { get; } = offset;
-    public double? Thickness { get; } = thickness;
+    public PdfExistingTextSdkDecoration(
+        PdfExistingTextSdkDecorationKind kind,
+        double? advanceWidth = null,
+        double? offset = null,
+        double? thickness = null)
+    {
+        if (!Enum.IsDefined(kind))
+        {
+            throw new ArgumentOutOfRangeException(nameof(kind));
+        }
+
+        if (advanceWidth.HasValue &&
+            (!double.IsFinite(advanceWidth.Value) || advanceWidth.Value <= 0))
+        {
+            throw new ArgumentOutOfRangeException(nameof(advanceWidth));
+        }
+
+        if (offset.HasValue && !double.IsFinite(offset.Value))
+        {
+            throw new ArgumentOutOfRangeException(nameof(offset));
+        }
+
+        if (thickness.HasValue &&
+            (!double.IsFinite(thickness.Value) || thickness.Value <= 0))
+        {
+            throw new ArgumentOutOfRangeException(nameof(thickness));
+        }
+
+        Kind = kind;
+        AdvanceWidth = advanceWidth;
+        Offset = offset;
+        Thickness = thickness;
+    }
+
+    public PdfExistingTextSdkDecorationKind Kind { get; }
+    public double? AdvanceWidth { get; }
+    public double? Offset { get; }
+    public double? Thickness { get; }
     public bool IsAutomatic => !AdvanceWidth.HasValue;
 }
 

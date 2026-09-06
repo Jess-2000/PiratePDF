@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
+using BlackFlag.Engine.Editing.Operations;
 using BlackFlag.Engine.Editing.Pages;
+using BlackFlag.Engine.Editing.Transactions;
 using BlackFlag.Engine.Editing.Text;
 using BlackFlag.Engine.Rendering.DisplayList;
 using BlackFlag.Engine.SDK.Editing;
@@ -11,7 +13,7 @@ public sealed partial class PdfEditingSdkSession
 {
     private readonly List<ExistingTextSourceRegistration> existingTextSources = [];
     private readonly Dictionary<Guid, ExistingTextTargetRegistration> existingTextTargets = [];
-    private readonly Dictionary<PdfExistingTextIdentity, Guid> existingTextIds = [];
+    private readonly Dictionary<ExistingTextTargetKey, Guid> existingTextIds = [];
 
     /// <summary>
     /// Registers one host-created interpreted source snapshot for SDK discovery.
@@ -33,7 +35,6 @@ public sealed partial class PdfEditingSdkSession
                 current.Source.ContentOwnerIdentifier == source.ContentOwnerIdentifier)
             {
                 InvalidateExistingTextSource(current);
-                existingTextSources.RemoveAt(index);
             }
         }
 
@@ -70,15 +71,15 @@ public sealed partial class PdfEditingSdkSession
         string searchText,
         bool matchCase = true)
     {
-        IReadOnlyList<PdfExistingTextSearchScope> scopes = CreateCurrentScopes();
+        ExistingTextSearchSnapshot snapshot = CreateCurrentSearchSnapshot();
         IReadOnlyList<PdfExistingTextSearchMatch> matches =
-            PdfExistingTextEditingService.Find(session, scopes, searchText, matchCase);
+            PdfExistingTextEditingService.Find(session, snapshot.Scopes, searchText, matchCase);
 
         var result = new PdfExistingTextSdkSearchMatch[matches.Count];
         for (int index = 0; index < matches.Count; index++)
         {
             PdfExistingTextSearchMatch match = matches[index];
-            ExistingTextSourceRegistration registration = GetScopeRegistration(scopes, match.ScopeIndex);
+            ExistingTextSourceRegistration registration = snapshot.Registrations[match.ScopeIndex];
             PdfExistingTextSdkTarget target = RegisterTarget(registration, match.Descriptor);
             result[index] = new PdfExistingTextSdkSearchMatch(
                 target.Id,
@@ -97,16 +98,16 @@ public sealed partial class PdfEditingSdkSession
         bool matchCase = true,
         CancellationToken cancellationToken = default)
     {
-        IReadOnlyList<PdfExistingTextSearchScope> scopes = CreateCurrentScopes();
+        ExistingTextSearchSnapshot snapshot = CreateCurrentSearchSnapshot();
         PdfExistingTextFindReplaceResult result =
             PdfExistingTextEditingService.ReplaceAll(
-                session, scopes, searchText, replacementText, matchCase, cancellationToken);
+                session, snapshot.Scopes, searchText, replacementText, matchCase, cancellationToken);
 
         var mapped = new PdfExistingTextSdkSearchMatch[result.Matches.Count];
         for (int index = 0; index < result.Matches.Count; index++)
         {
             PdfExistingTextSearchMatch match = result.Matches[index];
-            ExistingTextSourceRegistration registration = GetScopeRegistration(scopes, match.ScopeIndex);
+            ExistingTextSourceRegistration registration = snapshot.Registrations[match.ScopeIndex];
             PdfExistingTextSdkTarget target = RegisterTarget(registration, match.Descriptor);
             mapped[index] = new PdfExistingTextSdkSearchMatch(
                 target.Id, match.TextElementIndex, match.TextOffset, match.TextLength, match.MatchedText);
@@ -247,41 +248,38 @@ public sealed partial class PdfEditingSdkSession
         return mapped;
     }
 
-    private ReadOnlyCollection<PdfExistingTextSearchScope> CreateCurrentScopes()
+    private ExistingTextSearchSnapshot CreateCurrentSearchSnapshot()
     {
-        PdfExistingTextSearchScope[] scopes =
-            existingTextSources
-                .Where(static source => source.IsCurrent)
-                .Select(static source => new PdfExistingTextSearchScope(source.Page, source.Source))
-                .ToArray();
+        ExistingTextSourceRegistration[] registrations = [.. existingTextSources
+            .Where(static source => source.IsCurrent)];
 
-        if (scopes.Length == 0)
+        if (registrations.Length == 0)
         {
-            throw new InvalidOperationException("No current existing-text sources are registered for this SDK editing session.");
+            throw new InvalidOperationException(
+                "No current existing-text sources are registered for this SDK editing session.");
         }
 
-        return Array.AsReadOnly(scopes);
-    }
+        var scopes = new PdfExistingTextSearchScope[registrations.Length];
+        for (int index = 0; index < registrations.Length; index++)
+        {
+            ExistingTextSourceRegistration source = registrations[index];
+            scopes[index] = new PdfExistingTextSearchScope(source.Page, source.Source);
+        }
 
-    private ExistingTextSourceRegistration GetScopeRegistration(
-        IReadOnlyList<PdfExistingTextSearchScope> scopes,
-        int scopeIndex)
-    {
-        PdfExistingTextSearchScope scope = scopes[scopeIndex];
-        return existingTextSources.Single(source =>
-            source.IsCurrent &&
-            ReferenceEquals(source.Page, scope.DisplayedPage) &&
-            ReferenceEquals(source.Source, scope.Source));
+        return new ExistingTextSearchSnapshot(
+            Array.AsReadOnly(scopes),
+            Array.AsReadOnly(registrations));
     }
 
     private PdfExistingTextSdkTarget RegisterTarget(
         ExistingTextSourceRegistration source,
         PdfExistingTextDescriptor descriptor)
     {
-        if (!existingTextIds.TryGetValue(descriptor.Identity, out Guid targetId))
+        var key = new ExistingTextTargetKey(source.Id, descriptor.Identity);
+        if (!existingTextIds.TryGetValue(key, out Guid targetId))
         {
             targetId = Guid.NewGuid();
-            existingTextIds.Add(descriptor.Identity, targetId);
+            existingTextIds.Add(key, targetId);
         }
 
         existingTextTargets[targetId] = new ExistingTextTargetRegistration(source, descriptor);
@@ -290,7 +288,7 @@ public sealed partial class PdfEditingSdkSession
             targetId,
             source.Page.Id,
             source.Id,
-            (PdfExistingTextSdkSourceKind)descriptor.Identity.SourceKind,
+            MapSourceKind(descriptor.Identity.SourceKind),
             GetTextSegments(source.Source, descriptor),
             descriptor.FontResourceName,
             descriptor.FontSize,
@@ -301,7 +299,7 @@ public sealed partial class PdfEditingSdkSession
                 descriptor.Typography.HorizontalScaling,
                 descriptor.Typography.TextRenderingMode,
                 descriptor.Typography.TextRise),
-            (PdfExistingTextSdkEditability)descriptor.Editability,
+            MapEditability(descriptor.Editability),
             descriptor.EditabilityReason);
     }
 
@@ -359,10 +357,15 @@ public sealed partial class PdfEditingSdkSession
         Guid[] targetIds = [.. existingTextTargets
             .Where(pair => ReferenceEquals(pair.Value.Source, source))
             .Select(static pair => pair.Key)];
+
         foreach (Guid id in targetIds)
         {
+            ExistingTextTargetRegistration target = existingTextTargets[id];
+            existingTextIds.Remove(new ExistingTextTargetKey(source.Id, target.Descriptor.Identity));
             existingTextTargets.Remove(id);
         }
+
+        existingTextSources.Remove(source);
     }
 
     private void InvalidateAllExistingTextSources()
@@ -371,7 +374,10 @@ public sealed partial class PdfEditingSdkSession
         {
             source.IsCurrent = false;
         }
+
+        existingTextSources.Clear();
         existingTextTargets.Clear();
+        existingTextIds.Clear();
     }
 
     private static PdfExistingTextSdkAdvanceMeasurement MapMeasurement(PdfTextAdvanceMeasurement measurement) =>
@@ -380,7 +386,39 @@ public sealed partial class PdfEditingSdkSession
             measurement.ReplacementAdvance,
             measurement.Delta,
             measurement.AbsoluteDelta,
-            (PdfExistingTextSdkAdvanceFit)measurement.Fit);
+            MapAdvanceFit(measurement.Fit));
+
+    private static PdfExistingTextSdkSourceKind MapSourceKind(PdfExistingTextSourceKind sourceKind) =>
+        sourceKind switch
+        {
+            PdfExistingTextSourceKind.PageContent => PdfExistingTextSdkSourceKind.PageContent,
+            PdfExistingTextSourceKind.FormXObject => PdfExistingTextSdkSourceKind.FormXObject,
+            _ => throw new ArgumentOutOfRangeException(nameof(sourceKind))
+        };
+
+    private static PdfExistingTextSdkEditability MapEditability(PdfExistingTextEditability editability) =>
+        editability switch
+        {
+            PdfExistingTextEditability.DirectlyEditable => PdfExistingTextSdkEditability.DirectlyEditable,
+            PdfExistingTextEditability.EditableWithResourceChange => PdfExistingTextSdkEditability.EditableWithResourceChange,
+            PdfExistingTextEditability.EditableWithSharedSourceImpact => PdfExistingTextSdkEditability.EditableWithSharedSourceImpact,
+            PdfExistingTextEditability.ReadOnlyAmbiguous => PdfExistingTextSdkEditability.ReadOnlyAmbiguous,
+            PdfExistingTextEditability.ReadOnlyUnsupportedEncoding => PdfExistingTextSdkEditability.ReadOnlyUnsupportedEncoding,
+            PdfExistingTextEditability.ReadOnlyUnsupportedFont => PdfExistingTextSdkEditability.ReadOnlyUnsupportedFont,
+            PdfExistingTextEditability.ReadOnlyNonText => PdfExistingTextSdkEditability.ReadOnlyNonText,
+            PdfExistingTextEditability.ReadOnlyMalformedSource => PdfExistingTextSdkEditability.ReadOnlyMalformedSource,
+            PdfExistingTextEditability.EditableWithPositionPreservation => PdfExistingTextSdkEditability.EditableWithPositionPreservation,
+            _ => throw new ArgumentOutOfRangeException(nameof(editability))
+        };
+
+    private static PdfExistingTextSdkAdvanceFit MapAdvanceFit(PdfTextAdvanceFit fit) =>
+        fit switch
+        {
+            PdfTextAdvanceFit.Exact => PdfExistingTextSdkAdvanceFit.Exact,
+            PdfTextAdvanceFit.LocallyAdjustable => PdfExistingTextSdkAdvanceFit.LocallyAdjustable,
+            PdfTextAdvanceFit.RequiresReflow => PdfExistingTextSdkAdvanceFit.RequiresReflow,
+            _ => throw new ArgumentOutOfRangeException(nameof(fit))
+        };
 
     private static PdfExistingTextScriptStyle MapScriptStyle(PdfExistingTextSdkScriptStyle style) =>
         style switch
@@ -421,18 +459,34 @@ public sealed partial class PdfEditingSdkSession
             : new PdfExistingTextDecoration(kind, decoration.AdvanceWidth!.Value, decoration.Offset, decoration.Thickness);
     }
 
-    private sealed class ExistingTextSourceRegistration
+    private PdfEditingSdkOperation MapExistingTextInvalidatingOperation(IPdfEditOperation operation)
     {
-        public ExistingTextSourceRegistration(Guid id, PdfEditablePage page, PdfExistingTextDiscoverySource source)
-        {
-            Id = id;
-            Page = page;
-            Source = source;
-        }
+        PdfEditingSdkOperation mapped = MapOperation(operation);
+        InvalidateAllExistingTextSources();
+        return mapped;
+    }
 
-        public Guid Id { get; }
-        public PdfEditablePage Page { get; }
-        public PdfExistingTextDiscoverySource Source { get; }
+    private PdfEditingSdkChangeSet MapExistingTextInvalidatingChangeSet(PdfEditChangeSet changeSet)
+    {
+        PdfEditingSdkChangeSet mapped = MapChangeSet(changeSet);
+        InvalidateAllExistingTextSources();
+        return mapped;
+    }
+
+    private readonly record struct ExistingTextTargetKey(
+        Guid SourceId,
+        PdfExistingTextIdentity Identity);
+
+    private sealed record ExistingTextSearchSnapshot(
+        ReadOnlyCollection<PdfExistingTextSearchScope> Scopes,
+        ReadOnlyCollection<ExistingTextSourceRegistration> Registrations);
+
+    private sealed class ExistingTextSourceRegistration(Guid id, PdfEditablePage page, PdfExistingTextDiscoverySource source)
+    {
+
+        public Guid Id { get; } = id;
+        public PdfEditablePage Page { get; } = page;
+        public PdfExistingTextDiscoverySource Source { get; } = source;
         public bool IsCurrent { get; set; } = true;
     }
 

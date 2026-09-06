@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+
 namespace BlackFlag.Engine.Services.Text;
 
 /// <summary>
@@ -6,14 +8,14 @@ namespace BlackFlag.Engine.Services.Text;
 /// </summary>
 public sealed class PdfExistingTextColor
 {
-    private readonly double[] components;
+    private readonly ReadOnlyCollection<double> components;
 
     private PdfExistingTextColor(
         string colorSpaceName,
         params double[] components)
     {
         ColorSpaceName = colorSpaceName;
-        this.components = components;
+        this.components = Array.AsReadOnly((double[])components.Clone());
         Validate();
     }
 
@@ -48,13 +50,13 @@ public sealed class PdfExistingTextColor
                     $"Existing-text direct color '{ColorSpaceName}' is not supported.")
             };
 
-        if (components.Length != expected)
+        if (components.Count != expected)
         {
             throw new ArgumentException(
                 $"Color '{ColorSpaceName}' requires {expected} components.");
         }
 
-        for (int index = 0; index < components.Length; index++)
+        for (int index = 0; index < components.Count; index++)
         {
             double value = components[index];
 

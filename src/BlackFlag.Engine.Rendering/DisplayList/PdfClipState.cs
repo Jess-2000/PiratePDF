@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+
 namespace BlackFlag.Engine.Rendering.DisplayList;
 
 /// <summary>
@@ -7,7 +9,7 @@ namespace BlackFlag.Engine.Rendering.DisplayList;
 /// </summary>
 public sealed class PdfClipState
 {
-    private readonly PdfDisplayTextRun[] textRuns;
+    private readonly ReadOnlyCollection<PdfDisplayTextRun> textRuns;
 
     /// <summary>Initializes a path clipping state.</summary>
     public PdfClipState(
@@ -20,7 +22,7 @@ public sealed class PdfClipState
         Kind = PdfClipKind.Path;
         Path = path;
         FillRule = fillRule;
-        textRuns = [];
+        textRuns = Array.AsReadOnly(Array.Empty<PdfDisplayTextRun>());
         Parent = parent;
         Depth = parent is null ? 1 : checked(parent.Depth + 1);
     }
@@ -32,8 +34,8 @@ public sealed class PdfClipState
     {
         ArgumentNullException.ThrowIfNull(textRuns);
 
-        this.textRuns = textRuns.ToArray();
-        if (this.textRuns.Length == 0)
+        this.textRuns = Array.AsReadOnly(textRuns.ToArray());
+        if (this.textRuns.Count == 0)
         {
             throw new ArgumentException(
                 "A text clipping state requires at least one text run.",

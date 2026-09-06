@@ -37,7 +37,7 @@ public sealed class PdfExistingTextSdkSessionTests
         var run = new PdfDisplayTextRun(
             font,
             12,
-            [PdfTextRunElement.CreateText(System.Text.Encoding.ASCII.GetBytes("Hello"), "Hello")],
+            [PdfTextRunElement.CreateText(Encoding.ASCII.GetBytes("Hello"), "Hello")],
             PdfMatrix.Identity,
             new PdfGraphicsStateSnapshot
             {
@@ -174,38 +174,57 @@ public sealed class PdfExistingTextSdkSessionTests
         Assert.Equal(expected, context.ReadContent());
     }
 
-    [Theory]
-    [InlineData(0)]
-    [InlineData(1)]
-    [InlineData(2)]
-    public void InvalidStyleMappingDoesNotMutateOrInvalidateTarget(int invalidField)
+    [Fact]
+    public void InvalidStyleMappingDoesNotMutateOrInvalidateTarget()
     {
         using var context = CreateContext();
         IPdfExistingTextSdkSession textSession = context.Sdk;
         var target = Assert.Single(textSession.DiscoverExistingText(context.PageId));
-        var update = invalidField switch
+        var update = new PdfExistingTextSdkStyleUpdate
         {
-            0 => new PdfExistingTextSdkStyleUpdate { ScriptStyle = (PdfExistingTextSdkScriptStyle)99 },
-            1 => new PdfExistingTextSdkStyleUpdate
-            {
-                FillColor = new PdfExistingTextSdkColor(PdfExistingTextSdkColorSpace.DeviceRgb, [1])
-            },
-            _ => new PdfExistingTextSdkStyleUpdate
-            {
-                Decoration = new PdfExistingTextSdkDecoration((PdfExistingTextSdkDecorationKind)99, 42)
-            }
+            ScriptStyle = (PdfExistingTextSdkScriptStyle)99
         };
 
-        if (invalidField == 1)
-        {
-            Assert.Throws<ArgumentException>(() => textSession.ApplyExistingTextStyle(target.Id, update));
-        }
-        else
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => textSession.ApplyExistingTextStyle(target.Id, update));
-        }
+        Assert.Throws<ArgumentOutOfRangeException>(() =>
+            textSession.ApplyExistingTextStyle(target.Id, update));
         Assert.Equal(context.Original, context.ReadContent());
         Assert.Equal(target.Id, Assert.Single(textSession.DiscoverExistingText(context.PageId)).Id);
+    }
+
+    [Theory]
+    [InlineData(-1, 1)]
+    [InlineData(0, 2)]
+    [InlineData(1, 1)]
+    [InlineData(2, 3)]
+    public void SdkColorRejectsInvalidSpaceOrComponentCount(int colorSpace, int componentCount)
+    {
+        double[] values = Enumerable.Repeat(0.5, componentCount).ToArray();
+        Assert.ThrowsAny<ArgumentException>(() =>
+            new PdfExistingTextSdkColor((PdfExistingTextSdkColorSpace)colorSpace, values));
+    }
+
+    [Theory]
+    [InlineData(double.NaN)]
+    [InlineData(double.PositiveInfinity)]
+    [InlineData(-0.01)]
+    [InlineData(1.01)]
+    public void SdkColorRejectsNonFiniteOrOutOfRangeComponents(double component)
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() =>
+            new PdfExistingTextSdkColor(PdfExistingTextSdkColorSpace.DeviceGray, [component]));
+    }
+
+    [Fact]
+    public void SdkDecorationRejectsInvalidGeometryAtConstruction()
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() =>
+            new PdfExistingTextSdkDecoration((PdfExistingTextSdkDecorationKind)99));
+        Assert.Throws<ArgumentOutOfRangeException>(() =>
+            new PdfExistingTextSdkDecoration(PdfExistingTextSdkDecorationKind.Underline, 0));
+        Assert.Throws<ArgumentOutOfRangeException>(() =>
+            new PdfExistingTextSdkDecoration(PdfExistingTextSdkDecorationKind.Underline, 1, double.NaN));
+        Assert.Throws<ArgumentOutOfRangeException>(() =>
+            new PdfExistingTextSdkDecoration(PdfExistingTextSdkDecorationKind.Underline, 1, thickness: 0));
     }
 
     [Fact]
@@ -219,6 +238,59 @@ public sealed class PdfExistingTextSdkSessionTests
         Assert.Throws<ArgumentNullException>(() => textSession.ApplyExistingTextStyle(target.Id, null));
         Assert.Equal(context.Original, context.ReadContent());
         Assert.Equal(target.Id, Assert.Single(textSession.DiscoverExistingText(context.PageId)).Id);
+    }
+
+    [Fact]
+    public void NonTextContentMutationInvalidatesRegisteredTextTargets()
+    {
+        using var context = CreateContext();
+        IPdfExistingTextSdkSession textSession = context.Sdk;
+        var target = Assert.Single(textSession.DiscoverExistingText(context.PageId));
+
+        context.Sdk.BeginTransaction();
+        _ = context.Sdk.ReplacePageContent(context.PageId, Encoding.ASCII.GetBytes("BT (Changed) Tj ET"));
+        _ = context.Sdk.CommitTransaction();
+
+        Assert.Empty(textSession.DiscoverExistingText(context.PageId));
+        Assert.Throws<InvalidOperationException>(() =>
+            textSession.ReplaceExistingText(target.Id, "Again"));
+    }
+
+    [Fact]
+    public void UndoAndRedoInvalidateRegisteredTextTargets()
+    {
+        using var context = CreateContext();
+        IPdfExistingTextSdkSession textSession = context.Sdk;
+
+        context.Sdk.BeginTransaction();
+        _ = context.Sdk.SetDocumentInformation(PdfEditingSdkDocumentInformationField.Title, "Changed");
+        _ = context.Sdk.CommitTransaction();
+        var beforeUndo = Assert.Single(textSession.DiscoverExistingText(context.PageId));
+
+        _ = context.Sdk.Undo();
+        Assert.Throws<InvalidOperationException>(() =>
+            textSession.ReplaceExistingText(beforeUndo.Id, "Again"));
+
+        context.Sdk.RegisterExistingTextSource(context.PageId, context.Source);
+        var beforeRedo = Assert.Single(textSession.DiscoverExistingText(context.PageId));
+        _ = context.Sdk.Redo();
+        Assert.Throws<InvalidOperationException>(() =>
+            textSession.ReplaceExistingText(beforeRedo.Id, "Again"));
+    }
+
+    [Fact]
+    public void ReplacingRegisteredSourceCreatesFreshSnapshotScopedTargetId()
+    {
+        using var context = CreateContext();
+        IPdfExistingTextSdkSession textSession = context.Sdk;
+        Guid firstTargetId = Assert.Single(textSession.DiscoverExistingText(context.PageId)).Id;
+
+        context.Sdk.RegisterExistingTextSource(context.PageId, context.Source);
+        Guid secondTargetId = Assert.Single(textSession.DiscoverExistingText(context.PageId)).Id;
+
+        Assert.NotEqual(firstTargetId, secondTargetId);
+        Assert.Throws<InvalidOperationException>(() =>
+            textSession.ReplaceExistingText(firstTargetId, "Again"));
     }
 
     [Theory]
@@ -284,14 +356,14 @@ public sealed class PdfExistingTextSdkSessionTests
         var page = new PdfPage(612, 792);
         document.Pages.Add(page);
         var stream = new Document.Objects.PdfStream(
-            new Document.Objects.PdfDictionary(), Encoding.ASCII.GetBytes(content));
+            [], Encoding.ASCII.GetBytes(content));
         document.Objects.Add(contentId, stream);
         var sdk = new PdfEditingSdkSession(document);
         Guid sdkPageId = Assert.Single(sdk.Pages).Id;
         Assert.True(PdfGraphicsOperator.TryGet("Tf", out var fontOperator));
         Assert.True(PdfGraphicsOperator.TryGet(positioned ? "TJ" : "Tj", out var textOperator));
         int start = content.IndexOf(show, StringComparison.Ordinal);
-        Engine.Objects.PdfObject[] operands = positioned
+        Objects.PdfObject[] operands = positioned
             ? [new Engine.Objects.PdfArray([new PdfLiteralString("Hel"), new PdfInteger(-120), new PdfLiteralString("lo")])]
             : [new PdfLiteralString("Hello")];
         var operation = new PdfGraphicsOperation(textOperator,
@@ -310,14 +382,15 @@ public sealed class PdfExistingTextSdkSessionTests
             [fontSelection, operation], new PdfDisplayList([run]), [contentId],
             availableFonts: new Dictionary<string, PdfResolvedFont> { ["F1"] = font, ["F2"] = font });
         sdk.RegisterExistingTextSource(sdkPageId, source);
-        return new TestContext(sdk, sdkPageId, stream, content);
+        return new TestContext(sdk, sdkPageId, stream, content, source);
     }
 
     private sealed record TestContext(
         PdfEditingSdkSession Sdk,
         Guid PageId,
         Document.Objects.PdfStream Stream,
-        string Original) : IDisposable
+        string Original,
+        PdfExistingTextDiscoverySource Source) : IDisposable
     {
         public string ReadContent() => Encoding.ASCII.GetString(Stream.ToByteArray());
         public void Dispose() => Sdk.Dispose();
@@ -327,7 +400,7 @@ public sealed class PdfExistingTextSdkSessionTests
     {
         return new(
             PdfResourceIdentity.ForLocal(1),
-            new Engine.Objects.PdfDictionary([]),
+            new Objects.PdfDictionary([]),
             "TrueType",
             "Test Sans",
             "Test Sans Regular",
@@ -339,8 +412,8 @@ public sealed class PdfExistingTextSdkSessionTests
             isSubset: false,
             encoding: new PdfName("WinAnsiEncoding"),
             toUnicode: null,
-            descriptor: new Engine.Objects.PdfDictionary(
-                [new KeyValuePair<PdfName, Engine.Objects.PdfObject>(new PdfName("MissingWidth"), new PdfInteger(500))]),
+            descriptor: new Objects.PdfDictionary(
+                [new KeyValuePair<PdfName, Objects.PdfObject>(new PdfName("MissingWidth"), new PdfInteger(500))]),
             descendantFonts: null,
             embeddedFontProgram: null,
             variationAxes: []);

@@ -101,21 +101,21 @@ public sealed partial class PdfEditingSdkSession :
     public PdfEditingSdkOperation InsertPage(
         int index,
         Guid pageId) =>
-        MapOperation(
+        MapExistingTextInvalidatingOperation(
             session.Document.InsertPage(
                 index,
                 FindPage(pageId)));
 
     public PdfEditingSdkOperation RemovePage(
         Guid pageId) =>
-        MapOperation(
+        MapExistingTextInvalidatingOperation(
             session.Document.RemovePage(
                 FindPage(pageId)));
 
     public PdfEditingSdkOperation MovePage(
         Guid pageId,
         int destinationIndex) =>
-        MapOperation(
+        MapExistingTextInvalidatingOperation(
             session.Document.MovePage(
                 FindPage(pageId),
                 destinationIndex));
@@ -123,7 +123,7 @@ public sealed partial class PdfEditingSdkSession :
     public PdfEditingSdkOperation ReplacePage(
         Guid targetPageId,
         Guid replacementPageId) =>
-        MapOperation(
+        MapExistingTextInvalidatingOperation(
             session.Document.ReplacePage(
                 FindPage(targetPageId),
                 FindPage(replacementPageId)));
@@ -131,7 +131,7 @@ public sealed partial class PdfEditingSdkSession :
     public PdfEditingSdkOperation SetPageRotation(
         Guid pageId,
         PdfEditingSdkPageRotation rotation) =>
-        MapOperation(
+        MapExistingTextInvalidatingOperation(
             session.Document.SetPageRotation(
                 FindPage(pageId),
                 MapRotation(rotation)));
@@ -139,7 +139,7 @@ public sealed partial class PdfEditingSdkSession :
     public PdfEditingSdkOperation ReplacePageContent(
         Guid pageId,
         ReadOnlyMemory<byte> replacement) =>
-        MapOperation(
+        MapExistingTextInvalidatingOperation(
             session.Document.ReplacePageContent(
                 FindPage(pageId),
                 replacement.Span));
@@ -182,7 +182,7 @@ public sealed partial class PdfEditingSdkSession :
         Guid pageId,
         PdfEditingSdkPageBoxKind kind,
         PdfEditingSdkPageBox box) =>
-        MapOperation(
+        MapExistingTextInvalidatingOperation(
             session.Document.SetPageBox(
                 FindPage(pageId),
                 MapPageBoxKind(kind),
@@ -191,7 +191,7 @@ public sealed partial class PdfEditingSdkSession :
     public PdfEditingSdkOperation CropPage(
         Guid pageId,
         PdfEditingSdkPageBox cropBox) =>
-        MapOperation(
+        MapExistingTextInvalidatingOperation(
             session.Document.CropPage(
                 FindPage(pageId),
                 MapPageBox(cropBox)));
@@ -201,7 +201,7 @@ public sealed partial class PdfEditingSdkSession :
         double width,
         double height,
         PdfEditingSdkPageResizeAnchor anchor = PdfEditingSdkPageResizeAnchor.LowerLeft) =>
-        MapOperation(
+        MapExistingTextInvalidatingOperation(
             session.Document.ResizePage(
                 FindPage(pageId),
                 width,
@@ -241,22 +241,30 @@ public sealed partial class PdfEditingSdkSession :
         var active =
             GetActiveTransaction();
 
-        active.Rollback();
-        transaction = null;
+        try
+        {
+            active.Rollback();
+            transaction = null;
+        }
+        finally
+        {
+            InvalidateAllExistingTextSources();
+        }
     }
 
     public PdfEditingSdkChangeSet Undo() =>
-        MapChangeSet(
+        MapExistingTextInvalidatingChangeSet(
             session.History.Undo());
 
     public PdfEditingSdkChangeSet Redo() =>
-        MapChangeSet(
+        MapExistingTextInvalidatingChangeSet(
             session.History.Redo());
 
     public void Dispose()
     {
         transaction?.Dispose();
         transaction = null;
+        InvalidateAllExistingTextSources();
         session.Dispose();
     }
 

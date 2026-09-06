@@ -56,4 +56,14 @@ public sealed class PdfExistingTextStyleServiceTests
                     PdfExistingTextDecorationKind.Underline,
                     0));
     }
+    [Fact]
+    public void ExistingTextColorComponentsRejectMutationThroughListCast()
+    {
+        PdfExistingTextColor color = PdfExistingTextColor.Rgb(0.25, 0.5, 0.75);
+        var components = Assert.IsType<IList<double>>(color.Components, exactMatch: false);
+
+        Assert.Throws<NotSupportedException>(() => components[0] = double.NaN);
+        Assert.Equal(0.25, color.Components[0]);
+    }
+
 }
