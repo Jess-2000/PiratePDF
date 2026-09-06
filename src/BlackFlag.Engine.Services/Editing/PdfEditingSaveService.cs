@@ -1,6 +1,7 @@
 using BlackFlag.Engine.Editing.Documents;
 using BlackFlag.Engine.Editing.Operations;
 using BlackFlag.Engine.Editing.Transactions;
+using BlackFlag.Engine.Services.Text;
 using BlackFlag.Engine.Writing;
 
 namespace BlackFlag.Engine.Services.Editing;
@@ -122,6 +123,13 @@ public static class PdfEditingSaveService
                             changeSet,
                             basePlan),
 
+                SaveDomain.ExistingText =>
+                    PdfExistingTextTransactionWritingService
+                        .CreateFullRewritePlan(
+                            session,
+                            changeSet,
+                            basePlan),
+
                 _ => throw new InvalidOperationException(
                     "The Editing save domain is not supported.")
             };
@@ -165,6 +173,14 @@ public static class PdfEditingSaveService
                             basePlan,
                             sourceRevision),
 
+                SaveDomain.ExistingText =>
+                    PdfExistingTextTransactionWritingService
+                        .CreateIncrementalPlan(
+                            session,
+                            changeSet,
+                            basePlan,
+                            sourceRevision),
+
                 _ => throw new InvalidOperationException(
                     "The Editing save domain is not supported.")
             };
@@ -197,6 +213,8 @@ public static class PdfEditingSaveService
                         SaveDomain.Pages,
                     PdfAnnotationEditOperation =>
                         SaveDomain.Annotations,
+                    PdfExistingTextEditOperation =>
+                        SaveDomain.ExistingText,
                     _ => throw new NotSupportedException(
                         $"Editing operation '{operation.GetType().Name}' does not have a public save orchestration path.")
                 };
@@ -219,6 +237,7 @@ public static class PdfEditingSaveService
     private enum SaveDomain
     {
         Pages,
-        Annotations
+        Annotations,
+        ExistingText
     }
 }

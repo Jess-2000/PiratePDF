@@ -17,8 +17,9 @@ namespace BlackFlag.Engine.SDK.Adapters.Editing;
 /// <summary>
 /// Adapts the isolated SDK editing contract to the internal editing subsystem.
 /// </summary>
-public sealed class PdfEditingSdkSession :
-    IPdfEditingSdkSession
+public sealed partial class PdfEditingSdkSession :
+    IPdfEditingSdkSession,
+    IPdfExistingTextSdkSession
 {
     private readonly PdfEditingSession session;
     private readonly Dictionary<Guid, PdfEditablePage> pagesById = [];
@@ -100,21 +101,21 @@ public sealed class PdfEditingSdkSession :
     public PdfEditingSdkOperation InsertPage(
         int index,
         Guid pageId) =>
-        MapOperation(
+        MapExistingTextInvalidatingOperation(
             session.Document.InsertPage(
                 index,
                 FindPage(pageId)));
 
     public PdfEditingSdkOperation RemovePage(
         Guid pageId) =>
-        MapOperation(
+        MapExistingTextInvalidatingOperation(
             session.Document.RemovePage(
                 FindPage(pageId)));
 
     public PdfEditingSdkOperation MovePage(
         Guid pageId,
         int destinationIndex) =>
-        MapOperation(
+        MapExistingTextInvalidatingOperation(
             session.Document.MovePage(
                 FindPage(pageId),
                 destinationIndex));
@@ -122,7 +123,7 @@ public sealed class PdfEditingSdkSession :
     public PdfEditingSdkOperation ReplacePage(
         Guid targetPageId,
         Guid replacementPageId) =>
-        MapOperation(
+        MapExistingTextInvalidatingOperation(
             session.Document.ReplacePage(
                 FindPage(targetPageId),
                 FindPage(replacementPageId)));
@@ -130,7 +131,7 @@ public sealed class PdfEditingSdkSession :
     public PdfEditingSdkOperation SetPageRotation(
         Guid pageId,
         PdfEditingSdkPageRotation rotation) =>
-        MapOperation(
+        MapExistingTextInvalidatingOperation(
             session.Document.SetPageRotation(
                 FindPage(pageId),
                 MapRotation(rotation)));
@@ -138,7 +139,7 @@ public sealed class PdfEditingSdkSession :
     public PdfEditingSdkOperation ReplacePageContent(
         Guid pageId,
         ReadOnlyMemory<byte> replacement) =>
-        MapOperation(
+        MapExistingTextInvalidatingOperation(
             session.Document.ReplacePageContent(
                 FindPage(pageId),
                 replacement.Span));
@@ -181,7 +182,7 @@ public sealed class PdfEditingSdkSession :
         Guid pageId,
         PdfEditingSdkPageBoxKind kind,
         PdfEditingSdkPageBox box) =>
-        MapOperation(
+        MapExistingTextInvalidatingOperation(
             session.Document.SetPageBox(
                 FindPage(pageId),
                 MapPageBoxKind(kind),
@@ -190,7 +191,7 @@ public sealed class PdfEditingSdkSession :
     public PdfEditingSdkOperation CropPage(
         Guid pageId,
         PdfEditingSdkPageBox cropBox) =>
-        MapOperation(
+        MapExistingTextInvalidatingOperation(
             session.Document.CropPage(
                 FindPage(pageId),
                 MapPageBox(cropBox)));
@@ -200,7 +201,7 @@ public sealed class PdfEditingSdkSession :
         double width,
         double height,
         PdfEditingSdkPageResizeAnchor anchor = PdfEditingSdkPageResizeAnchor.LowerLeft) =>
-        MapOperation(
+        MapExistingTextInvalidatingOperation(
             session.Document.ResizePage(
                 FindPage(pageId),
                 width,
@@ -240,22 +241,30 @@ public sealed class PdfEditingSdkSession :
         var active =
             GetActiveTransaction();
 
-        active.Rollback();
-        transaction = null;
+        try
+        {
+            active.Rollback();
+            transaction = null;
+        }
+        finally
+        {
+            InvalidateAllExistingTextSources();
+        }
     }
 
     public PdfEditingSdkChangeSet Undo() =>
-        MapChangeSet(
+        MapExistingTextInvalidatingChangeSet(
             session.History.Undo());
 
     public PdfEditingSdkChangeSet Redo() =>
-        MapChangeSet(
+        MapExistingTextInvalidatingChangeSet(
             session.History.Redo());
 
     public void Dispose()
     {
         transaction?.Dispose();
         transaction = null;
+        InvalidateAllExistingTextSources();
         session.Dispose();
     }
 
@@ -342,6 +351,18 @@ public sealed class PdfEditingSdkSession :
                 new PdfEditingSdkOperation(
                     decoration.Scope.ToString(),
                     decoration.Kind.ToString()),
+
+            PdfExistingTextEditOperation existingText =>
+                new PdfEditingSdkOperation(
+                    existingText.Scope.ToString(),
+                    "ExistingText",
+                    existingText.Identity.PageId),
+
+            PdfExistingTextResourceChangeOperation existingTextResource =>
+                new PdfEditingSdkOperation(
+                    existingTextResource.Scope.ToString(),
+                    "ExistingTextResourceChange",
+                    existingTextResource.Identity.PageId),
 
             _ =>
                 new PdfEditingSdkOperation(
@@ -528,4 +549,5 @@ public sealed class PdfEditingSdkSession :
                     rotation,
                     "The page rotation is not supported by the SDK.")
         };
+
 }

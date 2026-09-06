@@ -89,6 +89,28 @@
 | BF-1053X | [BF-1053X — Unified Annotation Transaction Writing Orchestration](milestones/BF-1053X-Unified-Annotation-Transaction-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-23 |
 | BF-1053Y | [BF-1053Y — Page Geometry Change-Set Writing Orchestration](milestones/BF-1053Y-Page-Geometry-Change-Set-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-25 |
 | BF-1053Z | [BF-1053Z — Page Rotation Change-Set Writing Orchestration](milestones/BF-1053Z-Page-Rotation-Change-Set-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-25 |
+| BF-1054A | [BF-1054A — Existing Text Editing Architecture, Identity, and Preservation Contracts](milestones/BF-1054A-Existing-Text-Editing-Architecture-Identity-and-Preservation-Contracts.md) | Milestone | 1.0 | Implemented | 2026-08-27 |
+| BF-1054B | [BF-1054B — Existing Text Discovery and Provenance Mapping](milestones/BF-1054B-Existing-Text-Discovery-and-Provenance-Mapping.md) | Milestone | 1.0 | Implemented | 2026-08-27 |
+| BF-1054C | [BF-1054C — Same-Font Direct Text Replacement](milestones/BF-1054C-Same-Font-Direct-Text-Replacement.md) | Milestone | 1.0 | Implemented | 2026-08-27 |
+| BF-1054D | [BF-1054D — Composite TJ Editing and Position Preservation](milestones/BF-1054D-Composite-TJ-Editing-and-Position-Preservation.md) | Milestone | 1.0 | Implemented | 2026-08-27 |
+| BF-1054E | [BF-1054E — Find/Replace Transaction Integration](milestones/BF-1054E-Find-Replace-Transaction-Integration.md) | Milestone | 1.0 | Implemented | 2026-09-03 |
+| BF-1054F | [BF-1054F — Typography State Editing](milestones/BF-1054F-Typography-State-Editing.md) | Milestone | 1.0 | Implemented | 2026-09-03 |
+| BF-1054G | [BF-1054G — Canonical Existing-Font Selection and Resource Integration](milestones/BF-1054G-Canonical-Existing-Font-Selection-and-Resource-Integration.md) | Milestone | 1.0 | Implemented | 2026-09-03 |
+| BF-1054H | [BF-1054H — External Font Infrastructure Foundation](milestones/BF-1054H-External-Font-Infrastructure-Foundation.md) | Milestone | 1.0 | Implemented | 2026-09-03 |
+| BF-1054I | [BF-1054I — External Font Sanitization and Trusted Font-Program Boundary](milestones/BF-1054I-External-Font-Sanitization-and-Trusted-Font-Program-Boundary.md) | Milestone | 1.0 | Implemented | 2026-09-04 |
+| BF-1054J | [BF-1054J — PDF External TrueType Resource Construction and Full Embedding](milestones/BF-1054J-PDF-External-TrueType-Resource-Construction-and-Full-Embedding.md) | Milestone | 1.0 | Implemented | 2026-09-04 |
+| BF-1054K | [BF-1054K — TrueType Glyph Subsetting, Subset-Only Rights, and ToUnicode Generation](milestones/BF-1054K-TrueType-Glyph-Subsetting-Subset-Only-Rights-and-ToUnicode-Generation.md) | Milestone | 1.0 | Implemented | 2026-09-04 |
+| BF-1054L | [BF-1054L — Composite TrueType Glyph Dependency Closure and Subset Hardening](milestones/BF-1054L-Composite-TrueType-Glyph-Dependency-Closure-and-Subset-Hardening.md) | Milestone | 1.0 | Implemented | 2026-09-05 |
+| BF-1054M | [BF-1054M — Type0/CID Unicode TrueType Font Construction](milestones/BF-1054M-Type0-CID-Unicode-TrueType-Font-Construction.md) | Milestone | 1.0 | Implemented | 2026-09-05 |
+| BF-1054N | [BF-1054N — Canonical Resource Ownership and Collision-Safe Mutation](milestones/BF-1054N-Canonical-Resource-Ownership-and-Collision-Safe-Mutation.md) | Milestone | 1.0 | Implemented | 2026-09-05 |
+| BF-1054O | [BF-1054O — Form XObject Existing-Text Editing and Shared-Source Semantics](milestones/BF-1054O-Form-XObject-Existing-Text-and-Shared-Source-Semantics.md) | Milestone | 1.0 | Implemented | 2026-09-05 |
+| BF-1054P | [BF-1054P — Filtered Content-Stream Mutation and Safe Re-encoding](milestones/BF-1054P-Filtered-Content-Stream-Mutation-and-Safe-Re-encoding.md) | Milestone | 1.0 | Implemented | 2026-09-05 |
+| BF-1054Q | [BF-1054Q — External/Newly Embedded Font Integration into Existing Text](milestones/BF-1054Q-External-Newly-Embedded-Font-Integration-into-Existing-Text.md) | Milestone | 1.0 | Implemented | 2026-09-05 |
+| BF-1054R | [BF-1054R — Windows and macOS External Font Provider Adapters](milestones/BF-1054R-Windows-and-macOS-External-Font-Provider-Adapters.md) | Milestone | 1.0 | Implemented | 2026-09-05 |
+| BF-1054S | [BF-1054S — Existing-Text Styling, Script Positioning, Color, Compound Operators, and Decorations](milestones/BF-1054S-Existing-Text-Styling-Script-Color-Compound-Operators-and-Decorations.md) | Milestone | 1.0 | Implemented | 2026-09-05 |
+| BF-1054T | [BF-1054T — Text Advance Measurement and Width-Aware Existing-Text Adjustment](milestones/BF-1054T-Text-Advance-Measurement-and-Width-Aware-Existing-Text-Adjustment.md) | Milestone | 1.0 | Implemented | 2026-09-05 |
+| BF-1054U | [BF-1054U — Public Existing-Text Editing Services and SDK Integration](milestones/BF-1054U-Public-Existing-Text-Editing-Services-and-SDK-Integration.md) | Milestone | 1.0 | Implemented | 2026-09-05 |
+| BF-1054V | [BF-1054V — End-to-End Existing-Text Conformance, Provenance/Immutability Hardening, and BF-1054 Closure](milestones/BF-1054V-End-to-End-Existing-Text-Conformance-Provenance-Immutability-Hardening-and-Closure.md) | Milestone / Closure | 1.0 | Implemented | 2026-09-05 |
 | BF-DOC-0004 | [BlackFlag Engine — Parser Infrastructure RC1](Parser-Infrastructure-RC1.md) | Architecture | 0.4.0 | Tested | 2026-07-30 |
 | BF-DOC-0005 | [BlackFlag Engine 0.5.0 — PDF Object Model RC1](PDF-Object-Model-RC1.md) | Architecture | 0.5.0 | In Development | 2026-07-30 |
 | BF-DOC-1001 | [Documentation Template RC1](Documentation-Template-RC1.md) | Developer Documentation | 0.1.0 | In Development | 2026-07-30 |

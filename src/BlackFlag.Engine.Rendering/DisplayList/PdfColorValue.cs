@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using BlackFlag.Engine.Rendering.Resources;
 
 namespace BlackFlag.Engine.Rendering.DisplayList;
@@ -7,7 +8,7 @@ namespace BlackFlag.Engine.Rendering.DisplayList;
 /// </summary>
 public sealed class PdfColorValue
 {
-    private readonly double[] components;
+    private readonly ReadOnlyCollection<double> components;
 
     /// <summary>Initializes a color value.</summary>
     public PdfColorValue(
@@ -20,7 +21,7 @@ public sealed class PdfColorValue
         ArgumentNullException.ThrowIfNull(components);
 
         ColorSpaceName = colorSpaceName;
-        this.components = components.ToArray();
+        this.components = Array.AsReadOnly(components.ToArray());
         Resource = resource;
         Pattern = pattern;
     }

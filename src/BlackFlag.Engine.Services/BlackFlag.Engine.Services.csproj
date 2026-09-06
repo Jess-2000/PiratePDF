@@ -15,6 +15,12 @@
       Include="..\BlackFlag.Engine.Editing\BlackFlag.Engine.Editing.csproj" />
 
     <ProjectReference
+      Include="..\BlackFlag.Engine.Fonts\BlackFlag.Engine.Fonts.csproj" />
+
+    <ProjectReference
+      Include="..\BlackFlag.Engine.Rendering\BlackFlag.Engine.Rendering.csproj" />
+
+    <ProjectReference
       Include="..\BlackFlag.Engine.Security\BlackFlag.Engine.Security.csproj" />
     <ProjectReference
       Include="..\BlackFlag.Engine.Writing\BlackFlag.Engine.Writing.csproj" />

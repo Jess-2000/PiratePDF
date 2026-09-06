@@ -1,15 +1,17 @@
+using System.Collections.ObjectModel;
+
 namespace BlackFlag.Engine.Rendering.DisplayList;
 
 /// <summary>Represents an immutable canonical path geometry.</summary>
 public sealed class PdfPathGeometry
 {
-    private readonly PdfPathSegment[] segments;
+    private readonly ReadOnlyCollection<PdfPathSegment> segments;
 
     /// <summary>Initializes immutable path geometry.</summary>
     public PdfPathGeometry(IEnumerable<PdfPathSegment> segments)
     {
         ArgumentNullException.ThrowIfNull(segments);
-        this.segments = segments.ToArray();
+        this.segments = Array.AsReadOnly(segments.ToArray());
     }
 
     /// <summary>Gets path segments in source order.</summary>
@@ -18,7 +20,7 @@ public sealed class PdfPathGeometry
     /// <summary>Gets conservative bounds over all segment points.</summary>
     public PdfDisplayBounds? GetBounds()
     {
-        if (segments.Length == 0)
+        if (segments.Count == 0)
         {
             return null;
         }
