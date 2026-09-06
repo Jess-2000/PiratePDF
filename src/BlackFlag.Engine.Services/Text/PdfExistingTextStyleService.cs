@@ -124,12 +124,18 @@ public static class PdfExistingTextStyleService
                 normalized.Length -
                 decoded.Length);
 
+        PdfExistingTextStyleUpdate resolvedUpdate =
+            ResolveMeasuredDecoration(
+                update,
+                run,
+                cancellationToken);
+
         byte[] styled =
             PdfExistingTextStyleTokenEditor.Apply(
                 normalized,
                 descriptor,
                 run.GraphicsState,
-                update,
+                resolvedUpdate,
                 normalizedEnd);
 
         byte[] encoded =
@@ -206,4 +212,42 @@ public static class PdfExistingTextStyleService
         throw new InvalidOperationException(
             "The style target display-run provenance is stale.");
     }
+
+    private static PdfExistingTextStyleUpdate ResolveMeasuredDecoration(
+        PdfExistingTextStyleUpdate update,
+        PdfDisplayTextRun run,
+        CancellationToken cancellationToken)
+    {
+        if (update.Decoration is not
+            { RequiresMeasurement: true } decoration)
+        {
+            return update;
+        }
+
+        double advance =
+            Math.Abs(
+                PdfTextAdvanceMeasurementService.MeasureOriginal(
+                    run,
+                    cancellationToken));
+
+        if (advance <= 0)
+        {
+            throw new NotSupportedException(
+                "Automatic text decoration requires a positive measurable text advance.");
+        }
+
+        return new PdfExistingTextStyleUpdate
+        {
+            ScriptStyle = update.ScriptStyle,
+            SuperscriptScale = update.SuperscriptScale,
+            SuperscriptRise = update.SuperscriptRise,
+            SubscriptScale = update.SubscriptScale,
+            SubscriptDrop = update.SubscriptDrop,
+            FillColor = update.FillColor,
+            StrokeColor = update.StrokeColor,
+            Decoration = decoration.ResolveAdvance(
+                advance)
+        };
+    }
+
 }
