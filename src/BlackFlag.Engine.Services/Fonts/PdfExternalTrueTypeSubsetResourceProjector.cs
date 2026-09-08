@@ -113,7 +113,7 @@ public static class PdfExternalTrueTypeSubsetResourceProjector
 
         PdfStream toUnicode =
             new(
-                new PdfDictionary(),
+                [],
                 PdfToUnicodeCMapBuilder.Build(
                     subset.UnicodeByCode));
 
@@ -141,7 +141,7 @@ public static class PdfExternalTrueTypeSubsetResourceProjector
                     fontIdentifier));
 
         return new PdfExternalFontResourceProjection(
-            resourceName,
+            resourceMutation.ResourceName,
             fontIdentifier,
             descriptorIdentifier,
             programIdentifier,

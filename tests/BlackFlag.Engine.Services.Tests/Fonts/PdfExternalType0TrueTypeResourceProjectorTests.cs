@@ -311,7 +311,7 @@ public sealed class PdfExternalType0TrueTypeResourceProjectorTests
             program);
     }
 
-    private static byte[] BuildFont()
+    internal static byte[] BuildFont(ushort fsType = 0x0100)
     {
         byte[][] glyphs =
         [
@@ -345,7 +345,7 @@ public sealed class PdfExternalType0TrueTypeResourceProjectorTests
             new Dictionary<string, byte[]>(
                 StringComparer.Ordinal)
             {
-                ["OS/2"] = Os2(),
+                ["OS/2"] = Os2(fsType),
                 ["cmap"] = Cmap(),
                 ["glyf"] = glyf,
                 ["head"] = Head(),
@@ -511,10 +511,10 @@ public sealed class PdfExternalType0TrueTypeResourceProjectorTests
         return value;
     }
 
-    private static byte[] Os2()
+    private static byte[] Os2(ushort fsType)
     {
         byte[] value = new byte[78];
-        W16(value, 8, 0x0100);
+        W16(value, 8, fsType);
         return value;
     }
 

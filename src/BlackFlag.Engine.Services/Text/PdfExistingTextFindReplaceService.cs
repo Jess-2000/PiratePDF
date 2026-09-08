@@ -153,32 +153,25 @@ public static class PdfExistingTextFindReplaceService
                 ReplacementTarget target =
                     targets[index];
 
-                switch (target.Descriptor.Editability)
+                _ = target.Descriptor.Editability switch
                 {
-                    case PdfExistingTextEditability.DirectlyEditable:
-                        _ = PdfExistingTextReplacementService.Replace(
-                            session,
-                            target.Scope.DisplayedPage,
-                            target.Scope.Source,
-                            target.Descriptor,
-                            target.DirectReplacement!,
-                            cancellationToken);
-                        break;
-
-                    case PdfExistingTextEditability.EditableWithPositionPreservation:
-                        _ = PdfPositionedTextReplacementService.Replace(
-                            session,
-                            target.Scope.DisplayedPage,
-                            target.Scope.Source,
-                            target.Descriptor,
-                            target.PositionedReplacement!,
-                            cancellationToken);
-                        break;
-
-                    default:
-                        throw new NotSupportedException(
-                            "The replacement target no longer has a supported existing-text mutation strategy.");
-                }
+                    PdfExistingTextEditability.DirectlyEditable => PdfExistingTextReplacementService.Replace(
+                                                session,
+                                                target.Scope.DisplayedPage,
+                                                target.Scope.Source,
+                                                target.Descriptor,
+                                                target.DirectReplacement!,
+                                                cancellationToken),
+                    PdfExistingTextEditability.EditableWithPositionPreservation => PdfPositionedTextReplacementService.Replace(
+                                                session,
+                                                target.Scope.DisplayedPage,
+                                                target.Scope.Source,
+                                                target.Descriptor,
+                                                target.PositionedReplacement!,
+                                                cancellationToken),
+                    _ => throw new NotSupportedException(
+                                                "The replacement target no longer has a supported existing-text mutation strategy."),
+                };
             }
 
             PdfEditChangeSet changeSet =

@@ -4,16 +4,16 @@
 |---|---|
 | **Document ID** | PP-AUD-009 |
 | **Category** | Engineering Review |
-| **Version** | 1.1 |
+| **Version** | 1.2 |
 | **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1049, BF-1050, BF-1051, BF-1053, BF-1054 |
-| **Last Updated** | 2026-09-07 |
+| **Last Updated** | 2026-09-08 |
 | **Next Review** | 2026-12-06 |
 
 ## 1. Executive summary
 
-**Implementation update, 2026-09-07:** B1 (POST-P0-001) is implemented and validated; see the [B1 completion report](Post-BF-1054-Batch-B1-Completion-Report.md). The user subsequently approved B2 only (POST-P0-002); its implementation and validation are recorded in the [B2 completion report](Post-BF-1054-Batch-B2-Completion-Report.md). B3 and later batches remain unapproved and untouched. The findings, inventory and baseline results below record the original Phase A assessment.
+**Implementation update, 2026-09-08:** B1 (POST-P0-001) and B2 (POST-P0-002) are implemented and validated; see the [B1 completion report](Post-BF-1054-Batch-B1-Completion-Report.md) and [B2 completion report](Post-BF-1054-Batch-B2-Completion-Report.md). The user subsequently approved B3 only (POST-P0-003); its completed implementation and validation are recorded in the [B3 completion report](Post-BF-1054-Batch-B3-Completion-Report.md). B4 and later batches remain unapproved and untouched. The findings, inventory and baseline results below record the original Phase A assessment.
 
 Phase A is complete. The baseline passes the existing release gate, but that gate does not cover the defects demonstrated here. Recommend separately approved, narrow hardening batches before beginning canonical font editing. No production or test C# was changed during Phase A.
 
@@ -145,6 +145,8 @@ P3 is recorded as one aggregate category: formatting and preference-only churn. 
 **Risk and validation:** medium/high at the native boundary. Test a small dimension-mismatch image and an instrumented preallocation rejection path, checked overflow, truncated JPEG, cancellation where supported, and packaged Windows/macOS/Linux native assets. Do not use destructive memory-exhaustion tests. Fuzz JPEG handling only in a process with memory/time ceilings. Measurement is required for any speed claim. **Batch B2; predates BF-1054, relevant to hostile PDFs and native hardening.**
 
 ### POST-P0-003: allocated font resource name is discarded
+
+**B3 disposition, 2026-09-08:** implemented and validated. The three font projectors now propagate the canonical resource mutation result's name. Collision, transaction and supported Writing save/reopen checks pass; the full unmodified release gate passed with 1,789 tests. See the [B3 completion record](Post-BF-1054-Batch-B3-Completion-Report.md) for exact scope, preservation evidence and the separate existing save-facade/CMap limitations discovered during validation. The following evidence records the original audit baseline.
 
 **Locations:** Create return values in src/BlackFlag.Engine.Services/Fonts/PdfExternalTrueTypeResourceProjector.cs:119, PdfExternalTrueTypeSubsetResourceProjector.cs:144, and PdfExternalType0TrueTypeResourceProjector.cs:175. Consumer: src/BlackFlag.Engine.Services/Text/PdfExternalExistingTextFontService.cs, ChangeFont.
 
@@ -481,7 +483,7 @@ These support using existing contracts consistently, not adding a second font mo
 
 ## 23. Proposed implementation batches
 
-**This table records the Phase A proposals; the report itself grants no approval.** The user subsequently approved B1 and then B2 as separate batches; see the [B1 completion record](Post-BF-1054-Batch-B1-Completion-Report.md) and [B2 completion record](Post-BF-1054-Batch-B2-Completion-Report.md). Explicit user approval remains required for every other batch, including serious P0 issues. Accept each implementation batch only after targeted tests, affected-project tests, diff checks and the full unmodified release gate.
+**This table records the Phase A proposals; the report itself grants no approval.** The user subsequently approved B1, B2 and B3 as separate batches; see the [B1 completion record](Post-BF-1054-Batch-B1-Completion-Report.md), [B2 completion record](Post-BF-1054-Batch-B2-Completion-Report.md) and [B3 completion record](Post-BF-1054-Batch-B3-Completion-Report.md). Explicit user approval remains required for every other batch, including serious P0 issues. Accept each implementation batch only after targeted tests, affected-project tests, diff checks and the full unmodified release gate.
 
 | Order | Batch | Exact finding scope and principal files | Preconditions and acceptance |
 |---|---|---|---|
@@ -583,6 +585,7 @@ Phase A ends with this report and the proposed batches. **Phase B has not begun 
 |---|---|---|
 | 1.0 | 2026-09-06 | Post-BF-1054 audit, prior-work reconciliation, bounded reproductions, updated security/deployment review and proposed approval-gated batches. |
 | 1.1 | 2026-09-07 | Record separately approved B2 implementation disposition and completion evidence; retain the historical audit baseline and all other findings. |
+| 1.2 | 2026-09-08 | Record separately approved B3 disposition and link its validation evidence and limitations; retain the historical audit baseline and other findings. |
 
 ## Appendix A. Per-file coverage ledger
 

@@ -21,7 +21,7 @@ internal sealed class PdfFilteredTextTestDocument : IDisposable
     internal static readonly PdfObjectIdentifier ContentId = new(4, 2);
     private static readonly PdfObjectIdentifier FontId = new(5);
 
-    internal PdfFilteredTextTestDocument(bool positioned = false)
+    internal PdfFilteredTextTestDocument(bool positioned = false, string text = "Hello")
     {
         Document = PdfDocument.CreateEmpty(PdfVersion.Pdf20);
         var catalogId = new PdfObjectIdentifier(1);
@@ -67,7 +67,7 @@ internal sealed class PdfFilteredTextTestDocument : IDisposable
         page.BindObjectIdentifier(PageId);
         Document.Pages.Add(page);
 
-        string show = positioned ? "[(Hel) -120 <6C6F>] TJ" : "(Hello) Tj";
+        string show = positioned ? "[(Hel) -120 <6C6F>] TJ" : $"({text}) Tj";
         OriginalContent = $"BT\n/F1 12 Tf\n{show}\n(Next) Tj\nET\n";
         Content = CreateStream(Encoding.ASCII.GetBytes(OriginalContent));
         Document.Objects.Add(ContentId, Content);
@@ -78,7 +78,7 @@ internal sealed class PdfFilteredTextTestDocument : IDisposable
         Assert.True(PdfGraphicsOperator.TryGet("Tf", out var fontOperator));
         G.PdfObject[] operands = positioned
             ? [new G.PdfArray([new G.PdfLiteralString("Hel"), new G.PdfInteger(-120), new G.PdfHexString("lo"u8.ToArray())])]
-            : [new G.PdfLiteralString("Hello")];
+            : [new G.PdfLiteralString(text)];
         var operation = new PdfGraphicsOperation(
             textOperator, operands, new PdfContentSourceSpan(0, start, start + show.Length));
         var fontSelection = new PdfGraphicsOperation(
@@ -91,7 +91,7 @@ internal sealed class PdfFilteredTextTestDocument : IDisposable
         PdfTextRunElement[] elements = positioned
             ? [PdfTextRunElement.CreateText("Hel"u8, "Hel"), PdfTextRunElement.CreateAdjustment(-120),
                 PdfTextRunElement.CreateText("lo"u8, "lo")]
-            : [PdfTextRunElement.CreateText("Hello"u8, "Hello")];
+            : [PdfTextRunElement.CreateText(Encoding.ASCII.GetBytes(text), text)];
         var run = new PdfDisplayTextRun(
             font, 12, elements, PdfMatrix.Identity,
             new PdfGraphicsStateSnapshot { Font = font, FontSize = 12 },

@@ -172,7 +172,7 @@ public static class PdfExternalType0TrueTypeResourceProjector
                     type0Identifier));
 
         return new PdfExternalType0TrueTypeResourceProjection(
-            resourceName,
+            resourceMutation.ResourceName,
             type0Identifier,
             descendantIdentifier,
             descriptorIdentifier,

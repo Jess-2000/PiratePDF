@@ -116,7 +116,7 @@ public static class PdfExternalTrueTypeResourceProjector
                     fontIdentifier));
 
         return new PdfExternalFontResourceProjection(
-            resourceName,
+            resourceMutation.ResourceName,
             fontIdentifier,
             descriptorIdentifier,
             programIdentifier,
