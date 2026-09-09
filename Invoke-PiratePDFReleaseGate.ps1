@@ -74,13 +74,13 @@ $RepositoryRoot = Get-RepositoryRoot
 Set-Location -LiteralPath $RepositoryRoot
 
 $SolutionPath =
-    Join-Path $RepositoryRoot "PiratePDF.slnx"
+Join-Path $RepositoryRoot "PiratePDF.slnx"
 
 $DocGenProject =
-    Join-Path $RepositoryRoot "tools\PiratePDF.DocGen\PiratePDF.DocGen.csproj"
+Join-Path $RepositoryRoot "tools\PiratePDF.DocGen\PiratePDF.DocGen.csproj"
 
 $DocumentChangesReport =
-    Join-Path $RepositoryRoot "docs\Document-Changes.md"
+Join-Path $RepositoryRoot "docs\Document-Changes.md"
 
 if (-not (Test-Path -LiteralPath $SolutionPath -PathType Leaf)) {
     throw "PiratePDF solution was not found at '$SolutionPath'."

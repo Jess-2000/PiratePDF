@@ -4,7 +4,7 @@
 |---|---|
 | **Document ID** | PP-AUD-009 |
 | **Category** | Engineering Review |
-| **Version** | 1.2 |
+| **Version** | 1.4 |
 | **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1049, BF-1050, BF-1051, BF-1053, BF-1054 |
@@ -17,7 +17,9 @@
 
 Phase A is complete. The baseline passes the existing release gate, but that gate does not cover the defects demonstrated here. Recommend separately approved, narrow hardening batches before beginning canonical font editing. No production or test C# was changed during Phase A.
 
-The audit records **9 P0 findings**, **0 established P1 findings**, **2 carried-forward P1 candidates marked measurement required**, and **8 P2 findings**. P0 follows this repository's broad classification of correctness, preservation, and security risks; it is not a claim that all nine findings have critical exploit severity. Evidence is distinguished as bounded reproduction, source-established behavior, or an unverified deployment/test gap.
+The original Phase A audit records **9 P0 findings**, **0 established P1 findings**, **2 carried-forward P1 candidates marked measurement required**, and **8 P2 findings**. P0 follows this repository's broad classification of correctness, preservation, and security risks; it is not a claim that all nine findings have critical exploit severity. Evidence is distinguished as bounded reproduction, source-established behavior, or an unverified deployment/test gap.
+
+**Post-audit addition, 2026-09-08:** B3 validation discovered **POST-P0-010, CMap tokenizer non-progress/resource exhaustion**, bringing the recorded P0 total to ten. It was not part of the original Phase A inventory. The user separately approved B3A only; see the [B3A completion record](Post-BF-1054-Batch-B3A-CMap-Tokenizer-Completion-Report.md) for implementation, bounded reproductions, generated-CMap compatibility and validation. Existing finding identifiers and historical baseline evidence are retained.
 
 The highest priority security issues are unbounded editing-path Flate expansion, intrinsic JPEG dimensions checked after native allocation, and mutation of a supposedly trusted sanitized font buffer. Other demonstrated defects affect resource naming, subset bounds, malformed-font failures, embedding permissions, and stale Form placement. Text decorations also lack the required transform and valid text-object placement.
 
@@ -104,6 +106,7 @@ The current structural assessment supersedes the original audit's decomposition 
 | POST-P0-007 | P0 | Decorations ignore text transforms and emit paths inside text objects | Source plus existing expected-output tests and PDF specification |
 | POST-P0-008 | P0 | Font embedding restrictions are reduced incorrectly | Version-aware bounded reproduction and OpenType specification |
 | POST-P0-009 | P0 | Stale Form placement can overwrite unrelated current content | Bounded reproduction |
+| POST-P0-010 | P0 | CMap tokenizer non-progress/resource exhaustion | Discovered during B3, after Phase A; source characterization and bounded iterator reproduction in B3A |
 | AUD-P1-001 / AUD-P1-002 | P1 candidates | Recovery materialization; repeated identifier sorting | Measurement required; carried forward, not established P1 benefits |
 | POST-P2-001 | P2 | Font catalog build lacks cancellation propagation and aggregate policy | Source-established |
 | POST-P2-002 | P2 | High-risk byte boundaries lack an operational fuzz/corpus workflow | Repository coverage gap |
@@ -229,6 +232,24 @@ P3 is recorded as one aggregate category: formatting and preference-only churn. 
 **Smallest change:** validate the current canonical Do operator, operand/resource identity, stream/page ownership and resource binding before constructing projections. Preserve valid source representation outside the selected span; reject stale content instead of searching for a replacement placement.
 
 **Risk and validation:** medium/high preservation sensitivity. Add same-length replacement, shifted offsets, changed resource binding, wrong owner, direct/inherited resource and filtered-stream cases; require no partial object application, original-Form/other-placement preservation and save/reopen coverage. Include stale-span permutations in the regression corpus. No benchmark needed. **Batch B7; affects BF-1054O/P.**
+
+### POST-P0-010: CMap tokenizer non-progress/resource exhaustion
+
+**Origin:** discovered during B3 save/reopen validation, not part of the original Phase A inventory. This is a new finding; POST-P0-001 through POST-P0-009 retain their identifiers.
+
+**Location:** `src/BlackFlag.Engine.Rendering/Fonts/PdfCMapParser.cs`, `Tokenize` and `Parse`.
+
+**Evidence:** the old `<` path consumed through only the first closing `>` of a dictionary; the ordinary-token branch then excluded `>` without advancing or rejecting it, repeatedly yielding an empty token. `Parse` materialized the sequence with `ToArray()`. B3 observed process memory exhaustion on a generated ToUnicode CMap. B3A confirmed the defect safely before production changes: finite iterator tests for `>`, `>>` and generated-style dictionary syntax failed on empty tokens. No uncontrolled exhaustion reproduction was run in B3A.
+
+**Impact:** a tiny malformed input or valid repository-generated dictionary syntax can cause non-termination and unbounded token materialization at a font/CMap byte boundary.
+
+**Approved correction, B3A:** retain the mapping parser, distinguish dictionary/hex delimiters, consume or reject closing delimiters, guard the single yield site against non-progress, and bound decoded input/token materialization. The public signature and CMap builders remain unchanged.
+
+**Risk and required validation:** medium compatibility sensitivity. Preserve all supported mapping operations and builder output; reject malformed lexical sequences with the existing domain/format exception family. Verify strict progress with finite enumeration, exact/over-budget tests, generated full CID-space compatibility, real edit/save/reopen CMap decoding, complete Rendering/affected Services tests and the full release gate. This closes lexical non-progress, not every possible CMap grammar or aggregate range-work issue.
+
+**Disposition, 2026-09-08:** implemented and validated; targeted, complete Rendering/Services and 16 generated-CMap save/reopen combinations pass. The full unmodified release gate passed with 1,818 tests. See the [B3A completion record](Post-BF-1054-Batch-B3A-CMap-Tokenizer-Completion-Report.md) for exact limits, files and remaining limitations. B4 and all other original findings remain untouched.
+
+**Post-B3A reconciliation, 2026-09-08:** all eleven current uncommitted files were reviewed across the repository. Later user edits comprise the independent byte-array copy in `AddBigEndian`, equivalent tokenizer-test simplifications/indentation and indentation-only changes to the release-gate script. They are retained; token materialization remains eager and bounded, and all B3A limits, progress, exception and mapping contracts remain intact. The [B3A reconciliation record](Post-BF-1054-Batch-B3A-CMap-Tokenizer-Completion-Report.md) distinguishes these edits from the original B3A work and generated output. Current targeted, affected-project and sixteen reopen checks pass; the complete current release gate also passed with the unchanged 1,818-test suite and clean documentation/repair checks. No production, test or script file was modified during reconciliation. No other finding or batch is implemented by this reconciliation.
 
 ### POST-P2-001: font catalog cancellation and aggregate work policy
 
@@ -483,13 +504,14 @@ These support using existing contracts consistently, not adding a second font mo
 
 ## 23. Proposed implementation batches
 
-**This table records the Phase A proposals; the report itself grants no approval.** The user subsequently approved B1, B2 and B3 as separate batches; see the [B1 completion record](Post-BF-1054-Batch-B1-Completion-Report.md), [B2 completion record](Post-BF-1054-Batch-B2-Completion-Report.md) and [B3 completion record](Post-BF-1054-Batch-B3-Completion-Report.md). Explicit user approval remains required for every other batch, including serious P0 issues. Accept each implementation batch only after targeted tests, affected-project tests, diff checks and the full unmodified release gate.
+**This table records the Phase A proposals and the later B3A addition; the report itself grants no approval.** The user subsequently approved B1, B2, B3 and B3A as separate batches; see the [B1 completion record](Post-BF-1054-Batch-B1-Completion-Report.md), [B2 completion record](Post-BF-1054-Batch-B2-Completion-Report.md), [B3 completion record](Post-BF-1054-Batch-B3-Completion-Report.md) and [B3A completion record](Post-BF-1054-Batch-B3A-CMap-Tokenizer-Completion-Report.md). Explicit user approval remains required for every other batch, including serious P0 issues. Accept each implementation batch only after targeted tests, affected-project tests, diff checks and the full unmodified release gate.
 
 | Order | Batch | Exact finding scope and principal files | Preconditions and acceptance |
 |---|---|---|---|
 | 1 | B1 bounded mutation decode | POST-P0-001; Services/Text/PdfContentStreamMutationCodec.cs and its codec/service tests | Characterize supported filters, exception/cancellation and rollback; preserve serialization/reopen |
 | 2 | B2 native JPEG preallocation | POST-P0-002; Rendering/Images/PdfImageDecoder.cs, IPdfImageCodec.cs only if approved, Skia/Images/SkiaDctImageCodec.cs, decoder/native tests | Approve compatible limit seam; prove rejection before allocation; platform native checks |
 | 3 | B3 resource-name correctness | POST-P0-003; the three Services/Fonts projectors and their tests; external-text integration test | All collision/resource ownership variants and save/reopen |
+| 3A | B3A CMap tokenizer (added after Phase A; separately approved) | POST-P0-010; Rendering/Fonts/PdfCMapParser.cs and directly relevant Rendering/Services font tests | Bounded progress/materialization proof, delimiter compatibility, generated-CMap parse/save/reopen |
 | 4 | B4 font trust and bounds | POST-P0-004/005/006; Sanitization program/sanitizer, CompositeClosure, both subsetters/SfntBuilder as required, focused Fonts/Platform tests | Prefer three independently reviewable sub-batches; characterize exception/ownership before patching |
 | 5 | B6 font permissions | POST-P0-008; both font inspectors, embedding policy, subset projectors, permission tests | Explicit policy/API approval; version-aware fixtures and program/provider disagreement |
 | 6 | B7 current Form provenance | POST-P0-009; FormPlacementCloneProjector/Descriptor and Form/resource tests | Current-token/binding checks, no partial projections, other placements unchanged |
@@ -586,6 +608,8 @@ Phase A ends with this report and the proposed batches. **Phase B has not begun 
 | 1.0 | 2026-09-06 | Post-BF-1054 audit, prior-work reconciliation, bounded reproductions, updated security/deployment review and proposed approval-gated batches. |
 | 1.1 | 2026-09-07 | Record separately approved B2 implementation disposition and completion evidence; retain the historical audit baseline and all other findings. |
 | 1.2 | 2026-09-08 | Record separately approved B3 disposition and link its validation evidence and limitations; retain the historical audit baseline and other findings. |
+| 1.3 | 2026-09-08 | Add POST-P0-010 discovered during B3 after Phase A; record separately approved B3A and its validation without renumbering original findings. |
+| 1.4 | 2026-09-08 | Record repository-wide reconciliation of post-B3A user changes and current validation; preserve prior batch history and all deferred findings. |
 
 ## Appendix A. Per-file coverage ledger
 

@@ -6,6 +6,7 @@ using BlackFlag.Engine.Document.Objects;
 using BlackFlag.Engine.Document.Objects.Primitives;
 using BlackFlag.Engine.Editing.Operations;
 using BlackFlag.Engine.Fonts.Sanitization;
+using BlackFlag.Engine.Rendering.Fonts;
 using BlackFlag.Engine.Services.Tests.Fonts;
 using BlackFlag.Engine.Services.Text;
 using BlackFlag.Engine.Writing;
@@ -166,6 +167,10 @@ public sealed class PdfExternalFontCollisionIntegrationTests
         PdfExternalFontResourceCollisionTests.AssertMapping(context, "FExt2", new PdfObjectIdentifier(18));
         Assert.Equal(PdfFontCollisionTestDocument.Name("Type0"), context.Document.Objects.Get<PdfDictionary>(
             new PdfObjectIdentifier(18)).Get(PdfFontCollisionTestDocument.Name("Subtype")));
+        var toUnicode = context.Document.Objects.Get<PdfStream>(new PdfObjectIdentifier(15));
+        PdfCMap cmap = PdfCMapParser.Parse(toUnicode.ToByteArray());
+        Assert.True(cmap.TryGetUnicode(new PdfCharacterCode([0, 1]), out string unicode));
+        Assert.Equal("A", unicode);
         context.AssertUnrelatedObjectsUnchanged();
     }
 }
