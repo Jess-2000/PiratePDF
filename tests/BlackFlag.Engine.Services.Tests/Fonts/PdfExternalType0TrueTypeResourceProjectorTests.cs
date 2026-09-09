@@ -311,7 +311,7 @@ public sealed class PdfExternalType0TrueTypeResourceProjectorTests
             program);
     }
 
-    internal static byte[] BuildFont(ushort fsType = 0x0100)
+    internal static byte[] BuildFont(ushort fsType = 0x0100, byte[] nameTable = null)
     {
         byte[][] glyphs =
         [
@@ -353,7 +353,7 @@ public sealed class PdfExternalType0TrueTypeResourceProjectorTests
                 ["hmtx"] = Hmtx(glyphs.Length),
                 ["loca"] = loca,
                 ["maxp"] = Maxp(glyphs.Length),
-                ["name"] = Name()
+                ["name"] = nameTable ?? Name()
             };
 
         return BuildSfnt(

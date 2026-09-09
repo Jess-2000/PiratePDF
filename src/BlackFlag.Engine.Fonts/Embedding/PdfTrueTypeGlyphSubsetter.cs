@@ -49,7 +49,7 @@ public sealed class PdfTrueTypeGlyphSubsetter
                 "BF-1054L subsetting supports sanitized TrueType glyf/loca fonts only.");
         }
 
-        byte[] source = program.Bytes.ToArray();
+        byte[] source = program.TrustedBytes.ToArray();
         Dictionary<string, PdfTrueTypeTable> tables =
             PdfTrueTypeBinary.ReadTables(source);
 

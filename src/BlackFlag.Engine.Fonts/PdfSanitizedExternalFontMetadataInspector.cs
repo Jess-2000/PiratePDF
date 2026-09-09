@@ -17,7 +17,7 @@ public static class PdfSanitizedExternalFontMetadataInspector
         ArgumentNullException.ThrowIfNull(program);
 
         ReadOnlySpan<byte> bytes =
-            program.Bytes.Span;
+            program.TrustedBytes;
 
         Dictionary<string, PdfTrueTypeTable> tables =
             PdfTrueTypeBinary.ReadTables(bytes);

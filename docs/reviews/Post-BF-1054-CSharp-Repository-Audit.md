@@ -4,16 +4,18 @@
 |---|---|
 | **Document ID** | PP-AUD-009 |
 | **Category** | Engineering Review |
-| **Version** | 1.4 |
+| **Version** | 1.5 |
 | **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1049, BF-1050, BF-1051, BF-1053, BF-1054 |
-| **Last Updated** | 2026-09-08 |
+| **Last Updated** | 2026-09-09 |
 | **Next Review** | 2026-12-06 |
 
 ## 1. Executive summary
 
-**Implementation update, 2026-09-08:** B1 (POST-P0-001) and B2 (POST-P0-002) are implemented and validated; see the [B1 completion report](Post-BF-1054-Batch-B1-Completion-Report.md) and [B2 completion report](Post-BF-1054-Batch-B2-Completion-Report.md). The user subsequently approved B3 only (POST-P0-003); its completed implementation and validation are recorded in the [B3 completion report](Post-BF-1054-Batch-B3-Completion-Report.md). B4 and later batches remain unapproved and untouched. The findings, inventory and baseline results below record the original Phase A assessment.
+**Implementation update, 2026-09-08:** B1 (POST-P0-001) and B2 (POST-P0-002) are implemented and validated; see the [B1 completion report](Post-BF-1054-Batch-B1-Completion-Report.md) and [B2 completion report](Post-BF-1054-Batch-B2-Completion-Report.md). The user subsequently approved B3 only (POST-P0-003); its completed implementation and validation are recorded in the [B3 completion report](Post-BF-1054-Batch-B3-Completion-Report.md). At that checkpoint, B4 and later batches were unapproved and untouched. The findings, inventory and baseline results below record the original Phase A assessment.
+
+**Implementation update, 2026-09-09:** The user separately approved B4A only (POST-P0-004). Trusted sanitized-font ownership is now implemented and validated; see the [B4A completion report](Post-BF-1054-Batch-B4A-Sanitized-Font-Ownership-Completion-Report.md) for public byte/stream isolation, trusted internal consumption, copy accounting, downstream save/reopen results and separately reported analogous ownership candidates. The unmodified release gate passed all 1,841 tests. B4B/B4C and later batches remain unapproved and untouched.
 
 Phase A is complete. The baseline passes the existing release gate, but that gate does not cover the defects demonstrated here. Recommend separately approved, narrow hardening batches before beginning canonical font editing. No production or test C# was changed during Phase A.
 
@@ -172,6 +174,8 @@ P3 is recorded as one aggregate category: formatting and preference-only churn. 
 **Smallest change:** stop exposing the mutable backing store publicly; preserve an efficient internal read path with explicit ownership, and provide defensive public snapshots or a non-exposing stream. Audit analogous provenance byte views during this narrow boundary review rather than mechanically copying every ReadOnlyMemory in the repository.
 
 **Risk and validation:** medium; additional copies may affect large-font allocation and require measurement before performance claims. Add alias-mutation, retained-view, hash consistency, stream, subset and embed/reopen regressions. Ensure input snapshots and meaningful secret-buffer clearing remain intact. Fuzzing is supplementary to the deterministic ownership regression. **Batch B4; affects BF-1054I and all trusted-font consumers.**
+
+**Disposition, 2026-09-09:** Implemented and validated in B4A. Bytes and OpenRead now expose independent defensive snapshots; assembly-internal inspectors borrow a private read-only span, subsetters retain one working copy, and Services projectors reuse one public snapshot per embedding operation. Characterization also reproduced trusted-buffer exposure through stream-copy destination callbacks. Ownership, hash, metadata/subset/embed and six actual parser-reopen combinations passed; the full unmodified release gate passed 1,841 tests. The [B4A completion report](Post-BF-1054-Batch-B4A-Sanitized-Font-Ownership-Completion-Report.md) records allocation tradeoffs marked measurement required and analogous provenance-view candidates requiring separate approval. POST-P0-005/006 were not implemented.
 
 ### POST-P0-005: subset limits do not count initial roots
 
@@ -610,6 +614,7 @@ Phase A ends with this report and the proposed batches. **Phase B has not begun 
 | 1.2 | 2026-09-08 | Record separately approved B3 disposition and link its validation evidence and limitations; retain the historical audit baseline and other findings. |
 | 1.3 | 2026-09-08 | Add POST-P0-010 discovered during B3 after Phase A; record separately approved B3A and its validation without renumbering original findings. |
 | 1.4 | 2026-09-08 | Record repository-wide reconciliation of post-B3A user changes and current validation; preserve prior batch history and all deferred findings. |
+| 1.5 | 2026-09-09 | Record B4A-only completion of POST-P0-004, ownership/stream regressions, downstream reopen and full release-gate validation; link separately reported analogous candidates while preserving historical findings and deferred batches. |
 
 ## Appendix A. Per-file coverage ledger
 

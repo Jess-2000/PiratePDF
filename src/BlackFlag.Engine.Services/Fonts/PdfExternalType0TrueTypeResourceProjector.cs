@@ -102,6 +102,7 @@ public static class PdfExternalType0TrueTypeResourceProjector
                 face.FaceName,
                 subset.Program.Sha256);
 
+        ReadOnlyMemory<byte> fontBytes = subset.Program.Bytes;
         PdfStream programStream =
             new(
                 new PdfDictionary
@@ -109,10 +110,10 @@ public static class PdfExternalType0TrueTypeResourceProjector
                     {
                         Length1Name,
                         new PdfInteger(
-                            subset.Program.Bytes.Length)
+                            fontBytes.Length)
                     }
                 },
-                subset.Program.Bytes.Span);
+                fontBytes.Span);
 
         PdfStream cidToGid =
             new(

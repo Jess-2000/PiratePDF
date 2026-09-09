@@ -20,7 +20,7 @@ public static class PdfExternalTrueTypeInspector
                 "BF-1054J embeds sanitized TrueType-outline fonts only.");
         }
 
-        ReadOnlySpan<byte> bytes = program.Bytes.Span;
+        ReadOnlySpan<byte> bytes = program.TrustedBytes;
         Dictionary<string, Table> tables = ReadTables(bytes);
 
         Table head = Require(tables, "head");

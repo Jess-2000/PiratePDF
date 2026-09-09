@@ -81,6 +81,7 @@ public static class PdfExternalTrueTypeResourceProjector
             NormalizeBaseFontName(
                 face.FaceName);
 
+        ReadOnlyMemory<byte> fontBytes = program.Bytes;
         PdfStream fontProgram =
             new(
                 new PdfDictionary
@@ -88,10 +89,10 @@ public static class PdfExternalTrueTypeResourceProjector
                     {
                         Length1Name,
                         new PdfInteger(
-                            program.Bytes.Length)
+                            fontBytes.Length)
                     }
                 },
-                program.Bytes.Span);
+                fontBytes.Span);
 
         PdfDictionary descriptor =
             CreateDescriptor(

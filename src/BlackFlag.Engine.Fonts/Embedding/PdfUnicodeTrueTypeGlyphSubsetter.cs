@@ -46,7 +46,7 @@ public sealed class PdfUnicodeTrueTypeGlyphSubsetter
         }
 
         byte[] source =
-            program.Bytes.ToArray();
+            program.TrustedBytes.ToArray();
 
         Dictionary<string, PdfTrueTypeTable> tables =
             PdfTrueTypeBinary.ReadTables(source);
