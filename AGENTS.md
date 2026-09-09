@@ -144,6 +144,19 @@ replace bounded validation with optimistic assumptions.
 - Do not mechanically replace valid constructs merely to satisfy a stylistic preference.
 - LINQ is acceptable when it improves clarity and does not create unjustified hot-path allocations.
 
+### Expressions, materialization, and deconstruction
+- Do not mechanically prefer newer or shorter syntax. Choose the form that makes ownership, evaluation, allocation, resource bounds, and domain intent clearest.
+- Do not mechanically replace `ToArray()` with collection expressions or collection expressions with `ToArray()`.
+- Prefer collection expressions for straightforward fixed construction and known/materialized collection copies when independent ownership is clear.
+- Prefer or retain `ToArray()` when it more clearly establishes an intentional eager materialization boundary, especially for lazy/stateful enumerables, LINQ pipelines, parser/tokenizer pipelines, security-bounded enumeration, or sequences whose evaluation/exception behavior matters.
+- Neither `ToArray()` nor collection-expression spread is inherently faster or more secure. For performance-sensitive choices, use measurement or strong complexity/allocation evidence rather than syntax preference.
+- Ensure attacker-controlled enumeration is bounded and makes progress before relying on eager materialization. Syntax must not obscure resource ceilings or mutation/ownership boundaries.
+- Use deconstruction when the extracted values are meaningfully related and the resulting names remain clear. Prefer named variables or member access when deconstruction introduces unused values, obscures domain meaning/type/ownership/lifetime, or makes security-sensitive code harder to audit.
+- Keep descriptive intermediate variables when they capture state, provenance, numeric width, resource budgets, offsets, ownership, lifetime, or another meaningful invariant. Inline them only when evaluation timing, side effects, exception behavior, and readability remain clearly equivalent.
+- Use `var` when the type is evident and unimportant to understanding the operation. Prefer an explicit type when numeric width/signedness, interface versus implementation, ownership, lifetime, or another semantic distinction matters.
+- Before simplifying an expression, preserve evaluation count, enumeration count, ordering, side effects, exception timing, cancellation, disposal, null behavior, deferred/eager execution, mutation, and aliasing.
+- Add a concise comment when a non-obvious materialization or expression choice protects an important ownership, evaluation, preservation, security, or resource-bound invariant. Explain why the form is intentional rather than narrating its syntax.
+
 ### Comments and documentation
 - Preserve useful comments.
 - Comments should explain intent, invariants, preservation rules, algorithms, or non-obvious reasons.
