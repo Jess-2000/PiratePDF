@@ -133,6 +133,74 @@ public sealed class PdfProjectedIncrementalWritePlannerTests
             () => new PdfObjectWriteProjectionSet(projections!));
     }
 
+    [Fact]
+    public void ProjectionSetOwnsItsSortedStorageWithoutReorderingTheSource()
+    {
+        var first = new PdfObjectWriteProjection(new PdfObjectIdentifier(4), new PdfDictionary());
+        var second = new PdfObjectWriteProjection(new PdfObjectIdentifier(3), new PdfDictionary());
+        PdfObjectWriteProjection[] source = [first, second];
+
+        var projections = new PdfObjectWriteProjectionSet(source);
+
+        Assert.Same(first, source[0]);
+        Assert.Same(second, source[1]);
+        source[0] = second;
+        Assert.Equal([second, first], projections.Projections);
+        Assert.Equal([second.Identifier, first.Identifier], projections.Identifiers);
+    }
+
+    [Fact]
+    public void ProjectionSetEnumeratesAndDisposesItsSourceOnceBeforePublication()
+    {
+        int enumerations = 0;
+        bool disposed = false;
+        var projection = new PdfObjectWriteProjection(new PdfObjectIdentifier(4), new PdfDictionary());
+
+        IEnumerable<PdfObjectWriteProjection> Enumerate()
+        {
+            enumerations++;
+            try
+            {
+                yield return projection;
+            }
+            finally
+            {
+                disposed = true;
+            }
+        }
+
+        var projections = new PdfObjectWriteProjectionSet(Enumerate());
+
+        Assert.True(disposed);
+        Assert.Same(projection, Assert.Single(projections.Projections));
+        Assert.Equal(projection.Identifier, Assert.Single(projections.Identifiers));
+        Assert.Equal(1, enumerations);
+    }
+
+    [Fact]
+    public void ProjectionSetPropagatesEnumerationFailureBeforeEntryValidation()
+    {
+        var failure = new InvalidOperationException("Fixture enumeration failure.");
+        bool disposed = false;
+
+        IEnumerable<PdfObjectWriteProjection> Enumerate()
+        {
+            try
+            {
+                yield return null!;
+                throw failure;
+            }
+            finally
+            {
+                disposed = true;
+            }
+        }
+
+        Assert.Same(failure, Assert.Throws<InvalidOperationException>(
+            () => new PdfObjectWriteProjectionSet(Enumerate())));
+        Assert.True(disposed);
+    }
+
     private static PdfDocument CreateDocument()
     {
         PdfDocument document = PdfDocument.CreateEmpty(PdfVersion.Pdf17);

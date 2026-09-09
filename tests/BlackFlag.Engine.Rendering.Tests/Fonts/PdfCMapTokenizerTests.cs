@@ -69,10 +69,10 @@ public sealed class PdfCMapTokenizerTests
         var tokens = PdfCMapParser.Tokenize(source, 32).Take(source.Length + 1).ToArray();
         Assert.Equal(expected.Split('|'), tokens.Select(token => token.Value));
         int previous = 0;
-        foreach (var (Value, End) in tokens)
+        foreach (var token in tokens)
         {
-            Assert.InRange(End, previous + 1, source.Length);
-            previous = End;
+            Assert.InRange(token.End, previous + 1, source.Length);
+            previous = token.End;
         }
     }
 

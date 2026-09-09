@@ -25,6 +25,7 @@ public sealed class PdfCMapParser
         }
 
         string source = Encoding.ASCII.GetString(decodedBytes);
+        // Indexed lookahead needs an eager snapshot; Tokenize bounds progress and token count as it yields.
         string[] tokens = Tokenize(source, maximumTokens).Select(token => token.Value).ToArray();
 
         var codeSpaces = new List<PdfCodeSpaceRange>();

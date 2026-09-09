@@ -48,9 +48,9 @@ public static class PdfTextAdvanceMeasurementService
 
         int replacementIndex = 0;
 
+        // Consume the stateful replacement index once, before decoding and measuring the resulting elements.
         PdfTextRunElement[] elements =
-        [
-            .. run.Elements.Select(
+            run.Elements.Select(
                 element =>
                     element.Kind == PdfTextRunElementKind.Adjustment
                         ? PdfTextRunElement.CreateAdjustment(
@@ -58,7 +58,7 @@ public static class PdfTextAdvanceMeasurementService
                         : PdfTextRunElement.CreateText(
                             replacementTextElements[
                                 replacementIndex++].Span))
-        ];
+                .ToArray();
 
         return MeasureElements(
             run,
