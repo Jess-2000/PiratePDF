@@ -4,7 +4,7 @@
 |---|---|
 | **Document ID** | PP-AUD-009 |
 | **Category** | Engineering Review |
-| **Version** | 1.5 |
+| **Version** | 1.6 |
 | **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1049, BF-1050, BF-1051, BF-1053, BF-1054 |
@@ -26,6 +26,8 @@ The original Phase A audit records **9 P0 findings**, **0 established P1 finding
 The highest priority security issues are unbounded editing-path Flate expansion, intrinsic JPEG dimensions checked after native allocation, and mutation of a supposedly trusted sanitized font buffer. Other demonstrated defects affect resource naming, subset bounds, malformed-font failures, embedding permissions, and stale Form placement. Text decorations also lack the required transform and valid text-object placement.
 
 The previous plugin/result hardening and Abstractions test improvements remain incorporated. The earlier structural deferral remains appropriate. No file should be split merely because it is large.
+
+**Characterization update, 2026-09-09:** The separately authorized B4A follow-up confirms four additional in-process ownership defects, POST-P0-011 through POST-P0-014. The cumulative recorded P0 total is fourteen, including previously implemented findings; the original Phase A count and evidence remain historical. See the [ownership candidate characterization](Post-BF-1054-B4A-Ownership-Candidate-Characterization.md) for independent reproductions, negative controls, severity limits and proposed B4A-F1 through F4 batches. All 16 characterization cases and the full unmodified 1,857-test release gate passed. None of these four findings is fixed or approved for implementation.
 
 ## 2. Repository and baseline health
 
@@ -109,6 +111,10 @@ The current structural assessment supersedes the original audit's decomposition 
 | POST-P0-008 | P0 | Font embedding restrictions are reduced incorrectly | Version-aware bounded reproduction and OpenType specification |
 | POST-P0-009 | P0 | Stale Form placement can overwrite unrelated current content | Bounded reproduction |
 | POST-P0-010 | P0 | CMap tokenizer non-progress/resource exhaustion | Discovered during B3, after Phase A; source characterization and bounded iterator reproduction in B3A |
+| POST-P0-011 | P0 | Public character-code alias invalidates equality/hash and caller keys | B4A follow-up reproduction; private CMap keys remain inaccessible |
+| POST-P0-012 | P0 | Descriptor byte alias changes stale-source validation decisions | B4A follow-up reproduction in replacement/font/style; replay snapshots remain independent |
+| POST-P0-013 | P0 | Parser stream alias permits cached-object/source divergence | B4A follow-up filter and actual ObjStm resolver reproduction |
+| POST-P0-014 | P0 | Synchronous destination callback mutates retained original revision | B4A follow-up CopyTo and both incremental xref output modes |
 | AUD-P1-001 / AUD-P1-002 | P1 candidates | Recovery materialization; repeated identifier sorting | Measurement required; carried forward, not established P1 benefits |
 | POST-P2-001 | P2 | Font catalog build lacks cancellation propagation and aggregate policy | Source-established |
 | POST-P2-002 | P2 | High-risk byte boundaries lack an operational fuzz/corpus workflow | Repository coverage gap |
@@ -254,6 +260,30 @@ P3 is recorded as one aggregate category: formatting and preference-only churn. 
 **Disposition, 2026-09-08:** implemented and validated; targeted, complete Rendering/Services and 16 generated-CMap save/reopen combinations pass. The full unmodified release gate passed with 1,818 tests. See the [B3A completion record](Post-BF-1054-Batch-B3A-CMap-Tokenizer-Completion-Report.md) for exact limits, files and remaining limitations. B4 and all other original findings remain untouched.
 
 **Post-B3A reconciliation, 2026-09-08:** all eleven current uncommitted files were reviewed across the repository. Later user edits comprise the independent byte-array copy in `AddBigEndian`, equivalent tokenizer-test simplifications/indentation and indentation-only changes to the release-gate script. They are retained; token materialization remains eager and bounded, and all B3A limits, progress, exception and mapping contracts remain intact. The [B3A reconciliation record](Post-BF-1054-Batch-B3A-CMap-Tokenizer-Completion-Report.md) distinguishes these edits from the original B3A work and generated output. Current targeted, affected-project and sixteen reopen checks pass; the complete current release gate also passed with the unchanged 1,818-test suite and clean documentation/repair checks. No production, test or script file was modified during reconciliation. No other finding or batch is implemented by this reconciliation.
+
+### POST-P0-011: public character-code mutation invalidates key semantics
+
+**Location:** src/BlackFlag.Engine.Rendering/Fonts/PdfCharacterCode.cs, Bytes/Equals/GetHashCode. Constructor input is copied, but public array-backed memory exposes the stored bytes. A bounded mutation changes equality/hash; Dictionary/HashSet lookup fails after insertion and equivalent duplicate dictionary keys can appear. Public CMap query mutation does not expose or corrupt private stored CMap keys. This is a confirmed public-value correctness defect, not a demonstrated parser-only CMap exploit.
+
+**Proposal and risk:** B4A-F4, after the more consequential provenance/revision/stream work. Preserve public signatures with defensive Bytes exposure and review internal decoder length/byte access to avoid unnecessary copies. Retain constructor/equality/CMap controls and invert the alias/key-corruption characterization tests when implementing. Allocation impact is measurement required. **Unfixed; separate approval required.** Details and exact probes: [ownership characterization](Post-BF-1054-B4A-Ownership-Candidate-Characterization.md).
+
+### POST-P0-012: descriptor alias changes stale-source validation
+
+**Location:** src/BlackFlag.Engine.Editing/Text/PdfExistingTextDescriptor.cs, EncodedBytes. Public memory exposes copied private provenance bytes. Mutating Hello to World can make a valid target fail. After an authoritative same-length Hello-to-World source change, forging the retained descriptor bytes to World allows font switching and styling to proceed despite stale UnicodeText Hello; font switching reintroduces Hello. Direct replacement still rejects the independent display-run mismatch. Rollback/undo/redo snapshots remain independent and replay correctly. SDK opaque-target registration invalidation was not bypassed.
+
+**Proposal and risk:** B4A-F1, first. Preserve the constructor copy and property signature; return defensive snapshots and reuse them locally when validation currently reads twice. Characterize typography/external/width-aware consumers alongside the existing direct/font/style and history cases; add save/reopen if orchestration changes. Publicly constructible descriptors remain validation inputs, not unforgeable capabilities. Copies add O(text-byte-length) work; realistic impact is measurement required. **Unfixed; separate approval required.** [Evidence and limitations](Post-BF-1054-B4A-Ownership-Candidate-Characterization.md).
+
+### POST-P0-013: parser stream alias permits cache/source divergence
+
+**Location:** src/BlackFlag.Engine.Objects/PdfStream.cs, Data/Equals/GetHashCode. Public memory exposes the private copied stream array. ASCIIHex input mutation changes decoded A to B. An actual cached ObjStm mutation changes freshly parsed compressed object 42 to 43 while the resolver's previously cached object and untouched source still yield 42. Length/dictionary identity stay intact; array resizing is unnecessary. Document.PdfStream has a separate copy/mutation contract; a copy made before parser mutation remains isolated. No automatic parser-stream-to-writer path was established.
+
+**Proposal and risk:** B4A-F3, third. Defensive public Data exposure with an explicit cross-assembly consumer/copy review; preserve lazy object identity, generations, filter policy and source bytes. Invert parser/cache mutation tests and cover filter/resource/serialization boundaries actually changed. This has the broadest potential allocation impact; large-stream peak cost is measurement required. Avoid broad friend access or a parallel stream model. **Unfixed; separate approval required.** [Evidence and scope](Post-BF-1054-B4A-Ownership-Candidate-Characterization.md).
+
+### POST-P0-014: destination callback mutates preceding revision state
+
+**Location:** src/BlackFlag.Engine.Writing/PdfMemorySourceRevision.cs, CopyTo; forwarding path PdfCountingWriteStream.Write(ReadOnlySpan). A custom managed destination copies the span then writes its first byte through MemoryMarshal.GetReference while the callback is active. A second CopyTo returns changed bytes and hash. Through actual incremental saving, the first destination retains the original prefix but a later ordinary save begins with X instead of `%`; both xref modes reproduce this. This confirms synchronous source mutation, not safe retention of a source span after return. The byte-array fallback exposes an independent temporary buffer.
+
+**Proposal and risk:** B4A-F2, second. Never pass stored revision bytes into caller callbacks; use an independently owned bounded copy buffer, with explicit review of callback granularity, failure timing and destination ownership. Keep signature, exact byte ordering, Prev/startxref, length and exception behavior. Test chunk edges, throwing/nonseekable destinations, hashes and both xref modes with reopen. Whole-revision cloning adds O(revision-size) peak memory and is not a required design. Throughput is measurement required. **Unfixed; separate approval required.** [Managed reproduction and limits](Post-BF-1054-B4A-Ownership-Candidate-Characterization.md).
 
 ### POST-P2-001: font catalog cancellation and aggregate work policy
 
@@ -615,6 +645,7 @@ Phase A ends with this report and the proposed batches. **Phase B has not begun 
 | 1.3 | 2026-09-08 | Add POST-P0-010 discovered during B3 after Phase A; record separately approved B3A and its validation without renumbering original findings. |
 | 1.4 | 2026-09-08 | Record repository-wide reconciliation of post-B3A user changes and current validation; preserve prior batch history and all deferred findings. |
 | 1.5 | 2026-09-09 | Record B4A-only completion of POST-P0-004, ownership/stream regressions, downstream reopen and full release-gate validation; link separately reported analogous candidates while preserving historical findings and deferred batches. |
+| 1.6 | 2026-09-09 | Record characterization-only POST-P0-011 through POST-P0-014 with bounded reproductions, negative controls and proposed independent batches; implement no ownership fix. |
 
 ## Appendix A. Per-file coverage ledger
 
