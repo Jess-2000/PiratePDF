@@ -86,8 +86,10 @@ public static class PdfExistingTextReplacementService
                 source,
                 descriptor.Identity);
 
-        if (!run.EncodedBytes.Span.SequenceEqual(
-                descriptor.EncodedBytes.Span))
+        ReadOnlyMemory<byte> sourceBytes = run.EncodedBytes;
+        ReadOnlyMemory<byte> encodedBytes = descriptor.EncodedBytes;
+        if (!sourceBytes.Span.SequenceEqual(
+                encodedBytes.Span))
         {
             throw new InvalidOperationException(
                 "The existing-text descriptor no longer matches the discovered display run.");
@@ -137,7 +139,7 @@ public static class PdfExistingTextReplacementService
             PdfTextStringTokenEditor.Replace(
                 currentData,
                 descriptor.Identity,
-                descriptor.EncodedBytes.Span,
+                encodedBytes.Span,
                 replacementBytes);
 
         byte[] encodedReplacement =

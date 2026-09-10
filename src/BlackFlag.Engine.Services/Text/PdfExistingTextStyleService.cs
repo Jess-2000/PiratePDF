@@ -157,11 +157,12 @@ public static class PdfExistingTextStyleService
         if (descriptor.Editability ==
             PdfExistingTextEditability.DirectlyEditable)
         {
+            ReadOnlyMemory<byte> encodedBytes = descriptor.EncodedBytes;
             _ = PdfTextStringTokenEditor.Replace(
                 data,
                 descriptor.Identity,
-                descriptor.EncodedBytes.Span,
-                descriptor.EncodedBytes.Span);
+                encodedBytes.Span,
+                encodedBytes.Span);
             return;
         }
 
