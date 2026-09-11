@@ -3,6 +3,8 @@ namespace BlackFlag.Engine.Writing;
 /// <summary>Owns an immutable in-memory snapshot of a preceding PDF revision.</summary>
 public sealed class PdfMemorySourceRevision : IPdfOriginalSourceRevision
 {
+    private const int CopyBufferSize = 64 * 1024;
+
     private readonly byte[] bytes;
 
     public PdfMemorySourceRevision(
@@ -56,6 +58,16 @@ public sealed class PdfMemorySourceRevision : IPdfOriginalSourceRevision
                 nameof(destination));
         }
 
-        destination.Write(bytes);
+        // Caller-controlled Write callbacks must never receive retained revision storage.
+        // Reuse one independently owned, bounded buffer only within this copy operation.
+        var buffer = new byte[CopyBufferSize];
+        int offset = 0;
+        while (offset < bytes.Length)
+        {
+            int count = Math.Min(buffer.Length, bytes.Length - offset);
+            bytes.AsSpan(offset, count).CopyTo(buffer);
+            destination.Write(buffer.AsSpan(0, count));
+            offset += count;
+        }
     }
 }

@@ -4,7 +4,7 @@
 |---|---|
 | **Document ID** | PP-AUD-009 |
 | **Category** | Engineering Review |
-| **Version** | 1.7 |
+| **Version** | 1.8 |
 | **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1049, BF-1050, BF-1051, BF-1053, BF-1054 |
@@ -30,6 +30,8 @@ The previous plugin/result hardening and Abstractions test improvements remain i
 **Characterization update, 2026-09-09:** The separately authorized B4A follow-up confirms four additional in-process ownership defects, POST-P0-011 through POST-P0-014. The cumulative recorded P0 total is fourteen, including previously implemented findings; the original Phase A count and evidence remain historical. See the [ownership candidate characterization](Post-BF-1054-B4A-Ownership-Candidate-Characterization.md) for independent reproductions, negative controls, severity limits and proposed B4A-F1 through F4 batches. All 16 characterization cases and the full unmodified 1,857-test release gate passed. At that checkpoint none of these four findings was fixed or approved for implementation.
 
 **Implementation update, 2026-09-10:** Separately approved B4A-F1 implements POST-P0-012. EncodedBytes now returns independent snapshots, with one snapshot reused by replacement/style/typography consumers. All 20 focused regressions, affected Editing/Services/SDK.Adapters suites, seven supplemental parser reopen cases and the unmodified 1,870-test release gate passed. See the [F1 completion report](Post-BF-1054-B4A-F1-Descriptor-Ownership-Completion-Report.md) for exact files, copy accounting and compatibility limits. No additional issue required an expanded-scope implementation. POST-P0-011/013/014 and other planned batches remain untouched.
+
+**Implementation update, 2026-09-10:** Separately approved B4A-F2 implements POST-P0-014. CopyTo now isolates retained revision bytes with one fixed 64 KiB temporary buffer per call. All 15 focused cases, Writing 153/Services 313 affected-project tests, both incremental xref parser-reopen scenarios and the full unmodified 1,880-test release gate passed. See the [F2 completion report](Post-BF-1054-B4A-F2-Source-Revision-Ownership-Completion-Report.md) for allocation bounds, callback granularity, exception compatibility, exact prefix hashes and final scope. No adjacent production fix was necessary. POST-P0-011/013 and other planned batches remain untouched.
 
 ## 2. Repository and baseline health
 
@@ -287,7 +289,9 @@ P3 is recorded as one aggregate category: formatting and preference-only churn. 
 
 **Location:** src/BlackFlag.Engine.Writing/PdfMemorySourceRevision.cs, CopyTo; forwarding path PdfCountingWriteStream.Write(ReadOnlySpan). A custom managed destination copies the span then writes its first byte through MemoryMarshal.GetReference while the callback is active. A second CopyTo returns changed bytes and hash. Through actual incremental saving, the first destination retains the original prefix but a later ordinary save begins with X instead of `%`; both xref modes reproduce this. This confirms synchronous source mutation, not safe retention of a source span after return. The byte-array fallback exposes an independent temporary buffer.
 
-**Proposal and risk:** B4A-F2, second. Never pass stored revision bytes into caller callbacks; use an independently owned bounded copy buffer, with explicit review of callback granularity, failure timing and destination ownership. Keep signature, exact byte ordering, Prev/startxref, length and exception behavior. Test chunk edges, throwing/nonseekable destinations, hashes and both xref modes with reopen. Whole-revision cloning adds O(revision-size) peak memory and is not a required design. Throughput is measurement required. **Unfixed; separate approval required.** [Managed reproduction and limits](Post-BF-1054-B4A-Ownership-Candidate-Characterization.md).
+**Original proposal and risk:** B4A-F2, second. Never pass stored revision bytes into caller callbacks; use an independently owned bounded copy buffer, with explicit review of callback granularity, failure timing and destination ownership. Keep signature, exact byte ordering, Prev/startxref, length and exception behavior. Test chunk edges, throwing/nonseekable destinations, hashes and both xref modes with reopen. Whole-revision cloning adds O(revision-size) peak memory and is not a required design. Throughput is measurement required. [Managed reproduction and limits](Post-BF-1054-B4A-Ownership-Candidate-Characterization.md).
+
+**F2 disposition, 2026-09-10:** implemented and validated after separate user approval. One fixed 65,536-byte per-call array isolates all source-copy callbacks without changing public signatures or metadata. Empty-source rejection, exact exception propagation, chunk boundaries, repeated copies/saves, nonseekable destinations and both incremental modes pass. Actual parser reopen confirms exact original prefixes/hashes, Prev/startxref and original/updated object 3 7 R. The full unmodified release gate passed 1,880 tests. See the [F2 completion record](Post-BF-1054-B4A-F2-Source-Revision-Ownership-Completion-Report.md). No expanded-scope production fix was needed.
 
 ### POST-P2-001: font catalog cancellation and aggregate work policy
 
@@ -651,6 +655,7 @@ Phase A ends with this report and the proposed batches. **Phase B has not begun 
 | 1.5 | 2026-09-09 | Record B4A-only completion of POST-P0-004, ownership/stream regressions, downstream reopen and full release-gate validation; link separately reported analogous candidates while preserving historical findings and deferred batches. |
 | 1.6 | 2026-09-09 | Record characterization-only POST-P0-011 through POST-P0-014 with bounded reproductions, negative controls and proposed independent batches; implement no ownership fix. |
 | 1.7 | 2026-09-10 | Record B4A-F1 completion of POST-P0-012, independent descriptor snapshots, consumer reuse, ownership/history/SDK/save validation and full release-gate success; retain deferred findings and historical characterization. |
+| 1.8 | 2026-09-10 | Record B4A-F2 completion of POST-P0-014, bounded source-copy isolation, callback/exception compatibility, exact incremental-prefix and parser-reopen validation, and full release-gate success. |
 
 ## Appendix A. Per-file coverage ledger
 

@@ -8,15 +8,15 @@ using BlackFlag.Engine.Document.Objects.Primitives;
 
 namespace BlackFlag.Engine.Writing.Tests;
 
-// Characterizes the unfixed source-revision callback boundary using only managed
-// BCL APIs. These attack expectations must change with an approved ownership fix.
+// Source-revision ownership regressions converted from POST-P0-014 characterization.
+// The separate parser-stream bridge control remains characterization of POST-P0-013.
 public sealed class PdfSourceRevisionOwnershipCharacterizationTests
 {
     [Fact]
     public void ExplicitDocumentStreamCopiesIsolateOnlyBytesCapturedBeforeParserMutation()
     {
         var parsed = new BlackFlag.Engine.Objects.PdfStream(
-            BlackFlag.Engine.Objects.PdfDictionary.Empty, "original"u8.ToArray());
+            Objects.PdfDictionary.Empty, "original"u8.ToArray());
         var before = new PdfStream(new PdfDictionary(), parsed.Data.Span);
         byte[] serializedBefore = PdfObjectSerializer.Serialize(before);
         MemoryMarshal.AsMemory(parsed.Data).Span[0] = (byte)'X';
@@ -40,7 +40,7 @@ public sealed class PdfSourceRevisionOwnershipCharacterizationTests
     }
 
     [Fact]
-    public void SpanCallbackCanMutateSourceDuringTheCallAndChangeLaterCopies()
+    public void SpanCallbackCannotMutateRetainedSourceOrChangeLaterCopies()
     {
         var revision = new PdfMemorySourceRevision("source revision"u8, 0, PdfCrossReferenceWriteMode.TraditionalTable);
         byte[] original = Copy(revision);
@@ -48,38 +48,65 @@ public sealed class PdfSourceRevisionOwnershipCharacterizationTests
         revision.CopyTo(destination);
         Assert.True(destination.Mutated);
         Assert.Equal(original, destination.ToArray());
-        Assert.Equal("Xource revision"u8.ToArray(), Copy(revision));
-        Assert.NotEqual(SHA256.HashData(original), SHA256.HashData(Copy(revision)));
+        Assert.Equal(original, Copy(revision));
+        Assert.Equal(SHA256.HashData(original), SHA256.HashData(Copy(revision)));
         Assert.Equal(original.Length, revision.Length);
+        Assert.Equal(0, revision.CrossReferenceOffset);
+        Assert.Equal(PdfCrossReferenceWriteMode.TraditionalTable, revision.CrossReferenceMode);
     }
 
     [Theory]
     [InlineData(PdfCrossReferenceWriteMode.TraditionalTable)]
     [InlineData(PdfCrossReferenceWriteMode.CrossReferenceStream)]
-    public void IncrementalDestinationMutationCorruptsThePrefixOfTheNextSave(PdfCrossReferenceWriteMode mode)
+    public void IncrementalDestinationMutationCannotCorruptTheNextSave(PdfCrossReferenceWriteMode mode)
+    {
+        _ = CreateIncrementalAfterHostileCopy(mode);
+    }
+
+    // Shared deterministic fixture for supplemental actual-parser reopen validation.
+    public static (byte[] Original, byte[] Saved, long OriginalXref) CreateIncrementalAfterHostileCopy(
+        PdfCrossReferenceWriteMode mode)
     {
         var document = PdfDocument.CreateEmpty(PdfVersion.Pdf17);
         var rootId = new PdfObjectIdentifier(1);
-        var changedId = new PdfObjectIdentifier(3);
+        var changedId = new PdfObjectIdentifier(3, 7);
         document.Objects.Add(rootId, new PdfDictionary());
-        document.Objects.Add(changedId, new PdfString("updated"u8));
+        // Keep the original revision large enough to cross multiple isolation chunks.
+        document.Objects.Add(new PdfObjectIdentifier(2),
+            new PdfString(Encoding.ASCII.GetBytes(new string('p', (2 * 64 * 1024) + 1))));
+        document.Objects.Add(changedId, new PdfString("original"u8));
         document.Trailer.SetRootObject(rootId);
-        byte[] original = PdfFullRewriteWriter.Write(PdfWritePlanner.Create(document));
+        byte[] original = PdfFullRewriteWriter.Write(PdfWritePlanner.Create(document,
+            new PdfWriteOptions { CrossReferenceMode = mode }));
         string text = Encoding.Latin1.GetString(original);
         long xrefOffset = long.Parse(text[(text.LastIndexOf("startxref\n", StringComparison.Ordinal) + 10)..]
             .Split('\n')[0], System.Globalization.CultureInfo.InvariantCulture);
-        var revision = new PdfMemorySourceRevision(original, xrefOffset, PdfCrossReferenceWriteMode.TraditionalTable);
+        var revision = new PdfMemorySourceRevision(original, xrefOffset, mode);
+        document.Objects.Set(changedId, new PdfString("updated"u8));
         var options = new PdfWriteOptions { Mode = PdfWriteMode.IncrementalUpdate, CrossReferenceMode = mode };
         var plan = PdfIncrementalWritePlanner.Create(PdfWritePlanner.Create(document, options), revision, [changedId]);
-        using var destination = new MutatingDestination();
+        Assert.Same(revision, plan.SourceRevision);
+        using var destination = new MutatingDestination(original.Length);
         PdfIncrementalUpdateWriter.Write(destination, plan);
         Assert.True(destination.Mutated);
         Assert.Equal(original, destination.ToArray()[..original.Length]);
         byte[] secondSave = PdfIncrementalUpdateWriter.Write(plan);
-        Assert.Equal((byte)'X', secondSave[0]);
-        Assert.Equal(original[1..], secondSave[1..original.Length]);
-        Assert.NotEqual(SHA256.HashData(original), SHA256.HashData(secondSave[..original.Length]));
+        Assert.Equal(original, secondSave[..original.Length]);
+        Assert.Equal(SHA256.HashData(original), SHA256.HashData(secondSave[..original.Length]));
+        Assert.Equal(destination.ToArray(), secondSave);
+        Assert.Equal(secondSave, PdfIncrementalUpdateWriter.Write(plan));
+        Assert.Equal(original, Copy(revision));
+        Assert.Equal(original.Length, revision.Length);
         Assert.Equal(xrefOffset, revision.CrossReferenceOffset);
+        Assert.Equal(mode, revision.CrossReferenceMode);
+        string appended = Encoding.Latin1.GetString(secondSave[original.Length..]);
+        Assert.Contains($"/Prev {xrefOffset}", appended, StringComparison.Ordinal);
+        long appendedXref = long.Parse(appended[(appended.LastIndexOf("startxref\n", StringComparison.Ordinal) + 10)..]
+            .Split('\n')[0], System.Globalization.CultureInfo.InvariantCulture);
+        Assert.True(appendedXref > original.Length);
+        string xrefStart = Encoding.Latin1.GetString(secondSave[(int)appendedXref..]);
+        Assert.StartsWith(mode == PdfCrossReferenceWriteMode.TraditionalTable ? "xref\n" : "4 0 obj\n", xrefStart);
+        return (original, secondSave, xrefOffset);
     }
 
     private static byte[] Copy(PdfMemorySourceRevision revision)
@@ -89,19 +116,22 @@ public sealed class PdfSourceRevisionOwnershipCharacterizationTests
         return stream.ToArray();
     }
 
-    private sealed class MutatingDestination : MemoryStream
+    private sealed class MutatingDestination(int sourceLength = int.MaxValue) : MemoryStream
     {
+        private int remainingSourceBytes = sourceLength;
+
         public bool Mutated { get; private set; }
 
         public override void Write(ReadOnlySpan<byte> buffer)
         {
             base.Write(buffer);
-            if (!Mutated && !buffer.IsEmpty)
+            if (remainingSourceBytes > 0 && !buffer.IsEmpty)
             {
                 // GetReference returns a writable managed ref even for ReadOnlySpan.
                 // No ref is retained beyond this synchronous callback.
                 MemoryMarshal.GetReference(buffer) = (byte)'X';
                 Mutated = true;
+                remainingSourceBytes -= Math.Min(remainingSourceBytes, buffer.Length);
             }
         }
     }
