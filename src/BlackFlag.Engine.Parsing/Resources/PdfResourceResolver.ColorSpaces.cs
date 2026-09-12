@@ -98,13 +98,13 @@ public sealed partial class PdfResourceResolver
             throw InvalidColorSpace("An ICCBased profile must resolve to a stream.");
         }
 
-        if (profile.Data.Length > options.MaximumIccProfileBytes)
+        if (profile.Length > options.MaximumIccProfileBytes)
         {
             throw CreateException(
                 PdfResourceResolutionFailure.LimitExceeded,
                 PdfResourceKind.ColorSpace,
                 resourceName: null,
-                $"ICC profile size {profile.Data.Length} exceeds the configured maximum of "
+                $"ICC profile size {profile.Length} exceeds the configured maximum of "
                 + $"{options.MaximumIccProfileBytes} bytes.");
         }
 

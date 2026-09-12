@@ -9,11 +9,11 @@ using BlackFlag.Engine.Document.Objects.Primitives;
 namespace BlackFlag.Engine.Writing.Tests;
 
 // Source-revision ownership regressions converted from POST-P0-014 characterization.
-// The separate parser-stream bridge control remains characterization of POST-P0-013.
+// The parser-stream bridge control also enforces POST-P0-013 public isolation.
 public sealed class PdfSourceRevisionOwnershipCharacterizationTests
 {
     [Fact]
-    public void ExplicitDocumentStreamCopiesIsolateOnlyBytesCapturedBeforeParserMutation()
+    public void ExplicitDocumentStreamCopiesRemainOriginalAfterParserSnapshotMutation()
     {
         var parsed = new BlackFlag.Engine.Objects.PdfStream(
             Objects.PdfDictionary.Empty, "original"u8.ToArray());
@@ -23,8 +23,12 @@ public sealed class PdfSourceRevisionOwnershipCharacterizationTests
         Assert.Equal("original"u8.ToArray(), before.ToByteArray());
         Assert.Equal(serializedBefore, PdfObjectSerializer.Serialize(before));
         var after = new PdfStream(new PdfDictionary(), parsed.Data.Span);
-        Assert.Contains("Xriginal", Encoding.Latin1.GetString(PdfObjectSerializer.Serialize(after)), StringComparison.Ordinal);
-        Assert.Equal("Xriginal"u8.ToArray(), after.ToByteArray());
+        Assert.Equal(serializedBefore, PdfObjectSerializer.Serialize(after));
+        Assert.Equal("original"u8.ToArray(), after.ToByteArray());
+        after.ReplaceData("changed"u8);
+        Assert.Equal("changed"u8.ToArray(), after.ToByteArray());
+        Assert.Equal("original"u8.ToArray(), parsed.Data.ToArray());
+        Assert.Equal("original"u8.ToArray(), before.ToByteArray());
     }
 
     [Fact]

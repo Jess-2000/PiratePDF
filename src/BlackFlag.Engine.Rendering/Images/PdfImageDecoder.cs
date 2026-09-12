@@ -72,6 +72,8 @@ public sealed class PdfImageDecoder
         if (item.ImageResource is not null)
         {
             dictionary = item.ImageResource.Stream.Dictionary;
+            // Enforce the encoded-size ceiling before allocating the public snapshot.
+            ValidateEncodedLength(item.ImageResource.Stream.Length, limits);
             encoded = item.ImageResource.Stream.Data;
         }
         else
@@ -80,9 +82,8 @@ public sealed class PdfImageDecoder
                 ?? throw new InvalidOperationException("Image source is missing.");
             dictionary = inline.Dictionary;
             encoded = inline.EncodedBytes;
+            ValidateEncodedLength(encoded.Length, limits);
         }
-
-        ValidateEncodedLength(encoded.Length, limits);
 
         int width = ReadPositiveInt(dictionary, WidthKey, WKey);
         int height = ReadPositiveInt(dictionary, HeightKey, HKey);

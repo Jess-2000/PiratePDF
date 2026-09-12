@@ -4,11 +4,11 @@
 |---|---|
 | **Document ID** | PP-AUD-009 |
 | **Category** | Engineering Review |
-| **Version** | 1.8 |
+| **Version** | 1.9 |
 | **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1049, BF-1050, BF-1051, BF-1053, BF-1054 |
-| **Last Updated** | 2026-09-10 |
+| **Last Updated** | 2026-09-12 |
 | **Next Review** | 2026-12-06 |
 
 ## 1. Executive summary
@@ -32,6 +32,8 @@ The previous plugin/result hardening and Abstractions test improvements remain i
 **Implementation update, 2026-09-10:** Separately approved B4A-F1 implements POST-P0-012. EncodedBytes now returns independent snapshots, with one snapshot reused by replacement/style/typography consumers. All 20 focused regressions, affected Editing/Services/SDK.Adapters suites, seven supplemental parser reopen cases and the unmodified 1,870-test release gate passed. See the [F1 completion report](Post-BF-1054-B4A-F1-Descriptor-Ownership-Completion-Report.md) for exact files, copy accounting and compatibility limits. No additional issue required an expanded-scope implementation. POST-P0-011/013/014 and other planned batches remain untouched.
 
 **Implementation update, 2026-09-10:** Separately approved B4A-F2 implements POST-P0-014. CopyTo now isolates retained revision bytes with one fixed 64 KiB temporary buffer per call. All 15 focused cases, Writing 153/Services 313 affected-project tests, both incremental xref parser-reopen scenarios and the full unmodified 1,880-test release gate passed. See the [F2 completion report](Post-BF-1054-B4A-F2-Source-Revision-Ownership-Completion-Report.md) for allocation bounds, callback granularity, exception compatibility, exact prefix hashes and final scope. No adjacent production fix was necessary. POST-P0-011/013 and other planned batches remain untouched.
+
+**Implementation update, 2026-09-12:** Separately approved B4A-F3 implements POST-P0-013. Parser-stream Data returns independent snapshots; an additive scalar Length getter preserves allocation-free resource-size checks, and image decoding validates encoded size before the snapshot. All 24 focused cases, complete affected suites, and the unmodified consolidated 1,901-test release gate passed, including its integrated source-size stage. See the [F3 completion report](Post-BF-1054-B4A-F3-Parser-Stream-Ownership-Completion-Report.md) for the cross-assembly review, exact copy costs, real ObjStm/cache/filter regressions and separately recorded truncated-Flate observation. No friend assembly or internal borrowed-memory API was added. POST-P2-008 remains open with wording reconciled to the consolidated gate; F4 and unrelated findings remain untouched.
 
 ## 2. Repository and baseline health
 
@@ -283,7 +285,9 @@ P3 is recorded as one aggregate category: formatting and preference-only churn. 
 
 **Location:** src/BlackFlag.Engine.Objects/PdfStream.cs, Data/Equals/GetHashCode. Public memory exposes the private copied stream array. ASCIIHex input mutation changes decoded A to B. An actual cached ObjStm mutation changes freshly parsed compressed object 42 to 43 while the resolver's previously cached object and untouched source still yield 42. Length/dictionary identity stay intact; array resizing is unnecessary. Document.PdfStream has a separate copy/mutation contract; a copy made before parser mutation remains isolated. No automatic parser-stream-to-writer path was established.
 
-**Proposal and risk:** B4A-F3, third. Defensive public Data exposure with an explicit cross-assembly consumer/copy review; preserve lazy object identity, generations, filter policy and source bytes. Invert parser/cache mutation tests and cover filter/resource/serialization boundaries actually changed. This has the broadest potential allocation impact; large-stream peak cost is measurement required. Avoid broad friend access or a parallel stream model. **Unfixed; separate approval required.** [Evidence and scope](Post-BF-1054-B4A-Ownership-Candidate-Characterization.md).
+**Original proposal and risk:** B4A-F3, third. Defensive public Data exposure with an explicit cross-assembly consumer/copy review; preserve lazy object identity, generations, filter policy and source bytes. Invert parser/cache mutation tests and cover filter/resource/serialization boundaries actually changed. This has the broadest potential allocation impact; large-stream peak cost is measurement required. Avoid broad friend access or a parallel stream model. [Evidence and scope](Post-BF-1054-B4A-Ownership-Candidate-Characterization.md).
+
+**F3 disposition, 2026-09-12:** implemented and validated after separate approval. Public Data snapshots no longer alter retained bytes, equality/hash, ASCIIHex output or cached/fresh ObjStm interpretation. Every decode path retains one independent input snapshot; no borrow crosses injectable filter/codec callbacks. Scalar Length and pre-snapshot image validation prevent resource-check allocation amplification. Existing public signatures remain intact; Length is the sole additive API. The complete consolidated gate passed 1,901 tests and integrated size validation. See the [F3 completion record](Post-BF-1054-B4A-F3-Parser-Stream-Ownership-Completion-Report.md), including F3-R1 resource-regression prevention and F3-OBS-01 truncated-Flate acceptance requiring separate characterization. No automatic parser-to-Writing bridge was found or introduced.
 
 ### POST-P0-014: destination callback mutates preceding revision state
 
@@ -349,13 +353,13 @@ No AOT/trimmed deployment matrix or warning baseline was identified. Dynamic ass
 
 Smallest proposal: explicitly declare supported deployment modes, then run representative publish experiments against serialization, reflection, plugin discovery, Skia/native assets and font/image adapters. Do not enable AOT globally or suppress warnings. Risk: medium/high if deployment behavior changes; fixes require preserving SDK capabilities and platform portability. Validate features on actual published artifacts, not only JIT unit tests. Measure startup/size separately; stripping/AOT is not a secrecy or security boundary. **Batch B14; BF-1054 font adapters are included.**
 
-### POST-P2-008: CI omits the local source-size gate
+### POST-P2-008: CI omits integrated release-gate source-size validation
 
-**Locations:** .github/workflows/continuous-integration.yml; Invoke-PiratePDFReleaseGate.ps1; Test-PiratePDFSourceFileSizes.ps1.
+**Current locations:** .github/workflows/continuous-integration.yml; Invoke-PiratePDFReleaseGate.ps1.
 
-CI restores, builds, tests and runs documentation checks but does not invoke the source-size script used by the authoritative local release gate. This permits a CI-green change that fails the repository's required local gate. Current files pass; size is not itself a defect.
+**Current-state reconciliation, 2026-09-12:** committed maintenance consolidation moved source-file-size validation directly into the single authoritative Invoke-PiratePDFReleaseGate.ps1 and intentionally removed the standalone script. The current CI workflow still restores, builds, tests and runs documentation checks independently; it invokes neither the authoritative gate nor its integrated size validation. Consolidation therefore does not close POST-P2-008. A CI-green change can still fail the required local gate. Current files pass; size is not itself a defect. Historical validation records accurately describe their original checkpoints and remain unchanged.
 
-Smallest proposal: share/invoke Test-PiratePDFSourceFileSizes.ps1 in CI without weakening its thresholds, exclusions or other gate checks. Risk: low; validate a controlled over-limit temporary fixture and ensure CI/local results agree without introducing tracked source churn. No benchmark or fuzzing needed. **Batch B15; not BF-1054 behavior.**
+Smallest current proposal: execute the authoritative consolidated release gate in CI, or otherwise share its integrated source-size validation without weakening thresholds, exclusions or other checks. Do not recreate the deleted standalone script. Risk: low; validate a controlled over-limit temporary fixture and ensure CI/local results agree without tracked source churn. No benchmark or fuzzing needed. **Open; Batch B15; not implemented by F3.**
 
 ## 8. BF-1054 regression and interaction review
 
@@ -656,6 +660,7 @@ Phase A ends with this report and the proposed batches. **Phase B has not begun 
 | 1.6 | 2026-09-09 | Record characterization-only POST-P0-011 through POST-P0-014 with bounded reproductions, negative controls and proposed independent batches; implement no ownership fix. |
 | 1.7 | 2026-09-10 | Record B4A-F1 completion of POST-P0-012, independent descriptor snapshots, consumer reuse, ownership/history/SDK/save validation and full release-gate success; retain deferred findings and historical characterization. |
 | 1.8 | 2026-09-10 | Record B4A-F2 completion of POST-P0-014, bounded source-copy isolation, callback/exception compatibility, exact incremental-prefix and parser-reopen validation, and full release-gate success. |
+| 1.9 | 2026-09-12 | Record B4A-F3 completion of POST-P0-013, parser-stream snapshots and bounded resource checks, real cache/filter regressions and consolidated release-gate success; reconcile POST-P2-008 wording while keeping it open. |
 
 ## Appendix A. Per-file coverage ledger
 

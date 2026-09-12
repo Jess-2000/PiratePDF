@@ -38,13 +38,13 @@ public sealed partial class PdfResourceResolver
         }
 
         PdfStream? embeddedFont = ResolveEmbeddedFontProgram(descriptor);
-        if (embeddedFont is not null && embeddedFont.Data.Length > options.MaximumEmbeddedFontBytes)
+        if (embeddedFont is not null && embeddedFont.Length > options.MaximumEmbeddedFontBytes)
         {
             throw CreateException(
                 PdfResourceResolutionFailure.LimitExceeded,
                 PdfResourceKind.Font,
                 resourceName: null,
-                $"Embedded font stream size {embeddedFont.Data.Length} exceeds the configured maximum of "
+                $"Embedded font stream size {embeddedFont.Length} exceeds the configured maximum of "
                 + $"{options.MaximumEmbeddedFontBytes} bytes.");
         }
 
