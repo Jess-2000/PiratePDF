@@ -1,7 +1,13 @@
 [CmdletBinding()]
 param(
     [ValidateSet("Release", "Debug")]
-    [string]$Configuration = "Release"
+    [string]$Configuration = "Release",
+
+    [ValidateRange(1, 100000)]
+    [int]$SourceReviewThreshold = 800,
+
+    [ValidateRange(1, 100000)]
+    [int]$SourceHardLimit = 1000
 )
 
 Set-StrictMode -Version Latest
@@ -38,10 +44,114 @@ function Get-RepositoryRoot {
     return [System.IO.Path]::GetFullPath($Root.Trim())
 }
 
+function Test-IsGeneratedSource {
+    param(
+        [Parameter(Mandatory = $true)]
+        [System.IO.FileInfo]$File
+    )
+
+    $Name = $File.Name
+
+    return $Name.EndsWith(".g.cs", [System.StringComparison]::OrdinalIgnoreCase) -or
+        $Name.EndsWith(".generated.cs", [System.StringComparison]::OrdinalIgnoreCase) -or
+        $Name.EndsWith(".designer.cs", [System.StringComparison]::OrdinalIgnoreCase) -or
+        $Name.Equals("AssemblyInfo.cs", [System.StringComparison]::OrdinalIgnoreCase)
+}
+
+function Invoke-SourceFileSizeValidation {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$RepositoryRoot,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateRange(1, 100000)]
+        [int]$ReviewThreshold,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateRange(1, 100000)]
+        [int]$HardLimit
+    )
+
+    if ($ReviewThreshold -gt $HardLimit) {
+        throw "SourceReviewThreshold must be less than or equal to SourceHardLimit."
+    }
+
+    $SourceRoots = @(
+        "src",
+        "tests",
+        "tools",
+        "samples"
+    )
+
+    $Files = New-Object System.Collections.Generic.List[System.IO.FileInfo]
+
+    foreach ($RelativeRoot in $SourceRoots) {
+        $SourceRoot = Join-Path $RepositoryRoot $RelativeRoot
+
+        if (-not (Test-Path -LiteralPath $SourceRoot -PathType Container)) {
+            continue
+        }
+
+        Get-ChildItem -LiteralPath $SourceRoot -Recurse -File -Filter "*.cs" |
+            Where-Object {
+                $_.FullName -notmatch '[\\/](bin|obj)[\\/]' -and
+                -not (Test-IsGeneratedSource $_)
+            } |
+            ForEach-Object { $Files.Add($_) }
+    }
+
+    Get-ChildItem -LiteralPath $RepositoryRoot -Recurse -File -Filter "*.ps1" |
+        Where-Object { $_.FullName -notmatch '[\\/](bin|obj|\.git)[\\/]' } |
+        ForEach-Object { $Files.Add($_) }
+
+    $Results = foreach ($File in $Files) {
+        $LineCount = @(Get-Content -LiteralPath $File.FullName).Count
+        $RelativePath = $File.FullName.Substring($RepositoryRoot.Length).TrimStart([char[]]"\/")
+
+        [pscustomobject]@{
+            Lines = $LineCount
+            Path = $RelativePath
+        }
+    }
+
+    $Reviewed = @(
+        $Results |
+            Where-Object { $_.Lines -ge $ReviewThreshold } |
+            Sort-Object -Property @{ Expression = 'Lines'; Descending = $true }, Path
+    )
+
+    $Violations = @(
+        $Results |
+            Where-Object { $_.Lines -gt $HardLimit } |
+            Sort-Object -Property @{ Expression = 'Lines'; Descending = $true }, Path
+    )
+
+    Write-Host "PiratePDF source-file size check"
+    Write-Host "Review threshold: $ReviewThreshold lines"
+    Write-Host "Hard limit:       $HardLimit lines"
+    Write-Host "Files inspected:  $($Results.Count)"
+
+    if ($Reviewed.Count -gt 0) {
+        Write-Host ""
+        Write-Host "Files at or above the review threshold:"
+        $Reviewed | Format-Table Lines, Path -AutoSize | Out-Host
+    }
+
+    if ($Violations.Count -gt 0) {
+        throw "$($Violations.Count) hand-authored source file(s) exceed the $HardLimit-line hard limit."
+    }
+
+    Write-Host ""
+    Write-Host "Source-file size check passed."
+}
+
 function Assert-DocumentationRepairPreviewIsClean {
     param(
         [Parameter(Mandatory = $true)]
-        [string]$ReportPath
+        [string]$ReportPath,
+
+        [Parameter(Mandatory = $true)]
+        [string]$Configuration
     )
 
     if (-not (Test-Path -LiteralPath $ReportPath -PathType Leaf)) {
@@ -73,14 +183,9 @@ function Assert-DocumentationRepairPreviewIsClean {
 $RepositoryRoot = Get-RepositoryRoot
 Set-Location -LiteralPath $RepositoryRoot
 
-$SolutionPath =
-Join-Path $RepositoryRoot "PiratePDF.slnx"
-
-$DocGenProject =
-Join-Path $RepositoryRoot "tools\PiratePDF.DocGen\PiratePDF.DocGen.csproj"
-
-$DocumentChangesReport =
-Join-Path $RepositoryRoot "docs\Document-Changes.md"
+$SolutionPath = Join-Path $RepositoryRoot "PiratePDF.slnx"
+$DocGenProject = Join-Path $RepositoryRoot "tools\PiratePDF.DocGen\PiratePDF.DocGen.csproj"
+$DocumentChangesReport = Join-Path $RepositoryRoot "docs\Document-Changes.md"
 
 if (-not (Test-Path -LiteralPath $SolutionPath -PathType Leaf)) {
     throw "PiratePDF solution was not found at '$SolutionPath'."
@@ -90,13 +195,21 @@ if (-not (Test-Path -LiteralPath $DocGenProject -PathType Leaf)) {
     throw "PiratePDF.DocGen project was not found at '$DocGenProject'."
 }
 
+if ($SourceReviewThreshold -gt $SourceHardLimit) {
+    throw "SourceReviewThreshold must be less than or equal to SourceHardLimit."
+}
+
 Write-Host "PiratePDF Release Gate"
-Write-Host "Repository:    $RepositoryRoot"
-Write-Host "Configuration: $Configuration"
+Write-Host "Repository:              $RepositoryRoot"
+Write-Host "Configuration:           $Configuration"
+Write-Host "Source review threshold: $SourceReviewThreshold lines"
+Write-Host "Source hard limit:       $SourceHardLimit lines"
 
 Write-GateStep "Source-file size validation"
-& (Join-Path $RepositoryRoot "Test-PiratePDFSourceFileSizes.ps1")
-Assert-LastExitCode "Source-file size validation"
+Invoke-SourceFileSizeValidation `
+    -RepositoryRoot $RepositoryRoot `
+    -ReviewThreshold $SourceReviewThreshold `
+    -HardLimit $SourceHardLimit
 
 Write-GateStep "Dependency restore"
 & dotnet restore $SolutionPath
@@ -132,8 +245,10 @@ Write-GateStep "Documentation repair preview"
 
 $RepairExitCode = $LASTEXITCODE
 
-# Inspect the generated report even if DocGen itself returns success.
-Assert-DocumentationRepairPreviewIsClean $DocumentChangesReport
+# Inspect the generated report even when DocGen itself reports success.
+Assert-DocumentationRepairPreviewIsClean `
+    -ReportPath $DocumentChangesReport `
+    -Configuration $Configuration
 
 if ($RepairExitCode -ne 0) {
     throw "Documentation repair preview failed with exit code $RepairExitCode."
