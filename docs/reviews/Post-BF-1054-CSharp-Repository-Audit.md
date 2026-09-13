@@ -4,7 +4,7 @@
 |---|---|
 | **Document ID** | PP-AUD-009 |
 | **Category** | Engineering Review |
-| **Version** | 1.10 |
+| **Version** | 1.11 |
 | **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1049, BF-1050, BF-1051, BF-1053, BF-1054 |
@@ -36,6 +36,8 @@ The previous plugin/result hardening and Abstractions test improvements remain i
 **Implementation update, 2026-09-12:** Separately approved B4A-F3 implements POST-P0-013. Parser-stream Data returns independent snapshots; an additive scalar Length getter preserves allocation-free resource-size checks, and image decoding validates encoded size before the snapshot. All 24 focused cases, complete affected suites, and the unmodified consolidated 1,901-test release gate passed, including its integrated source-size stage. See the [F3 completion report](Post-BF-1054-B4A-F3-Parser-Stream-Ownership-Completion-Report.md) for the cross-assembly review, exact copy costs, real ObjStm/cache/filter regressions and separately recorded truncated-Flate observation. No friend assembly or internal borrowed-memory API was added. POST-P2-008 remains open with wording reconciled to the consolidated gate; F4 and unrelated findings remain untouched.
 
 **Implementation update, 2026-09-13:** Separately approved B4A-F4 implements POST-P0-011. Character-code Bytes returns independent snapshots; composite decoding reuses one snapshot per code. Constructor isolation, equality/hash, Dictionary/HashSet membership, uppercase display and CMap mappings remain stable. All 10 focused cases, Rendering 97/Services 313/Parsing 216 complete suites and the unmodified consolidated 1,909-test release gate passed, including integrated size validation and clean DocGen. See the [F4 completion report](Post-BF-1054-B4A-F4-Character-Code-Ownership-Completion-Report.md). All four characterized B4A ownership findings (POST-P0-012/F1, POST-P0-014/F2, POST-P0-013/F3 and POST-P0-011/F4) are now closed. Other byte-view candidates and findings remain separate and untouched; F3-OBS-01 was not investigated or assigned severity in F4.
+
+**Characterization/correction update, 2026-09-13:** Separately approved F3-OBS-01 work establishes POST-P0-015: ordinary Flate silently accepted incomplete zlib, contrary to BF-1040. A real ObjStm prefix of encoded 42 parsed as integer 4; missing trailers also passed xref/CMap controls. Classification D, P0 correctness/data integrity; no resource bypass or critical exploit severity is claimed. The cumulative recorded P0 total is fifteen. The ordinary Flate decoder now applies B1's existing complete-member invariant. The unmodified consolidated gate passed 1,945 tests with zero build warnings/errors, integrated size validation and clean DocGen; POST-P0-015 is implemented and F3-OBS-01 is closed. See the [F3-OBS-01 report](Post-BF-1054-F3-OBS-01-Truncated-Flate-Characterization.md) for the 21-fixture BCL/Filters/editing matrix and compatibility evidence. F3/F4 ownership remains closed; POST-P0-005 and unrelated findings remain untouched.
 
 ## 2. Repository and baseline health
 
@@ -123,6 +125,7 @@ The current structural assessment supersedes the original audit's decomposition 
 | POST-P0-012 | P0 | Descriptor byte alias changes stale-source validation decisions | B4A follow-up reproduction in replacement/font/style; replay snapshots remain independent |
 | POST-P0-013 | P0 | Parser stream alias permits cached-object/source divergence | B4A follow-up filter and actual ObjStm resolver reproduction |
 | POST-P0-014 | P0 | Synchronous destination callback mutates retained original revision | B4A follow-up CopyTo and both incremental xref output modes |
+| POST-P0-015 | P0 | Ordinary Flate accepts incomplete members and publishes shortened decoded values | F3-OBS-01 matrix; actual ObjStm integer 42 becomes 4 |
 | AUD-P1-001 / AUD-P1-002 | P1 candidates | Recovery materialization; repeated identifier sorting | Measurement required; carried forward, not established P1 benefits |
 | POST-P2-001 | P2 | Font catalog build lacks cancellation propagation and aggregate policy | Source-established |
 | POST-P2-002 | P2 | High-risk byte boundaries lack an operational fuzz/corpus workflow | Repository coverage gap |
@@ -300,6 +303,12 @@ P3 is recorded as one aggregate category: formatting and preference-only churn. 
 **Original proposal and risk:** B4A-F2, second. Never pass stored revision bytes into caller callbacks; use an independently owned bounded copy buffer, with explicit review of callback granularity, failure timing and destination ownership. Keep signature, exact byte ordering, Prev/startxref, length and exception behavior. Test chunk edges, throwing/nonseekable destinations, hashes and both xref modes with reopen. Whole-revision cloning adds O(revision-size) peak memory and is not a required design. Throughput is measurement required. [Managed reproduction and limits](Post-BF-1054-B4A-Ownership-Candidate-Characterization.md).
 
 **F2 disposition, 2026-09-10:** implemented and validated after separate user approval. One fixed 65,536-byte per-call array isolates all source-copy callbacks without changing public signatures or metadata. Empty-source rejection, exact exception propagation, chunk boundaries, repeated copies/saves, nonseekable destinations and both incremental modes pass. Actual parser reopen confirms exact original prefixes/hashes, Prev/startxref and original/updated object 3 7 R. The full unmodified release gate passed 1,880 tests. See the [F2 completion record](Post-BF-1054-B4A-F2-Source-Revision-Ownership-Completion-Report.md). No expanded-scope production fix was needed.
+
+### POST-P0-015: incomplete ordinary Flate publishes truncated decoded values
+
+**Location:** src/BlackFlag.Engine.Filters/PdfFlateFilterDecoder.cs, Decompress. Ordinary ZLibStream EOF was treated as successful completion. BF-1040 explicitly requires incomplete zlib to report InvalidData; B1 already enforces that invariant for mutation. The 21-fixture comparison confirms zero, partial and apparently complete output can be returned without a final block or full trailer. An actual truncated ObjStm parses 4 instead of 42; xref/CMap consumers can also accept a complete-looking payload. Classified D/P0 for correctness/data integrity, not a demonstrated resource-limit bypass or execution vulnerability.
+
+**Correction and compatibility:** a private input stream rejects another nonempty read after encoded input ends, reusing B1's established strategy without a second inflater or global switch. The existing InvalidDataException catch preserves PdfFilterDecodeException/InvalidData, message and inner exception. Complete zlib, empty members, trailing data, predictors, bounds and cancellation remain supported. Damaged files previously tolerated by default BCL EOF now fail intentionally. No public API, dependency or higher-layer production change. **Implemented and validated, 2026-09-13:** 62 focused cases and the full unmodified 1,945-test release gate passed, with integrated source-size validation and clean DocGen. F3-OBS-01 is closed as the corrected POST-P0-015 finding; see [characterization and correction evidence](Post-BF-1054-F3-OBS-01-Truncated-Flate-Characterization.md).
 
 ### POST-P2-001: font catalog cancellation and aggregate work policy
 
@@ -666,6 +675,7 @@ Phase A ends with this report and the proposed batches. **Phase B has not begun 
 | 1.8 | 2026-09-10 | Record B4A-F2 completion of POST-P0-014, bounded source-copy isolation, callback/exception compatibility, exact incremental-prefix and parser-reopen validation, and full release-gate success. |
 | 1.9 | 2026-09-12 | Record B4A-F3 completion of POST-P0-013, parser-stream snapshots and bounded resource checks, real cache/filter regressions and consolidated release-gate success; reconcile POST-P2-008 wording while keeping it open. |
 | 1.10 | 2026-09-13 | Record B4A-F4 completion of POST-P0-011, stable character-code ownership/key semantics, decoder snapshot reuse and full validation; close the four characterized B4A ownership follow-ups while retaining unrelated findings and F3-OBS-01. |
+| 1.11 | 2026-09-13 | Characterize F3-OBS-01, establish POST-P0-015 incomplete-Flate correctness impact and record the narrow complete-member correction and validation evidence. |
 
 ## Appendix A. Per-file coverage ledger
 

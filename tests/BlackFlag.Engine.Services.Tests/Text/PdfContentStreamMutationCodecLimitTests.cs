@@ -219,6 +219,35 @@ public sealed class PdfContentStreamMutationCodecLimitTests
         Assert.Equal("BT (Hello) Tj ET"u8.ToArray(), PdfContentStreamMutationCodec.Decode(stream));
     }
 
+    [Theory]
+    [InlineData("78")]
+    [InlineData("789C")]
+    [InlineData("7801")]
+    [InlineData("78DA")]
+    [InlineData("7801000600F9FF414243444546")]
+    public void IncompleteFlateMatchesOrdinaryFilterRejection(string hex)
+    {
+        byte[] encoded = Convert.FromHexString(hex);
+        var stream = CreateStream(encoded);
+        var editing = Assert.Throws<InvalidDataException>(() => PdfContentStreamMutationCodec.Decode(stream));
+        Assert.Equal("The editable Flate content stream contains invalid or incomplete zlib data.", editing.Message);
+        var pipeline = new PdfFilterPipeline(PdfFilterRegistrations.CreateDefault());
+        var ordinary = Assert.Throws<PdfFilterDecodeException>(() => pipeline.Decode(
+            encoded, [new BlackFlag.Engine.Objects.PdfName("FlateDecode")], null, new()));
+        Assert.Equal(PdfFilterDecodeFailure.InvalidData, ordinary.Failure);
+        Assert.Equal(encoded, stream.ToByteArray());
+    }
+
+    [Fact]
+    public void ConcatenatedMembersKeepOnlyFirstMemberInBothPaths()
+    {
+        byte[] encoded = [.. Compress("ABCDEF"u8), .. Compress("GH"u8)];
+        var pipeline = new PdfFilterPipeline(PdfFilterRegistrations.CreateDefault());
+        Assert.Equal("ABCDEF"u8.ToArray(), pipeline.Decode(
+            encoded, [new BlackFlag.Engine.Objects.PdfName("FlateDecode")], null, new()).ToArray());
+        Assert.Equal("ABCDEF"u8.ToArray(), PdfContentStreamMutationCodec.Decode(CreateStream(encoded)));
+    }
+
     private static PdfStream CreateStream(byte[] encoded) => new(
         new PdfDictionary
         {
