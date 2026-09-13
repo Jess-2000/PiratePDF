@@ -16,8 +16,8 @@ public sealed class PdfCharacterCode : IEquatable<PdfCharacterCode>
         this.bytes = bytes.ToArray();
     }
 
-    /// <summary>Gets the encoded bytes.</summary>
-    public ReadOnlyMemory<byte> Bytes => bytes;
+    /// <summary>Gets an independent snapshot of the encoded bytes.</summary>
+    public ReadOnlyMemory<byte> Bytes => bytes.ToArray();
 
     /// <inheritdoc />
     public bool Equals(PdfCharacterCode? other) =>

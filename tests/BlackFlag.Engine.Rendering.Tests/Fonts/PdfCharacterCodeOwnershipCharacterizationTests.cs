@@ -3,41 +3,63 @@ using BlackFlag.Engine.Rendering.Fonts;
 
 namespace BlackFlag.Engine.Rendering.Tests.Fonts;
 
-// Characterizes an unfixed ownership candidate. A future approved fix must invert
-// the mutation expectations, rather than treating the defect as desired behavior.
+// Retains the original ownership reproduction and CMap control as F4 regressions.
 public sealed class PdfCharacterCodeOwnershipCharacterizationTests
 {
-    [Fact]
-    public void PublicAliasChangesEqualityAndInvalidatesStoredKeys()
+    [Theory]
+    [InlineData("41")]
+    [InlineData("80AB")]
+    public void PublicSnapshotsPreserveEqualityAndStoredKeys(string hex)
     {
-        byte[] input = [0x41];
+        byte[] input = Convert.FromHexString(hex);
         var code = new PdfCharacterCode(input);
-        input[0] = 0x42;
-        Assert.Equal(new PdfCharacterCode([0x41]), code);
+        var equivalent = new PdfCharacterCode(input);
         int originalHash = code.GetHashCode();
         var dictionary = new Dictionary<PdfCharacterCode, int> { [code] = 1 };
         var set = new HashSet<PdfCharacterCode> { code };
-        Assert.True(MemoryMarshal.TryGetArray(code.Bytes, out ArraySegment<byte> alias));
-
-        // Select a different hash instead of assuming that two particular inputs
-        // cannot collide under the process-randomized HashCode implementation.
-        for (int value = 0; value <= byte.MaxValue && code.GetHashCode() == originalHash; value++)
-        {
-            alias.Array![alias.Offset] = (byte)value;
-        }
-
-        Assert.NotEqual(originalHash, code.GetHashCode());
-        Assert.NotEqual(new PdfCharacterCode([0x41]), code);
-        var equivalent = new PdfCharacterCode(code.Bytes.Span);
+        input[0] ^= 0xFF;
+        Assert.Equal(hex, code.ToString());
         Assert.Equal(equivalent, code);
-        Assert.False(dictionary.ContainsKey(code));
-        Assert.False(dictionary.ContainsKey(equivalent));
-        // Exercise the set's hashed lookup, not an assertion that enumerates values.
-        bool foundInSet = set.Contains(code);
-        Assert.False(foundInSet);
-        dictionary.Add(equivalent, 2);
-        Assert.Equal(2, dictionary.Count);
-        Assert.Equal(dictionary.Keys.First(), dictionary.Keys.Last());
+        Assert.Equal(originalHash, code.GetHashCode());
+        Assert.Equal(1, dictionary[equivalent]);
+        Assert.Equal(Convert.FromHexString(hex), code.Bytes.ToArray());
+
+        ReadOnlyMemory<byte> first = code.Bytes;
+        ReadOnlyMemory<byte> second = code.Bytes;
+        Assert.True(MemoryMarshal.TryGetArray(first, out ArraySegment<byte> snapshot));
+        snapshot.Array![snapshot.Offset] ^= 0xFF;
+        Assert.NotEqual(hex, Convert.ToHexString(first.Span));
+        Assert.Equal(hex, Convert.ToHexString(second.Span));
+        Assert.Equal(hex, Convert.ToHexString(code.Bytes.Span));
+        Assert.Equal(hex, code.ToString());
+        Assert.Equal(equivalent, code);
+        Assert.True(code.Equals((object)equivalent));
+        Assert.False(code.Equals(new PdfCharacterCode(first.Span)));
+        Assert.Equal(originalHash, code.GetHashCode());
+        Assert.Equal(equivalent.GetHashCode(), code.GetHashCode());
+        Assert.Equal(1, dictionary[code]);
+        Assert.Equal(1, dictionary[equivalent]);
+        Assert.Throws<ArgumentException>(() => dictionary.Add(equivalent, 2));
+        Assert.Single(dictionary);
+        // Use hashed lookup explicitly; an assertion that enumerates can hide corruption.
+        bool containsOriginal = set.Contains(code);
+        bool containsEquivalent = set.Contains(equivalent);
+        Assert.True(containsOriginal);
+        Assert.True(containsEquivalent);
+        Assert.False(set.Add(equivalent));
+        Assert.Single(set);
+
+        MemoryMarshal.AsMemory(second).Span[0] ^= 0xFF;
+        Assert.Equal(hex, code.ToString());
+        Assert.Equal(hex, Convert.ToHexString(code.Bytes.Span));
+    }
+
+    [Fact]
+    public void EmptyCodeRetainsConstructorRejection()
+    {
+        var exception = Assert.Throws<ArgumentException>(() => new PdfCharacterCode([]));
+        Assert.Equal("bytes", exception.ParamName);
+        Assert.StartsWith("A PDF character code cannot be empty.", exception.Message, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -50,8 +72,16 @@ public sealed class PdfCharacterCodeOwnershipCharacterizationTests
         Assert.Equal(7, cid);
         Assert.True(cmap.TryGetUnicode(code, out string text));
         Assert.Equal("A", text);
-        MemoryMarshal.AsMemory(code.Bytes).Span[0] = 0x42;
-        Assert.False(cmap.TryGetCid(code, out _));
+        ReadOnlyMemory<byte> snapshot = code.Bytes;
+        MemoryMarshal.AsMemory(snapshot).Span[0] = 0x42;
+        Assert.True(cmap.TryGetCid(code, out cid));
+        Assert.Equal(7, cid);
+        Assert.True(cmap.TryGetUnicode(code, out text));
+        Assert.Equal("A", text);
+        var changedQuery = new PdfCharacterCode(snapshot.Span);
+        Assert.False(cmap.TryGetCid(changedQuery, out _));
+        Assert.False(cmap.TryGetUnicode(changedQuery, out _));
+        Assert.Equal(code, cmap.ReadCode([0x41], 0));
         Assert.True(cmap.TryGetCid(new PdfCharacterCode([0x41]), out cid));
         Assert.Equal(7, cid);
         Assert.True(cmap.TryGetUnicode(new PdfCharacterCode([0x41]), out text));

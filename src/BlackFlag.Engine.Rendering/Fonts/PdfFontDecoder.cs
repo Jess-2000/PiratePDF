@@ -142,12 +142,13 @@ public sealed class PdfFontDecoder
         while (offset < bytes.Length)
         {
             PdfCharacterCode code = encodingMap.ReadCode(bytes, offset);
-            int codeLength = code.Bytes.Length;
+            ReadOnlyMemory<byte> codeBytes = code.Bytes;
+            int codeLength = codeBytes.Length;
             int cid;
 
             if (!encodingMap.TryGetCid(code, out cid))
             {
-                cid = ToBigEndianInteger(code.Bytes.Span);
+                cid = ToBigEndianInteger(codeBytes.Span);
             }
 
             string? unicode = null;
@@ -161,7 +162,7 @@ public sealed class PdfFontDecoder
             ushort? glyphId = GetCidGlyphId(run.Font, cid, diagnostics, cancellationToken);
             double advance = GetCompositeAdvance(run, cid);
 
-            glyphs.Add(new PdfDecodedGlyph(code.Bytes.Span, cid, glyphId, unicode, x, advance));
+            glyphs.Add(new PdfDecodedGlyph(codeBytes.Span, cid, glyphId, unicode, x, advance));
             x += advance;
             offset += codeLength;
         }

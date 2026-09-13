@@ -4,11 +4,11 @@
 |---|---|
 | **Document ID** | PP-AUD-009 |
 | **Category** | Engineering Review |
-| **Version** | 1.9 |
+| **Version** | 1.10 |
 | **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1049, BF-1050, BF-1051, BF-1053, BF-1054 |
-| **Last Updated** | 2026-09-12 |
+| **Last Updated** | 2026-09-13 |
 | **Next Review** | 2026-12-06 |
 
 ## 1. Executive summary
@@ -34,6 +34,8 @@ The previous plugin/result hardening and Abstractions test improvements remain i
 **Implementation update, 2026-09-10:** Separately approved B4A-F2 implements POST-P0-014. CopyTo now isolates retained revision bytes with one fixed 64 KiB temporary buffer per call. All 15 focused cases, Writing 153/Services 313 affected-project tests, both incremental xref parser-reopen scenarios and the full unmodified 1,880-test release gate passed. See the [F2 completion report](Post-BF-1054-B4A-F2-Source-Revision-Ownership-Completion-Report.md) for allocation bounds, callback granularity, exception compatibility, exact prefix hashes and final scope. No adjacent production fix was necessary. POST-P0-011/013 and other planned batches remain untouched.
 
 **Implementation update, 2026-09-12:** Separately approved B4A-F3 implements POST-P0-013. Parser-stream Data returns independent snapshots; an additive scalar Length getter preserves allocation-free resource-size checks, and image decoding validates encoded size before the snapshot. All 24 focused cases, complete affected suites, and the unmodified consolidated 1,901-test release gate passed, including its integrated source-size stage. See the [F3 completion report](Post-BF-1054-B4A-F3-Parser-Stream-Ownership-Completion-Report.md) for the cross-assembly review, exact copy costs, real ObjStm/cache/filter regressions and separately recorded truncated-Flate observation. No friend assembly or internal borrowed-memory API was added. POST-P2-008 remains open with wording reconciled to the consolidated gate; F4 and unrelated findings remain untouched.
+
+**Implementation update, 2026-09-13:** Separately approved B4A-F4 implements POST-P0-011. Character-code Bytes returns independent snapshots; composite decoding reuses one snapshot per code. Constructor isolation, equality/hash, Dictionary/HashSet membership, uppercase display and CMap mappings remain stable. All 10 focused cases, Rendering 97/Services 313/Parsing 216 complete suites and the unmodified consolidated 1,909-test release gate passed, including integrated size validation and clean DocGen. See the [F4 completion report](Post-BF-1054-B4A-F4-Character-Code-Ownership-Completion-Report.md). All four characterized B4A ownership findings (POST-P0-012/F1, POST-P0-014/F2, POST-P0-013/F3 and POST-P0-011/F4) are now closed. Other byte-view candidates and findings remain separate and untouched; F3-OBS-01 was not investigated or assigned severity in F4.
 
 ## 2. Repository and baseline health
 
@@ -271,7 +273,9 @@ P3 is recorded as one aggregate category: formatting and preference-only churn. 
 
 **Location:** src/BlackFlag.Engine.Rendering/Fonts/PdfCharacterCode.cs, Bytes/Equals/GetHashCode. Constructor input is copied, but public array-backed memory exposes the stored bytes. A bounded mutation changes equality/hash; Dictionary/HashSet lookup fails after insertion and equivalent duplicate dictionary keys can appear. Public CMap query mutation does not expose or corrupt private stored CMap keys. This is a confirmed public-value correctness defect, not a demonstrated parser-only CMap exploit.
 
-**Proposal and risk:** B4A-F4, after the more consequential provenance/revision/stream work. Preserve public signatures with defensive Bytes exposure and review internal decoder length/byte access to avoid unnecessary copies. Retain constructor/equality/CMap controls and invert the alias/key-corruption characterization tests when implementing. Allocation impact is measurement required. **Unfixed; separate approval required.** Details and exact probes: [ownership characterization](Post-BF-1054-B4A-Ownership-Candidate-Characterization.md).
+**Original proposal and risk (historical):** B4A-F4, after the more consequential provenance/revision/stream work. Preserve public signatures with defensive Bytes exposure and review internal decoder length/byte access to avoid unnecessary copies. Retain constructor/equality/CMap controls and invert the alias/key-corruption characterization tests when implementing. Allocation impact is measurement required. Details and exact probes: [ownership characterization](Post-BF-1054-B4A-Ownership-Candidate-Characterization.md).
+
+**F4 disposition, 2026-09-13:** implemented and validated after separate approval. Each Bytes access returns an independent snapshot; constructor copying and allocation-free private equality/hash inspection remain unchanged. Caller mutation cannot invalidate dictionary/set keys, alter display or affect private CMap mappings. Composite decoding reuses one snapshot without new public/internal APIs or friend access. All 10 focused cases, complete Rendering/Services/Parsing suites and the consolidated 1,909-test gate passed. See the [F4 completion record](Post-BF-1054-B4A-F4-Character-Code-Ownership-Completion-Report.md) for exact files, decoding/exception controls, added copy costs and closure of all four characterized ownership findings. Unrelated provenance views and F3-OBS-01 remain outside this closure.
 
 ### POST-P0-012: descriptor alias changes stale-source validation
 
@@ -661,6 +665,7 @@ Phase A ends with this report and the proposed batches. **Phase B has not begun 
 | 1.7 | 2026-09-10 | Record B4A-F1 completion of POST-P0-012, independent descriptor snapshots, consumer reuse, ownership/history/SDK/save validation and full release-gate success; retain deferred findings and historical characterization. |
 | 1.8 | 2026-09-10 | Record B4A-F2 completion of POST-P0-014, bounded source-copy isolation, callback/exception compatibility, exact incremental-prefix and parser-reopen validation, and full release-gate success. |
 | 1.9 | 2026-09-12 | Record B4A-F3 completion of POST-P0-013, parser-stream snapshots and bounded resource checks, real cache/filter regressions and consolidated release-gate success; reconcile POST-P2-008 wording while keeping it open. |
+| 1.10 | 2026-09-13 | Record B4A-F4 completion of POST-P0-011, stable character-code ownership/key semantics, decoder snapshot reuse and full validation; close the four characterized B4A ownership follow-ups while retaining unrelated findings and F3-OBS-01. |
 
 ## Appendix A. Per-file coverage ledger
 
