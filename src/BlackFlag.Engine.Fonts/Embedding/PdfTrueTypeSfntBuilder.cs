@@ -53,7 +53,9 @@ internal static class PdfTrueTypeSfntBuilder
     }
 
     public static byte[] Build(
-        IReadOnlyDictionary<string, byte[]> tables)
+        IReadOnlyDictionary<string, byte[]> tables,
+        int maximumGeneratedBytes,
+        string subsetKind)
     {
         KeyValuePair<string, byte[]>[] ordered =
         [
@@ -62,32 +64,25 @@ internal static class PdfTrueTypeSfntBuilder
                 StringComparer.Ordinal)
         ];
 
-        int directoryLength =
-            checked(12 + ordered.Length * 16);
-
-        int cursor =
-            PdfTrueTypeBinary.Align4(
-                directoryLength);
-
-        var offsets =
-            new Dictionary<string, int>(
-                StringComparer.Ordinal);
+        // Widen before alignment and addition. Every table length is an int;
+        // the full sum fits in long even when it cannot fit in an array.
+        long generatedLength = checked(12L + ordered.Length * 16L);
+        var offsets = new Dictionary<string, long>(StringComparer.Ordinal);
 
         foreach (KeyValuePair<string, byte[]> table in ordered)
         {
-            cursor =
-                PdfTrueTypeBinary.Align4(cursor);
-
-            offsets[table.Key] = cursor;
-
-            cursor =
-                checked(
-                    cursor +
-                    PdfTrueTypeBinary.Align4(
-                        table.Value.Length));
+            offsets[table.Key] = generatedLength;
+            generatedLength = checked(
+                generatedLength + ((table.Value.LongLength + 3L) & ~3L));
         }
 
-        byte[] output = new byte[cursor];
+        if (generatedLength > maximumGeneratedBytes)
+        {
+            throw new InvalidDataException(
+                $"The generated {subsetKind} subset is {generatedLength} bytes, exceeding the configured {maximumGeneratedBytes}-byte limit.");
+        }
+
+        byte[] output = new byte[checked((int)generatedLength)];
 
         PdfTrueTypeBinary.W32(output, 0, 0x00010000);
         PdfTrueTypeBinary.W16(
@@ -104,11 +99,11 @@ internal static class PdfTrueTypeSfntBuilder
             WriteTable(
                 output,
                 12 + index * 16,
-                offsets[ordered[index].Key],
+                checked((int)offsets[ordered[index].Key]),
                 ordered[index]);
         }
 
-        int headOffset = offsets["head"];
+        int headOffset = checked((int)offsets["head"]);
 
         uint adjustment =
             unchecked(

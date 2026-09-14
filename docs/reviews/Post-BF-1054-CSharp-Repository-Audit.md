@@ -4,7 +4,7 @@
 |---|---|
 | **Document ID** | PP-AUD-009 |
 | **Category** | Engineering Review |
-| **Version** | 1.11 |
+| **Version** | 1.12 |
 | **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1049, BF-1050, BF-1051, BF-1053, BF-1054 |
@@ -12,6 +12,8 @@
 | **Next Review** | 2026-12-06 |
 
 ## 1. Executive summary
+
+**B4B implementation update, 2026-09-13:** Separately approved POST-P0-005 work corrects distinct retained-glyph admission in both subsetters, including zero, roots and composite dependencies. The shared SFNT builder now checks exact widened generated length before final allocation. POST-P0-005 is implemented and closed: the full unmodified consolidated gate passed 1,989 tests across 20 projects, with zero build warnings/errors, integrated source-size validation and clean DocGen. See the [B4B completion report](Post-BF-1054-Batch-B4B-Subset-Resource-Limits-Completion-Report.md) for baseline reproduction, allocation limits, exception/preservation evidence and final validation. POST-P0-006 and unrelated findings remain untouched; POST-P0-015 and ownership batches remain closed.
 
 **Implementation update, 2026-09-08:** B1 (POST-P0-001) and B2 (POST-P0-002) are implemented and validated; see the [B1 completion report](Post-BF-1054-Batch-B1-Completion-Report.md) and [B2 completion report](Post-BF-1054-Batch-B2-Completion-Report.md). The user subsequently approved B3 only (POST-P0-003); its completed implementation and validation are recorded in the [B3 completion report](Post-BF-1054-Batch-B3-Completion-Report.md). At that checkpoint, B4 and later batches were unapproved and untouched. The findings, inventory and baseline results below record the original Phase A assessment.
 
@@ -115,7 +117,7 @@ The current structural assessment supersedes the original audit's decomposition 
 | POST-P0-002 | P0 | JPEG intrinsic dimensions reach native allocation before limits | Source-established ordering; no large-allocation experiment |
 | POST-P0-003 | P0 | Font projections report requested resource name after collision rename | Bounded reproduction |
 | POST-P0-004 | P0 | Public sanitized-font memory exposes mutable trusted backing array | Bounded reproduction |
-| POST-P0-005 | P0 | Subset root glyphs bypass configured retained-glyph limit | Bounded reproduction; generated-byte guard also late |
+| POST-P0-005 | P0 | Subset root glyphs bypass configured retained-glyph limit | Implemented in B4B; distinct admission and final-allocation preflight validated |
 | POST-P0-006 | P0 | Malformed font numeric lengths escape the domain failure contract | Bounded reproduction; catalog impact source-traced |
 | POST-P0-007 | P0 | Decorations ignore text transforms and emit paths inside text objects | Source plus existing expected-output tests and PDF specification |
 | POST-P0-008 | P0 | Font embedding restrictions are reduced incorrectly | Version-aware bounded reproduction and OpenType specification |
@@ -195,6 +197,8 @@ P3 is recorded as one aggregate category: formatting and preference-only churn. 
 **Disposition, 2026-09-09:** Implemented and validated in B4A. Bytes and OpenRead now expose independent defensive snapshots; assembly-internal inspectors borrow a private read-only span, subsetters retain one working copy, and Services projectors reuse one public snapshot per embedding operation. Characterization also reproduced trusted-buffer exposure through stream-copy destination callbacks. Ownership, hash, metadata/subset/embed and six actual parser-reopen combinations passed; the full unmodified release gate passed 1,841 tests. The [B4A completion report](Post-BF-1054-Batch-B4A-Sanitized-Font-Ownership-Completion-Report.md) records allocation tradeoffs marked measurement required and analogous provenance-view candidates requiring separate approval. POST-P0-005/006 were not implemented.
 
 ### POST-P0-005: subset limits do not count initial roots
+
+**Disposition, 2026-09-13:** Implemented and validated in B4B; POST-P0-005 is closed after the full unmodified gate passed 1,989 tests. Both subsetters validate each distinct root before insertion/mapping, composite dependencies use the same admission check, and closure validates the initial count. Generated SFNT layout uses widened arithmetic and rejects before the complete result allocation. Existing exception types/messages and successful GID/CID/metric/byte semantics are preserved. The [B4B report](Post-BF-1054-Batch-B4B-Subset-Resource-Limits-Completion-Report.md) distinguishes the final-output bound from source/table/temporary allocations. Original Phase A evidence follows.
 
 **Locations:** src/BlackFlag.Engine.Fonts/Embedding/PdfTrueTypeCompositeClosure.cs, Visit lines 104-108; PdfTrueTypeGlyphSubsetter.cs, selected roots and lines 136-141; PdfUnicodeTrueTypeGlyphSubsetter.cs, roots and lines 218-225.
 
@@ -676,6 +680,7 @@ Phase A ends with this report and the proposed batches. **Phase B has not begun 
 | 1.9 | 2026-09-12 | Record B4A-F3 completion of POST-P0-013, parser-stream snapshots and bounded resource checks, real cache/filter regressions and consolidated release-gate success; reconcile POST-P2-008 wording while keeping it open. |
 | 1.10 | 2026-09-13 | Record B4A-F4 completion of POST-P0-011, stable character-code ownership/key semantics, decoder snapshot reuse and full validation; close the four characterized B4A ownership follow-ups while retaining unrelated findings and F3-OBS-01. |
 | 1.11 | 2026-09-13 | Characterize F3-OBS-01, establish POST-P0-015 incomplete-Flate correctness impact and record the narrow complete-member correction and validation evidence. |
+| 1.12 | 2026-09-13 | Record B4B / POST-P0-005 distinct retained-glyph admission, generated-byte preflight and preservation/resource validation. |
 
 ## Appendix A. Per-file coverage ledger
 
