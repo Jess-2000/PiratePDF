@@ -8,7 +8,7 @@ using BlackFlag.Engine.Fonts.Platform.Windows;
 
 namespace BlackFlag.Engine.Fonts.Platform.Tests;
 
-public sealed class PdfFileSystemExternalFontProviderTests :
+public sealed partial class PdfFileSystemExternalFontProviderTests :
     IDisposable
 {
     private readonly string directory;
@@ -122,7 +122,7 @@ public sealed class PdfFileSystemExternalFontProviderTests :
         }
     }
 
-    private static byte[] BuildFont()
+    private static byte[] BuildFont(byte[] cmap = null)
     {
         byte[] glyph0 =
             SimpleGlyph(16);
@@ -154,7 +154,7 @@ public sealed class PdfFileSystemExternalFontProviderTests :
                 StringComparer.Ordinal)
             {
                 ["OS/2"] = Os2(),
-                ["cmap"] = Cmap(),
+                ["cmap"] = cmap ?? Cmap(),
                 ["glyf"] = glyf,
                 ["head"] = Head(),
                 ["hhea"] = Hhea(),

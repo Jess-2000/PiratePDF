@@ -4,14 +4,16 @@
 |---|---|
 | **Document ID** | PP-AUD-009 |
 | **Category** | Engineering Review |
-| **Version** | 1.12 |
+| **Version** | 1.13 |
 | **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1049, BF-1050, BF-1051, BF-1053, BF-1054 |
-| **Last Updated** | 2026-09-13 |
+| **Last Updated** | 2026-09-14 |
 | **Next Review** | 2026-12-06 |
 
 ## 1. Executive summary
+
+**B4C update, 2026-09-14:** Separately approved POST-P0-006 implementation validates unsigned cmap lengths and 12/13/14 record bounds before narrowing/publication, fixes extreme input-budget arithmetic and an equivalent SFNT search-field overflow. Mixed-directory tests reproduce and correct malformed-candidate Lazy poisoning through the existing provider domain-failure filter; provider production is unchanged. POST-P0-006 is implemented and closed: focused/affected suites, six actual save/reopen cases and the full unmodified gate pass (2,046 tests across 20 projects, zero build warnings/errors, integrated source-size and clean DocGen). See the [B4C completion report](Post-BF-1054-Batch-B4C-Malformed-Font-Numeric-Lengths-Completion-Report.md). POST-P0-005/015 remain closed; POST-P0-007 and POST-P2-001 are untouched.
 
 **B4B implementation update, 2026-09-13:** Separately approved POST-P0-005 work corrects distinct retained-glyph admission in both subsetters, including zero, roots and composite dependencies. The shared SFNT builder now checks exact widened generated length before final allocation. POST-P0-005 is implemented and closed: the full unmodified consolidated gate passed 1,989 tests across 20 projects, with zero build warnings/errors, integrated source-size validation and clean DocGen. See the [B4B completion report](Post-BF-1054-Batch-B4B-Subset-Resource-Limits-Completion-Report.md) for baseline reproduction, allocation limits, exception/preservation evidence and final validation. POST-P0-006 and unrelated findings remain untouched; POST-P0-015 and ownership batches remain closed.
 
@@ -118,7 +120,7 @@ The current structural assessment supersedes the original audit's decomposition 
 | POST-P0-003 | P0 | Font projections report requested resource name after collision rename | Bounded reproduction |
 | POST-P0-004 | P0 | Public sanitized-font memory exposes mutable trusted backing array | Bounded reproduction |
 | POST-P0-005 | P0 | Subset root glyphs bypass configured retained-glyph limit | Implemented in B4B; distinct admission and final-allocation preflight validated |
-| POST-P0-006 | P0 | Malformed font numeric lengths escape the domain failure contract | Bounded reproduction; catalog impact source-traced |
+| POST-P0-006 | P0 | Malformed font numeric lengths escape domain failure handling | Implemented in B4C; sanitizer numeric bounds and real mixed-catalog isolation validated |
 | POST-P0-007 | P0 | Decorations ignore text transforms and emit paths inside text objects | Source plus existing expected-output tests and PDF specification |
 | POST-P0-008 | P0 | Font embedding restrictions are reduced incorrectly | Version-aware bounded reproduction and OpenType specification |
 | POST-P0-009 | P0 | Stale Form placement can overwrite unrelated current content | Bounded reproduction |
@@ -211,6 +213,8 @@ P3 is recorded as one aggregate category: formatting and preference-only churn. 
 **Risk and validation:** medium. Add simple-root exact/over-limit cases for both subsetters, duplicate roots, glyph zero, composite dependencies, cancellation and checked output-size boundaries. Resanitize output and verify glyph IDs/CID maps/metrics after embedding. Fuzz composite flags, cycles, truncation and root sets. Measure allocation before promising savings. **Batch B4, separable from buffer ownership; affects BF-1054K/L/M.**
 
 ### POST-P0-006: malformed font lengths escape predictable failure handling
+
+**Disposition, 2026-09-14:** Implemented and validated in B4C; POST-P0-006 is closed after the full unmodified gate passed 2,046 tests. Oversized unsigned cmap lengths now use MalformedRequiredTable before narrowing; input int.MaxValue works; impossible 12/13/14 arrays/nested ranges and unrepresentable SFNT search fields fail through the sanitizer domain. The real bad-plus-valid provider regression now omits the bad candidate using its existing narrow filter. See the [B4C report](Post-BF-1054-Batch-B4C-Malformed-Font-Numeric-Lengths-Completion-Report.md) for before/after exceptions, numeric inventory, compatibility and validation. Original Phase A evidence follows.
 
 **Locations:** src/BlackFlag.Engine.Fonts/Sanitization/PdfOpenTypeFontSanitizer.cs, ReadBounded:177 and ValidateCmapSubtable:515/520; src/BlackFlag.Engine.Fonts.Platform/PdfFileSystemExternalFontProvider.cs, BuildSnapshot.
 
@@ -681,6 +685,7 @@ Phase A ends with this report and the proposed batches. **Phase B has not begun 
 | 1.10 | 2026-09-13 | Record B4A-F4 completion of POST-P0-011, stable character-code ownership/key semantics, decoder snapshot reuse and full validation; close the four characterized B4A ownership follow-ups while retaining unrelated findings and F3-OBS-01. |
 | 1.11 | 2026-09-13 | Characterize F3-OBS-01, establish POST-P0-015 incomplete-Flate correctness impact and record the narrow complete-member correction and validation evidence. |
 | 1.12 | 2026-09-13 | Record B4B / POST-P0-005 distinct retained-glyph admission, generated-byte preflight and preservation/resource validation. |
+| 1.13 | 2026-09-14 | Record B4C / POST-P0-006 numeric-domain hardening, cmap record bounds and real mixed-catalog failure isolation. |
 
 ## Appendix A. Per-file coverage ledger
 
