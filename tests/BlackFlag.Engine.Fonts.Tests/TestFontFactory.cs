@@ -9,7 +9,7 @@ namespace BlackFlag.Engine.Fonts.Tests;
 
 internal static class TestFontFactory
 {
-    public static MemoryStream CreateMinimalTrueType()
+    public static MemoryStream CreateMinimalTrueType(byte[] os2 = null)
     {
         var tables =
             new Dictionary<string, byte[]>(StringComparer.Ordinal)
@@ -23,6 +23,8 @@ internal static class TestFontFactory
                 ["maxp"] = Maxp(),
                 ["name"] = Name()
             };
+
+        if (os2 is not null) tables.Add("OS/2", os2);
 
         return new MemoryStream(
             BuildSfnt(

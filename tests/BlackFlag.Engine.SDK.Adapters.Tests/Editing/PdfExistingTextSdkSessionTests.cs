@@ -93,6 +93,26 @@ public sealed class PdfExistingTextSdkSessionTests
     }
 
     [Fact]
+    public void FontSwitchCannotIntroduceAnUnregisteredExternalFont()
+    {
+        using var context = CreateContext();
+        IPdfExistingTextSdkSession textSession = context.Sdk;
+        var target = Assert.Single(textSession.DiscoverExistingText(context.PageId));
+        context.Sdk.BeginTransaction();
+        Assert.Throws<KeyNotFoundException>(() => textSession.ChangeExistingTextFont(target.Id, "FExternal"));
+        Assert.Equal(context.Original, context.ReadContent());
+        Assert.False(context.Sdk.CanUndo);
+        // This SDK API selects existing resources; it has no external provider
+        // input. A failed lookup must not invalidate the target registration.
+        Assert.Contains(textSession.GetExistingTextFontCandidates(target.Id), candidate => candidate.ResourceName == "F2");
+        textSession.ChangeExistingTextFont(target.Id, "F2");
+        context.Sdk.CommitTransaction();
+        Assert.Contains("/F2 12 Tf", context.ReadContent(), StringComparison.Ordinal);
+        context.Sdk.Undo();
+        Assert.Equal(context.Original, context.ReadContent());
+    }
+
+    [Fact]
     public void InterfaceTypographyMapsAllFieldsInvalidatesTargetAndSupportsUndoRedo()
     {
         using var context = CreateContext();

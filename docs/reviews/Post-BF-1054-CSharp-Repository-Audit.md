@@ -4,14 +4,16 @@
 |---|---|
 | **Document ID** | PP-AUD-009 |
 | **Category** | Engineering Review |
-| **Version** | 1.14 |
+| **Version** | 1.15 |
 | **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1049, BF-1050, BF-1051, BF-1053, BF-1054 |
-| **Last Updated** | 2026-09-15 |
+| **Last Updated** | 2026-09-16 |
 | **Next Review** | 2026-12-06 |
 
 ## 1. Executive summary
+
+**B6 update, 2026-09-16:** POST-P0-008 is implemented and closed. Centralized version-aware program rights retain independent no-subsetting/bitmap restrictions; provider/program intersection occurs before subset generation or resource allocation. Metadata distinguishes editable from preview/print. The unmodified gate passed 2,308 tests across 20 projects, integrated source-size validation and clean DocGen; 12 supplemental save/reopen cases pass. See the [B6 completion report](Post-BF-1054-Batch-B6-External-Font-Embedding-Rights-Completion-Report.md) for additive API compatibility and existing SDK/save-orchestration boundaries. POST-P0-005/006/007/015 remain closed; POST-P0-009 and POST-P2-001 remain untouched.
 
 **B5 update, 2026-09-15:** POST-P0-007 is implemented and closed. Decorations follow target affine placement outside BT/ET and restore current/line matrices, graphics state and marked-content nesting. Directly exposed interpreter matrix-order and Q-state defects are corrected narrowly. The full unmodified gate passed 2,098 tests across 20 projects with zero build warnings/errors, integrated source-size validation and clean DocGen; 38 supplemental save/reopen combinations also pass. See the [B5 completion report](Post-BF-1054-Batch-B5-Decoration-Geometry-and-Operator-Placement-Completion-Report.md). POST-P0-005/006/015 remain closed; POST-P0-008/009 and POST-P2-001 remain untouched.
 
@@ -243,6 +245,8 @@ P3 is recorded as one aggregate category: formatting and preference-only churn. 
 **Risk and validation:** high preservation sensitivity. Require translated/rotated/skewed/scaled text, non-default rise, explicit/automatic widths, script combinations, Tj/TJ/quote operators, clipping, following-line behavior, render and reopen tests. No visual render experiment was performed in Phase A; the missing transform and operator sequence are source-established. No speed claim; fuzz malformed spans only after geometry regressions. **Batch B5; affects BF-1054S/T/U.**
 
 ### POST-P0-008: external-font permission mapping loses restrictions
+
+**B6 disposition, 2026-09-16:** Implemented and closed after the full unmodified 2,308-test release gate and 12 supplemental parser reopen cases passed. The [B6 completion report](Post-BF-1054-Batch-B6-External-Font-Embedding-Rights-Completion-Report.md) records pre-fix reproductions, the version/operation matrix, provider restrictions, additive API compatibility and actual parser reopen evidence. Original Phase A evidence follows.
 
 **Locations:** src/BlackFlag.Engine.Fonts/Embedding/PdfExternalTrueTypeInspector.cs, ReadEmbeddingRights:383; src/BlackFlag.Engine.Fonts/PdfSanitizedExternalFontMetadataInspector.cs, fsType mapping:245; src/BlackFlag.Engine.Fonts/PdfExternalFontEmbeddingRights.cs; the two subset projectors and external-text service.
 
@@ -584,7 +588,7 @@ These support using existing contracts consistently, not adding a second font mo
 | 3 | B3 resource-name correctness | POST-P0-003; the three Services/Fonts projectors and their tests; external-text integration test | All collision/resource ownership variants and save/reopen |
 | 3A | B3A CMap tokenizer (added after Phase A; separately approved) | POST-P0-010; Rendering/Fonts/PdfCMapParser.cs and directly relevant Rendering/Services font tests | Bounded progress/materialization proof, delimiter compatibility, generated-CMap parse/save/reopen |
 | 4 | B4 font trust and bounds | POST-P0-004/005/006; Sanitization program/sanitizer, CompositeClosure, both subsetters/SfntBuilder as required, focused Fonts/Platform tests | Prefer three independently reviewable sub-batches; characterize exception/ownership before patching |
-| 5 | B6 font permissions | POST-P0-008; both font inspectors, embedding policy, subset projectors, permission tests | Explicit policy/API approval; version-aware fixtures and program/provider disagreement |
+| 5 | B6 font permissions | POST-P0-008; trusted program rights, both inspectors, policy, projectors and subsetters | Implemented and closed 2026-09-16; unmodified gate and version/provider/reopen evidence in B6 completion report |
 | 6 | B7 current Form provenance | POST-P0-009; FormPlacementCloneProjector/Descriptor and Form/resource tests | Current-token/binding checks, no partial projections, other placements unchanged |
 | 7 | B5 decoration semantics | POST-P0-007; StyleService/StyleTokenEditor and directly required interpretation corrections | Implemented and closed 2026-09-15; unmodified gate and parser/reopen evidence in the B5 completion report |
 | 8 | B8 font catalog responsiveness | POST-P2-001; Fonts.Platform provider and tests | Complete B4 failure-contract work; define cancellation/retry and aggregate policy |
@@ -691,6 +695,7 @@ Phase A ends with this report and the proposed batches. **Phase B has not begun 
 | 1.12 | 2026-09-13 | Record B4B / POST-P0-005 distinct retained-glyph admission, generated-byte preflight and preservation/resource validation. |
 | 1.13 | 2026-09-14 | Record B4C / POST-P0-006 numeric-domain hardening, cmap record bounds and real mixed-catalog failure isolation. |
 | 1.14 | 2026-09-15 | Record B5 / POST-P0-007 decoration geometry, valid path placement and directly required state corrections. |
+| 1.15 | 2026-09-16 | Record B6 / POST-P0-008 version-aware font permissions and early operation enforcement. |
 
 ## Appendix A. Per-file coverage ledger
 

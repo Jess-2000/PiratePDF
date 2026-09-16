@@ -142,7 +142,7 @@
 | PP-AUD-006 | [Pre-BF-1054 Batch 3 — Abstractions Test Quality](reviews/Pre-BF-1054-Batch-3-Abstractions-Test-Quality.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
 | PP-AUD-007 | [Pre-BF-1054 Batch 3 — Completion Report](reviews/Pre-BF-1054-Batch-3-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
 | PP-AUD-008 | [Pre-BF-1054 Structural-Refactoring Necessity Assessment](reviews/Pre-BF-1054-Structural-Refactoring-Necessity-Assessment.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
-| PP-AUD-009 | [Post-BF-1054 C# Repository Engineering, Security and Optimization Audit](reviews/Post-BF-1054-CSharp-Repository-Audit.md) | Engineering Review | 1.14 | Review | 2026-09-15 |
+| PP-AUD-009 | [Post-BF-1054 C# Repository Engineering, Security and Optimization Audit](reviews/Post-BF-1054-CSharp-Repository-Audit.md) | Engineering Review | 1.15 | Review | 2026-09-16 |
 | PP-AUD-010 | [Post-BF-1054 Batch B1 - Bounded Mutation Decode](reviews/Post-BF-1054-Batch-B1-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-06 |
 | PP-AUD-011 | [Post-BF-1054 Batch B2 - JPEG Preallocation Validation](reviews/Post-BF-1054-Batch-B2-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-07 |
 | PP-AUD-012 | [Post-BF-1054 Batch B3 - Allocated Font Resource Name](reviews/Post-BF-1054-Batch-B3-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-08 |
@@ -158,6 +158,7 @@
 | PP-AUD-022 | [Post-BF-1054 Batch B4B - TrueType Subset Resource Limits](reviews/Post-BF-1054-Batch-B4B-Subset-Resource-Limits-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-13 |
 | PP-AUD-023 | [Post-BF-1054 Batch B4C - Malformed Font Numeric Lengths](reviews/Post-BF-1054-Batch-B4C-Malformed-Font-Numeric-Lengths-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-14 |
 | PP-AUD-024 | [Post-BF-1054 Batch B5 - Decoration Geometry and Operator Placement](reviews/Post-BF-1054-Batch-B5-Decoration-Geometry-and-Operator-Placement-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-15 |
+| PP-AUD-025 | [Post-BF-1054 Batch B6 - External Font Embedding Rights](reviews/Post-BF-1054-Batch-B6-External-Font-Embedding-Rights-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-16 |
 | PP-CHARTER-001 | [PiratePDF Project Charter](Project-Charter.md) | Project Charter | 1.1 | Approved | 2026-08-09 |
 | PP-DEV-001 | [PiratePDF Master Blueprint - Volume IV: Engineering Standards](Blueprint/Volume-IV-Engineering-Standards.md) | Developer Documentation | 1.1 | Approved | 2026-08-15 |
 | PP-DEV-002 | [BlackFlag Engine Plugin Development Contract](04-Developer/Plugin-Development.md) | Developer Documentation | 1.0 | Implemented | 2026-08-13 |

@@ -50,22 +50,11 @@ public static class PdfExternalTrueTypeResourceProjector
         ArgumentNullException.ThrowIfNull(face);
         ArgumentNullException.ThrowIfNull(program);
 
-        if (face.EmbeddingRights != PdfExternalFontEmbeddingRights.Allowed)
-        {
-            throw new NotSupportedException(
-                "BF-1054J full embedding requires provider embedding rights to be Allowed.");
-        }
+        PdfExternalFontEmbeddingPolicy.EnsureCanEmbed(face, program, subset: false);
 
         PdfExternalTrueTypeMetrics metrics =
             PdfExternalTrueTypeInspector.Inspect(
                 program);
-
-        if (metrics.EmbeddingRights !=
-            PdfExternalFontEmbeddingRights.Allowed)
-        {
-            throw new NotSupportedException(
-                "BF-1054J full embedding requires the sanitized font program itself to permit embedding.");
-        }
 
         PdfWriteObjectAllocator allocator =
             writePlan.CreateObjectAllocator();

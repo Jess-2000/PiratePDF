@@ -15,7 +15,7 @@ public sealed class PdfExternalTrueTypeMetrics
         int xMax,
         int yMax,
         IReadOnlyList<int> winAnsiWidths,
-        PdfExternalFontEmbeddingRights embeddingRights)
+        PdfExternalFontProgramRights restrictions)
     {
         UnitsPerEm = unitsPerEm;
         Ascent = ascent;
@@ -25,7 +25,9 @@ public sealed class PdfExternalTrueTypeMetrics
         XMax = xMax;
         YMax = yMax;
         WinAnsiWidths = Array.AsReadOnly(winAnsiWidths.ToArray());
-        EmbeddingRights = embeddingRights;
+        EmbeddingRights = restrictions.Level;
+        NoSubsetting = restrictions.NoSubsetting;
+        BitmapEmbeddingOnly = restrictions.BitmapEmbeddingOnly;
     }
 
     public int UnitsPerEm { get; }
@@ -37,4 +39,6 @@ public sealed class PdfExternalTrueTypeMetrics
     public int YMax { get; }
     public IReadOnlyList<int> WinAnsiWidths { get; }
     public PdfExternalFontEmbeddingRights EmbeddingRights { get; }
+    public bool NoSubsetting { get; }
+    public bool BitmapEmbeddingOnly { get; }
 }

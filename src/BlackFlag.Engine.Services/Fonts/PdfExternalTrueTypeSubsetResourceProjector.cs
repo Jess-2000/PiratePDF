@@ -54,13 +54,8 @@ public static class PdfExternalTrueTypeSubsetResourceProjector
         ArgumentNullException.ThrowIfNull(program);
         ArgumentNullException.ThrowIfNull(requiredText);
 
-        if (face.EmbeddingRights is not
-            (PdfExternalFontEmbeddingRights.Allowed or
-            PdfExternalFontEmbeddingRights.SubsetOnly))
-        {
-            throw new NotSupportedException(
-                "The selected external font does not permit subset embedding.");
-        }
+        cancellationToken.ThrowIfCancellationRequested();
+        PdfExternalFontEmbeddingPolicy.EnsureCanEmbed(face, program, subset: true);
 
         var subsetter =
             new PdfTrueTypeGlyphSubsetter();
@@ -74,13 +69,6 @@ public static class PdfExternalTrueTypeSubsetResourceProjector
         PdfExternalTrueTypeMetrics metrics =
             PdfExternalTrueTypeInspector.Inspect(
                 subset.Program);
-
-        if (metrics.EmbeddingRights ==
-            PdfExternalFontEmbeddingRights.Restricted)
-        {
-            throw new NotSupportedException(
-                "The sanitized font program prohibits embedding.");
-        }
 
         PdfWriteObjectAllocator allocator =
             writePlan.CreateObjectAllocator();

@@ -171,7 +171,11 @@ public abstract class PdfFileSystemExternalFontProvider :
                         metadata.Stretch,
                         metadata.Slant,
                         program.Technology,
-                        metadata.EmbeddingRights);
+                        metadata.EmbeddingRights)
+                    {
+                        NoSubsetting = metadata.NoSubsetting,
+                        BitmapEmbeddingOnly = metadata.BitmapEmbeddingOnly
+                    };
 
                 entries.TryAdd(
                     faceId,

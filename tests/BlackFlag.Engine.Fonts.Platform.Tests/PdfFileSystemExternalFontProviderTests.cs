@@ -122,7 +122,7 @@ public sealed partial class PdfFileSystemExternalFontProviderTests :
         }
     }
 
-    private static byte[] BuildFont(byte[] cmap = null)
+    private static byte[] BuildFont(byte[] cmap = null, ushort version = 0, ushort fsType = 0)
     {
         byte[] glyph0 =
             SimpleGlyph(16);
@@ -153,7 +153,7 @@ public sealed partial class PdfFileSystemExternalFontProviderTests :
             new Dictionary<string, byte[]>(
                 StringComparer.Ordinal)
             {
-                ["OS/2"] = Os2(),
+                ["OS/2"] = Os2(version, fsType),
                 ["cmap"] = cmap ?? Cmap(),
                 ["glyf"] = glyf,
                 ["head"] = Head(),
@@ -257,14 +257,15 @@ public sealed partial class PdfFileSystemExternalFontProviderTests :
         return table;
     }
 
-    private static byte[] Os2()
+    private static byte[] Os2(ushort version, ushort fsType)
     {
         byte[] value =
-            new byte[78];
+            new byte[version switch { 0 => 78, 1 => 86, 5 => 100, _ => 96 }];
 
+        W16(value, 0, version);
         W16(value, 4, 400);
         W16(value, 6, 5);
-        W16(value, 8, 0);
+        W16(value, 8, fsType);
         W16(value, 62, 0x0040);
 
         return value;

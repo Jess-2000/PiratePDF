@@ -45,6 +45,8 @@ public sealed class PdfUnicodeTrueTypeGlyphSubsetter
                 "BF-1054M Unicode subsetting supports sanitized TrueType glyf/loca fonts only.");
         }
 
+        cancellationToken.ThrowIfCancellationRequested();
+        program.EmbeddingRestrictions.EnsureCanEmbed(subset: true);
         byte[] source =
             program.TrustedBytes.ToArray();
 

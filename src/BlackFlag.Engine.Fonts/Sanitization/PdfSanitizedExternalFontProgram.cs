@@ -20,6 +20,7 @@ public sealed class PdfSanitizedExternalFontProgram
         Technology = technology;
         this.tableTags = Array.AsReadOnly(tableTags.ToArray());
         Sha256 = Convert.ToHexString(SHA256.HashData(this.bytes));
+        EmbeddingRestrictions = PdfExternalFontProgramRights.Read(this.bytes);
     }
 
     /// <summary>Returns an independent snapshot of the trusted font bytes.</summary>
@@ -28,6 +29,7 @@ public sealed class PdfSanitizedExternalFontProgram
     // Assembly-owned readers borrow this span only while inspecting the program.
     // Never forward it to public callbacks or return a recoverable memory/array alias.
     internal ReadOnlySpan<byte> TrustedBytes => bytes;
+    internal PdfExternalFontProgramRights EmbeddingRestrictions { get; }
     public PdfExternalFontTechnology Technology { get; }
     public IReadOnlyList<string> TableTags => tableTags;
     public string Sha256 { get; }
