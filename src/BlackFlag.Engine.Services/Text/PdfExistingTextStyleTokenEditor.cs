@@ -6,14 +6,15 @@ using BlackFlag.Engine.Document.Objects.Primitives;
 
 namespace BlackFlag.Engine.Services.Text;
 
-internal static class PdfExistingTextStyleTokenEditor
+internal static partial class PdfExistingTextStyleTokenEditor
 {
     public static byte[] Apply(
         ReadOnlySpan<byte> streamData,
         PdfExistingTextDescriptor descriptor,
         PdfGraphicsStateSnapshot graphicsState,
         PdfExistingTextStyleUpdate update,
-        long operationEndOffset)
+        long operationEndOffset,
+        double styledAdvance = 0)
     {
         ArgumentNullException.ThrowIfNull(descriptor);
         ArgumentNullException.ThrowIfNull(graphicsState);
@@ -41,7 +42,8 @@ internal static class PdfExistingTextStyleTokenEditor
             BuildSuffix(
                 descriptor,
                 graphicsState,
-                update);
+                update,
+                styledAdvance);
 
         int start = checked((int)startOffset);
         int end = checked((int)operationEndOffset);
@@ -102,7 +104,8 @@ internal static class PdfExistingTextStyleTokenEditor
     private static byte[] BuildSuffix(
         PdfExistingTextDescriptor descriptor,
         PdfGraphicsStateSnapshot state,
-        PdfExistingTextStyleUpdate update)
+        PdfExistingTextStyleUpdate update,
+        double styledAdvance)
     {
         using var output = new MemoryStream();
         WriteAscii(output, "\n");
@@ -144,7 +147,8 @@ internal static class PdfExistingTextStyleTokenEditor
                 output,
                 descriptor,
                 state,
-                update.Decoration);
+                update,
+                styledAdvance);
         }
 
         return output.ToArray();
@@ -263,43 +267,6 @@ internal static class PdfExistingTextStyleTokenEditor
         WriteColor(output, direct, stroking);
     }
 
-    private static void WriteDecoration(
-        Stream output,
-        PdfExistingTextDescriptor descriptor,
-        PdfGraphicsStateSnapshot state,
-        PdfExistingTextDecoration decoration)
-    {
-        double fontSize =
-            descriptor.Typography.FontSize;
-
-        double offset =
-            decoration.Offset ??
-            (decoration.Kind ==
-                PdfExistingTextDecorationKind.Underline
-                ? -0.12 * fontSize
-                : 0.30 * fontSize);
-
-        double thickness =
-            decoration.Thickness ??
-            Math.Max(
-                0.5,
-                0.05 * Math.Abs(fontSize));
-
-        WriteAscii(output, "q\n");
-        WriteDisplayColor(
-            output,
-            state.FillColor,
-            stroking: true);
-        WriteNumber(output, thickness);
-        WriteAscii(output, " w\n0 ");
-        WriteNumber(output, offset);
-        WriteAscii(output, " m\n");
-        WriteNumber(output, decoration.AdvanceWidth);
-        WriteAscii(output, " ");
-        WriteNumber(output, offset);
-        WriteAscii(output, " l\nS\nQ\n");
-    }
-
     private static void WriteName(Stream output, string name) =>
         PdfObjectSerializer.Write(
             output,
@@ -312,9 +279,10 @@ internal static class PdfExistingTextStyleTokenEditor
             throw new ArgumentOutOfRangeException(nameof(value));
         }
 
+        // long.MaxValue rounds to 2^63 as a double; use an exclusive bound.
         if (value == Math.Truncate(value) &&
             value >= long.MinValue &&
-            value <= long.MaxValue)
+            value < 9223372036854775808d)
         {
             PdfObjectSerializer.Write(
                 output,

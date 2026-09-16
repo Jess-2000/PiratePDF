@@ -42,7 +42,7 @@ public sealed partial class PdfGraphicsInterpreter
         double y)
     {
         PdfMatrix translation = new(1, 0, 0, 1, x, y);
-        PdfMatrix line = state.TextLineMatrix.Multiply(translation);
+        PdfMatrix line = translation.Multiply(state.TextLineMatrix);
         return state with
         {
             TextLineMatrix = line,

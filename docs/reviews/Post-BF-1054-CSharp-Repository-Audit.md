@@ -4,14 +4,16 @@
 |---|---|
 | **Document ID** | PP-AUD-009 |
 | **Category** | Engineering Review |
-| **Version** | 1.13 |
+| **Version** | 1.14 |
 | **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1049, BF-1050, BF-1051, BF-1053, BF-1054 |
-| **Last Updated** | 2026-09-14 |
+| **Last Updated** | 2026-09-15 |
 | **Next Review** | 2026-12-06 |
 
 ## 1. Executive summary
+
+**B5 update, 2026-09-15:** POST-P0-007 is implemented and closed. Decorations follow target affine placement outside BT/ET and restore current/line matrices, graphics state and marked-content nesting. Directly exposed interpreter matrix-order and Q-state defects are corrected narrowly. The full unmodified gate passed 2,098 tests across 20 projects with zero build warnings/errors, integrated source-size validation and clean DocGen; 38 supplemental save/reopen combinations also pass. See the [B5 completion report](Post-BF-1054-Batch-B5-Decoration-Geometry-and-Operator-Placement-Completion-Report.md). POST-P0-005/006/015 remain closed; POST-P0-008/009 and POST-P2-001 remain untouched.
 
 **B4C update, 2026-09-14:** Separately approved POST-P0-006 implementation validates unsigned cmap lengths and 12/13/14 record bounds before narrowing/publication, fixes extreme input-budget arithmetic and an equivalent SFNT search-field overflow. Mixed-directory tests reproduce and correct malformed-candidate Lazy poisoning through the existing provider domain-failure filter; provider production is unchanged. POST-P0-006 is implemented and closed: focused/affected suites, six actual save/reopen cases and the full unmodified gate pass (2,046 tests across 20 projects, zero build warnings/errors, integrated source-size and clean DocGen). See the [B4C completion report](Post-BF-1054-Batch-B4C-Malformed-Font-Numeric-Lengths-Completion-Report.md). POST-P0-005/015 remain closed; POST-P0-007 and POST-P2-001 are untouched.
 
@@ -227,6 +229,8 @@ P3 is recorded as one aggregate category: formatting and preference-only churn. 
 **Risk and validation:** low/medium. Add checksummed format-12/13/14 length extremes, short headers, configured int limits, and a directory containing one bad and one valid font. Verify deterministic omission, retry/cancellation policy and absence of partial publication. Add the tiny fixtures to the fuzz regression corpus. No benchmark required. **Batch B4; affects BF-1054I/R.**
 
 ### POST-P0-007: decoration output is not positioned in text space
+
+**B5 disposition, 2026-09-15:** Implemented and closed after the full unmodified 2,098-test release gate and 38 supplemental parser/save/reopen cases passed. The [B5 completion report](Post-BF-1054-Batch-B5-Decoration-Geometry-and-Operator-Placement-Completion-Report.md) records separate baseline reproductions, effective affine/script geometry, valid path placement, text/graphics/tag restoration and supported boundaries. Original Phase A evidence follows.
 
 **Locations:** src/BlackFlag.Engine.Services/Text/PdfExistingTextStyleTokenEditor.cs, BuildSuffix and WriteDecoration; PdfExistingTextStyleService.cs, Apply/ResolveMeasuredDecoration; tests/BlackFlag.Engine.SDK.Adapters.Tests/Editing/PdfExistingTextSdkSessionTests.cs, InterfaceStyleUsesScriptColorAndDecorationMappings.
 
@@ -582,7 +586,7 @@ These support using existing contracts consistently, not adding a second font mo
 | 4 | B4 font trust and bounds | POST-P0-004/005/006; Sanitization program/sanitizer, CompositeClosure, both subsetters/SfntBuilder as required, focused Fonts/Platform tests | Prefer three independently reviewable sub-batches; characterize exception/ownership before patching |
 | 5 | B6 font permissions | POST-P0-008; both font inspectors, embedding policy, subset projectors, permission tests | Explicit policy/API approval; version-aware fixtures and program/provider disagreement |
 | 6 | B7 current Form provenance | POST-P0-009; FormPlacementCloneProjector/Descriptor and Form/resource tests | Current-token/binding checks, no partial projections, other placements unchanged |
-| 7 | B5 decoration semantics | POST-P0-007; StyleService/StyleTokenEditor and Services/SDK rendering integration tests | Geometry/state characterization first; any wider preservation semantics need explicit approval |
+| 7 | B5 decoration semantics | POST-P0-007; StyleService/StyleTokenEditor and directly required interpretation corrections | Implemented and closed 2026-09-15; unmodified gate and parser/reopen evidence in the B5 completion report |
 | 8 | B8 font catalog responsiveness | POST-P2-001; Fonts.Platform provider and tests | Complete B4 failure-contract work; define cancellation/retry and aggregate policy |
 | 9 | B9 bounded fuzz/corpus | POST-P2-002; bounded harness/test/corpus/CI files selected in approved proposal | Tool/dependency approval if required; process ceilings and deterministic replay |
 | 10 | B10 remaining conformance tests | POST-P2-003; named Services/SDK tests and deterministic fixtures | Complement B1-B7, do not duplicate their regressions |
@@ -686,6 +690,7 @@ Phase A ends with this report and the proposed batches. **Phase B has not begun 
 | 1.11 | 2026-09-13 | Characterize F3-OBS-01, establish POST-P0-015 incomplete-Flate correctness impact and record the narrow complete-member correction and validation evidence. |
 | 1.12 | 2026-09-13 | Record B4B / POST-P0-005 distinct retained-glyph admission, generated-byte preflight and preservation/resource validation. |
 | 1.13 | 2026-09-14 | Record B4C / POST-P0-006 numeric-domain hardening, cmap record bounds and real mixed-catalog failure isolation. |
+| 1.14 | 2026-09-15 | Record B5 / POST-P0-007 decoration geometry, valid path placement and directly required state corrections. |
 
 ## Appendix A. Per-file coverage ledger
 
