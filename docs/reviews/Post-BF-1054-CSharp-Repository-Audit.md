@@ -4,14 +4,16 @@
 |---|---|
 | **Document ID** | PP-AUD-009 |
 | **Category** | Engineering Review |
-| **Version** | 1.15 |
+| **Version** | 1.16 |
 | **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1049, BF-1050, BF-1051, BF-1053, BF-1054 |
-| **Last Updated** | 2026-09-16 |
+| **Last Updated** | 2026-09-21 |
 | **Next Review** | 2026-12-06 |
 
 ## 1. Executive summary
+
+**B7 update, 2026-09-21:** POST-P0-009 is implemented and closed. All fifteen currently recorded P0 findings are now closed; P2 and measurement-required work remains. Document-aware Form placement capture validates current owner, decoded source span, operand and effective resource binding before clone work. The full unmodified gate passed 2,378 tests across 20 projects, integrated source-size validation and clean DocGen. The [B7 completion report](Post-BF-1054-Batch-B7-Stale-Form-Placement-Provenance-Completion-Report.md) records legacy-factory and inline-image-prefix compatibility boundaries, transaction primitive replay and ten supplemental acceptance controls. Other P0 closures remain intact and no P2 work is included.
 
 **B6 update, 2026-09-16:** POST-P0-008 is implemented and closed. Centralized version-aware program rights retain independent no-subsetting/bitmap restrictions; provider/program intersection occurs before subset generation or resource allocation. Metadata distinguishes editable from preview/print. The unmodified gate passed 2,308 tests across 20 projects, integrated source-size validation and clean DocGen; 12 supplemental save/reopen cases pass. See the [B6 completion report](Post-BF-1054-Batch-B6-External-Font-Embedding-Rights-Completion-Report.md) for additive API compatibility and existing SDK/save-orchestration boundaries. POST-P0-005/006/007/015 remain closed; POST-P0-009 and POST-P2-001 remain untouched.
 
@@ -127,7 +129,7 @@ The current structural assessment supersedes the original audit's decomposition 
 | POST-P0-006 | P0 | Malformed font numeric lengths escape domain failure handling | Implemented in B4C; sanitizer numeric bounds and real mixed-catalog isolation validated |
 | POST-P0-007 | P0 | Decorations ignore text transforms and emit paths inside text objects | Source plus existing expected-output tests and PDF specification |
 | POST-P0-008 | P0 | Font embedding restrictions are reduced incorrectly | Version-aware bounded reproduction and OpenType specification |
-| POST-P0-009 | P0 | Stale Form placement can overwrite unrelated current content | Bounded reproduction |
+| POST-P0-009 | P0 | Stale Form placement can overwrite unrelated current content | Implemented in B7; current source/owner/binding provenance and preservation validated |
 | POST-P0-010 | P0 | CMap tokenizer non-progress/resource exhaustion | Discovered during B3, after Phase A; source characterization and bounded iterator reproduction in B3A |
 | POST-P0-011 | P0 | Public character-code alias invalidates equality/hash and caller keys | B4A follow-up reproduction; private CMap keys remain inaccessible |
 | POST-P0-012 | P0 | Descriptor byte alias changes stale-source validation decisions | B4A follow-up reproduction in replacement/font/style; replay snapshots remain independent |
@@ -259,6 +261,8 @@ P3 is recorded as one aggregate category: formatting and preference-only churn. 
 **Risk and validation:** medium/high because policy and possibly public contracts change; require explicit batch approval. Test OS/2 versions, no-subsetting, restricted/bitmap-only, preview/print versus editable, combinations, missing/unknown rights and provider/program disagreement. Existing synthetic fixtures use version-zero OS/2 and must not be mistaken for a version-three permission oracle. Retain them where testing unrelated behavior and add specification-correct permission fixtures. No benchmark needed; fuzz numeric/table handling, not legal interpretation. **Batch B6; affects BF-1054H/J/K/M/Q/R.**
 
 ### POST-P0-009: stale Form spans overwrite unrelated operations
+
+**B7 disposition, 2026-09-21:** Implemented and closed after the full unmodified 2,378-test gate and ten supplemental acceptance controls passed. See the [B7 completion report](Post-BF-1054-Batch-B7-Stale-Form-Placement-Provenance-Completion-Report.md) for authoritative capture, source/binding/owner validation, exact preservation and compatibility boundaries. Original Phase A evidence follows.
 
 **Locations:** src/BlackFlag.Engine.Services/Text/PdfFormPlacementCloneProjector.cs, Create/RedirectPlacement; PdfFormPlacementDescriptor.cs, Create.
 
@@ -589,7 +593,7 @@ These support using existing contracts consistently, not adding a second font mo
 | 3A | B3A CMap tokenizer (added after Phase A; separately approved) | POST-P0-010; Rendering/Fonts/PdfCMapParser.cs and directly relevant Rendering/Services font tests | Bounded progress/materialization proof, delimiter compatibility, generated-CMap parse/save/reopen |
 | 4 | B4 font trust and bounds | POST-P0-004/005/006; Sanitization program/sanitizer, CompositeClosure, both subsetters/SfntBuilder as required, focused Fonts/Platform tests | Prefer three independently reviewable sub-batches; characterize exception/ownership before patching |
 | 5 | B6 font permissions | POST-P0-008; trusted program rights, both inspectors, policy, projectors and subsetters | Implemented and closed 2026-09-16; unmodified gate and version/provider/reopen evidence in B6 completion report |
-| 6 | B7 current Form provenance | POST-P0-009; FormPlacementCloneProjector/Descriptor and Form/resource tests | Current-token/binding checks, no partial projections, other placements unchanged |
+| 6 | B7 current Form provenance | POST-P0-009; FormPlacementCloneProjector/Descriptor and Form/resource tests | Implemented and closed 2026-09-21; full unmodified gate and preservation/reopen controls pass |
 | 7 | B5 decoration semantics | POST-P0-007; StyleService/StyleTokenEditor and directly required interpretation corrections | Implemented and closed 2026-09-15; unmodified gate and parser/reopen evidence in the B5 completion report |
 | 8 | B8 font catalog responsiveness | POST-P2-001; Fonts.Platform provider and tests | Complete B4 failure-contract work; define cancellation/retry and aggregate policy |
 | 9 | B9 bounded fuzz/corpus | POST-P2-002; bounded harness/test/corpus/CI files selected in approved proposal | Tool/dependency approval if required; process ceilings and deterministic replay |
@@ -696,6 +700,7 @@ Phase A ends with this report and the proposed batches. **Phase B has not begun 
 | 1.13 | 2026-09-14 | Record B4C / POST-P0-006 numeric-domain hardening, cmap record bounds and real mixed-catalog failure isolation. |
 | 1.14 | 2026-09-15 | Record B5 / POST-P0-007 decoration geometry, valid path placement and directly required state corrections. |
 | 1.15 | 2026-09-16 | Record B6 / POST-P0-008 version-aware font permissions and early operation enforcement. |
+| 1.16 | 2026-09-21 | Record B7 / POST-P0-009 authoritative Form placement provenance, compatibility and preservation evidence. |
 
 ## Appendix A. Per-file coverage ledger
 
