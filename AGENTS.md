@@ -72,6 +72,8 @@ Review every hand-authored C# file when explicitly asked to perform the reposito
 
 Do **not** change every file.
 
+When modifying a hand-authored C# file for an approved task, leave the touched area no dirtier than you found it. Remove imports or private implementation members that become conclusively unused as a direct result of the approved change, provided removal is local, behavior-preserving, and satisfies the source-hygiene rules below. Do not expand the task into an unrelated repository-wide cleanup.
+
 Change a file only when there is a concrete, defensible improvement in at least one of:
 - correctness;
 - security/privacy;
@@ -157,6 +159,97 @@ replace bounded validation with optimistic assumptions.
 - Before simplifying an expression, preserve evaluation count, enumeration count, ordering, side effects, exception timing, cancellation, disposal, null behavior, deferred/eager execution, mutation, and aliasing.
 - Add a concise comment when a non-obvious materialization or expression choice protects an important ownership, evaluation, preservation, security, or resource-bound invariant. Explain why the form is intentional rather than narrating its syntax.
 
+### Source hygiene, unused code, and dead-code removal
+
+Keep hand-authored source free of genuinely unused imports and implementation code, but treat removal as a correctness and compatibility decision rather than a cosmetic cleanup.
+
+- Remove unused ordinary `using` directives when compiler/Roslyn analysis establishes that they are unnecessary.
+- Evaluate `global using`, alias, and `using static` directives at the appropriate project/semantic scope rather than by same-file textual search.
+- Account for extension-method resolution, aliases, conditional compilation, generated-code interaction, and supported target/platform configurations before removing an import.
+- Do not reorganize, fully qualify, or otherwise rewrite live code merely to eliminate a `using`.
+
+For apparently unused members, absence of an ordinary C# call site is not sufficient evidence that the member is dead.
+
+Before removing a type, constructor, method, property, field, event, delegate, operator, overload, local function, parameter, or other member, account for applicable use through:
+
+- interfaces and explicit/implicit interface implementation;
+- overrides, virtual dispatch, inheritance, and protected extension points;
+- public or protected API consumption outside the repository;
+- delegates, events, callbacks, method groups, and expression trees;
+- reflection, `Activator`, attributes, name-based discovery, and runtime registration;
+- plugin discovery, activation, manifests, factories, and lifecycle contracts;
+- serialization/deserialization and generated-code contracts;
+- P/Invoke, native callbacks, function pointers, and platform adapters;
+- test/fixture/data-source discovery;
+- conditional compilation and supported target frameworks/platforms;
+- partial types and declarations in other files;
+- tooling, scripts, samples, documentation, and repository conventions that invoke symbols indirectly.
+
+Apply increasingly conservative removal standards as accessibility increases:
+
+- Private implementation members may be removed when repository-wide semantic analysis establishes that they are genuinely unreachable and unnecessary.
+- Internal members require cross-project, test, tooling, and `InternalsVisibleTo` analysis before removal.
+- Public and protected members are API/extension surface. Do not remove them merely because the repository contains no caller. Retain them unless an explicitly approved API change establishes that removal is compatibility-safe.
+- Required interface implementations and overrides are live contract members even when no direct call site exists.
+
+When usage is dynamic, framework-driven, platform-specific, generated, externally consumable, or otherwise uncertain, retain the member. False retention is preferable to false deletion.
+
+Additional cleanup rules:
+
+- Inspect every partial declaration before classifying a member as dead.
+- Do not remove constructors solely because there is no direct `new` expression; account for reflection, factories, serializers, plugins, generic activation, and frameworks.
+- Do not remove setters/properties solely because there is no direct assignment/read; account for serialization, binding, reflection, interfaces, and generated code.
+- Do not remove event handlers or callbacks solely because there is no conventional invocation expression.
+- Do not remove `Dispose`, `DisposeAsync`, finalizers, equality/hash members, `ToString`, operators, conversions, entry points, lifecycle hooks, or throw-only/no-op contract implementations based only on direct-reference counts.
+- Do not remove public constants, public enum members, public exception types, or public overloads as routine dead-code cleanup.
+- Do not renumber enums or alter persisted/serialized numeric values during cleanup.
+- Treat struct-layout, interop, serialization, and native-facing fields as contract-sensitive.
+- Treat `CancellationToken` parameters as contract-sensitive; do not remove them merely because the current implementation does not consume them.
+- Remove private/internal unused parameters or dead overloads only when all controlled callers and delegate/signature contracts remain equivalent.
+- Remove unused local functions and newly orphaned private helpers only after applying the same semantic/evaluation analysis.
+- A test is not dead merely because another test appears similar. Preserve unique behavioral and regression coverage.
+- Production members referenced only by tests are not automatically dead; determine whether the tests are validating an intentional production contract.
+- Tool, sample, plugin, and platform entry points may be externally invoked and must not be classified by ordinary application call graphs alone.
+- Documented architectural seams should normally be retained even when the current implementation has no caller. Undocumented private implementation with no callers or contract is a stronger removal candidate.
+- Clearly obsolete commented-out implementation may be removed when version control preserves its history, but preserve rationale, invariants, specification notes, TODOs with tracked follow-up, and explanatory comments that remain relevant.
+- Remove comments/XML documentation that solely describe a deleted member; do not use dead-code cleanup as a general documentation rewrite.
+- If deletion leaves an otherwise unnecessary private/internal type or source file empty, reassess it under the same dead-code rules rather than deleting it mechanically.
+
+Dead-code cleanup must not be combined opportunistically with:
+
+- API redesign;
+- renaming;
+- formatting churn;
+- syntax modernization;
+- LINQ/control-flow rewrites;
+- visibility changes to make a member removable;
+- inlining of live helpers merely to reduce member count;
+- performance refactoring;
+- security-policy changes;
+- dependency/project-reference changes;
+- feature implementation.
+
+For repository-wide cleanup work, characterize candidates before deleting them. Classify each meaningful candidate as one of:
+
+- remove — proven dead;
+- retain — public/protected API;
+- retain — interface/override;
+- retain — reflection/dynamic;
+- retain — plugin/framework;
+- retain — serialization/native;
+- retain — conditional target;
+- retain — documented architecture;
+- retain — uncertain;
+- investigate further.
+
+A non-local member should be removed only when the evidence establishes that removal preserves supported behavior and compatibility. If analysis is inconclusive, keep the code and report the candidate rather than guessing.
+
+Perform cleanup in small coherent groups. Build and run affected tests after meaningful deletion groups. If deleting supposedly dead code causes a build, analyzer, test, DocGen, API-surface, platform, or runtime-validation failure, treat that as evidence that the code may be live; investigate the assumption rather than weakening validation.
+
+After member cleanup, perform a final compiler/analyzer-backed unused-import pass so imports orphaned by legitimate deletions are removed without creating unrelated churn.
+
+Unless the current task explicitly authorizes otherwise, source-hygiene cleanup must preserve observable behavior and public/protected API surface.
+
 ### Comments and documentation
 - Preserve useful comments.
 - Comments should explain intent, invariants, preservation rules, algorithms, or non-obvious reasons.
@@ -215,6 +308,9 @@ Requirements:
   serialization/reopen coverage, not only intermediate-object assertions.
 - Tests must remain deterministic and isolated.
 - Do not weaken/delete tests to make a refactor pass.
+- Treat build/test failures after dead-code removal as evidence that the removed code may have been live; investigate and restore it when the removal cannot be proven safe rather than changing callers/tests merely to preserve the deletion.
+- Repository dead-code cleanup must not reduce test discovery or coverage silently. Reconcile and explain any changed test count.
+- When cleanup could affect externally visible members, compare the public/protected API surface before and after where practical; a passing in-repository test suite alone does not prove external API compatibility.
 - Do not replace meaningful assertions with looser assertions without explicit justification.
 
 ## Security
@@ -339,6 +435,15 @@ A batch is complete only when:
 - the required release gate passes;
 - no unrelated churn remains;
 - the final report identifies exactly what changed and why.
+
+For a source-hygiene/dead-code batch, completion additionally requires:
+
+- genuinely unused imports introduced or exposed by the batch are removed;
+- every removed non-local member has defensible evidence that it was dead;
+- uncertain dynamic/API/framework members were retained rather than guessed away;
+- public/protected API surface is unchanged unless explicitly approved;
+- no test-count decrease remains unexplained;
+- no cleanup-only formatting, modernization, or unrelated refactoring remains in the diff.
 
 ## Stop conditions
 
