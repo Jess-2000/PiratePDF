@@ -117,7 +117,7 @@ public sealed partial class PdfFileSystemExternalFontProviderTests
             Assert.Same(failure, Record.Exception(() => provider.GetFaces()));
             Assert.Same(failure, Record.Exception(() => provider.GetFaces()));
         }
-        Assert.Equal(1, sanitizer.Calls);
+        Assert.Equal(kind == "cancellation" ? 2 : 1, sanitizer.Calls);
     }
 
     [Fact]

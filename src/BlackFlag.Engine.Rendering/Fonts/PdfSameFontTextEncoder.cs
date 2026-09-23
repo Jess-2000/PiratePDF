@@ -210,7 +210,7 @@ public sealed class PdfSameFontTextEncoder
                         out string? glyphName) &&
                     PdfGlyphNameUnicodeMap.TryGetUnicode(
                         glyphName,
-                        out string? mapped))
+                        out string? mapped, new System.Text.StringBuilder()))
                 {
                     unicode = mapped;
                 }

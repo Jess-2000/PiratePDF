@@ -36,7 +36,7 @@ public static class PdfGlyphNameUnicodeMap
         };
 
     /// <summary>Attempts to map a glyph name to Unicode text.</summary>
-    public static bool TryGetUnicode(string glyphName, out string? unicodeText)
+    public static bool TryGetUnicode(string glyphName, out string? unicodeText, StringBuilder result)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(glyphName);
 
@@ -63,7 +63,6 @@ public static class PdfGlyphNameUnicodeMap
             glyphName.Length > 3 &&
             ((glyphName.Length - 3) % 4) == 0)
         {
-            var result = new System.Text.StringBuilder();
             for (int index = 3; index < glyphName.Length; index += 4)
             {
                 if (!ushort.TryParse(

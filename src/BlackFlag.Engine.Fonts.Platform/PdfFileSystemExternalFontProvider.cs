@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Runtime.ExceptionServices;
 using System.Security.Cryptography;
 using System.Text;
 using BlackFlag.Engine.Fonts.Sanitization;
@@ -14,72 +15,109 @@ public abstract class PdfFileSystemExternalFontProvider :
 {
     private readonly IReadOnlyList<string> searchDirectories;
     private readonly IPdfExternalFontSanitizer sanitizer;
-    private readonly Lazy<ProviderSnapshot> snapshot;
+    private readonly PdfExternalFontCatalogLimits limits;
+    private readonly object snapshotLock = new();
+    private ProviderSnapshot? snapshot;
+    private ExceptionDispatchInfo? snapshotFailure;
+    private bool building;
 
     protected PdfFileSystemExternalFontProvider(
         string id,
         IEnumerable<string> searchDirectories,
         IPdfExternalFontSanitizer? sanitizer = null)
+        : this(id, searchDirectories, sanitizer, new PdfExternalFontCatalogLimits())
+    {
+    }
+
+    protected PdfFileSystemExternalFontProvider(
+        string id,
+        IEnumerable<string> searchDirectories,
+        IPdfExternalFontSanitizer? sanitizer,
+        PdfExternalFontCatalogLimits limits)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(id);
         ArgumentNullException.ThrowIfNull(searchDirectories);
+        ArgumentNullException.ThrowIfNull(limits);
+        limits.Validate();
 
         Id = id;
 
-        this.searchDirectories =
-        [
-            .. searchDirectories
-                .Where(
-                    static path =>
-                        !string.IsNullOrWhiteSpace(path))
-                .Select(
-                    static path =>
-                        Path.GetFullPath(path))
-                .Distinct(
-                    OperatingSystem.IsWindows()
-                        ? StringComparer.OrdinalIgnoreCase
-                        : StringComparer.Ordinal)
-        ];
+        this.limits = limits;
+        var directories = new HashSet<string>(
+            OperatingSystem.IsWindows() ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
+        var orderedDirectories = new List<string>();
+        int suppliedDirectories = 0;
+        foreach (string path in searchDirectories)
+        {
+            if (suppliedDirectories == limits.MaximumSearchDirectories)
+                throw new PdfExternalFontCatalogLimitException(
+                    nameof(limits.MaximumSearchDirectories), limits.MaximumSearchDirectories);
+            suppliedDirectories++;
+            if (string.IsNullOrWhiteSpace(path)) continue;
+            string fullPath = Path.GetFullPath(path);
+            if (directories.Add(fullPath)) orderedDirectories.Add(fullPath);
+        }
+        this.searchDirectories = orderedDirectories;
 
         this.sanitizer =
             sanitizer ??
             new PdfOpenTypeFontSanitizer();
-
-        snapshot =
-            new Lazy<ProviderSnapshot>(
-                BuildSnapshot,
-                LazyThreadSafetyMode.ExecutionAndPublication);
     }
 
     public string Id { get; }
 
+    /// <summary>
+    /// Returns a complete snapshot. Cold cancellation or aggregate exhaustion
+    /// publishes nothing and permits a later explicit retry. Pre-canceled warm
+    /// requests still throw without invalidating the completed snapshot.
+    /// </summary>
     public IReadOnlyList<PdfExternalFontFace> GetFaces(
         CancellationToken cancellationToken = default)
+        => new ReadOnlyCollection<PdfExternalFontFace>(GetSnapshot(cancellationToken).Faces);
+
+    private ProviderSnapshot GetSnapshot(CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
+        ProviderSnapshot? completed = Volatile.Read(ref snapshot);
+        if (completed is not null) return completed;
 
-        ProviderSnapshot value =
-            snapshot.Value;
+        // Keep one synchronous builder, while waiting callers observe their own
+        // cancellation independently. This is a lock-wait slice, not a work budget.
+        while (!Monitor.TryEnter(snapshotLock, millisecondsTimeout: 50))
+            cancellationToken.ThrowIfCancellationRequested();
+        try
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (snapshot is not null) return snapshot;
+            snapshotFailure?.Throw();
+            if (building)
+                throw new InvalidOperationException("Recursive font catalog construction is not supported.");
 
-        return new ReadOnlyCollection<PdfExternalFontFace>(
-        [
-            .. value.Entries.Values
-                .Select(
-                    static entry =>
-                        entry.Face)
-                .OrderBy(
-                    static face =>
-                        face.FamilyName,
-                    StringComparer.OrdinalIgnoreCase)
-                .ThenBy(
-                    static face =>
-                        face.FaceName,
-                    StringComparer.OrdinalIgnoreCase)
-                .ThenBy(
-                    static face =>
-                        face.FaceId,
-                    StringComparer.Ordinal)
-        ]);
+            building = true;
+            try
+            {
+                completed = BuildSnapshot(cancellationToken);
+                cancellationToken.ThrowIfCancellationRequested();
+                Volatile.Write(ref snapshot, completed);
+                return completed;
+            }
+            catch (Exception exception) when (exception is not
+                (OperationCanceledException or PdfExternalFontCatalogLimitException))
+            {
+                // Preserve Lazy's failure caching for unexpected defects. Caller
+                // cancellation and aggregate exhaustion alone leave a retryable build.
+                snapshotFailure = ExceptionDispatchInfo.Capture(exception);
+                throw;
+            }
+            finally
+            {
+                building = false;
+            }
+        }
+        finally
+        {
+            Monitor.Exit(snapshotLock);
+        }
     }
 
     public bool SupportsRune(
@@ -130,14 +168,16 @@ public abstract class PdfFileSystemExternalFontProvider :
                 false
         };
 
-    private ProviderSnapshot BuildSnapshot()
+    private ProviderSnapshot BuildSnapshot(CancellationToken cancellationToken)
     {
+        var budget = new PdfFontCatalogBuildBudget(limits);
         var entries =
             new Dictionary<string, ProviderEntry>(
                 StringComparer.Ordinal);
 
-        foreach (string path in EnumerateCandidates())
+        foreach (string path in EnumerateCandidates(budget, cancellationToken))
         {
+            cancellationToken.ThrowIfCancellationRequested();
             try
             {
                 using var stream =
@@ -149,13 +189,22 @@ public abstract class PdfFileSystemExternalFontProvider :
                         bufferSize: 64 * 1024,
                         FileOptions.SequentialScan);
 
+                cancellationToken.ThrowIfCancellationRequested();
+                budget.CheckSourceLength(stream.Length);
+                using var boundedStream = new PdfFontCatalogReadStream(stream, budget, cancellationToken);
                 PdfSanitizedExternalFontProgram program =
                     sanitizer.Sanitize(
-                        stream);
+                        boundedStream,
+                        cancellationToken: cancellationToken);
+
+                cancellationToken.ThrowIfCancellationRequested();
+                budget.ThrowIfExceeded();
 
                 PdfSanitizedExternalFontMetadata metadata =
                     PdfSanitizedExternalFontMetadataInspector.Inspect(
                         program);
+
+                cancellationToken.ThrowIfCancellationRequested();
 
                 string faceId =
                     CreateFaceId(
@@ -196,13 +245,25 @@ public abstract class PdfFileSystemExternalFontProvider :
                 // collection-based, or unsupported programs are omitted rather
                 // than weakening the sanitizer boundary.
             }
+            cancellationToken.ThrowIfCancellationRequested();
+            budget.ThrowIfExceeded();
         }
 
-        return new ProviderSnapshot(
-            entries);
+        cancellationToken.ThrowIfCancellationRequested();
+        // Sorting is bounded by admitted standalone candidates and completes before
+        // publication. Keep the existing family/face/id comparison policy exactly.
+        PdfExternalFontFace[] faces = entries.Values.Select(static entry => entry.Face)
+            .OrderBy(static face => face.FamilyName, StringComparer.OrdinalIgnoreCase)
+            .ThenBy(static face => face.FaceName, StringComparer.OrdinalIgnoreCase)
+            .ThenBy(static face => face.FaceId, StringComparer.Ordinal)
+            .ToArray();
+        cancellationToken.ThrowIfCancellationRequested();
+        return new ProviderSnapshot(entries, faces);
     }
 
-    private IEnumerable<string> EnumerateCandidates()
+    private IEnumerable<string> EnumerateCandidates(
+        PdfFontCatalogBuildBudget budget,
+        CancellationToken cancellationToken)
     {
         var seen =
             new HashSet<string>(
@@ -212,6 +273,7 @@ public abstract class PdfFileSystemExternalFontProvider :
 
         foreach (string directory in searchDirectories)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             if (!Directory.Exists(directory))
             {
                 continue;
@@ -222,7 +284,7 @@ public abstract class PdfFileSystemExternalFontProvider :
             try
             {
                 files =
-                    Directory.EnumerateFiles(
+                    Directory.EnumerateFileSystemEntries(
                         directory,
                         "*",
                         SearchOption.TopDirectoryOnly);
@@ -235,8 +297,16 @@ public abstract class PdfFileSystemExternalFontProvider :
                 continue;
             }
 
-            foreach (string file in files)
+            using IEnumerator<string> enumerator = files.GetEnumerator();
+            while (true)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+                if (!enumerator.MoveNext()) break;
+                cancellationToken.ThrowIfCancellationRequested();
+                budget.AdmitDirectoryEntry();
+                string file = enumerator.Current;
+                // Count subdirectories too, but retain nonrecursive font discovery.
+                if (Directory.Exists(file)) continue;
                 string fullPath;
 
                 try
@@ -253,9 +323,12 @@ public abstract class PdfFileSystemExternalFontProvider :
                     continue;
                 }
 
-                if (IsSupportedFontFile(fullPath) &&
-                    seen.Add(fullPath))
+                bool supported = IsSupportedFontFile(fullPath);
+                cancellationToken.ThrowIfCancellationRequested();
+                if (supported && !seen.Contains(fullPath))
                 {
+                    budget.AdmitCandidate();
+                    seen.Add(fullPath);
                     yield return fullPath;
                 }
             }
@@ -277,7 +350,7 @@ public abstract class PdfFileSystemExternalFontProvider :
                 nameof(face));
         }
 
-        if (!snapshot.Value.Entries.TryGetValue(
+        if (!GetSnapshot(CancellationToken.None).Entries.TryGetValue(
                 face.FaceId,
                 out ProviderEntry? entry))
         {
@@ -301,5 +374,6 @@ public abstract class PdfFileSystemExternalFontProvider :
         PdfSanitizedExternalFontMetadata Metadata);
 
     private sealed record ProviderSnapshot(
-        IReadOnlyDictionary<string, ProviderEntry> Entries);
+        IReadOnlyDictionary<string, ProviderEntry> Entries,
+        PdfExternalFontFace[] Faces);
 }

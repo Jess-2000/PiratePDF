@@ -4,14 +4,16 @@
 |---|---|
 | **Document ID** | PP-AUD-009 |
 | **Category** | Engineering Review |
-| **Version** | 1.17 |
+| **Version** | 1.18 |
 | **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1049, BF-1050, BF-1051, BF-1053, BF-1054 |
-| **Last Updated** | 2026-09-22 |
+| **Last Updated** | 2026-09-23 |
 | **Next Review** | 2026-12-06 |
 
 ## 1. Executive summary
+
+**B8 update, 2026-09-23:** POST-P2-001 is implemented and closed. Filesystem font discovery now propagates caller cancellation, retries canceled/aggregate-failed cold builds, publishes only complete sorted snapshots and enforces finite directory, entry, candidate and source-read budgets. The full unmodified gate passed **2,446 tests across 20 projects**, with zero failures/skips and zero build warnings/errors, integrated source-size validation and clean DocGen. The [B8 completion report](Post-BF-1054-Batch-B8-Font-Catalog-Responsiveness-Completion-Report.md) records exact limits, retry/concurrency/exception compatibility and 68 added tests. All fifteen P0 findings remain closed; POST-P2-002 through POST-P2-008 and measurement-required performance work remain untouched.
 
 **Source hygiene update, 2026-09-22:** The separately approved post-B7 cleanup scanned all 1,075 hand-authored C# files across 42 projects and removed 151 unused imports, 16 dead implementation members and six private-helper parameters. Public/protected APIs and dynamic/framework contracts remain intact. See the [cleanup report](Post-BF-1054-Repository-Dead-Code-and-Using-Cleanup-Report.md) for exact removals, retained candidates and validation. All fifteen P0 findings remain closed; no P2 finding or canonical-font work is included.
 
@@ -139,7 +141,7 @@ The current structural assessment supersedes the original audit's decomposition 
 | POST-P0-014 | P0 | Synchronous destination callback mutates retained original revision | B4A follow-up CopyTo and both incremental xref output modes |
 | POST-P0-015 | P0 | Ordinary Flate accepts incomplete members and publishes shortened decoded values | F3-OBS-01 matrix; actual ObjStm integer 42 becomes 4 |
 | AUD-P1-001 / AUD-P1-002 | P1 candidates | Recovery materialization; repeated identifier sorting | Measurement required; carried forward, not established P1 benefits |
-| POST-P2-001 | P2 | Font catalog build lacks cancellation propagation and aggregate policy | Source-established |
+| POST-P2-001 | P2 | Font catalog build lacks cancellation propagation and aggregate policy | Implemented and closed in B8; PP-AUD-028 |
 | POST-P2-002 | P2 | High-risk byte boundaries lack an operational fuzz/corpus workflow | Repository coverage gap |
 | POST-P2-003 | P2 | BF-1054 integration assertions do not establish reopen/render conformance | Test-content inspection |
 | POST-P2-004 | P2 | Packaged native resolution and fallback policy lack platform fixtures | Source and deployment-evidence gap |
@@ -334,6 +336,8 @@ P3 is recorded as one aggregate category: formatting and preference-only churn. 
 
 ### POST-P2-001: font catalog cancellation and aggregate work policy
 
+**B8 disposition, 2026-09-23:** Implemented and closed after the full unmodified 2,446-test release gate passed. Cancellation reaches cold enumeration/reads/sanitization and is checked around bounded inspection/sorting/publication. Cancel/aggregate failures publish nothing and permit explicit retry; other unexpected failures retain prior caching semantics. Defaults bound 64 supplied directories, 65,536 immediate entries including subdirectories, 4,096 distinct supported candidates and 1 GiB of actual logical source reads, with length preflight and overflow-safe accounting. Existing one-file/one-face support bounds retained faces. Successful metadata/order, B4/B6 contracts and narrow malformed/IO isolation remain intact. See the [B8 report](Post-BF-1054-Batch-B8-Font-Catalog-Responsiveness-Completion-Report.md) for compatibility and cooperative-cancellation limits. Performance remains measurement required. Original Phase A evidence follows.
+
 **Location:** src/BlackFlag.Engine.Fonts.Platform/PdfFileSystemExternalFontProvider.cs, GetFaces/BuildSnapshot/EnumerateCandidates.
 
 GetFaces checks cancellation before entering Lazy.Value, but BuildSnapshot does not receive the token and calls Sanitize without one. Per-file sanitizer bounds do not bound the number of candidate files, retained metadata or aggregate catalog work. This can delay cancellation on a large configured directory; its practical latency and memory cost are **measurement required**, not an established P1 claim.
@@ -445,7 +449,7 @@ Repeated synthetic SFNT builders are a candidate for a small shared test fixture
 | AUD-P1-001: src/BlackFlag.Engine.Parsing/Recovery/PdfCrossReferenceRecoveryService.cs, ReadSource/ScanObjects/ScanTrailers | Bounded whole-source allocation and multiple scan phases remain | Representative clean/damaged/encrypted documents, bytes scanned, peak/allocated bytes, recovery duration, cancellation responsiveness | High: newest-wins locations, recovered encryption authorization and diagnostics must match |
 | AUD-P1-002: src/BlackFlag.Engine.Document/Objects/PdfObjectStore.cs, Identifiers; src/BlackFlag.Engine.Writing/PdfWriteObjectAllocator.cs | Sorting occurs on enumeration, including allocator set construction | Instrument enumeration count and allocation across full/incremental/projection saves at realistic object counts | Medium/high: deterministic ordering, generation identity, reservation state and cache invalidation |
 | BF-1054 repeated decode/encoding/provenance scans | Services repeatedly materializes decoded/encoded arrays and some reverse font mappings | Measure complete user workflows, cold/warm fonts, multi-match streams and history retention; establish which copies are ownership requirements | High: avoid stale snapshots/caches and original-byte changes |
-| Catalog enumeration/caching, POST-P2-001 | Cold build traverses all candidates; GetFaces sorts a snapshot | Number of faces/files, cold cancellation, retained metadata bytes, warm-call allocation | Medium: deterministic snapshots and invalidation |
+| Catalog enumeration/caching, POST-P2-001 | B8 closes cancellation/retry and aggregate correctness policy; cold builds are bounded and sort before publication | Number of faces/files, cancellation latency, retained metadata bytes, cold/warm costs and default tuning remain measurement required | Medium: deterministic snapshots and invalidation; no performance claim from B8 |
 
 No benchmark was run and no percentage improvement is claimed. Missing security limits are not justified as speculative speed optimizations. Retain BCL/current abstractions until measurements identify a real bottleneck.
 
@@ -704,6 +708,7 @@ Phase A ends with this report and the proposed batches. **Phase B has not begun 
 | 1.15 | 2026-09-16 | Record B6 / POST-P0-008 version-aware font permissions and early operation enforcement. |
 | 1.16 | 2026-09-21 | Record B7 / POST-P0-009 authoritative Form placement provenance, compatibility and preservation evidence. |
 | 1.17 | 2026-09-22 | Record the separately approved post-B7 dead-code and unused-import hygiene pass without changing finding dispositions. |
+| 1.18 | 2026-09-23 | Close POST-P2-001 through B8 cancellation/retry and finite aggregate discovery policy, with full release-gate validation; retain unrelated findings and measurement requirements. |
 
 ## Appendix A. Per-file coverage ledger
 

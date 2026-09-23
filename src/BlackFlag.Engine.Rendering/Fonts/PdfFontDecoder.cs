@@ -54,7 +54,7 @@ public sealed class PdfFontDecoder
 
             if (element.Kind == PdfTextRunElementKind.Adjustment)
             {
-                x += (-element.Adjustment / 1000.0) * run.FontSize;
+                x += -element.Adjustment / 1000.0 * run.FontSize;
                 continue;
             }
 
@@ -93,12 +93,11 @@ public sealed class PdfFontDecoder
         foreach (byte code in bytes)
         {
             PdfCharacterCode sourceCode = new([code]);
-            string? unicode = null;
 
-            if (toUnicode?.TryGetUnicode(sourceCode, out unicode) != true)
+            if (toUnicode?.TryGetUnicode(sourceCode, out string? unicode) != true)
             {
                 if (differences.TryGetValue(code, out string? glyphName) &&
-                    PdfGlyphNameUnicodeMap.TryGetUnicode(glyphName, out string? mapped))
+                    PdfGlyphNameUnicodeMap.TryGetUnicode(glyphName, out string? mapped, new System.Text.StringBuilder()))
                 {
                     unicode = mapped;
                 }
@@ -143,9 +142,8 @@ public sealed class PdfFontDecoder
             PdfCharacterCode code = encodingMap.ReadCode(bytes, offset);
             ReadOnlyMemory<byte> codeBytes = code.Bytes;
             int codeLength = codeBytes.Length;
-            int cid;
 
-            if (!encodingMap.TryGetCid(code, out cid))
+            if (!encodingMap.TryGetCid(code, out int cid))
             {
                 cid = ToBigEndianInteger(codeBytes.Span);
             }
@@ -238,7 +236,7 @@ public sealed class PdfFontDecoder
         double spacing = run.GraphicsState.CharacterSpacing +
             (code == 0x20 ? run.GraphicsState.WordSpacing : 0);
 
-        return (width / 1000.0) * run.FontSize + spacing;
+        return width / 1000.0 * run.FontSize + spacing;
     }
 
     private static double GetCompositeAdvance(PdfDisplayTextRun run, int cid)
@@ -248,7 +246,7 @@ public sealed class PdfFontDecoder
             ? explicitWidth
             : ReadNumber(descendant, DwKey) ?? 1000;
 
-        return (width / 1000.0) * run.FontSize + run.GraphicsState.CharacterSpacing;
+        return width / 1000.0 * run.FontSize + run.GraphicsState.CharacterSpacing;
     }
 
     private ushort? GetCidGlyphId(
