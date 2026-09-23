@@ -37,7 +37,4 @@ public sealed class PdfExternalFontMatch
             options,
             cancellationToken);
     }
-
-    internal Stream OpenUntrustedFontProgram() =>
-        Provider.OpenFontProgram(Face);
 }

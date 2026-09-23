@@ -1,8 +1,6 @@
 using BlackFlag.Engine.Objects;
-using BlackFlag.Engine.Parsing.CrossReferences;
 using BlackFlag.Engine.Parsing.Loading;
 using BlackFlag.Engine.Security.Inspection;
-using BlackFlag.Engine.Security.Model;
 
 namespace BlackFlag.Engine.Parsing.Security;
 
@@ -20,7 +18,6 @@ public sealed partial class PdfSecurityAnalyzer
     private static readonly PdfName AdditionalActionsKey = new("AA");
     private static readonly PdfName ActionKey = new("A");
     private static readonly PdfName NextKey = new("Next");
-    private static readonly PdfName NamesKey = new("Names");
     private static readonly PdfName JavaScriptNamesKey = new("JavaScript");
     private static readonly PdfName EmbeddedFilesKey = new("EmbeddedFiles");
     private static readonly PdfName EmbeddedFileKey = new("EF");
@@ -31,12 +28,6 @@ public sealed partial class PdfSecurityAnalyzer
     private static readonly PdfName UnicodeFileKey = new("UF");
     private static readonly PdfName FileSpecName = new("Filespec");
     private static readonly PdfName AnnotationName = new("Annot");
-    private static readonly PdfName FileAttachmentName = new("FileAttachment");
-    private static readonly PdfName RichMediaName = new("RichMedia");
-    private static readonly PdfName ScreenName = new("Screen");
-    private static readonly PdfName MovieName = new("Movie");
-    private static readonly PdfName SoundName = new("Sound");
-    private static readonly PdfName WidgetName = new("Widget");
 
     private readonly IPdfIndirectObjectResolver resolver;
 

@@ -10,7 +10,6 @@ public sealed class PdfFontDecoder
     private static readonly PdfName FirstCharKey = new("FirstChar");
     private static readonly PdfName WidthsKey = new("Widths");
     private static readonly PdfName MissingWidthKey = new("MissingWidth");
-    private static readonly PdfName EncodingKey = new("Encoding");
     private static readonly PdfName BaseEncodingKey = new("BaseEncoding");
     private static readonly PdfName DifferencesKey = new("Differences");
     private static readonly PdfName DwKey = new("DW");

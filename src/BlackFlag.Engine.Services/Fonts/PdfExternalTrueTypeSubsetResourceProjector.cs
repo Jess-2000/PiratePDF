@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using System.Text;
 using BlackFlag.Engine.Document.Objects;
 using BlackFlag.Engine.Document.Objects.Primitives;

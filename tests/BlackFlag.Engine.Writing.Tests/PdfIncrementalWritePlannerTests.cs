@@ -3,7 +3,6 @@ using System.Text;
 
 using BlackFlag.Engine.Document.Model;
 using BlackFlag.Engine.Document.Objects;
-using BlackFlag.Engine.Document.Objects.Primitives;
 
 namespace BlackFlag.Engine.Writing.Tests;
 

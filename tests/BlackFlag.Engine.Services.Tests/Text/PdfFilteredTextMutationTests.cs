@@ -3,7 +3,6 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using BlackFlag.Engine.Document.Objects;
-using BlackFlag.Engine.Document.Objects.Primitives;
 using BlackFlag.Engine.Editing.Operations;
 using BlackFlag.Engine.Editing.Text;
 using BlackFlag.Engine.Filters;

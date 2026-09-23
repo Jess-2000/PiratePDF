@@ -1,8 +1,5 @@
 
 using System.Globalization;
-using System.Text;
-using BlackFlag.Engine.Filters;
-using BlackFlag.Engine.Objects;
 
 namespace BlackFlag.Engine.Rendering.Functions;
 

@@ -1,6 +1,5 @@
 using System.Collections;
 
-using BlackFlag.Engine.Document.Annotations;
 using BlackFlag.Engine.Document.Pages;
 using BlackFlag.Engine.Editing.Ownership;
 

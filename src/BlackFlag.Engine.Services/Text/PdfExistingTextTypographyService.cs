@@ -1,6 +1,5 @@
 using BlackFlag.Engine.Document.Model;
 using BlackFlag.Engine.Document.Objects;
-using BlackFlag.Engine.Document.Objects.Primitives;
 using BlackFlag.Engine.Editing.Documents;
 using BlackFlag.Engine.Editing.Operations;
 using BlackFlag.Engine.Editing.Pages;

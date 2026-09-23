@@ -1,5 +1,3 @@
-using System.Text;
-
 using BlackFlag.Engine.Fonts.Sanitization;
 
 namespace BlackFlag.Engine.Fonts.Embedding;

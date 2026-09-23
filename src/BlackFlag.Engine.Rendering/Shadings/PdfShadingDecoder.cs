@@ -12,7 +12,6 @@ public sealed class PdfShadingDecoder
 {
     private const int DefaultSampleCount = 33;
 
-    private readonly PdfFunctionEvaluator functions = new();
     private readonly PdfColorConverter colors = new();
 
     /// <summary>Decodes an axial or radial resolved shading.</summary>

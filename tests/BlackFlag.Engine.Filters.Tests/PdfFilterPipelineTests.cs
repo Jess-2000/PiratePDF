@@ -1,4 +1,3 @@
-using System.Buffers;
 using BlackFlag.Engine.Objects;
 
 namespace BlackFlag.Engine.Filters.Tests;

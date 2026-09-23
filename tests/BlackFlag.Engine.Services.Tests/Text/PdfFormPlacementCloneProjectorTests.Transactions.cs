@@ -1,5 +1,4 @@
 using BlackFlag.Engine.Document.Metadata;
-using BlackFlag.Engine.Document.Model;
 using BlackFlag.Engine.Document.Objects;
 using BlackFlag.Engine.Document.Pages;
 using BlackFlag.Engine.Editing.Documents;

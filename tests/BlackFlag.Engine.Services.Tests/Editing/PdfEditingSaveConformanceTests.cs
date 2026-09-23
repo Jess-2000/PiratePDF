@@ -29,8 +29,6 @@ public sealed class PdfEditingSaveConformanceTests
         PdfName.FromLatin1("MediaBox");
     private static readonly PdfName AnnotsName =
         PdfName.FromLatin1("Annots");
-    private static readonly PdfName ContentsName =
-        PdfName.FromLatin1("Contents");
 
     [Fact]
     public void FullRewriteTraditionalSerializesNestedMixedPageTransactionAndUntargetedObject()

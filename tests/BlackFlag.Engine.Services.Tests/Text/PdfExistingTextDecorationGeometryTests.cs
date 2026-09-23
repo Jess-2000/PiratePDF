@@ -1,5 +1,4 @@
 using BlackFlag.Engine.Rendering.DisplayList;
-using BlackFlag.Engine.Services.Text;
 using Xunit.Abstractions;
 
 namespace BlackFlag.Engine.Services.Tests.Text;

@@ -1,5 +1,4 @@
 using BlackFlag.Engine.Security.Containers;
-using BlackFlag.Engine.Security.Formats;
 using BlackFlag.Engine.Security.Inspection;
 
 namespace BlackFlag.Engine.Security.Formats.Ooxml;

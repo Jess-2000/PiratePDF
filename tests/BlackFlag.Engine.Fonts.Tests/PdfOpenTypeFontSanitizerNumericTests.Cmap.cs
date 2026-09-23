@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using BlackFlag.Engine.Fonts.Sanitization;
 using Xunit;
 

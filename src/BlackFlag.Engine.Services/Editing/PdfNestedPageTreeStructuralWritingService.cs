@@ -2,7 +2,6 @@ using BlackFlag.Engine.Document.Model;
 using BlackFlag.Engine.Document.Objects;
 using BlackFlag.Engine.Document.Pages;
 using BlackFlag.Engine.Editing.Documents;
-using BlackFlag.Engine.Editing.Operations;
 using BlackFlag.Engine.Editing.Pages;
 using BlackFlag.Engine.Editing.Transactions;
 using BlackFlag.Engine.Writing;

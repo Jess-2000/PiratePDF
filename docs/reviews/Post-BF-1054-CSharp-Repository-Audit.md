@@ -4,14 +4,16 @@
 |---|---|
 | **Document ID** | PP-AUD-009 |
 | **Category** | Engineering Review |
-| **Version** | 1.16 |
+| **Version** | 1.17 |
 | **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1049, BF-1050, BF-1051, BF-1053, BF-1054 |
-| **Last Updated** | 2026-09-21 |
+| **Last Updated** | 2026-09-22 |
 | **Next Review** | 2026-12-06 |
 
 ## 1. Executive summary
+
+**Source hygiene update, 2026-09-22:** The separately approved post-B7 cleanup scanned all 1,075 hand-authored C# files across 42 projects and removed 151 unused imports, 16 dead implementation members and six private-helper parameters. Public/protected APIs and dynamic/framework contracts remain intact. See the [cleanup report](Post-BF-1054-Repository-Dead-Code-and-Using-Cleanup-Report.md) for exact removals, retained candidates and validation. All fifteen P0 findings remain closed; no P2 finding or canonical-font work is included.
 
 **B7 update, 2026-09-21:** POST-P0-009 is implemented and closed. All fifteen currently recorded P0 findings are now closed; P2 and measurement-required work remains. Document-aware Form placement capture validates current owner, decoded source span, operand and effective resource binding before clone work. The full unmodified gate passed 2,378 tests across 20 projects, integrated source-size validation and clean DocGen. The [B7 completion report](Post-BF-1054-Batch-B7-Stale-Form-Placement-Provenance-Completion-Report.md) records legacy-factory and inline-image-prefix compatibility boundaries, transaction primitive replay and ten supplemental acceptance controls. Other P0 closures remain intact and no P2 work is included.
 
@@ -701,6 +703,7 @@ Phase A ends with this report and the proposed batches. **Phase B has not begun 
 | 1.14 | 2026-09-15 | Record B5 / POST-P0-007 decoration geometry, valid path placement and directly required state corrections. |
 | 1.15 | 2026-09-16 | Record B6 / POST-P0-008 version-aware font permissions and early operation enforcement. |
 | 1.16 | 2026-09-21 | Record B7 / POST-P0-009 authoritative Form placement provenance, compatibility and preservation evidence. |
+| 1.17 | 2026-09-22 | Record the separately approved post-B7 dead-code and unused-import hygiene pass without changing finding dispositions. |
 
 ## Appendix A. Per-file coverage ledger
 

@@ -1,6 +1,5 @@
 using System.Threading;
 using BlackFlag.Engine.Document.Objects;
-using BlackFlag.Engine.Document.Objects.Primitives;
 using BlackFlag.Engine.Fonts;
 using BlackFlag.Engine.Fonts.Embedding;
 using BlackFlag.Engine.Fonts.Sanitization;

@@ -45,15 +45,13 @@ internal sealed class IsoDateRepairRule
             context,
             metadataFields,
             DocumentationContract.LastUpdated,
-            changes,
-            diagnostics);
+            changes);
 
         PlanDateRepair(
             context,
             metadataFields,
             DocumentationContract.NextReview,
-            changes,
-            diagnostics);
+            changes);
     }
 
     // =========================================================================
@@ -64,8 +62,7 @@ internal sealed class IsoDateRepairRule
         RepairRuleContext context,
         Dictionary<string, MarkdownMetadataValueSpan> metadataFields,
         string fieldName,
-        List<DocumentChange> changes,
-        List<RepairDiagnostic> diagnostics)
+        List<DocumentChange> changes)
     {
         if (!metadataFields.TryGetValue(
                 fieldName,

@@ -24,7 +24,7 @@ public sealed class PdfColorConverter : IPdfColorConverter
             {
                 PdfColorSpaceKind.CalGray => Gray(c,alpha),
                 PdfColorSpaceKind.CalRgb => Rgb(c,alpha),
-                PdfColorSpaceKind.Lab => Lab(r,c,alpha),
+                PdfColorSpaceKind.Lab => Lab(c,alpha),
                 PdfColorSpaceKind.Separation or PdfColorSpaceKind.DeviceN => Alternate(r,c,alpha),
                 PdfColorSpaceKind.IccBased => Alternate(r,c,alpha),
                 _ => ByName(color.ColorSpaceName,c,alpha)
@@ -44,7 +44,7 @@ public sealed class PdfColorConverter : IPdfColorConverter
     private static PdfSrgbColor Rgb(IReadOnlyList<double> c,double a)=>new(PdfSrgbColor.Clamp(c[0]),PdfSrgbColor.Clamp(c[1]),PdfSrgbColor.Clamp(c[2]),a);
     private static PdfSrgbColor Cmyk(IReadOnlyList<double> c,double a){double k=PdfSrgbColor.Clamp(c[3]);return new((1-PdfSrgbColor.Clamp(c[0]))*(1-k),(1-PdfSrgbColor.Clamp(c[1]))*(1-k),(1-PdfSrgbColor.Clamp(c[2]))*(1-k),a);}
 
-    private static PdfSrgbColor Lab(PdfResolvedColorSpace r,IReadOnlyList<double> c,double a)
+    private static PdfSrgbColor Lab(IReadOnlyList<double> c,double a)
     {
         if (c.Count<3) return new(0,0,0,a);
         double l=Math.Clamp(c[0],0,100), aa=c[1], bb=c[2];

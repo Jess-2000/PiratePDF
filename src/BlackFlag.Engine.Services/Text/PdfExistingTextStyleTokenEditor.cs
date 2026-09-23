@@ -35,7 +35,6 @@ internal static partial class PdfExistingTextStyleTokenEditor
         byte[] prefix =
             BuildPrefix(
                 descriptor,
-                graphicsState,
                 update);
 
         byte[] suffix =
@@ -71,7 +70,6 @@ internal static partial class PdfExistingTextStyleTokenEditor
 
     private static byte[] BuildPrefix(
         PdfExistingTextDescriptor descriptor,
-        PdfGraphicsStateSnapshot state,
         PdfExistingTextStyleUpdate update)
     {
         using var output = new MemoryStream();

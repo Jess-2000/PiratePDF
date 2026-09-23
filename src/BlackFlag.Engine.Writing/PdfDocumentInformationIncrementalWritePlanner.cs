@@ -1,6 +1,5 @@
 using BlackFlag.Engine.Document.Metadata;
 using BlackFlag.Engine.Document.Objects;
-using BlackFlag.Engine.Document.Objects.Primitives;
 
 namespace BlackFlag.Engine.Writing;
 
