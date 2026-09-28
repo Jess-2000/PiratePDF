@@ -4,7 +4,7 @@
 |---|---|
 | **Document ID** | PP-AUD-009 |
 | **Category** | Engineering Review |
-| **Version** | 1.18 |
+| **Version** | 1.19 |
 | **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1049, BF-1050, BF-1051, BF-1053, BF-1054 |
@@ -12,6 +12,8 @@
 | **Next Review** | 2026-12-06 |
 
 ## 1. Executive summary
+
+**B9 approval checkpoint, 2026-09-23:** POST-P2-002 remains open. Repository inventory and a bounded target/corpus/isolation design are recorded in the [B9 approval-checkpoint report](Post-BF-1054-Batch-B9-Bounded-Fuzz-and-Corpus-Completion-Report.md). No suitable coverage-guided tool is already approved; the report proposes pinned testing-only tooling for explicit approval. No harness, corpus, dependency or CI change has been implemented, and no fuzz campaign is claimed. Other findings retain their existing dispositions.
 
 **B8 update, 2026-09-23:** POST-P2-001 is implemented and closed. Filesystem font discovery now propagates caller cancellation, retries canceled/aggregate-failed cold builds, publishes only complete sorted snapshots and enforces finite directory, entry, candidate and source-read budgets. The full unmodified gate passed **2,446 tests across 20 projects**, with zero failures/skips and zero build warnings/errors, integrated source-size validation and clean DocGen. The [B8 completion report](Post-BF-1054-Batch-B8-Font-Catalog-Responsiveness-Completion-Report.md) records exact limits, retry/concurrency/exception compatibility and 68 added tests. All fifteen P0 findings remain closed; POST-P2-002 through POST-P2-008 and measurement-required performance work remain untouched.
 
@@ -142,7 +144,7 @@ The current structural assessment supersedes the original audit's decomposition 
 | POST-P0-015 | P0 | Ordinary Flate accepts incomplete members and publishes shortened decoded values | F3-OBS-01 matrix; actual ObjStm integer 42 becomes 4 |
 | AUD-P1-001 / AUD-P1-002 | P1 candidates | Recovery materialization; repeated identifier sorting | Measurement required; carried forward, not established P1 benefits |
 | POST-P2-001 | P2 | Font catalog build lacks cancellation propagation and aggregate policy | Implemented and closed in B8; PP-AUD-028 |
-| POST-P2-002 | P2 | High-risk byte boundaries lack an operational fuzz/corpus workflow | Repository coverage gap |
+| POST-P2-002 | P2 | High-risk byte boundaries lack an operational fuzz/corpus workflow | Open; B9 inventory/design complete for dependency-approval checkpoint, PP-AUD-029 |
 | POST-P2-003 | P2 | BF-1054 integration assertions do not establish reopen/render conformance | Test-content inspection |
 | POST-P2-004 | P2 | Packaged native resolution and fallback policy lack platform fixtures | Source and deployment-evidence gap |
 | POST-P2-005 | P2 | Dependency provenance, notices and SBOM readiness incomplete | Repository-evidence gap |
@@ -345,6 +347,8 @@ GetFaces checks cancellation before entering Lazy.Value, but BuildSnapshot does 
 Smallest proposal: define cancelable snapshot construction and explicit aggregate candidate/retained-work policy without publishing partial snapshots or caching cancellation permanently. Risk: medium, including concurrency and retry semantics. Test cancellation between files, duplicate paths, IO failure, deterministic ordering and bounded traversal. Use a synthetic local directory corpus; no dependency needed. **Batch B8; affects BF-1054R; can follow B4.**
 
 ### POST-P2-002: operational fuzz coverage is incomplete
+
+**B9 disposition, 2026-09-23:** Open at the external-tool approval stop. The [B9 report](Post-BF-1054-Batch-B9-Bounded-Fuzz-and-Corpus-Completion-Report.md) inventories reusable owned fixtures and proposes 25 targets, engine-independent replay, process supervision and a pinned SharpFuzz/libFuzzer toolchain. This is a proposal, not an operational harness or completed campaign. Existing deterministic regressions remain intact. No external dependency, production/test code, corpus or workflow changed at this checkpoint. Original evidence follows.
 
 **Locations:** tests/BlackFlag.Engine.Security.Tests/Inspection/DocumentSecurityAdversarialHardeningTests.cs; tests/BlackFlag.Engine.Fonts.Tests/PdfOpenTypeFontSanitizerTests.cs; tests/BlackFlag.Engine.Services.Tests/Text/PdfContentStreamMutationCodecTests.cs; .github/workflows/continuous-integration.yml.
 
@@ -709,6 +713,7 @@ Phase A ends with this report and the proposed batches. **Phase B has not begun 
 | 1.16 | 2026-09-21 | Record B7 / POST-P0-009 authoritative Form placement provenance, compatibility and preservation evidence. |
 | 1.17 | 2026-09-22 | Record the separately approved post-B7 dead-code and unused-import hygiene pass without changing finding dispositions. |
 | 1.18 | 2026-09-23 | Close POST-P2-001 through B8 cancellation/retry and finite aggregate discovery policy, with full release-gate validation; retain unrelated findings and measurement requirements. |
+| 1.19 | 2026-09-23 | Record B9 target/corpus/isolation design and external-tool approval checkpoint; keep POST-P2-002 open and other findings unchanged. |
 
 ## Appendix A. Per-file coverage ledger
 

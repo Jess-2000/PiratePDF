@@ -44,5 +44,6 @@
     <Project Path="tests/BlackFlag.Engine.Syntax.Tests/BlackFlag.Engine.Syntax.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.Writing.Tests/BlackFlag.Engine.Writing.Tests.csproj" />
     <Project Path="tests/PiratePDF.DocGen.Tests/PiratePDF.DocGen.Tests.csproj" />
+    <Project Path="tests/PiratePDF.Fuzz.Tests/PiratePDF.Fuzz.Tests.csproj" />
   </Folder>
 </Solution>

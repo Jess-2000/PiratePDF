@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <!-- The same repository-owned artifact supplies controlled supervisor test-child behavior. -->
+    <OutputType>Exe</OutputType>
+    <UseAppHost>false</UseAppHost>
+    <GenerateProgramFile>false</GenerateProgramFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime;build;native;contentfiles;analyzers;buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime;build;native;contentfiles;analyzers;buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../tools/PiratePDF.Fuzz.Targets/PiratePDF.Fuzz.Targets.csproj" />
+    <ProjectReference Include="../../tools/PiratePDF.Fuzz.Runner/PiratePDF.Fuzz.Runner.csproj" />
+    <!-- Reuse the repository-owned synthetic fixture; no system font or copied sanitizer. -->
+    <Compile Include="../BlackFlag.Engine.Fonts.Tests/TestFontFactory.cs" Link="Fixtures/TestFontFactory.cs" />
+    <!-- Test the callback adapter without importing SharpFuzz into ordinary test dependencies. -->
+    <Compile Include="../../tools/PiratePDF.Fuzz.SharpFuzz/SharpFuzzTargetSession.cs" Link="Fixtures/SharpFuzzTargetSession.cs" />
+  </ItemGroup>
+</Project>

@@ -50,3 +50,7 @@ docs/ValidationReport.md
 docs/Documentation-Health.md
 docs/Document-Changes.md
 .package-backups/
+
+# Local fuzz engines, instrumented copies and failure artifacts (not seeds)
+artifacts/fuzz/
+tools/PiratePDF.Fuzz.SharpFuzz/tools/

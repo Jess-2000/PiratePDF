@@ -291,8 +291,12 @@ Do not introduce unsafe code solely for speed without explicit approval.
 ## Dependencies
 
 - Prefer the .NET Base Class Library and existing project capabilities.
-- Do not add, remove, or upgrade NuGet/native/runtime dependencies during a cleanup/optimization
-  audit without explicit approval.
+- Do not add, remove, or upgrade NuGet/native/runtime dependencies during a cleanup/optimization audit without explicit approval.
+- When the current user task explicitly authorizes dependency remediation, update only a dependency that evidence shows causes or materially contributes to the approved issue. Do not turn that authorization into a repository-wide dependency modernization sweep.
+- For an authorized remediation of an implicated outdated dependency, prefer the current stable upstream release after verifying the authoritative package/project source, relevant release notes and breaking changes, license/provenance, and direct/transitive dependency changes. Do not select preview, beta, alpha, RC, nightly, development, or unverified repackaged releases when a stable upstream release exists.
+- After an authorized dependency update, record the old and new versions and rationale, verify resolved direct/transitive versions and licensing/provenance, and run validation proportional to the affected scope.
+- Updating an existing component of an explicitly approved toolchain to its current stable version is permitted when the current task authorizes dependency remediation and evidence implicates that component. Replacing the approved toolchain or its architecture, introducing a different framework/driver/compiler stack, or maintaining a private fork still requires separate explicit approval.
+- If compatible coordinated version updates to other components of the same approved toolchain are required by the implicated component's supported dependency/version relationship, they may be included under the same explicit authorization; document the complete version transition.
 - Do not introduce platform-specific dependencies into BlackFlag Engine.
 - Preserve licensing/provenance rules.
 
@@ -342,6 +346,42 @@ Do not weaken validation, sanitization, capability checks, or least-privilege bo
 - Track dependency purpose/version/license/provenance/security-update path and release SBOM/third-party notices where applicable.
 - Native AOT/trimming/symbol stripping are deployment-hardening choices, not security or secrecy boundaries. Treat AOT/trimming warnings as engineering work and validate reflection, serialization, plugins, SkiaSharp/native assets, fonts/images, and platform adapters.
 - Official Windows release artifacts should be Authenticode-signed; official macOS artifacts should be code-signed/notarized. Protect signing credentials, record hashes/provenance, and pursue reproducible/deterministic release builds where practical.
+
+## Manual commands and elevated execution
+
+Codex should perform ordinary repository commands itself when they can be run safely in the available environment. Do not ask the user to manually run commands merely for convenience.
+
+When a required validation, setup, diagnostic, or repository command cannot be completed because it needs permissions or an execution context Codex does not have, stop at the appropriate boundary and tell the user exactly what must be run manually.
+
+In particular:
+
+- Explicitly identify when a command must be run from an **Administrator PowerShell** or an **Administrator Command Prompt**.
+- If elevation is not required but the command must still be run manually, state whether **regular PowerShell** or **regular Command Prompt** is appropriate.
+- Prefer PowerShell commands for this repository unless the required tool specifically needs Command Prompt or another shell.
+- Provide the exact working directory and complete copy/paste-ready command(s), including required arguments.
+- State briefly why manual execution or elevation is required and what result/output Codex needs from the user afterward.
+- Never tell the user to weaken execution policy, security controls, filesystem protections, certificate protections, or OS policy merely to make a command pass unless the current task explicitly requires such a policy change and the user approves it.
+- Never claim a privileged/manual validation passed when Codex could not execute it. Record it as blocked or pending until the user reports the actual result.
+- After the user supplies the result, incorporate that evidence into the current validation/report rather than rerunning or redesigning unrelated work.
+- If a non-elevated alternative provides equivalent validation without weakening the contract, prefer it.
+- Do not request elevation preemptively. Ask for Administrator execution only when the actual command or fixture demonstrably requires it.
+
+Example: if a Windows test must create a symbolic-link fixture and the current process receives a privilege error before the validator runs, preserve the test and report the blocker. Ask the user to rerun the exact focused test from Administrator PowerShell, followed by the required broader test suite if the focused test passes. Do not skip or weaken the test.
+
+## Evidence-driven corrective iteration
+
+When an approved diagnostic, hardening, fuzzing, or validation task explicitly authorizes remediation of issues exposed during execution, Codex may continue through repeated bounded corrective cycles without requesting approval for each directly related defect:
+
+1. Preserve the failure evidence.
+2. Reduce it to the smallest practical deterministic reproduction.
+3. Identify the root cause and distinguish repository, harness/tooling, dependency, environment, and test/oracle defects.
+4. Implement the smallest correct fix within the authorized scope.
+5. Add focused regression coverage when deterministic reproduction is possible.
+6. Rerun the affected validation before continuing.
+
+Do not retry unchanged commands hoping for a different result, make speculative changes until a test passes, suppress unexpected exceptions, weaken security/resource bounds, or reinterpret crashes as expected rejection. If the same failure repeats after its purported fix, reassess the diagnosis and stop when the evidence no longer supports another bounded correction.
+
+This authorization never implies permission for unrelated cleanup, broad architectural redesign, public API changes, preservation-semantic changes, security-boundary changes, toolchain replacement, commit/push/merge/tag operations, or other work outside the current user task.
 
 ## Git and change discipline
 
@@ -450,7 +490,8 @@ For a source-hygiene/dead-code batch, completion additionally requires:
 Stop and ask for approval rather than proceeding when:
 - a public API must change;
 - PDF semantics or preservation behavior may change;
-- a dependency change is needed;
+- a dependency change is needed and the current user task has not explicitly authorized dependency remediation;
+- an authorized dependency remediation would require replacing the approved toolchain/architecture rather than updating an implicated existing component within the authorized scope;
 - a security policy/boundary would change;
 - tests reveal ambiguous intended behavior;
 - a broad architectural rewrite appears necessary;
