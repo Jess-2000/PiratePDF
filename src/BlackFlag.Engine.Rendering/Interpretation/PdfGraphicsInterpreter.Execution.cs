@@ -48,13 +48,19 @@ public sealed partial class PdfGraphicsInterpreter
                                 "The graphics-state stack was restored without a matching save.");
                         }
 
-                        state = stateStack.Pop();
+                        // Text matrices belong to the text object, not the
+                        // graphics state saved by q/Q.
+                        state = stateStack.Pop() with
+                        {
+                            TextMatrix = state.TextMatrix,
+                            TextLineMatrix = state.TextLineMatrix
+                        };
                         break;
 
                     case "cm":
                         state = state with
                         {
-                            Transform = state.Transform.Multiply(ReadMatrix(operation.Operands))
+                            Transform = ReadMatrix(operation.Operands).Multiply(state.Transform)
                         };
                         break;
 

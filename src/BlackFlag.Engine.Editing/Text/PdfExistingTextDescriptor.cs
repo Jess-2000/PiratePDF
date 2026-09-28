@@ -76,8 +76,8 @@ public sealed class PdfExistingTextDescriptor
     /// <summary>Gets the provenance-backed identity of the text target.</summary>
     public PdfExistingTextIdentity Identity { get; }
 
-    /// <summary>Gets a defensive immutable view of the encoded source text bytes.</summary>
-    public ReadOnlyMemory<byte> EncodedBytes => encodedBytes;
+    /// <summary>Returns an independent snapshot of the encoded source text bytes.</summary>
+    public ReadOnlyMemory<byte> EncodedBytes => encodedBytes.ToArray();
 
     /// <summary>Gets directly derivable Unicode text when available.</summary>
     public string? UnicodeText { get; }

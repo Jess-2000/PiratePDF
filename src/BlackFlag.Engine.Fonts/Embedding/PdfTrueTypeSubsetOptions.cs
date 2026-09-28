@@ -12,10 +12,10 @@ public sealed class PdfTrueTypeSubsetOptions
     /// <summary>Gets the maximum component records allowed in one composite glyph.</summary>
     public int MaximumComponentsPerGlyph { get; init; } = 256;
 
-    /// <summary>Gets the maximum number of glyphs retained by one subset.</summary>
+    /// <summary>Gets the maximum distinct retained glyph count, including glyph zero, roots and dependencies.</summary>
     public int MaximumRetainedGlyphs { get; init; } = 16384;
 
-    /// <summary>Gets the maximum generated SFNT byte length before re-sanitization.</summary>
+    /// <summary>Gets the maximum final SFNT byte length, checked before final SFNT allocation.</summary>
     public int MaximumGeneratedBytes { get; init; } = 64 * 1024 * 1024;
 
     internal void Validate()

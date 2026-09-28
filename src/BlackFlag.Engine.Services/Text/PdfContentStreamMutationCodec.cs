@@ -1,6 +1,7 @@
 using System.IO.Compression;
 using BlackFlag.Engine.Document.Objects;
 using BlackFlag.Engine.Document.Objects.Primitives;
+using BlackFlag.Engine.Filters;
 
 namespace BlackFlag.Engine.Services.Text;
 
@@ -10,6 +11,8 @@ namespace BlackFlag.Engine.Services.Text;
 /// </summary>
 internal static class PdfContentStreamMutationCodec
 {
+    private static readonly PdfFilterDecodeLimits DefaultDecodeLimits = new();
+
     private static readonly PdfName FilterName =
         PdfName.FromLatin1("Filter");
 
@@ -27,22 +30,35 @@ internal static class PdfContentStreamMutationCodec
 
     public static byte[] Decode(
         PdfStream stream,
+        CancellationToken cancellationToken = default) =>
+        Decode(stream, DefaultDecodeLimits, cancellationToken);
+
+    internal static byte[] Decode(
+        PdfStream stream,
+        PdfFilterDecodeLimits limits,
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(stream);
+        ArgumentNullException.ThrowIfNull(limits);
 
         FilterPolicy policy =
             GetPolicy(
                 stream.Dictionary);
 
+        // Keep the mutation API's OperationCanceledException contract. The
+        // shared budget owns byte/ratio accounting, not cancellation wrapping.
+        cancellationToken.ThrowIfCancellationRequested();
+        var budget = new PdfFilterDecodeBudget(stream.Length, limits);
+
         return policy switch
         {
             FilterPolicy.None =>
-                stream.ToByteArray(),
+                CopyUnfiltered(stream, budget, cancellationToken),
 
             FilterPolicy.Flate =>
                 DecodeFlate(
                     stream.ToByteArray(),
+                    budget,
                     cancellationToken),
 
             _ =>
@@ -199,16 +215,15 @@ internal static class PdfContentStreamMutationCodec
 
     private static byte[] DecodeFlate(
         byte[] encoded,
+        PdfFilterDecodeBudget budget,
         CancellationToken cancellationToken)
     {
-        cancellationToken.ThrowIfCancellationRequested();
-
         try
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             using var source =
-                new MemoryStream(
-                    encoded,
-                    writable: false);
+                new CompleteFlateInputStream(encoded);
 
             using var zlib =
                 new ZLibStream(
@@ -222,8 +237,10 @@ internal static class PdfContentStreamMutationCodec
             Copy(
                 zlib,
                 destination,
+                budget,
                 cancellationToken);
 
+            cancellationToken.ThrowIfCancellationRequested();
             return destination.ToArray();
         }
         catch (InvalidDataException exception)
@@ -238,11 +255,32 @@ internal static class PdfContentStreamMutationCodec
         }
     }
 
+    private static byte[] CopyUnfiltered(
+        PdfStream stream,
+        PdfFilterDecodeBudget budget,
+        CancellationToken cancellationToken)
+    {
+        if (stream.Length > 0)
+        {
+            budget.AccountDecodedBytes(stream.Length);
+        }
+
+        cancellationToken.ThrowIfCancellationRequested();
+        return stream.ToByteArray();
+    }
+
     private static byte[] EncodeFlate(
         ReadOnlySpan<byte> decoded,
         CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
+
+        if (decoded.IsEmpty)
+        {
+            // .NET may emit nothing when no data is written. Preserve empty
+            // content with a complete zlib header, final block and Adler-32.
+            return [0x78, 0x9C, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01];
+        }
 
         using var destination =
             new MemoryStream();
@@ -280,11 +318,14 @@ internal static class PdfContentStreamMutationCodec
 
     private static void Copy(
         Stream source,
-        Stream destination,
+        MemoryStream destination,
+        PdfFilterDecodeBudget budget,
         CancellationToken cancellationToken)
     {
         byte[] buffer =
-            new byte[64 * 1024];
+            new byte[(int)Math.Min(
+                budget.Limits.BufferSize,
+                Math.Min(budget.Limits.MaximumDecodedBytes, Array.MaxLength))];
 
         try
         {
@@ -298,10 +339,16 @@ internal static class PdfContentStreamMutationCodec
                         0,
                         buffer.Length);
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (read == 0)
                 {
                     break;
                 }
+
+                // Reject the chunk before MemoryStream can allocate or grow.
+                budget.AccountDecodedBytes(read);
+                EnsureCapacity(destination, budget);
 
                 destination.Write(
                     buffer,
@@ -312,6 +359,59 @@ internal static class PdfContentStreamMutationCodec
         finally
         {
             buffer.AsSpan().Clear();
+        }
+    }
+
+    private static void EnsureCapacity(
+        MemoryStream destination,
+        PdfFilterDecodeBudget budget)
+    {
+        long required = budget.DecodedBytes;
+        if (required <= destination.Capacity)
+        {
+            return;
+        }
+
+        if (required > Array.MaxLength)
+        {
+            throw new PdfFilterDecodeException(
+                PdfFilterDecodeFailure.DecodedByteLimitExceeded,
+                "The editable content stream exceeds the supported decoded buffer size.");
+        }
+
+        // Bound spare capacity as well as written bytes. AccountDecodedBytes
+        // remains authoritative at exact ratio boundaries (including rounding).
+        double capacityLimit = Math.Min(
+            Array.MaxLength,
+            Math.Min(
+                budget.Limits.MaximumDecodedBytes,
+                budget.EncodedBytes * budget.Limits.MaximumExpansionRatio));
+
+        destination.Capacity = (int)Math.Max(
+            required,
+            Math.Min((long)destination.Capacity * 2, capacityLimit));
+    }
+
+    private sealed class CompleteFlateInputStream(byte[] encoded)
+        : MemoryStream(encoded, writable: false)
+    {
+        // ZLibStream may otherwise accept EOF before its end marker/checksum.
+        // A completed inflater stops reading input; another non-empty read at
+        // EOF therefore means the editable zlib member is incomplete.
+        public override int Read(byte[] buffer, int offset, int count) =>
+            RequireInput(base.Read(buffer, offset, count), count);
+
+        public override int Read(Span<byte> buffer) =>
+            RequireInput(base.Read(buffer), buffer.Length);
+
+        private static int RequireInput(int read, int requested)
+        {
+            if (read == 0 && requested > 0)
+            {
+                throw new InvalidDataException("The zlib input ended before decompression completed.");
+            }
+
+            return read;
         }
     }
 

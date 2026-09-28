@@ -1,4 +1,3 @@
-using System.IO;
 using BlackFlag.Engine.Rendering.Raster;
 
 namespace BlackFlag.Engine.Rendering.Tests.Raster;

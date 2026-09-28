@@ -10,7 +10,6 @@ public sealed class PdfFontDecoder
     private static readonly PdfName FirstCharKey = new("FirstChar");
     private static readonly PdfName WidthsKey = new("Widths");
     private static readonly PdfName MissingWidthKey = new("MissingWidth");
-    private static readonly PdfName EncodingKey = new("Encoding");
     private static readonly PdfName BaseEncodingKey = new("BaseEncoding");
     private static readonly PdfName DifferencesKey = new("Differences");
     private static readonly PdfName DwKey = new("DW");
@@ -55,7 +54,7 @@ public sealed class PdfFontDecoder
 
             if (element.Kind == PdfTextRunElementKind.Adjustment)
             {
-                x += (-element.Adjustment / 1000.0) * run.FontSize;
+                x += -element.Adjustment / 1000.0 * run.FontSize;
                 continue;
             }
 
@@ -94,12 +93,11 @@ public sealed class PdfFontDecoder
         foreach (byte code in bytes)
         {
             PdfCharacterCode sourceCode = new([code]);
-            string? unicode = null;
 
-            if (toUnicode?.TryGetUnicode(sourceCode, out unicode) != true)
+            if (toUnicode?.TryGetUnicode(sourceCode, out string? unicode) != true)
             {
                 if (differences.TryGetValue(code, out string? glyphName) &&
-                    PdfGlyphNameUnicodeMap.TryGetUnicode(glyphName, out string? mapped))
+                    PdfGlyphNameUnicodeMap.TryGetUnicode(glyphName, out string? mapped, new System.Text.StringBuilder()))
                 {
                     unicode = mapped;
                 }
@@ -142,12 +140,12 @@ public sealed class PdfFontDecoder
         while (offset < bytes.Length)
         {
             PdfCharacterCode code = encodingMap.ReadCode(bytes, offset);
-            int codeLength = code.Bytes.Length;
-            int cid;
+            ReadOnlyMemory<byte> codeBytes = code.Bytes;
+            int codeLength = codeBytes.Length;
 
-            if (!encodingMap.TryGetCid(code, out cid))
+            if (!encodingMap.TryGetCid(code, out int cid))
             {
-                cid = ToBigEndianInteger(code.Bytes.Span);
+                cid = ToBigEndianInteger(codeBytes.Span);
             }
 
             string? unicode = null;
@@ -161,7 +159,7 @@ public sealed class PdfFontDecoder
             ushort? glyphId = GetCidGlyphId(run.Font, cid, diagnostics, cancellationToken);
             double advance = GetCompositeAdvance(run, cid);
 
-            glyphs.Add(new PdfDecodedGlyph(code.Bytes.Span, cid, glyphId, unicode, x, advance));
+            glyphs.Add(new PdfDecodedGlyph(codeBytes.Span, cid, glyphId, unicode, x, advance));
             x += advance;
             offset += codeLength;
         }
@@ -238,7 +236,7 @@ public sealed class PdfFontDecoder
         double spacing = run.GraphicsState.CharacterSpacing +
             (code == 0x20 ? run.GraphicsState.WordSpacing : 0);
 
-        return (width / 1000.0) * run.FontSize + spacing;
+        return width / 1000.0 * run.FontSize + spacing;
     }
 
     private static double GetCompositeAdvance(PdfDisplayTextRun run, int cid)
@@ -248,7 +246,7 @@ public sealed class PdfFontDecoder
             ? explicitWidth
             : ReadNumber(descendant, DwKey) ?? 1000;
 
-        return (width / 1000.0) * run.FontSize + run.GraphicsState.CharacterSpacing;
+        return width / 1000.0 * run.FontSize + run.GraphicsState.CharacterSpacing;
     }
 
     private ushort? GetCidGlyphId(

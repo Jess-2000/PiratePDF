@@ -1,6 +1,5 @@
 using BlackFlag.Engine.Document.Model;
 using BlackFlag.Engine.Document.Objects;
-using BlackFlag.Engine.Document.Objects.Primitives;
 using BlackFlag.Engine.Editing.Documents;
 using BlackFlag.Engine.Editing.Operations;
 using BlackFlag.Engine.Editing.Pages;
@@ -142,11 +141,12 @@ public static class PdfExistingTextTypographyService
         if (descriptor.Editability ==
             PdfExistingTextEditability.DirectlyEditable)
         {
+            ReadOnlyMemory<byte> encodedBytes = descriptor.EncodedBytes;
             _ = PdfTextStringTokenEditor.Replace(
                 currentData,
                 descriptor.Identity,
-                descriptor.EncodedBytes.Span,
-                descriptor.EncodedBytes.Span);
+                encodedBytes.Span,
+                encodedBytes.Span);
             return;
         }
 

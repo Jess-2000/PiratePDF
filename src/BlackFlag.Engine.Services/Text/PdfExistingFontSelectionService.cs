@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using BlackFlag.Engine.Editing.Text;
 
 namespace BlackFlag.Engine.Services.Text;
 

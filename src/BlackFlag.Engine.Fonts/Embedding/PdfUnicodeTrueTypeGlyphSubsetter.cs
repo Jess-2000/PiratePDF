@@ -1,5 +1,3 @@
-using System.Text;
-
 using BlackFlag.Engine.Fonts.Sanitization;
 
 namespace BlackFlag.Engine.Fonts.Embedding;
@@ -45,8 +43,10 @@ public sealed class PdfUnicodeTrueTypeGlyphSubsetter
                 "BF-1054M Unicode subsetting supports sanitized TrueType glyf/loca fonts only.");
         }
 
+        cancellationToken.ThrowIfCancellationRequested();
+        program.EmbeddingRestrictions.EnsureCanEmbed(subset: true);
         byte[] source =
-            program.Bytes.ToArray();
+            program.TrustedBytes.ToArray();
 
         Dictionary<string, PdfTrueTypeTable> tables =
             PdfTrueTypeBinary.ReadTables(source);
@@ -163,6 +163,8 @@ public sealed class PdfUnicodeTrueTypeGlyphSubsetter
                     offsets,
                     glyph);
 
+            PdfTrueTypeCompositeClosure.RetainGlyph(selectedGlyphs, glyph, options);
+
             ushort cid =
                 nextCid++;
 
@@ -182,9 +184,6 @@ public sealed class PdfUnicodeTrueTypeGlyphSubsetter
                 cid,
                 metrics.GetPdfWidth(
                     glyph));
-
-            _ = selectedGlyphs.Add(
-                glyph);
         }
 
         PdfTrueTypeCompositeClosure.Expand(
@@ -216,14 +215,9 @@ public sealed class PdfUnicodeTrueTypeGlyphSubsetter
 
         byte[] sfnt =
             PdfTrueTypeSfntBuilder.Build(
-                rebuilt);
-
-        if (sfnt.Length >
-            options.MaximumGeneratedBytes)
-        {
-            throw new InvalidDataException(
-                $"The generated Unicode TrueType subset is {sfnt.Length} bytes, exceeding the configured {options.MaximumGeneratedBytes}-byte limit.");
-        }
+                rebuilt,
+                options.MaximumGeneratedBytes,
+                "Unicode TrueType");
 
         using var stream =
             new MemoryStream(

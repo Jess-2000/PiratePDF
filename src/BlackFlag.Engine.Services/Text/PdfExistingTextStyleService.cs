@@ -113,6 +113,11 @@ public static class PdfExistingTextStyleService
             descriptor,
             run);
 
+        if (update.Decoration is not null)
+        {
+            PdfExistingTextDecorationContext.Validate(source, identity, decoded, cancellationToken);
+        }
+
         byte[] normalized =
             PdfCompoundTextOperatorNormalizer.Normalize(
                 decoded,
@@ -124,8 +129,8 @@ public static class PdfExistingTextStyleService
                 normalized.Length -
                 decoded.Length);
 
-        PdfExistingTextStyleUpdate resolvedUpdate =
-            ResolveMeasuredDecoration(
+        double styledAdvance =
+            MeasureDecoration(
                 update,
                 run,
                 cancellationToken);
@@ -135,8 +140,15 @@ public static class PdfExistingTextStyleService
                 normalized,
                 descriptor,
                 run.GraphicsState,
-                resolvedUpdate,
-                normalizedEnd);
+                update,
+                normalizedEnd,
+                styledAdvance);
+
+        if (update.Decoration is not null)
+        {
+            styled = PdfExistingTextDecorationMarkedContent.PreserveNesting(
+                styled, decoded.Length, source, identity, styledAdvance, cancellationToken);
+        }
 
         byte[] encoded =
             PdfContentStreamMutationCodec.Encode(
@@ -157,11 +169,12 @@ public static class PdfExistingTextStyleService
         if (descriptor.Editability ==
             PdfExistingTextEditability.DirectlyEditable)
         {
+            ReadOnlyMemory<byte> encodedBytes = descriptor.EncodedBytes;
             _ = PdfTextStringTokenEditor.Replace(
                 data,
                 descriptor.Identity,
-                descriptor.EncodedBytes.Span,
-                descriptor.EncodedBytes.Span);
+                encodedBytes.Span,
+                encodedBytes.Span);
             return;
         }
 
@@ -213,41 +226,34 @@ public static class PdfExistingTextStyleService
             "The style target display-run provenance is stale.");
     }
 
-    private static PdfExistingTextStyleUpdate ResolveMeasuredDecoration(
+    private static double MeasureDecoration(
         PdfExistingTextStyleUpdate update,
         PdfDisplayTextRun run,
         CancellationToken cancellationToken)
     {
-        if (update.Decoration is not
-            { RequiresMeasurement: true } decoration)
+        if (update.Decoration is not { } decoration)
         {
-            return update;
+            return 0;
         }
 
+        PdfGraphicsStateSnapshot styledState = PdfExistingTextStyleTokenEditor.GetStyledState(run.GraphicsState, update);
+        var styledRun = new PdfDisplayTextRun(run.Font, styledState.FontSize, run.Elements,
+            run.TextMatrix, styledState, run.SourceSpan, run.MarkedContent);
         double advance =
-            Math.Abs(
-                PdfTextAdvanceMeasurementService.MeasureOriginal(
-                    run,
-                    cancellationToken));
+            PdfTextAdvanceMeasurementService.MeasureOriginal(styledRun, cancellationToken);
 
-        if (advance <= 0)
+        if (!double.IsFinite(advance) || !double.IsFinite(styledState.TextRise))
+        {
+            throw new NotSupportedException("Decoration geometry must remain finite.");
+        }
+
+        if (decoration.RequiresMeasurement && advance == 0)
         {
             throw new NotSupportedException(
                 "Automatic text decoration requires a positive measurable text advance.");
         }
 
-        return new PdfExistingTextStyleUpdate
-        {
-            ScriptStyle = update.ScriptStyle,
-            SuperscriptScale = update.SuperscriptScale,
-            SuperscriptRise = update.SuperscriptRise,
-            SubscriptScale = update.SubscriptScale,
-            SubscriptDrop = update.SubscriptDrop,
-            FillColor = update.FillColor,
-            StrokeColor = update.StrokeColor,
-            Decoration = decoration.ResolveAdvance(
-                advance)
-        };
+        return advance;
     }
 
 }

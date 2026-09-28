@@ -1,7 +1,4 @@
-using System.Collections.Concurrent;
 using BlackFlag.Engine.Objects;
-using BlackFlag.Engine.Parsing.CrossReferences;
-using BlackFlag.Engine.Parsing.Loading;
 using BlackFlag.Engine.Rendering.Resources;
 
 namespace BlackFlag.Engine.Parsing.Resources;
@@ -38,13 +35,13 @@ public sealed partial class PdfResourceResolver
         }
 
         PdfStream? embeddedFont = ResolveEmbeddedFontProgram(descriptor);
-        if (embeddedFont is not null && embeddedFont.Data.Length > options.MaximumEmbeddedFontBytes)
+        if (embeddedFont is not null && embeddedFont.Length > options.MaximumEmbeddedFontBytes)
         {
             throw CreateException(
                 PdfResourceResolutionFailure.LimitExceeded,
                 PdfResourceKind.Font,
                 resourceName: null,
-                $"Embedded font stream size {embeddedFont.Data.Length} exceeds the configured maximum of "
+                $"Embedded font stream size {embeddedFont.Length} exceeds the configured maximum of "
                 + $"{options.MaximumEmbeddedFontBytes} bytes.");
         }
 

@@ -50,22 +50,11 @@ public static class PdfExternalTrueTypeResourceProjector
         ArgumentNullException.ThrowIfNull(face);
         ArgumentNullException.ThrowIfNull(program);
 
-        if (face.EmbeddingRights != PdfExternalFontEmbeddingRights.Allowed)
-        {
-            throw new NotSupportedException(
-                "BF-1054J full embedding requires provider embedding rights to be Allowed.");
-        }
+        PdfExternalFontEmbeddingPolicy.EnsureCanEmbed(face, program, subset: false);
 
         PdfExternalTrueTypeMetrics metrics =
             PdfExternalTrueTypeInspector.Inspect(
                 program);
-
-        if (metrics.EmbeddingRights !=
-            PdfExternalFontEmbeddingRights.Allowed)
-        {
-            throw new NotSupportedException(
-                "BF-1054J full embedding requires the sanitized font program itself to permit embedding.");
-        }
 
         PdfWriteObjectAllocator allocator =
             writePlan.CreateObjectAllocator();
@@ -81,6 +70,7 @@ public static class PdfExternalTrueTypeResourceProjector
             NormalizeBaseFontName(
                 face.FaceName);
 
+        ReadOnlyMemory<byte> fontBytes = program.Bytes;
         PdfStream fontProgram =
             new(
                 new PdfDictionary
@@ -88,10 +78,10 @@ public static class PdfExternalTrueTypeResourceProjector
                     {
                         Length1Name,
                         new PdfInteger(
-                            program.Bytes.Length)
+                            fontBytes.Length)
                     }
                 },
-                program.Bytes.Span);
+                fontBytes.Span);
 
         PdfDictionary descriptor =
             CreateDescriptor(
@@ -116,7 +106,7 @@ public static class PdfExternalTrueTypeResourceProjector
                     fontIdentifier));
 
         return new PdfExternalFontResourceProjection(
-            resourceName,
+            resourceMutation.ResourceName,
             fontIdentifier,
             descriptorIdentifier,
             programIdentifier,

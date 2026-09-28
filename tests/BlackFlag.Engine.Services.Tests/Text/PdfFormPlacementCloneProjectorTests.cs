@@ -12,8 +12,73 @@ using GraphicsObjects = BlackFlag.Engine.Objects;
 
 namespace BlackFlag.Engine.Services.Tests.Text;
 
-public sealed class PdfFormPlacementCloneProjectorTests
+public sealed partial class PdfFormPlacementCloneProjectorTests
 {
+    [Fact]
+    public void FilteredPlacementClonePreservesBothFilterDictionariesAndOriginalForm()
+    {
+        PdfDocument document = CreateDocument(out var pageId, out var contentId, out var formId);
+        PdfStream pageContent = document.Objects.Get<PdfStream>(contentId);
+        PdfStream form = document.Objects.Get<PdfStream>(formId);
+        MakeFlate(pageContent);
+        MakeFlate(form);
+        byte[] originalForm = form.ToByteArray();
+        byte[] pageDictionary = PdfFilteredTextTestDocument.Serialize(pageContent.Dictionary);
+        byte[] formDictionary = PdfFilteredTextTestDocument.Serialize(form.Dictionary);
+        var placement = CreatePlacementDescriptor(document, pageId, contentId, formId, "X1", 0, 6);
+
+        PdfFormPlacementCloneProjection projection = PdfFormPlacementCloneProjector.Create(
+            PdfWritePlanner.Create(document), placement, "BT (Edited) Tj ET"u8);
+        var projectedPage = Assert.IsType<PdfStream>(Assert.Single(
+            projection.Projections.Projections, item => item.Identifier == contentId).Value);
+        var projectedForm = Assert.IsType<PdfStream>(Assert.Single(
+            projection.Projections.Projections, item => item.Identifier == projection.ClonedFormIdentifier).Value);
+
+        Assert.Equal("/X2 Do\n/X1 Do", Encoding.ASCII.GetString(
+            PdfContentStreamMutationCodec.Decode(projectedPage)));
+        Assert.Equal("BT (Edited) Tj ET"u8.ToArray(), PdfContentStreamMutationCodec.Decode(projectedForm));
+        Assert.Equal(originalForm, form.ToByteArray());
+        Assert.Equal(pageDictionary, PdfFilteredTextTestDocument.Serialize(projectedPage.Dictionary));
+        Assert.Equal(formDictionary, PdfFilteredTextTestDocument.Serialize(projectedForm.Dictionary));
+    }
+
+    [Fact]
+    public void PlacementDecodeBudgetFailureLeavesObjectGraphUnchanged()
+    {
+        PdfDocument document = CreateDocument(out var pageId, out var contentId, out var formId);
+        PdfStream pageContent = document.Objects.Get<PdfStream>(contentId);
+        MakeFlate(pageContent);
+        var placement = CreatePlacementDescriptor(document, pageId, contentId, formId, "X1", 0, 6);
+        pageContent.ReplaceData(PdfFilteredTextTestDocument.Compress(new byte[1024 * 1024]));
+        byte[] originalPage = pageContent.ToByteArray();
+        byte[] originalForm = document.Objects.Get<PdfStream>(formId).ToByteArray();
+        byte[] originalPageDictionary = PdfFilteredTextTestDocument.Serialize(
+            document.Objects.Get<PdfDictionary>(pageId));
+        int objectCount = document.Objects.Count;
+
+        var exception = Assert.Throws<BlackFlag.Engine.Filters.PdfFilterDecodeException>(
+            () => PdfFormPlacementCloneProjector.Create(
+                PdfWritePlanner.Create(document), placement, "BT (Edited) Tj ET"u8));
+
+        Assert.Equal(BlackFlag.Engine.Filters.PdfFilterDecodeFailure.ExpansionRatioExceeded, exception.Failure);
+        Assert.Equal(objectCount, document.Objects.Count);
+        Assert.Equal(originalPage, pageContent.ToByteArray());
+        Assert.Equal(originalForm, document.Objects.Get<PdfStream>(formId).ToByteArray());
+        Assert.Equal(originalPageDictionary, PdfFilteredTextTestDocument.Serialize(
+            document.Objects.Get<PdfDictionary>(pageId)));
+    }
+
+    private static void MakeFlate(PdfStream stream)
+    {
+        byte[] decoded = stream.ToByteArray();
+        stream.Dictionary.Set(PdfName.FromLatin1("Filter"), PdfName.FromLatin1("Fl"));
+        stream.Dictionary.Set(PdfName.FromLatin1("DecodeParms"), new PdfDictionary
+        {
+            { PdfName.FromLatin1("Predictor"), new PdfInteger(1) }
+        });
+        stream.ReplaceData(PdfFilteredTextTestDocument.Compress(decoded));
+    }
+
     [Fact]
     public void PlacementCloneCreatesNewFormAndRedirectsOnlySelectedDo()
     {
@@ -25,6 +90,7 @@ public sealed class PdfFormPlacementCloneProjectorTests
 
         var placement =
             CreatePlacementDescriptor(
+                document,
                 pageId,
                 pageContentId,
                 formId,
@@ -95,6 +161,7 @@ public sealed class PdfFormPlacementCloneProjectorTests
 
         var placement =
             CreatePlacementDescriptor(
+                document,
                 pageId,
                 pageContentId,
                 formId,
@@ -205,16 +272,22 @@ public sealed class PdfFormPlacementCloneProjectorTests
     }
 
     private static PdfFormPlacementDescriptor CreatePlacementDescriptor(
+        PdfDocument document,
         PdfObjectIdentifier pageId,
         PdfObjectIdentifier contentId,
         PdfObjectIdentifier formId,
         string resourceName,
         long startOffset,
-        long endOffset)
+        long endOffset,
+        PdfObjectIdentifier? sourceOwner = null,
+        int streamIndex = 0,
+        PdfObjectIdentifier?[] streamIdentifiers = null,
+        bool legacy = false,
+        PdfExistingTextSourceKind sourceKind = PdfExistingTextSourceKind.PageContent)
     {
         Assert.True(PdfGraphicsOperator.TryGet("Do", out var doOperator));
 
-        var sourceSpan = new PdfContentSourceSpan(0, startOffset, endOffset);
+        var sourceSpan = new PdfContentSourceSpan(streamIndex, startOffset, endOffset);
         var operation = new PdfGraphicsOperation(
             doOperator,
             [new GraphicsObjects.PdfName(resourceName)],
@@ -244,12 +317,14 @@ public sealed class PdfFormPlacementCloneProjectorTests
             sourceSpan,
             markedContent: null);
         var pageSource = new PdfExistingTextDiscoverySource(
-            pageId,
-            PdfExistingTextSourceKind.PageContent,
+            sourceOwner ?? pageId,
+            sourceKind,
             [operation],
             new PdfDisplayList([displayForm]),
-            [contentId]);
+            streamIdentifiers ?? [contentId]);
 
-        return PdfFormPlacementDescriptor.Create(pageId, pageSource, displayForm);
+        return legacy
+            ? PdfFormPlacementDescriptor.Create(pageId, pageSource, displayForm)
+            : PdfFormPlacementDescriptor.Create(document, pageId, pageSource, displayForm);
     }
 }

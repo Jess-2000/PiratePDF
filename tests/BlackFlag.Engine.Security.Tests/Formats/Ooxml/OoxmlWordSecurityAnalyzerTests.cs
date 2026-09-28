@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using BlackFlag.Engine.Security.Formats.Ooxml;
@@ -300,17 +299,6 @@ public sealed class OoxmlWordSecurityAnalyzerTests
 
         return output.ToArray();
     }
-
-    private static byte[] CreatePackage(
-        params (string Name, string Content)[] entries) =>
-        CreatePackage(
-            entries
-                .Select(
-                    entry =>
-                        (
-                            entry.Name,
-                            Encoding.UTF8.GetBytes(entry.Content)))
-                .ToArray());
 
     private static byte[] ContentTypesXml() =>
         Encoding.UTF8.GetBytes(

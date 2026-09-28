@@ -1,7 +1,6 @@
 using System.Buffers.Binary;
 using System.Security.Cryptography;
 using System.Text;
-using BlackFlag.Engine.Objects;
 
 namespace BlackFlag.Engine.Parsing.Security;
 

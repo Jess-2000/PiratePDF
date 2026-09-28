@@ -10,7 +10,7 @@ using Xunit;
 
 namespace BlackFlag.Engine.Fonts.Tests;
 
-public sealed class PdfTrueTypeGlyphSubsetterCompositeTests
+public sealed partial class PdfTrueTypeGlyphSubsetterCompositeTests
 {
     [Fact]
     public void NestedCompositeClosureIsRetainedAndResanitized()
@@ -438,6 +438,8 @@ public sealed class PdfTrueTypeGlyphSubsetterCompositeTests
 
         // U+0041 -> glyph 1.
         format0[6 + 65] = 1;
+        format0[6 + 66] = 2;
+        format0[6 + 67] = 1;
 
         byte[] cmap =
             new byte[

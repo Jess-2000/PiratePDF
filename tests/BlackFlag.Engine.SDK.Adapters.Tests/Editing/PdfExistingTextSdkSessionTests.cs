@@ -93,6 +93,26 @@ public sealed class PdfExistingTextSdkSessionTests
     }
 
     [Fact]
+    public void FontSwitchCannotIntroduceAnUnregisteredExternalFont()
+    {
+        using var context = CreateContext();
+        IPdfExistingTextSdkSession textSession = context.Sdk;
+        var target = Assert.Single(textSession.DiscoverExistingText(context.PageId));
+        context.Sdk.BeginTransaction();
+        Assert.Throws<KeyNotFoundException>(() => textSession.ChangeExistingTextFont(target.Id, "FExternal"));
+        Assert.Equal(context.Original, context.ReadContent());
+        Assert.False(context.Sdk.CanUndo);
+        // This SDK API selects existing resources; it has no external provider
+        // input. A failed lookup must not invalidate the target registration.
+        Assert.Contains(textSession.GetExistingTextFontCandidates(target.Id), candidate => candidate.ResourceName == "F2");
+        textSession.ChangeExistingTextFont(target.Id, "F2");
+        context.Sdk.CommitTransaction();
+        Assert.Contains("/F2 12 Tf", context.ReadContent(), StringComparison.Ordinal);
+        context.Sdk.Undo();
+        Assert.Equal(context.Original, context.ReadContent());
+    }
+
+    [Fact]
     public void InterfaceTypographyMapsAllFieldsInvalidatesTargetAndSupportsUndoRedo()
     {
         using var context = CreateContext();
@@ -131,7 +151,7 @@ public sealed class PdfExistingTextSdkSessionTests
 
     [Theory]
     [InlineData(PdfExistingTextSdkScriptStyle.Superscript, false, "/F1 6 Tf\n3 Ts\n", "42")]
-    [InlineData(PdfExistingTextSdkScriptStyle.Subscript, true, "/F1 9 Tf\n-6 Ts\n", "30")]
+    [InlineData(PdfExistingTextSdkScriptStyle.Subscript, true, "/F1 9 Tf\n-6 Ts\n", "22.5")]
     public void InterfaceStyleUsesScriptColorAndDecorationMappings(
         PdfExistingTextSdkScriptStyle scriptStyle,
         bool automaticDecoration,
@@ -160,9 +180,13 @@ public sealed class PdfExistingTextSdkSessionTests
         });
         context.Sdk.CommitTransaction();
 
+        string offset = scriptStyle == PdfExistingTextSdkScriptStyle.Superscript ? "1" : "-8";
+        string continuation = scriptStyle == PdfExistingTextSdkScriptStyle.Superscript ? "-15000" : "-22500";
         string expected = "BT\n/F1 12 Tf\n" + scriptOperators +
             "1 0 0 rg\n0 1 0 0 K\n(Hello) Tj\n/F1 12 Tf\n0 Ts\n0 g\n0 G\n" +
-            "q\n0 G\n1 w\n0 -2 m\n" + decorationWidth + " -2 l\nS\nQ\n\n(Next) Tj\nET\n";
+            "ET\nq\n1 0 0 1 0 0 cm\n1 0 0 RG\n1 w\n0 " + offset + " m\n" + decorationWidth +
+            " " + offset + " l\nS\nQ\nBT\n1 0 0 1 0 0 Tm\n/F1 1 Tf\n100 Tz\n[" + continuation +
+            "] TJ\n/F1 12 Tf\n100 Tz\n\n(Next) Tj\nET\n";
         Assert.Equal(expected, context.ReadContent());
         Assert.Empty(textSession.DiscoverExistingText(context.PageId));
         Assert.Throws<InvalidOperationException>(() => textSession.ApplyExistingTextStyle(
@@ -370,6 +394,11 @@ public sealed class PdfExistingTextSdkSessionTests
             operands, new PdfContentSourceSpan(0, start, start + show.Length));
         var fontSelection = new PdfGraphicsOperation(fontOperator,
             [new PdfName("F1"), new PdfInteger(12)], new PdfContentSourceSpan(0, 3, 12));
+        Assert.True(PdfGraphicsOperator.TryGet("BT", out var beginText));
+        Assert.True(PdfGraphicsOperator.TryGet("ET", out var endText));
+        var begin = new PdfGraphicsOperation(beginText, [], new PdfContentSourceSpan(0, 0, 2));
+        int endOffset = content.LastIndexOf("ET", StringComparison.Ordinal);
+        var end = new PdfGraphicsOperation(endText, [], new PdfContentSourceSpan(0, endOffset, endOffset + 2));
         PdfResolvedFont font = CreateFont();
         PdfTextRunElement[] elements = positioned
             ? [PdfTextRunElement.CreateText("Hel"u8, "Hel"),
@@ -379,7 +408,7 @@ public sealed class PdfExistingTextSdkSessionTests
             new PdfGraphicsStateSnapshot { Font = font, FontSize = 12 }, operation.SourceSpan, null);
         var source = new PdfExistingTextDiscoverySource(pageId,
             Engine.Editing.Text.PdfExistingTextSourceKind.PageContent,
-            [fontSelection, operation], new PdfDisplayList([run]), [contentId],
+            [begin, fontSelection, operation, end], new PdfDisplayList([run]), [contentId],
             availableFonts: new Dictionary<string, PdfResolvedFont> { ["F1"] = font, ["F2"] = font });
         sdk.RegisterExistingTextSource(sdkPageId, source);
         return new TestContext(sdk, sdkPageId, stream, content, source);

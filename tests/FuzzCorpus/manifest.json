@@ -1,0 +1,261 @@
+{
+  "schema": "piratepdf-fuzz-corpus",
+  "version": 1,
+  "seeds": [
+    {
+      "id": "asciihex-empty",
+      "target": "filter-asciihex",
+      "configurationVersion": 1,
+      "path": "tests/FuzzCorpus/filter-asciihex/asciihex-empty.bin",
+      "length": 1,
+      "sha256": "62B67E1F685B7FEF51102005DDDD27774BE3FEE38C42965C53AAB035D0B6B221",
+      "sourceRecipe": "tests/BlackFlag.Engine.Filters.Tests/Corpus/PdfTextFilterCorpus.cs#AsciiHexValid.Empty",
+      "origin": "repository-owned",
+      "rights": "Repository-owned synthetic fixture; no external license is asserted.",
+      "category": "valid-minimal",
+      "purpose": "Decode an immediate terminator to empty bytes.",
+      "expectedOutcome": "success",
+      "related": [
+        "BF-1040"
+      ]
+    },
+    {
+      "id": "asciihex-invalid-character",
+      "target": "filter-asciihex",
+      "configurationVersion": 1,
+      "path": "tests/FuzzCorpus/filter-asciihex/asciihex-invalid-character.bin",
+      "length": 5,
+      "sha256": "F001FDD680B3D864964A8F89FA1C87CF1E023DADD1E53CA0298F1CDBA637704D",
+      "sourceRecipe": "tests/BlackFlag.Engine.Filters.Tests/Corpus/PdfTextFilterCorpus.cs#AsciiHexInvalid.InvalidCharacter",
+      "origin": "repository-owned",
+      "rights": "Repository-owned synthetic fixture; no external license is asserted.",
+      "category": "malformed-structural",
+      "purpose": "Reject G inside a hexadecimal pair (InvalidData).",
+      "expectedOutcome": "rejected",
+      "related": [
+        "BF-1040"
+      ]
+    },
+    {
+      "id": "asciihex-missing-terminator",
+      "target": "filter-asciihex",
+      "configurationVersion": 1,
+      "path": "tests/FuzzCorpus/filter-asciihex/asciihex-missing-terminator.bin",
+      "length": 10,
+      "sha256": "53550CB11AD44FB2BE20148386008A98A3F2A7F397E937DE956D7CFD846BCD7C",
+      "sourceRecipe": "tests/BlackFlag.Engine.Filters.Tests/Corpus/PdfTextFilterCorpus.cs#AsciiHexInvalid.MissingTerminator",
+      "origin": "repository-owned",
+      "rights": "Repository-owned synthetic fixture; no external license is asserted.",
+      "category": "truncated",
+      "purpose": "Reject complete pairs without the required terminator (InvalidData).",
+      "expectedOutcome": "rejected",
+      "related": [
+        "BF-1040"
+      ]
+    },
+    {
+      "id": "asciihex-odd-nibble",
+      "target": "filter-asciihex",
+      "configurationVersion": 1,
+      "path": "tests/FuzzCorpus/filter-asciihex/asciihex-odd-nibble.bin",
+      "length": 2,
+      "sha256": "0AA65EAF6D4238AC157CFE34671E1BA9479BC12F026074EBDF11C1AD77F994AF",
+      "sourceRecipe": "tests/BlackFlag.Engine.Filters.Tests/Corpus/PdfTextFilterCorpus.cs#AsciiHexValid.OddNibble",
+      "origin": "repository-owned",
+      "rights": "Repository-owned synthetic fixture; no external license is asserted.",
+      "category": "valid-minimal",
+      "purpose": "Pad the final low nibble with zero, yielding A0.",
+      "expectedOutcome": "success",
+      "related": [
+        "BF-1040"
+      ]
+    },
+    {
+      "id": "asciihex-trailing-data",
+      "target": "filter-asciihex",
+      "configurationVersion": 1,
+      "path": "tests/FuzzCorpus/filter-asciihex/asciihex-trailing-data.bin",
+      "length": 4,
+      "sha256": "FC449BDFF908E6A5848B19124B85BD6063DA9839F434E1DF1B6C5FA380A38479",
+      "sourceRecipe": "tests/BlackFlag.Engine.Filters.Tests/Corpus/PdfTextFilterCorpus.cs#AsciiHexInvalid.TrailingData",
+      "origin": "repository-owned",
+      "rights": "Repository-owned synthetic fixture; no external license is asserted.",
+      "category": "malformed-structural",
+      "purpose": "Reject non-whitespace after the terminator (InvalidData).",
+      "expectedOutcome": "rejected",
+      "related": [
+        "BF-1040"
+      ]
+    },
+    {
+      "id": "asciihex-whitespace",
+      "target": "filter-asciihex",
+      "configurationVersion": 1,
+      "path": "tests/FuzzCorpus/filter-asciihex/asciihex-whitespace.bin",
+      "length": 17,
+      "sha256": "E906EEF435D0A766CF5C63E5EEFB9B292F082613461028ED143EB2838920F5AB",
+      "sourceRecipe": "tests/BlackFlag.Engine.Filters.Tests/Corpus/PdfTextFilterCorpus.cs#AsciiHexValid.Whitespace",
+      "origin": "repository-owned",
+      "rights": "Repository-owned synthetic fixture; no external license is asserted.",
+      "category": "valid-minimal",
+      "purpose": "Decode Hello with supported space, CR, LF and tab separators.",
+      "expectedOutcome": "success",
+      "related": [
+        "BF-1040"
+      ]
+    },
+    {
+      "id": "flate-decoded-exact",
+      "target": "filter-flate",
+      "configurationVersion": 1,
+      "path": "tests/FuzzCorpus/filter-flate/flate-decoded-exact.bin",
+      "length": 4407,
+      "sha256": "8433795C56D9F66E2F245EBA161E0B2C1D1AB316BC3E31FFD33A7270235A7DDD",
+      "sourceRecipe": "tests/PiratePDF.Fuzz.Tests/ManagedTargetTests.cs#FlateUsesDecodedByteLimitAndExpansionRatio",
+      "origin": "repository-owned",
+      "rights": "Repository-owned synthetic fixture; no external license is asserted.",
+      "category": "resource-boundary",
+      "purpose": "Accept 32768 decoded bytes while remaining below expansion ratio 32.",
+      "expectedOutcome": "success",
+      "related": [
+        "POST-P0-001"
+      ]
+    },
+    {
+      "id": "flate-decoded-over",
+      "target": "filter-flate",
+      "configurationVersion": 1,
+      "path": "tests/FuzzCorpus/filter-flate/flate-decoded-over.bin",
+      "length": 4407,
+      "sha256": "2FB48465387A66D03462AABEF6E1D11E35D5463558F9A9F7F0819EAE369A533C",
+      "sourceRecipe": "tests/PiratePDF.Fuzz.Tests/ManagedTargetTests.cs#FlateUsesDecodedByteLimitAndExpansionRatio",
+      "origin": "repository-owned",
+      "rights": "Repository-owned synthetic fixture; no external license is asserted.",
+      "category": "resource-boundary",
+      "purpose": "Reject 32769 decoded bytes (DecodedByteLimitExceeded), with ratio below 32.",
+      "expectedOutcome": "rejected",
+      "related": [
+        "POST-P0-001"
+      ]
+    },
+    {
+      "id": "flate-empty",
+      "target": "filter-flate",
+      "configurationVersion": 1,
+      "path": "tests/FuzzCorpus/filter-flate/flate-empty.bin",
+      "length": 8,
+      "sha256": "ACA503DEF43DC086A5AAA5C3D6F86BCBBC2AA6A80007DDEA4A81BCE2B376FCEB",
+      "sourceRecipe": "tests/BlackFlag.Engine.Filters.Tests/PdfFlateCompletenessTests.cs#CompleteEmptyMemberRemainsValid",
+      "origin": "repository-owned",
+      "rights": "Repository-owned synthetic fixture; no external license is asserted.",
+      "category": "valid-minimal",
+      "purpose": "Accept a complete empty zlib member.",
+      "expectedOutcome": "success",
+      "related": [
+        "F3-OBS-01"
+      ]
+    },
+    {
+      "id": "flate-expansion-over",
+      "target": "filter-flate",
+      "configurationVersion": 1,
+      "path": "tests/FuzzCorpus/filter-flate/flate-expansion-over.bin",
+      "length": 26,
+      "sha256": "77B1F27DFE4747505C3676510175FAD1E048EC0413DF6E848FF024D4E110C3A8",
+      "sourceRecipe": "tests/PiratePDF.Fuzz.Tests/ManagedTargetTests.cs#FlateUsesDecodedByteLimitAndExpansionRatio",
+      "origin": "repository-owned",
+      "rights": "Repository-owned synthetic fixture; no external license is asserted.",
+      "category": "resource-boundary",
+      "purpose": "Reject 4096 zero bytes expanded beyond ratio 32 (ExpansionRatioExceeded).",
+      "expectedOutcome": "rejected",
+      "related": [
+        "POST-P0-001"
+      ]
+    },
+    {
+      "id": "flate-hello",
+      "target": "filter-flate",
+      "configurationVersion": 1,
+      "path": "tests/FuzzCorpus/filter-flate/flate-hello.bin",
+      "length": 13,
+      "sha256": "589A31FA3790A670E020C0C8502CBDAFB87D0B470FE29B3BA18598C466895FFB",
+      "sourceRecipe": "tests/PiratePDF.Fuzz.Tests/ManagedTargetTests.cs#FlateDecodesOwnedInputAndRejectsTruncation",
+      "origin": "repository-owned",
+      "rights": "Repository-owned synthetic fixture; no external license is asserted.",
+      "category": "valid-minimal",
+      "purpose": "Decode the complete zlib member for Hello.",
+      "expectedOutcome": "success",
+      "related": [
+        "F3-OBS-01"
+      ]
+    },
+    {
+      "id": "flate-truncated",
+      "target": "filter-flate",
+      "configurationVersion": 1,
+      "path": "tests/FuzzCorpus/filter-flate/flate-truncated.bin",
+      "length": 12,
+      "sha256": "3DB8C1010A538BBD067E72AC708B4B8237F5103CC1C85E73B67C9D2BED89C2D2",
+      "sourceRecipe": "tests/PiratePDF.Fuzz.Tests/ManagedTargetTests.cs#FlateDecodesOwnedInputAndRejectsTruncation",
+      "origin": "repository-owned",
+      "rights": "Repository-owned synthetic fixture; no external license is asserted.",
+      "category": "historical-regression",
+      "purpose": "Reject the Hello member missing its last checksum byte (InvalidData).",
+      "expectedOutcome": "rejected",
+      "related": [
+        "F3-OBS-01"
+      ]
+    },
+    {
+      "id": "font-minimal",
+      "target": "font-sanitize",
+      "configurationVersion": 1,
+      "path": "tests/FuzzCorpus/font-sanitize/font-minimal.bin",
+      "length": 556,
+      "sha256": "40222B2C3E2E801FF12A412C7590F9A2C9B84A885A585B6B59675D5E09FEB04A",
+      "sourceRecipe": "tests/BlackFlag.Engine.Fonts.Tests/TestFontFactory.cs#CreateMinimalTrueType",
+      "origin": "repository-owned",
+      "rights": "Repository-owned synthetic fixture; no external license is asserted.",
+      "category": "valid-minimal",
+      "purpose": "Accept the owned one-glyph TrueType fixture with coherent required tables/checksums.",
+      "expectedOutcome": "success",
+      "related": [
+        "BF-1054"
+      ]
+    },
+    {
+      "id": "font-too-many-tables",
+      "target": "font-sanitize",
+      "configurationVersion": 1,
+      "path": "tests/FuzzCorpus/font-sanitize/font-too-many-tables.bin",
+      "length": 12,
+      "sha256": "B9978A78BFA4A6132A732C95E8BE7157A72A77F8564F4BD2B16C8FA1EC803DF9",
+      "sourceRecipe": "tests/PiratePDF.Fuzz.Tests/ManagedTargetTests.cs#FontSanitizerUsesDomainRejectionsAndConfiguredTableCeiling",
+      "origin": "repository-owned",
+      "rights": "Repository-owned synthetic fixture; no external license is asserted.",
+      "category": "resource-boundary",
+      "purpose": "Reject an SFNT header declaring 33 tables, above v1 limit 32 (TooManyTables).",
+      "expectedOutcome": "rejected",
+      "related": [
+        "BF-1054"
+      ]
+    },
+    {
+      "id": "font-truncated-header",
+      "target": "font-sanitize",
+      "configurationVersion": 1,
+      "path": "tests/FuzzCorpus/font-sanitize/font-truncated-header.bin",
+      "length": 11,
+      "sha256": "71B6C1D53832F789A7F2435A7C629245FA3761AD8487775EBF4957330213A706",
+      "sourceRecipe": "tests/PiratePDF.Fuzz.Tests/CorpusSeedRecipes.cs#TruncatedHeader",
+      "origin": "repository-owned",
+      "rights": "Repository-owned synthetic fixture; no external license is asserted.",
+      "category": "truncated",
+      "purpose": "Reject eleven zero bytes before reading a complete twelve-byte SFNT header (MalformedHeader).",
+      "expectedOutcome": "rejected",
+      "related": [
+        "BF-1054"
+      ]
+    }
+  ]
+}

@@ -1,3 +1,5 @@
+#nullable enable
+using System.Threading;
 using BlackFlag.Engine.Objects;
 using BlackFlag.Engine.Rendering.DisplayList;
 using BlackFlag.Engine.Rendering.Graphics;
@@ -91,6 +93,95 @@ public sealed class PdfTextAdvanceMeasurementServiceTests
         Assert.Equal(
             42,
             resolved.AdvanceWidth);
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void ReplacementReadsEachTextElementOnceBeforeMeasurement(bool cancelled)
+    {
+        PdfDisplayTextRun run = CreateMixedRun();
+        var replacements = new RecordingReplacementElements();
+        using var cancellation = new CancellationTokenSource();
+        if (cancelled)
+        {
+            cancellation.Cancel();
+        }
+
+        if (cancelled)
+        {
+            OperationCanceledException exception = Assert.Throws<OperationCanceledException>(
+                () => PdfTextAdvanceMeasurementService.MeasureReplacement(run, replacements, cancellation.Token));
+            Assert.Equal(cancellation.Token, exception.CancellationToken);
+        }
+        else
+        {
+            // ((700 / 1000 * 12 + 1) + (500 / 1000 * 12 + 1) + 1.44 - 0.24) * 0.8.
+            Assert.Equal(14.08, PdfTextAdvanceMeasurementService.MeasureReplacement(run, replacements), precision: 6);
+        }
+
+        Assert.Equal([0, 1], replacements.ReadIndices);
+        Assert.Equal([65, 65], run.EncodedBytes.ToArray());
+        Assert.Equal(-120, run.Elements[1].Adjustment);
+        Assert.Equal(20, run.Elements[3].Adjustment);
+    }
+
+    [Fact]
+    public void ReplacementReadFailurePrecedesMeasurementCancellation()
+    {
+        var failure = new InvalidOperationException("Fixture replacement read failure.");
+        var replacements = new RecordingReplacementElements(failure);
+        using var cancellation = new CancellationTokenSource();
+        cancellation.Cancel();
+
+        Assert.Same(failure, Assert.Throws<InvalidOperationException>(
+            () => PdfTextAdvanceMeasurementService.MeasureReplacement(
+                CreateMixedRun(), replacements, cancellation.Token)));
+        Assert.Equal([0, 1], replacements.ReadIndices);
+    }
+
+    private static PdfDisplayTextRun CreateMixedRun()
+    {
+        PdfDisplayTextRun template = CreateSimpleRun([65], horizontalScaling: 80);
+        return new PdfDisplayTextRun(
+            template.Font,
+            template.FontSize,
+            [
+                PdfTextRunElement.CreateText([65]),
+                PdfTextRunElement.CreateAdjustment(-120),
+                PdfTextRunElement.CreateText([65]),
+                PdfTextRunElement.CreateAdjustment(20)
+            ],
+            template.TextMatrix,
+            template.GraphicsState,
+            template.SourceSpan,
+            template.MarkedContent);
+    }
+
+    private sealed class RecordingReplacementElements(Exception? failure = null)
+        : IReadOnlyList<ReadOnlyMemory<byte>>
+    {
+        private readonly ReadOnlyMemory<byte>[] values = [new byte[] { 66 }, new byte[] { 65 }];
+
+        public List<int> ReadIndices { get; } = [];
+        public int Count => values.Length;
+        public ReadOnlyMemory<byte> this[int index]
+        {
+            get
+            {
+                ReadIndices.Add(index);
+                if (index == 1 && failure is not null)
+                {
+                    throw failure;
+                }
+                return values[index];
+            }
+        }
+
+        public IEnumerator<ReadOnlyMemory<byte>> GetEnumerator() =>
+            ((IEnumerable<ReadOnlyMemory<byte>>)values).GetEnumerator();
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
     private static PdfDisplayTextRun CreateSimpleRun(

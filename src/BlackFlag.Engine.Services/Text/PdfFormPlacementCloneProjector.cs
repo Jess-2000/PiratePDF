@@ -24,17 +24,10 @@ public static class PdfFormPlacementCloneProjector
         ArgumentNullException.ThrowIfNull(writePlan);
         ArgumentNullException.ThrowIfNull(placement);
 
-        PdfStream sourceForm =
-            GetStream(
-                writePlan,
-                placement.FormIdentifier,
-                "source Form XObject");
-
-        PdfStream pageContent =
-            GetStream(
-                writePlan,
-                placement.ContentStreamIdentifier,
-                "page content");
+        // Validate before allocation/clone preparation and reuse this decoded
+        // snapshot for redirection. No second fetch can change the target bytes.
+        (PdfStream sourceForm, PdfStream pageContent, byte[] decodedPageContent) =
+            placement.Validate(writePlan.Document);
 
         PdfWriteObjectAllocator allocator =
             writePlan.CreateObjectAllocator();
@@ -64,10 +57,6 @@ public static class PdfFormPlacementCloneProjector
                 preferred,
                 new PdfIndirectReference(
                     cloneIdentifier));
-
-        byte[] decodedPageContent =
-            PdfContentStreamMutationCodec.Decode(
-                pageContent);
 
         byte[] projectedDecodedPageContent =
             RedirectPlacement(
@@ -162,20 +151,4 @@ public static class PdfFormPlacementCloneProjector
         return destination.ToArray();
     }
 
-    private static PdfStream GetStream(
-        PdfWritePlan plan,
-        PdfObjectIdentifier identifier,
-        string description)
-    {
-        if (!plan.Document.Objects.TryGet(
-                identifier,
-                out PdfObject? value) ||
-            value is not PdfStream stream)
-        {
-            throw new InvalidOperationException(
-                $"{description} object '{identifier}' is not an indirect stream.");
-        }
-
-        return stream;
-    }
 }

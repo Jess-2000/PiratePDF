@@ -85,12 +85,12 @@ public sealed class PdfCrossReferenceStreamParser
 
         long expectedLength = 0;
 
-        foreach ((_, int count) in ranges)
+        foreach (var range in ranges)
         {
             expectedLength =
                 checked(
                     expectedLength +
-                    ((long)count * entryWidth));
+                    ((long)range.Count * entryWidth));
         }
 
         if (decoded.Length != expectedLength)

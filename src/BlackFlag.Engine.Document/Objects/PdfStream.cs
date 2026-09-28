@@ -43,6 +43,13 @@ public sealed class PdfStream : PdfObject
         data.Length == 0;
 
     /// <summary>
+    /// Gets the instance-local revision of the encoded data. Each successful
+    /// replacement advances it, including replacement with identical bytes.
+    /// This does not track dictionary changes or provide thread synchronization.
+    /// </summary>
+    public long DataRevision { get; private set; }
+
+    /// <summary>
     /// Returns a defensive copy of the encoded stream bytes.
     /// </summary>
     public byte[] ToByteArray()
@@ -56,6 +63,9 @@ public sealed class PdfStream : PdfObject
     public void ReplaceData(
         ReadOnlySpan<byte> replacement)
     {
-        data = replacement.ToArray();
+        long nextRevision = checked(DataRevision + 1);
+        byte[] snapshot = replacement.ToArray();
+        data = snapshot;
+        DataRevision = nextRevision;
     }
 }

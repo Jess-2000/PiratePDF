@@ -15,7 +15,7 @@ public sealed class PdfSanitizedExternalFontMetadata
         int weight,
         int stretch,
         PdfExternalFontSlant slant,
-        PdfExternalFontEmbeddingRights embeddingRights,
+        PdfExternalFontProgramRights restrictions,
         Func<int, int> glyphMapper)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(familyName);
@@ -27,7 +27,9 @@ public sealed class PdfSanitizedExternalFontMetadata
         Weight = weight;
         Stretch = stretch;
         Slant = slant;
-        EmbeddingRights = embeddingRights;
+        EmbeddingRights = restrictions.Level;
+        NoSubsetting = restrictions.NoSubsetting;
+        BitmapEmbeddingOnly = restrictions.BitmapEmbeddingOnly;
         this.glyphMapper = glyphMapper;
     }
 
@@ -37,6 +39,8 @@ public sealed class PdfSanitizedExternalFontMetadata
     public int Stretch { get; }
     public PdfExternalFontSlant Slant { get; }
     public PdfExternalFontEmbeddingRights EmbeddingRights { get; }
+    public bool NoSubsetting { get; }
+    public bool BitmapEmbeddingOnly { get; }
 
     public bool SupportsRune(Rune rune) =>
         glyphMapper(rune.Value) > 0;

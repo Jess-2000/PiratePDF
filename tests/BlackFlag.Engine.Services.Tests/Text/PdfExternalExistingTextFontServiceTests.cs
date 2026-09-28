@@ -1,18 +1,7 @@
-using System.Buffers.Binary;
-using System.Text;
-using BlackFlag.Engine.Document.Model;
 using BlackFlag.Engine.Document.Objects;
-using BlackFlag.Engine.Document.Objects.Primitives;
-using BlackFlag.Engine.Editing.Documents;
 using BlackFlag.Engine.Editing.Operations;
 using BlackFlag.Engine.Editing.Ownership;
 using BlackFlag.Engine.Editing.Text;
-using BlackFlag.Engine.Fonts;
-using BlackFlag.Engine.Fonts.Sanitization;
-using BlackFlag.Engine.Rendering.DisplayList;
-using BlackFlag.Engine.Rendering.Fonts;
-using BlackFlag.Engine.Rendering.Graphics;
-using BlackFlag.Engine.Rendering.Resources;
 using BlackFlag.Engine.Services.Text;
 
 namespace BlackFlag.Engine.Services.Tests.Text;

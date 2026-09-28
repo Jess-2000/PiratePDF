@@ -17,7 +17,7 @@ public static class PdfSanitizedExternalFontMetadataInspector
         ArgumentNullException.ThrowIfNull(program);
 
         ReadOnlySpan<byte> bytes =
-            program.Bytes.Span;
+            program.TrustedBytes;
 
         Dictionary<string, PdfTrueTypeTable> tables =
             PdfTrueTypeBinary.ReadTables(bytes);
@@ -60,7 +60,7 @@ public static class PdfSanitizedExternalFontMetadataInspector
             style.Weight,
             style.Stretch,
             style.Slant,
-            style.EmbeddingRights,
+            program.EmbeddingRestrictions,
             glyphMapper);
     }
 
@@ -237,23 +237,6 @@ public static class PdfSanitizedExternalFontMetadataInspector
                 1,
                 9);
 
-        int fsType =
-            U16(
-                os2,
-                8);
-
-        PdfExternalFontEmbeddingRights embeddingRights =
-            (fsType & 0x0002) != 0 ||
-            (fsType & 0x0200) != 0
-                ? PdfExternalFontEmbeddingRights.Restricted
-                : (fsType & 0x0100) != 0
-                    ? PdfExternalFontEmbeddingRights.Allowed
-                    : (fsType & 0x0004) != 0
-                        ? PdfExternalFontEmbeddingRights.Allowed
-                        : (fsType & 0x0008) != 0
-                            ? PdfExternalFontEmbeddingRights.SubsetOnly
-                            : PdfExternalFontEmbeddingRights.Allowed;
-
         PdfExternalFontSlant slant =
             ReadSlant(
                 os2);
@@ -261,8 +244,7 @@ public static class PdfSanitizedExternalFontMetadataInspector
         return new StyleMetadata(
             weight,
             stretch,
-            slant,
-            embeddingRights);
+            slant);
     }
 
     private static PdfExternalFontSlant ReadSlant(
@@ -400,14 +382,12 @@ public static class PdfSanitizedExternalFontMetadataInspector
     private readonly record struct StyleMetadata(
         int Weight,
         int Stretch,
-        PdfExternalFontSlant Slant,
-        PdfExternalFontEmbeddingRights EmbeddingRights)
+        PdfExternalFontSlant Slant)
     {
         public static StyleMetadata Default { get; } =
             new(
                 400,
                 5,
-                PdfExternalFontSlant.Upright,
-                PdfExternalFontEmbeddingRights.Unknown);
+                PdfExternalFontSlant.Upright);
     }
 }

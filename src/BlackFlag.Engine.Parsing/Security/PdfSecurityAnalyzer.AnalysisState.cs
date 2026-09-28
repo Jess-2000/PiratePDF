@@ -167,12 +167,10 @@ public sealed partial class PdfSecurityAnalyzer
                         entry.Key,
                         context);
 
-                if (ShouldRecordPresence(entry.Key, dictionary, childContext))
+                if (ShouldRecordPresence(entry.Key, childContext))
                 {
                     RecordPresenceObservation(
                         entry.Key,
-                        entry.Value,
-                        dictionary,
                         childPath,
                         sourceObjectId,
                         childContext);
@@ -473,7 +471,6 @@ public sealed partial class PdfSecurityAnalyzer
 
         private static bool ShouldRecordPresence(
             PdfName key,
-            PdfDictionary parent,
             VisitContext childContext) =>
             key == OpenActionKey ||
             key == AdditionalActionsKey ||
@@ -485,8 +482,6 @@ public sealed partial class PdfSecurityAnalyzer
 
         private void RecordPresenceObservation(
             PdfName key,
-            PdfObject value,
-            PdfDictionary parent,
             string logicalPath,
             PdfObjectId? sourceObjectId,
             VisitContext childContext)

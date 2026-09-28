@@ -1,4 +1,3 @@
-using System.Text;
 using BlackFlag.Engine.Objects;
 using BlackFlag.Engine.Rendering.DisplayList;
 using BlackFlag.Engine.Rendering.Graphics;
@@ -42,7 +41,7 @@ public sealed partial class PdfGraphicsInterpreter
         double y)
     {
         PdfMatrix translation = new(1, 0, 0, 1, x, y);
-        PdfMatrix line = state.TextLineMatrix.Multiply(translation);
+        PdfMatrix line = translation.Multiply(state.TextLineMatrix);
         return state with
         {
             TextLineMatrix = line,

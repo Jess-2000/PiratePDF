@@ -73,4 +73,8 @@ public sealed class PdfExternalFontFace
     public PdfExternalFontSlant Slant { get; }
     public PdfExternalFontTechnology Technology { get; }
     public PdfExternalFontEmbeddingRights EmbeddingRights { get; }
+    /// <summary>Independent provider restriction against creating a subset.</summary>
+    public bool NoSubsetting { get; init; }
+    /// <summary>Independent provider restriction excluding outline embedding.</summary>
+    public bool BitmapEmbeddingOnly { get; init; }
 }

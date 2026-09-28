@@ -1,3 +1,5 @@
+using BlackFlag.Engine.Fonts.Sanitization;
+
 namespace BlackFlag.Engine.Fonts;
 
 /// <summary>
@@ -10,14 +12,15 @@ public static class PdfExternalFontEmbeddingPolicy
         PdfExternalFontEmbeddingRights rights) =>
         rights is
             PdfExternalFontEmbeddingRights.Allowed or
-            PdfExternalFontEmbeddingRights.SubsetOnly;
+            PdfExternalFontEmbeddingRights.SubsetOnly or
+            PdfExternalFontEmbeddingRights.Editable;
 
     public static void EnsureCanEmbed(
         PdfExternalFontFace face)
     {
         ArgumentNullException.ThrowIfNull(face);
 
-        if (CanEmbed(face.EmbeddingRights))
+        if (CanEmbedFace(face))
         {
             return;
         }
@@ -34,5 +37,31 @@ public static class PdfExternalFontEmbeddingPolicy
                 _ =>
                     $"Font face '{face.FaceName}' is not eligible for embedding."
             });
+    }
+
+    /// <summary>Whether provider policy permits any supported outline embedding operation.</summary>
+    internal static bool CanEmbedFace(PdfExternalFontFace face)
+    {
+        ArgumentNullException.ThrowIfNull(face);
+        return CanEmbed(face.EmbeddingRights) && !face.BitmapEmbeddingOnly &&
+            !(face.NoSubsetting && face.EmbeddingRights == PdfExternalFontEmbeddingRights.SubsetOnly);
+    }
+
+    /// <summary>
+    /// Requires both provider and trusted program permission for outline embedding
+    /// into the supported editable-document workflow.
+    /// </summary>
+    public static void EnsureCanEmbed(
+        PdfExternalFontFace face,
+        PdfSanitizedExternalFontProgram program,
+        bool subset)
+    {
+        ArgumentNullException.ThrowIfNull(face);
+        ArgumentNullException.ThrowIfNull(program);
+        if (!CanEmbed(face.EmbeddingRights) || face.BitmapEmbeddingOnly ||
+            (subset && face.NoSubsetting) ||
+            (!subset && face.EmbeddingRights == PdfExternalFontEmbeddingRights.SubsetOnly))
+            throw new NotSupportedException("Provider restrictions prohibit the requested outline embedding operation.");
+        program.EmbeddingRestrictions.EnsureCanEmbed(subset);
     }
 }

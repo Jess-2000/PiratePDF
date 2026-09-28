@@ -151,8 +151,8 @@ public sealed class PdfExternalFontCatalog
             }
 
             if (request.RequireEmbeddable &&
-                !PdfExternalFontEmbeddingPolicy.CanEmbed(
-                    face.EmbeddingRights))
+                !PdfExternalFontEmbeddingPolicy.CanEmbedFace(
+                    face))
             {
                 continue;
             }

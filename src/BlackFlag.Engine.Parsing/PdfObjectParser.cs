@@ -18,7 +18,7 @@ public sealed partial class PdfObjectParser
 {
     private static readonly ReadOnlyCollection<PdfTokenKind>
         SupportedObjectTokenKinds =
-            Array.AsReadOnly<PdfTokenKind>(
+            Array.AsReadOnly(
                 [
                     PdfTokenKind.Null,
                     PdfTokenKind.BooleanTrue,

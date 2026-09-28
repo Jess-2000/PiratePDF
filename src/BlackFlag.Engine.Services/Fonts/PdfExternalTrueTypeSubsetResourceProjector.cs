@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using System.Text;
 using BlackFlag.Engine.Document.Objects;
 using BlackFlag.Engine.Document.Objects.Primitives;
@@ -54,13 +53,8 @@ public static class PdfExternalTrueTypeSubsetResourceProjector
         ArgumentNullException.ThrowIfNull(program);
         ArgumentNullException.ThrowIfNull(requiredText);
 
-        if (face.EmbeddingRights is not
-            (PdfExternalFontEmbeddingRights.Allowed or
-            PdfExternalFontEmbeddingRights.SubsetOnly))
-        {
-            throw new NotSupportedException(
-                "The selected external font does not permit subset embedding.");
-        }
+        cancellationToken.ThrowIfCancellationRequested();
+        PdfExternalFontEmbeddingPolicy.EnsureCanEmbed(face, program, subset: true);
 
         var subsetter =
             new PdfTrueTypeGlyphSubsetter();
@@ -74,13 +68,6 @@ public static class PdfExternalTrueTypeSubsetResourceProjector
         PdfExternalTrueTypeMetrics metrics =
             PdfExternalTrueTypeInspector.Inspect(
                 subset.Program);
-
-        if (metrics.EmbeddingRights ==
-            PdfExternalFontEmbeddingRights.Restricted)
-        {
-            throw new NotSupportedException(
-                "The sanitized font program prohibits embedding.");
-        }
 
         PdfWriteObjectAllocator allocator =
             writePlan.CreateObjectAllocator();
@@ -99,6 +86,7 @@ public static class PdfExternalTrueTypeSubsetResourceProjector
                 face.FaceName,
                 subset.Program.Sha256);
 
+        ReadOnlyMemory<byte> fontBytes = subset.Program.Bytes;
         PdfStream fontProgram =
             new(
                 new PdfDictionary
@@ -106,14 +94,14 @@ public static class PdfExternalTrueTypeSubsetResourceProjector
                     {
                         Length1Name,
                         new PdfInteger(
-                            subset.Program.Bytes.Length)
+                            fontBytes.Length)
                     }
                 },
-                subset.Program.Bytes.Span);
+                fontBytes.Span);
 
         PdfStream toUnicode =
             new(
-                new PdfDictionary(),
+                [],
                 PdfToUnicodeCMapBuilder.Build(
                     subset.UnicodeByCode));
 
@@ -141,7 +129,7 @@ public static class PdfExternalTrueTypeSubsetResourceProjector
                     fontIdentifier));
 
         return new PdfExternalFontResourceProjection(
-            resourceName,
+            resourceMutation.ResourceName,
             fontIdentifier,
             descriptorIdentifier,
             programIdentifier,

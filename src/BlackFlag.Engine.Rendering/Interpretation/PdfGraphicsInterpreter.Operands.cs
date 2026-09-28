@@ -1,8 +1,6 @@
-using System.Text;
 using BlackFlag.Engine.Objects;
 using BlackFlag.Engine.Rendering.DisplayList;
 using BlackFlag.Engine.Rendering.Graphics;
-using BlackFlag.Engine.Rendering.Resources;
 
 namespace BlackFlag.Engine.Rendering.Interpretation;
 

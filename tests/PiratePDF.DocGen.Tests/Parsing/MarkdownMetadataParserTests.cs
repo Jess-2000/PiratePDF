@@ -63,6 +63,25 @@ public sealed class MarkdownMetadataParserTests
             metadata.NextReview);
     }
 
+    [Theory]
+    [InlineData("| **Owner** |   PiratePDF Project   |", "PiratePDF Project")]
+    [InlineData("| **Owner** |   |", "")]
+    [InlineData("| **Owner** ||", "")]
+    [InlineData("| **Owner** | ignored | extra |", "original")]
+    public void Parse_PreservesEmptyCellsAndRejectsExtraCells(string row, string expectedOwner)
+    {
+        using var directory = new TemporaryDirectory();
+        string filePath = directory.CreateFile(
+            "Cells.md",
+            "# Cells\n\n| Field | Value |\n|---|---|\n" +
+            "| **Owner** | original |\n" + row + "\n| **Status** | Review |\n");
+
+        var metadata = MarkdownMetadataParser.Parse(filePath);
+
+        Assert.Equal(expectedOwner, metadata.Owner);
+        Assert.Equal("Review", metadata.Status);
+    }
+
     [Fact]
     public void Parse_WithLaterMarkdownTable_DoesNotOverwriteMetadata()
     {

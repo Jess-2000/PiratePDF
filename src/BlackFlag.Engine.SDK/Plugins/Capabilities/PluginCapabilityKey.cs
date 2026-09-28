@@ -1,4 +1,3 @@
-using BlackFlag.Engine.SDK.Plugins;
 namespace BlackFlag.Engine.SDK.Plugins.Capabilities;
 
 /// <summary>Strongly typed key for a manifest-declared plugin capability.</summary>

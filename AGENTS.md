@@ -72,6 +72,8 @@ Review every hand-authored C# file when explicitly asked to perform the reposito
 
 Do **not** change every file.
 
+When modifying a hand-authored C# file for an approved task, leave the touched area no dirtier than you found it. Remove imports or private implementation members that become conclusively unused as a direct result of the approved change, provided removal is local, behavior-preserving, and satisfies the source-hygiene rules below. Do not expand the task into an unrelated repository-wide cleanup.
+
 Change a file only when there is a concrete, defensible improvement in at least one of:
 - correctness;
 - security/privacy;
@@ -144,6 +146,110 @@ replace bounded validation with optimistic assumptions.
 - Do not mechanically replace valid constructs merely to satisfy a stylistic preference.
 - LINQ is acceptable when it improves clarity and does not create unjustified hot-path allocations.
 
+### Expressions, materialization, and deconstruction
+- Do not mechanically prefer newer or shorter syntax. Choose the form that makes ownership, evaluation, allocation, resource bounds, and domain intent clearest.
+- Do not mechanically replace `ToArray()` with collection expressions or collection expressions with `ToArray()`.
+- Prefer collection expressions for straightforward fixed construction and known/materialized collection copies when independent ownership is clear.
+- Prefer or retain `ToArray()` when it more clearly establishes an intentional eager materialization boundary, especially for lazy/stateful enumerables, LINQ pipelines, parser/tokenizer pipelines, security-bounded enumeration, or sequences whose evaluation/exception behavior matters.
+- Neither `ToArray()` nor collection-expression spread is inherently faster or more secure. For performance-sensitive choices, use measurement or strong complexity/allocation evidence rather than syntax preference.
+- Ensure attacker-controlled enumeration is bounded and makes progress before relying on eager materialization. Syntax must not obscure resource ceilings or mutation/ownership boundaries.
+- Use deconstruction when the extracted values are meaningfully related and the resulting names remain clear. Prefer named variables or member access when deconstruction introduces unused values, obscures domain meaning/type/ownership/lifetime, or makes security-sensitive code harder to audit.
+- Keep descriptive intermediate variables when they capture state, provenance, numeric width, resource budgets, offsets, ownership, lifetime, or another meaningful invariant. Inline them only when evaluation timing, side effects, exception behavior, and readability remain clearly equivalent.
+- Use `var` when the type is evident and unimportant to understanding the operation. Prefer an explicit type when numeric width/signedness, interface versus implementation, ownership, lifetime, or another semantic distinction matters.
+- Before simplifying an expression, preserve evaluation count, enumeration count, ordering, side effects, exception timing, cancellation, disposal, null behavior, deferred/eager execution, mutation, and aliasing.
+- Add a concise comment when a non-obvious materialization or expression choice protects an important ownership, evaluation, preservation, security, or resource-bound invariant. Explain why the form is intentional rather than narrating its syntax.
+
+### Source hygiene, unused code, and dead-code removal
+
+Keep hand-authored source free of genuinely unused imports and implementation code, but treat removal as a correctness and compatibility decision rather than a cosmetic cleanup.
+
+- Remove unused ordinary `using` directives when compiler/Roslyn analysis establishes that they are unnecessary.
+- Evaluate `global using`, alias, and `using static` directives at the appropriate project/semantic scope rather than by same-file textual search.
+- Account for extension-method resolution, aliases, conditional compilation, generated-code interaction, and supported target/platform configurations before removing an import.
+- Do not reorganize, fully qualify, or otherwise rewrite live code merely to eliminate a `using`.
+
+For apparently unused members, absence of an ordinary C# call site is not sufficient evidence that the member is dead.
+
+Before removing a type, constructor, method, property, field, event, delegate, operator, overload, local function, parameter, or other member, account for applicable use through:
+
+- interfaces and explicit/implicit interface implementation;
+- overrides, virtual dispatch, inheritance, and protected extension points;
+- public or protected API consumption outside the repository;
+- delegates, events, callbacks, method groups, and expression trees;
+- reflection, `Activator`, attributes, name-based discovery, and runtime registration;
+- plugin discovery, activation, manifests, factories, and lifecycle contracts;
+- serialization/deserialization and generated-code contracts;
+- P/Invoke, native callbacks, function pointers, and platform adapters;
+- test/fixture/data-source discovery;
+- conditional compilation and supported target frameworks/platforms;
+- partial types and declarations in other files;
+- tooling, scripts, samples, documentation, and repository conventions that invoke symbols indirectly.
+
+Apply increasingly conservative removal standards as accessibility increases:
+
+- Private implementation members may be removed when repository-wide semantic analysis establishes that they are genuinely unreachable and unnecessary.
+- Internal members require cross-project, test, tooling, and `InternalsVisibleTo` analysis before removal.
+- Public and protected members are API/extension surface. Do not remove them merely because the repository contains no caller. Retain them unless an explicitly approved API change establishes that removal is compatibility-safe.
+- Required interface implementations and overrides are live contract members even when no direct call site exists.
+
+When usage is dynamic, framework-driven, platform-specific, generated, externally consumable, or otherwise uncertain, retain the member. False retention is preferable to false deletion.
+
+Additional cleanup rules:
+
+- Inspect every partial declaration before classifying a member as dead.
+- Do not remove constructors solely because there is no direct `new` expression; account for reflection, factories, serializers, plugins, generic activation, and frameworks.
+- Do not remove setters/properties solely because there is no direct assignment/read; account for serialization, binding, reflection, interfaces, and generated code.
+- Do not remove event handlers or callbacks solely because there is no conventional invocation expression.
+- Do not remove `Dispose`, `DisposeAsync`, finalizers, equality/hash members, `ToString`, operators, conversions, entry points, lifecycle hooks, or throw-only/no-op contract implementations based only on direct-reference counts.
+- Do not remove public constants, public enum members, public exception types, or public overloads as routine dead-code cleanup.
+- Do not renumber enums or alter persisted/serialized numeric values during cleanup.
+- Treat struct-layout, interop, serialization, and native-facing fields as contract-sensitive.
+- Treat `CancellationToken` parameters as contract-sensitive; do not remove them merely because the current implementation does not consume them.
+- Remove private/internal unused parameters or dead overloads only when all controlled callers and delegate/signature contracts remain equivalent.
+- Remove unused local functions and newly orphaned private helpers only after applying the same semantic/evaluation analysis.
+- A test is not dead merely because another test appears similar. Preserve unique behavioral and regression coverage.
+- Production members referenced only by tests are not automatically dead; determine whether the tests are validating an intentional production contract.
+- Tool, sample, plugin, and platform entry points may be externally invoked and must not be classified by ordinary application call graphs alone.
+- Documented architectural seams should normally be retained even when the current implementation has no caller. Undocumented private implementation with no callers or contract is a stronger removal candidate.
+- Clearly obsolete commented-out implementation may be removed when version control preserves its history, but preserve rationale, invariants, specification notes, TODOs with tracked follow-up, and explanatory comments that remain relevant.
+- Remove comments/XML documentation that solely describe a deleted member; do not use dead-code cleanup as a general documentation rewrite.
+- If deletion leaves an otherwise unnecessary private/internal type or source file empty, reassess it under the same dead-code rules rather than deleting it mechanically.
+
+Dead-code cleanup must not be combined opportunistically with:
+
+- API redesign;
+- renaming;
+- formatting churn;
+- syntax modernization;
+- LINQ/control-flow rewrites;
+- visibility changes to make a member removable;
+- inlining of live helpers merely to reduce member count;
+- performance refactoring;
+- security-policy changes;
+- dependency/project-reference changes;
+- feature implementation.
+
+For repository-wide cleanup work, characterize candidates before deleting them. Classify each meaningful candidate as one of:
+
+- remove — proven dead;
+- retain — public/protected API;
+- retain — interface/override;
+- retain — reflection/dynamic;
+- retain — plugin/framework;
+- retain — serialization/native;
+- retain — conditional target;
+- retain — documented architecture;
+- retain — uncertain;
+- investigate further.
+
+A non-local member should be removed only when the evidence establishes that removal preserves supported behavior and compatibility. If analysis is inconclusive, keep the code and report the candidate rather than guessing.
+
+Perform cleanup in small coherent groups. Build and run affected tests after meaningful deletion groups. If deleting supposedly dead code causes a build, analyzer, test, DocGen, API-surface, platform, or runtime-validation failure, treat that as evidence that the code may be live; investigate the assumption rather than weakening validation.
+
+After member cleanup, perform a final compiler/analyzer-backed unused-import pass so imports orphaned by legitimate deletions are removed without creating unrelated churn.
+
+Unless the current task explicitly authorizes otherwise, source-hygiene cleanup must preserve observable behavior and public/protected API surface.
+
 ### Comments and documentation
 - Preserve useful comments.
 - Comments should explain intent, invariants, preservation rules, algorithms, or non-obvious reasons.
@@ -185,8 +291,12 @@ Do not introduce unsafe code solely for speed without explicit approval.
 ## Dependencies
 
 - Prefer the .NET Base Class Library and existing project capabilities.
-- Do not add, remove, or upgrade NuGet/native/runtime dependencies during a cleanup/optimization
-  audit without explicit approval.
+- Do not add, remove, or upgrade NuGet/native/runtime dependencies during a cleanup/optimization audit without explicit approval.
+- When the current user task explicitly authorizes dependency remediation, update only a dependency that evidence shows causes or materially contributes to the approved issue. Do not turn that authorization into a repository-wide dependency modernization sweep.
+- For an authorized remediation of an implicated outdated dependency, prefer the current stable upstream release after verifying the authoritative package/project source, relevant release notes and breaking changes, license/provenance, and direct/transitive dependency changes. Do not select preview, beta, alpha, RC, nightly, development, or unverified repackaged releases when a stable upstream release exists.
+- After an authorized dependency update, record the old and new versions and rationale, verify resolved direct/transitive versions and licensing/provenance, and run validation proportional to the affected scope.
+- Updating an existing component of an explicitly approved toolchain to its current stable version is permitted when the current task authorizes dependency remediation and evidence implicates that component. Replacing the approved toolchain or its architecture, introducing a different framework/driver/compiler stack, or maintaining a private fork still requires separate explicit approval.
+- If compatible coordinated version updates to other components of the same approved toolchain are required by the implicated component's supported dependency/version relationship, they may be included under the same explicit authorization; document the complete version transition.
 - Do not introduce platform-specific dependencies into BlackFlag Engine.
 - Preserve licensing/provenance rules.
 
@@ -202,6 +312,9 @@ Requirements:
   serialization/reopen coverage, not only intermediate-object assertions.
 - Tests must remain deterministic and isolated.
 - Do not weaken/delete tests to make a refactor pass.
+- Treat build/test failures after dead-code removal as evidence that the removed code may have been live; investigate and restore it when the removal cannot be proven safe rather than changing callers/tests merely to preserve the deletion.
+- Repository dead-code cleanup must not reduce test discovery or coverage silently. Reconcile and explain any changed test count.
+- When cleanup could affect externally visible members, compare the public/protected API surface before and after where practical; a passing in-repository test suite alone does not prove external API compatibility.
 - Do not replace meaningful assertions with looser assertions without explicit justification.
 
 ## Security
@@ -233,6 +346,42 @@ Do not weaken validation, sanitization, capability checks, or least-privilege bo
 - Track dependency purpose/version/license/provenance/security-update path and release SBOM/third-party notices where applicable.
 - Native AOT/trimming/symbol stripping are deployment-hardening choices, not security or secrecy boundaries. Treat AOT/trimming warnings as engineering work and validate reflection, serialization, plugins, SkiaSharp/native assets, fonts/images, and platform adapters.
 - Official Windows release artifacts should be Authenticode-signed; official macOS artifacts should be code-signed/notarized. Protect signing credentials, record hashes/provenance, and pursue reproducible/deterministic release builds where practical.
+
+## Manual commands and elevated execution
+
+Codex should perform ordinary repository commands itself when they can be run safely in the available environment. Do not ask the user to manually run commands merely for convenience.
+
+When a required validation, setup, diagnostic, or repository command cannot be completed because it needs permissions or an execution context Codex does not have, stop at the appropriate boundary and tell the user exactly what must be run manually.
+
+In particular:
+
+- Explicitly identify when a command must be run from an **Administrator PowerShell** or an **Administrator Command Prompt**.
+- If elevation is not required but the command must still be run manually, state whether **regular PowerShell** or **regular Command Prompt** is appropriate.
+- Prefer PowerShell commands for this repository unless the required tool specifically needs Command Prompt or another shell.
+- Provide the exact working directory and complete copy/paste-ready command(s), including required arguments.
+- State briefly why manual execution or elevation is required and what result/output Codex needs from the user afterward.
+- Never tell the user to weaken execution policy, security controls, filesystem protections, certificate protections, or OS policy merely to make a command pass unless the current task explicitly requires such a policy change and the user approves it.
+- Never claim a privileged/manual validation passed when Codex could not execute it. Record it as blocked or pending until the user reports the actual result.
+- After the user supplies the result, incorporate that evidence into the current validation/report rather than rerunning or redesigning unrelated work.
+- If a non-elevated alternative provides equivalent validation without weakening the contract, prefer it.
+- Do not request elevation preemptively. Ask for Administrator execution only when the actual command or fixture demonstrably requires it.
+
+Example: if a Windows test must create a symbolic-link fixture and the current process receives a privilege error before the validator runs, preserve the test and report the blocker. Ask the user to rerun the exact focused test from Administrator PowerShell, followed by the required broader test suite if the focused test passes. Do not skip or weaken the test.
+
+## Evidence-driven corrective iteration
+
+When an approved diagnostic, hardening, fuzzing, or validation task explicitly authorizes remediation of issues exposed during execution, Codex may continue through repeated bounded corrective cycles without requesting approval for each directly related defect:
+
+1. Preserve the failure evidence.
+2. Reduce it to the smallest practical deterministic reproduction.
+3. Identify the root cause and distinguish repository, harness/tooling, dependency, environment, and test/oracle defects.
+4. Implement the smallest correct fix within the authorized scope.
+5. Add focused regression coverage when deterministic reproduction is possible.
+6. Rerun the affected validation before continuing.
+
+Do not retry unchanged commands hoping for a different result, make speculative changes until a test passes, suppress unexpected exceptions, weaken security/resource bounds, or reinterpret crashes as expected rejection. If the same failure repeats after its purported fix, reassess the diagnosis and stop when the evidence no longer supports another bounded correction.
+
+This authorization never implies permission for unrelated cleanup, broad architectural redesign, public API changes, preservation-semantic changes, security-boundary changes, toolchain replacement, commit/push/merge/tag operations, or other work outside the current user task.
 
 ## Git and change discipline
 
@@ -327,12 +476,22 @@ A batch is complete only when:
 - no unrelated churn remains;
 - the final report identifies exactly what changed and why.
 
+For a source-hygiene/dead-code batch, completion additionally requires:
+
+- genuinely unused imports introduced or exposed by the batch are removed;
+- every removed non-local member has defensible evidence that it was dead;
+- uncertain dynamic/API/framework members were retained rather than guessed away;
+- public/protected API surface is unchanged unless explicitly approved;
+- no test-count decrease remains unexplained;
+- no cleanup-only formatting, modernization, or unrelated refactoring remains in the diff.
+
 ## Stop conditions
 
 Stop and ask for approval rather than proceeding when:
 - a public API must change;
 - PDF semantics or preservation behavior may change;
-- a dependency change is needed;
+- a dependency change is needed and the current user task has not explicitly authorized dependency remediation;
+- an authorized dependency remediation would require replacing the approved toolchain/architecture rather than updating an implicated existing component within the authorized scope;
 - a security policy/boundary would change;
 - tests reveal ambiguous intended behavior;
 - a broad architectural rewrite appears necessary;

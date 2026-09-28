@@ -46,7 +46,7 @@ public sealed partial class PdfGraphicsInterpreter
             if (element.Kind == PdfTextRunElementKind.Adjustment)
             {
                 translation +=
-                    (-element.Adjustment / 1000.0)
+                    -element.Adjustment / 1000.0
                     * state.FontSize
                     * horizontalScale;
 
@@ -72,7 +72,7 @@ public sealed partial class PdfGraphicsInterpreter
         return state with
         {
             TextMatrix =
-                state.TextMatrix.Multiply(advance)
+                advance.Multiply(state.TextMatrix)
         };
     }
 
@@ -149,7 +149,7 @@ public sealed partial class PdfGraphicsInterpreter
             }
 
             total +=
-                ((glyphWidth / 1000.0) * state.FontSize + spacing)
+                (glyphWidth / 1000.0 * state.FontSize + spacing)
                 * horizontalScale;
         }
 
@@ -217,7 +217,7 @@ public sealed partial class PdfGraphicsInterpreter
                     : defaultWidth;
 
             total +=
-                ((glyphWidth / 1000.0) * state.FontSize
+                (glyphWidth / 1000.0 * state.FontSize
                     + state.CharacterSpacing)
                 * horizontalScale;
         }

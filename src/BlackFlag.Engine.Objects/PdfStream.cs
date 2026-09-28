@@ -41,9 +41,15 @@ public sealed class PdfStream :
     public PdfDictionary Dictionary { get; }
 
     /// <summary>
-    /// Gets a read-only view of the stream bytes.
+    /// Returns an independent snapshot of the encoded stream bytes.
     /// </summary>
-    public ReadOnlyMemory<byte> Data => data;
+    public ReadOnlyMemory<byte> Data => data.ToArray();
+
+    /// <summary>
+    /// Gets the stored encoded-byte count without copying data or reading the
+    /// dictionary's potentially different <c>/Length</c> entry.
+    /// </summary>
+    public int Length => data.Length;
 
     /// <inheritdoc />
     public override PdfObjectType Type => PdfObjectType.Stream;

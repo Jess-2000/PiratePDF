@@ -35,6 +35,15 @@ public sealed class PdfWindowsExternalFontProvider :
         ArgumentNullException.ThrowIfNull(searchDirectories);
     }
 
+    /// <summary>Discovers fonts under explicit finite aggregate limits.</summary>
+    public PdfWindowsExternalFontProvider(
+        IEnumerable<string> searchDirectories,
+        IPdfExternalFontSanitizer? sanitizer,
+        PdfExternalFontCatalogLimits limits)
+        : base(ProviderId, searchDirectories, sanitizer, limits)
+    {
+    }
+
     private static IEnumerable<string> GetDefaultDirectories()
     {
         string systemFonts =

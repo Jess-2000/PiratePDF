@@ -4,6 +4,35 @@ namespace BlackFlag.Engine.Fonts.Embedding;
 
 internal static class PdfTrueTypeCompositeClosure
 {
+    public static void RetainGlyph(
+        HashSet<int> selectedGlyphs,
+        int glyph,
+        PdfTrueTypeSubsetOptions options)
+    {
+        if (selectedGlyphs.Contains(glyph))
+        {
+            return;
+        }
+
+        // Roots and dependencies share one distinct-glyph budget. Check
+        // before insertion so even rejected subsets never retain N + 1.
+        EnsureRetainedCount(selectedGlyphs.Count, options, admittingGlyph: true);
+        _ = selectedGlyphs.Add(glyph);
+    }
+
+    private static void EnsureRetainedCount(
+        int count,
+        PdfTrueTypeSubsetOptions options,
+        bool admittingGlyph = false)
+    {
+        if (count > options.MaximumRetainedGlyphs ||
+            admittingGlyph && count == options.MaximumRetainedGlyphs)
+        {
+            throw new InvalidDataException(
+                $"TrueType subset dependency closure exceeded the configured {options.MaximumRetainedGlyphs}-glyph limit.");
+        }
+    }
+
     public static void EnsureUsableRootGlyph(
         ReadOnlySpan<byte> glyf,
         IReadOnlyList<uint> offsets,
@@ -40,6 +69,9 @@ internal static class PdfTrueTypeCompositeClosure
         PdfTrueTypeSubsetOptions options,
         CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+        EnsureRetainedCount(selectedGlyphs.Count, options);
+
         var visitState =
             new Dictionary<int, GlyphVisitState>();
 
@@ -99,14 +131,9 @@ internal static class PdfTrueTypeCompositeClosure
             }
         }
 
-        visitState[glyph] = GlyphVisitState.Visiting;
+        RetainGlyph(selectedGlyphs, glyph, options);
 
-        if (selectedGlyphs.Add(glyph) &&
-            selectedGlyphs.Count > options.MaximumRetainedGlyphs)
-        {
-            throw new InvalidDataException(
-                $"TrueType subset dependency closure exceeded the configured {options.MaximumRetainedGlyphs}-glyph limit.");
-        }
+        visitState[glyph] = GlyphVisitState.Visiting;
 
         ReadOnlySpan<byte> data =
             GetGlyphData(

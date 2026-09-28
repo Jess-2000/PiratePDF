@@ -8,7 +8,7 @@ namespace BlackFlag.Engine.Fonts.Sanitization;
 /// It validates bounded structure and required tables, then reserializes a
 /// canonical compact SFNT so downstream code never consumes provider bytes.
 /// </summary>
-public sealed class PdfOpenTypeFontSanitizer : IPdfExternalFontSanitizer
+public sealed partial class PdfOpenTypeFontSanitizer : IPdfExternalFontSanitizer
 {
     private const uint TrueTypeScalar = 0x00010000;
     private const uint OpenTypeCffScalar = 0x4F54544F; // OTTO
@@ -139,7 +139,7 @@ public sealed class PdfOpenTypeFontSanitizer : IPdfExternalFontSanitizer
 
         ValidateNoOverlap(records);
         ValidateChecksums(source, records);
-        ValidateRequiredStructure(source, records, technology, options);
+        ValidateRequiredStructure(source, records, technology, options, cancellationToken);
 
         byte[] sanitized =
             ReserializeCanonical(
@@ -174,22 +174,23 @@ public sealed class PdfOpenTypeFontSanitizer : IPdfExternalFontSanitizer
             int read = input.Read(
                 buffer,
                 0,
-                Math.Min(buffer.Length, maximumBytes - total + 1));
+                (int)Math.Min(buffer.Length, (long)maximumBytes - total + 1));
 
             if (read == 0)
             {
                 return destination.ToArray();
             }
 
-            total = checked(total + read);
-
-            if (total > maximumBytes)
+            // The one-byte EOF probe must be rejected before adding it to
+            // an int-sized total or growing the destination buffer.
+            if (read > maximumBytes - total)
             {
                 throw Reject(
                     PdfExternalFontSanitizationFailure.InputTooLarge,
                     $"The external font exceeds the configured {maximumBytes}-byte input limit.");
             }
 
+            total += read;
             destination.Write(buffer, 0, read);
         }
     }
@@ -210,10 +211,8 @@ public sealed class PdfOpenTypeFontSanitizer : IPdfExternalFontSanitizer
             selector++;
         }
 
-        ushort expectedSearchRange =
-            checked((ushort)(power * 16));
-        ushort expectedRangeShift =
-            checked((ushort)((tableCount * 16) - expectedSearchRange));
+        int expectedSearchRange = power * 16;
+        int expectedRangeShift = tableCount * 16 - expectedSearchRange;
 
         if (searchRange != expectedSearchRange ||
             entrySelector != selector ||
@@ -295,7 +294,8 @@ public sealed class PdfOpenTypeFontSanitizer : IPdfExternalFontSanitizer
         ReadOnlySpan<byte> source,
         IReadOnlyList<TableRecord> records,
         PdfExternalFontTechnology technology,
-        PdfExternalFontSanitizationOptions options)
+        PdfExternalFontSanitizationOptions options,
+        CancellationToken cancellationToken)
     {
         TableRecord head = Require(records, "head");
         TableRecord maxp = Require(records, "maxp");
@@ -322,7 +322,8 @@ public sealed class PdfOpenTypeFontSanitizer : IPdfExternalFontSanitizer
 
         ValidateCmap(
             source.Slice(cmap.Offset, cmap.Length),
-            options.MaximumCMapSubtableCount);
+            options.MaximumCMapSubtableCount,
+            cancellationToken);
 
         ValidateName(
             source.Slice(name.Offset, name.Length),
@@ -445,93 +446,6 @@ public sealed class PdfOpenTypeFontSanitizer : IPdfExternalFontSanitizer
             throw Reject(
                 PdfExternalFontSanitizationFailure.MalformedRequiredTable,
                 "The hmtx table is shorter than the maxp/hhea metrics require.");
-        }
-    }
-
-    private static void ValidateCmap(
-        ReadOnlySpan<byte> table,
-        int maximumSubtables)
-    {
-        if (table.Length < 4 ||
-            ReadUInt16(table, 0) != 0)
-        {
-            throw Reject(
-                PdfExternalFontSanitizationFailure.MalformedRequiredTable,
-                "The cmap table header is invalid.");
-        }
-
-        int count = ReadUInt16(table, 2);
-
-        if (count == 0 ||
-            count > maximumSubtables)
-        {
-            throw Reject(
-                PdfExternalFontSanitizationFailure.ResourceLimitExceeded,
-                "The cmap subtable count is invalid or exceeds the configured limit.");
-        }
-
-        int recordsEnd =
-            checked(4 + (count * 8));
-
-        if (recordsEnd > table.Length)
-        {
-            throw Reject(
-                PdfExternalFontSanitizationFailure.MalformedRequiredTable,
-                "The cmap encoding-record array is truncated.");
-        }
-
-        for (int index = 0; index < count; index++)
-        {
-            int record = 4 + (index * 8);
-            uint offset = ReadUInt32(table, record + 4);
-
-            if (offset > table.Length - 2)
-            {
-                throw Reject(
-                    PdfExternalFontSanitizationFailure.MalformedRequiredTable,
-                    "A cmap subtable offset lies outside the cmap table.");
-            }
-
-            ValidateCmapSubtable(
-                table[(int)offset..]);
-        }
-    }
-
-    private static void ValidateCmapSubtable(
-        ReadOnlySpan<byte> subtable)
-    {
-        ushort format = ReadUInt16(subtable, 0);
-
-        int declaredLength =
-            format switch
-            {
-                0 or 2 or 4 or 6 =>
-                    subtable.Length >= 4
-                        ? ReadUInt16(subtable, 2)
-                        : 0,
-
-                8 or 10 or 12 or 13 =>
-                    subtable.Length >= 8
-                        ? checked((int)ReadUInt32(subtable, 4))
-                        : 0,
-
-                14 =>
-                    subtable.Length >= 6
-                        ? checked((int)ReadUInt32(subtable, 2))
-                        : 0,
-
-                _ =>
-                    throw Reject(
-                        PdfExternalFontSanitizationFailure.MalformedRequiredTable,
-                        $"Unsupported cmap format {format} is rejected by the sanitizer.")
-            };
-
-        if (declaredLength <= 0 ||
-            declaredLength > subtable.Length)
-        {
-            throw Reject(
-                PdfExternalFontSanitizationFailure.MalformedRequiredTable,
-                $"cmap format {format} declares an invalid length.");
         }
     }
 

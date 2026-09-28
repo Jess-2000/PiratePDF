@@ -35,6 +35,15 @@ public sealed class PdfMacOSExternalFontProvider :
         ArgumentNullException.ThrowIfNull(searchDirectories);
     }
 
+    /// <summary>Discovers fonts under explicit finite aggregate limits.</summary>
+    public PdfMacOSExternalFontProvider(
+        IEnumerable<string> searchDirectories,
+        IPdfExternalFontSanitizer? sanitizer,
+        PdfExternalFontCatalogLimits limits)
+        : base(ProviderId, searchDirectories, sanitizer, limits)
+    {
+    }
+
     private static IEnumerable<string> GetDefaultDirectories()
     {
         yield return "/System/Library/Fonts";

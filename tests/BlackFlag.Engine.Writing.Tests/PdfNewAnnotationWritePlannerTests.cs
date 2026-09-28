@@ -10,7 +10,6 @@ namespace BlackFlag.Engine.Writing.Tests;
 public sealed class PdfNewAnnotationWritePlannerTests
 {
     private static readonly PdfName AnnotsName = PdfName.FromLatin1("Annots");
-    private static readonly PdfName ParentName = PdfName.FromLatin1("Parent");
 
     [Fact]
     public void FullRewriteAllocatesBindsAndSerializesNewAnnotation()

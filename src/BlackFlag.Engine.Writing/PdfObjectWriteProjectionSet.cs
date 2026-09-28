@@ -10,6 +10,7 @@ public sealed class PdfObjectWriteProjectionSet
     public PdfObjectWriteProjectionSet(IEnumerable<PdfObjectWriteProjection> projections)
     {
         ArgumentNullException.ThrowIfNull(projections);
+        // Snapshot before validation and sorting so enumeration finishes once and caller storage is never reordered.
         PdfObjectWriteProjection[] snapshot = [.. projections];
 
         if (snapshot.Length == 0)

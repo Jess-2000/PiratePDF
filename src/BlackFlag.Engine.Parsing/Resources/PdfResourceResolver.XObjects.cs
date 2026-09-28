@@ -1,7 +1,4 @@
-using System.Collections.Concurrent;
 using BlackFlag.Engine.Objects;
-using BlackFlag.Engine.Parsing.CrossReferences;
-using BlackFlag.Engine.Parsing.Loading;
 using BlackFlag.Engine.Rendering.Resources;
 
 namespace BlackFlag.Engine.Parsing.Resources;
@@ -39,13 +36,13 @@ public sealed partial class PdfResourceResolver
         PdfResourceIdentity identity,
         PdfStream stream)
     {
-        if (stream.Data.Length > options.MaximumImageEncodedBytes)
+        if (stream.Length > options.MaximumImageEncodedBytes)
         {
             throw CreateException(
                 PdfResourceResolutionFailure.LimitExceeded,
                 PdfResourceKind.XObject,
                 resourceName: null,
-                $"Image stream size {stream.Data.Length} exceeds the configured maximum of "
+                $"Image stream size {stream.Length} exceeds the configured maximum of "
                 + $"{options.MaximumImageEncodedBytes} bytes.");
         }
 

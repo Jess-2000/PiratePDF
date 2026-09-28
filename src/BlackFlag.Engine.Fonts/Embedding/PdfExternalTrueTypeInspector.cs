@@ -20,7 +20,7 @@ public static class PdfExternalTrueTypeInspector
                 "BF-1054J embeds sanitized TrueType-outline fonts only.");
         }
 
-        ReadOnlySpan<byte> bytes = program.Bytes.Span;
+        ReadOnlySpan<byte> bytes = program.TrustedBytes;
         Dictionary<string, Table> tables = ReadTables(bytes);
 
         Table head = Require(tables, "head");
@@ -28,14 +28,12 @@ public static class PdfExternalTrueTypeInspector
         Table hmtx = Require(tables, "hmtx");
         Table maxp = Require(tables, "maxp");
         Table cmap = Require(tables, "cmap");
-        Table os2 = Require(tables, "OS/2");
 
         ReadOnlySpan<byte> headBytes = Slice(bytes, head);
         ReadOnlySpan<byte> hheaBytes = Slice(bytes, hhea);
         ReadOnlySpan<byte> maxpBytes = Slice(bytes, maxp);
         ReadOnlySpan<byte> hmtxBytes = Slice(bytes, hmtx);
         ReadOnlySpan<byte> cmapBytes = Slice(bytes, cmap);
-        ReadOnlySpan<byte> os2Bytes = Slice(bytes, os2);
 
         int unitsPerEm = U16(headBytes, 18);
         if (unitsPerEm is < 16 or > 16384)
@@ -90,7 +88,7 @@ public static class PdfExternalTrueTypeInspector
             Scale(I16(headBytes, 40), unitsPerEm),
             Scale(I16(headBytes, 42), unitsPerEm),
             widths,
-            ReadEmbeddingRights(os2Bytes));
+            program.EmbeddingRestrictions);
     }
 
     private static Dictionary<string, Table> ReadTables(
@@ -378,30 +376,6 @@ public static class PdfExternalTrueTypeInspector
 
             return 0;
         };
-    }
-
-    private static PdfExternalFontEmbeddingRights ReadEmbeddingRights(
-        ReadOnlySpan<byte> os2)
-    {
-        if (os2.Length < 10)
-        {
-            return PdfExternalFontEmbeddingRights.Unknown;
-        }
-
-        int fsType = U16(os2, 8);
-
-        if ((fsType & 0x0002) != 0 ||
-            (fsType & 0x0200) != 0)
-        {
-            return PdfExternalFontEmbeddingRights.Restricted;
-        }
-
-        if ((fsType & 0x0100) != 0)
-        {
-            return PdfExternalFontEmbeddingRights.Allowed;
-        }
-
-        return PdfExternalFontEmbeddingRights.Allowed;
     }
 
     private static int WinAnsiToUnicode(int code) =>

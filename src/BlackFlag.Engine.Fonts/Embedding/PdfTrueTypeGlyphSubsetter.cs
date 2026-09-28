@@ -49,7 +49,9 @@ public sealed class PdfTrueTypeGlyphSubsetter
                 "BF-1054L subsetting supports sanitized TrueType glyf/loca fonts only.");
         }
 
-        byte[] source = program.Bytes.ToArray();
+        cancellationToken.ThrowIfCancellationRequested();
+        program.EmbeddingRestrictions.EnsureCanEmbed(subset: true);
+        byte[] source = program.TrustedBytes.ToArray();
         Dictionary<string, PdfTrueTypeTable> tables =
             PdfTrueTypeBinary.ReadTables(source);
 
@@ -100,6 +102,7 @@ public sealed class PdfTrueTypeGlyphSubsetter
             glyphMapper,
             selectedGlyphs,
             unicodeByCode,
+            options,
             cancellationToken);
 
         PdfTrueTypeCompositeClosure.Expand(
@@ -133,13 +136,10 @@ public sealed class PdfTrueTypeGlyphSubsetter
                 glyphMapper);
 
         byte[] sfnt =
-            PdfTrueTypeSfntBuilder.Build(rebuilt);
-
-        if (sfnt.Length > options.MaximumGeneratedBytes)
-        {
-            throw new InvalidDataException(
-                $"The generated TrueType subset is {sfnt.Length} bytes, exceeding the configured {options.MaximumGeneratedBytes}-byte limit.");
-        }
+            PdfTrueTypeSfntBuilder.Build(
+                rebuilt,
+                options.MaximumGeneratedBytes,
+                "TrueType");
 
         using var stream = new MemoryStream(sfnt, writable: false);
 
@@ -161,6 +161,7 @@ public sealed class PdfTrueTypeGlyphSubsetter
         Func<int, int> glyphMapper,
         HashSet<int> selectedGlyphs,
         Dictionary<byte, int> unicodeByCode,
+        PdfTrueTypeSubsetOptions options,
         CancellationToken cancellationToken)
     {
         foreach (Rune rune in requiredText.EnumerateRunes())
@@ -186,7 +187,7 @@ public sealed class PdfTrueTypeGlyphSubsetter
                 offsets,
                 glyph);
 
-            _ = selectedGlyphs.Add(glyph);
+            PdfTrueTypeCompositeClosure.RetainGlyph(selectedGlyphs, glyph, options);
             unicodeByCode[code] = rune.Value;
         }
     }

@@ -275,8 +275,7 @@ internal static class MarkdownMetadataParser
         cells = trimmed
             .Split(
                 '|',
-                StringSplitOptions.TrimEntries)
-            .ToArray();
+                StringSplitOptions.TrimEntries);
 
         return true;
     }
