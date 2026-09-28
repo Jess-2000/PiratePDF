@@ -164,6 +164,13 @@
 | PP-AUD-028 | [Post-BF-1054 Batch B8 - Font Catalog Responsiveness](reviews/Post-BF-1054-Batch-B8-Font-Catalog-Responsiveness-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-23 |
 | PP-AUD-029 | [Post-BF-1054 Batch B9 - Bounded Fuzz and Corpus Approval Checkpoint](reviews/Post-BF-1054-Batch-B9-Bounded-Fuzz-and-Corpus-Completion-Report.md) | Engineering Review | 0.1 | Review | 2026-09-23 |
 | PP-AUD-030 | [Post-BF-1054 Batch B9 - Neutral Target Registry Completion Report](reviews/Post-BF-1054-Batch-B9-Neutral-Targets-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-23 |
+| PP-AUD-031 | [Post-BF-1054 Batch B9 - Neutral Single-Case Runner Report](reviews/Post-BF-1054-Batch-B9-Neutral-Runner-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-23 |
+| PP-AUD-032 | [Post-BF-1054 Batch B9 - Process Supervision Completion Report](reviews/Post-BF-1054-Batch-B9-Process-Supervision-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-24 |
+| PP-AUD-033 | [Post-BF-1054 Batch B9 - Owned Corpus and Manifest Report](reviews/Post-BF-1054-Batch-B9-Owned-Corpus-and-Manifest-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-24 |
+| PP-AUD-034 | [Post-BF-1054 Batch B9 - Deterministic Supervised Replay Report](reviews/Post-BF-1054-Batch-B9-Deterministic-Replay-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-24 |
+| PP-AUD-035 | [Post-BF-1054 Batch B9 - Deterministic Mutation Completion Report](reviews/Post-BF-1054-Batch-B9-Deterministic-Mutation-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-25 |
+| PP-AUD-036 | [Post-BF-1054 Batch B9 - Fuzz Toolchain Smoke Completion Report](reviews/Post-BF-1054-Batch-B9-Fuzz-Toolchain-Smoke-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-26 |
+| PP-AUD-037 | [Post-BF-1054 Batch B9 - Failure Artifact Reproduction and Promotion Report](reviews/Post-BF-1054-Batch-B9-Failure-Artifact-Reproduction-and-Promotion-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-27 |
 | PP-CHARTER-001 | [PiratePDF Project Charter](Project-Charter.md) | Project Charter | 1.1 | Approved | 2026-08-09 |
 | PP-DEV-001 | [PiratePDF Master Blueprint - Volume IV: Engineering Standards](Blueprint/Volume-IV-Engineering-Standards.md) | Developer Documentation | 1.1 | Approved | 2026-08-15 |
 | PP-DEV-002 | [BlackFlag Engine Plugin Development Contract](04-Developer/Plugin-Development.md) | Developer Documentation | 1.0 | Implemented | 2026-08-13 |
