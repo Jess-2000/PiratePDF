@@ -178,6 +178,7 @@
 | PP-DOC-000 | [PiratePDF Documentation](README.md) | Documentation Index | 1.0 | Approved | 2026-07-24 |
 | PP-GOV-002 | [PiratePDF Documentation Standards](05-Governance/Documentation-Standards.md) | Governance | 1.1 | Approved | 2026-08-16 |
 | PP-GOV-003 | [Documentation Validation Rules](05-Governance/Documentation-Validation-Rules.md) | Governance | 1.0 | Approved | 2026-07-24 |
+| PP-HANDOFF-001 | [PiratePDF Maintenance Handoff](handoffs/PiratePDF-Maintenance-Handoff-Post-BF-1054-Part1.md) | Engineering Handoff | 1.0 | Review | 2026-10-05 |
 | PP-HIST-001 | [Building BlackFlag](BUILDING-BLACKFLAG.md) | Developer Guide | 0.1 | In Development | 2026-08-06 |
 | PP-HIST-BF-1040 | [BF-1040 Milestone Reflection](releases/BF-1040/Milestone-Reflection.md) | Project History | 1.0 | Tested | 2026-08-06 |
 | PP-HIST-BF-1041 | [BF-1041 Milestone Reflection](releases/BF-1041/Milestone-Reflection.md) | Project History | 1.0 | Tested | 2026-08-06 |
