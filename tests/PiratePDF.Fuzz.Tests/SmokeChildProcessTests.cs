@@ -13,6 +13,7 @@ public sealed class SmokeChildProcessTests : IDisposable
     private static string Host => Path.GetFullPath(Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), "..", "..", "..", OperatingSystem.IsWindows() ? "dotnet.exe" : "dotnet"));
     private static string Child => typeof(SupervisorTestChild).Assembly.Location;
     private string Lease => Path.Combine(directory, "child.lease");
+    private string RootIdentity => Path.Combine(directory, "root.identity");
 
     public SmokeChildProcessTests() => Directory.CreateDirectory(directory);
 
@@ -41,20 +42,32 @@ public sealed class SmokeChildProcessTests : IDisposable
     }
 
     [Fact]
-    public async Task ExplicitCancellationReapsObservedLeasedProcess()
+    public Task ExplicitCancellationReapsObservedLeasedProcess() => VerifyCancellation(RootIdentity);
+
+    [Fact]
+    public Task TimeoutReapsObservedLeasedProcess() => VerifyTimeout(RootIdentity);
+
+    [Theory]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
+    [InlineData(false)]
+    [InlineData(true)]
+    public Task CooperatingLeaseCleanupRetainsWindowsAdmission(bool cancel) =>
+        cancel ? VerifyCancellation(Lease) : VerifyTimeout(Lease);
+
+    private async Task VerifyCancellation(string identityPath)
     {
         using var cancellation = new CancellationTokenSource();
-        Task<ChildResult> run = ChildProcess.RunAsync(Host, [Child, "grandchild", Lease], directory,
+        Task<ChildResult> run = ChildProcess.RunAsync(Host, [Child, "grandchild", identityPath], directory,
             TimeSpan.FromSeconds(10), Lease, cancellation.Token);
         try
         {
-            await CorpusReplayTests.WaitForFile(Lease);
+            await CorpusReplayTests.WaitForFile(identityPath);
             cancellation.Cancel();
             ChildResult result = await run;
             Assert.True(result.Cancelled);
             Assert.False(result.TimedOut);
             Assert.True(result.CleanupSucceeded);
-            AssertLeasedProcessExited();
+            AssertLeasedProcessExited(identityPath);
         }
         finally
         {
@@ -63,15 +76,14 @@ public sealed class SmokeChildProcessTests : IDisposable
         }
     }
 
-    [Fact]
-    public async Task TimeoutReapsObservedLeasedProcess()
+    private async Task VerifyTimeout(string identityPath)
     {
-        ChildResult result = await ChildProcess.RunAsync(Host, [Child, "grandchild", Lease], directory,
+        ChildResult result = await ChildProcess.RunAsync(Host, [Child, "grandchild", identityPath], directory,
             TimeSpan.FromSeconds(2), Lease);
         Assert.True(result.TimedOut);
         Assert.False(result.Cancelled);
         Assert.True(result.CleanupSucceeded);
-        AssertLeasedProcessExited();
+        AssertLeasedProcessExited(identityPath);
     }
 
     [Fact]
@@ -98,9 +110,11 @@ public sealed class SmokeChildProcessTests : IDisposable
         [Child, "run", "--target", "filter-asciihex", "--input", Path.Combine(directory, mode), "--config", "v1"],
         directory, TimeSpan.FromSeconds(10), Lease);
 
-    private void AssertLeasedProcessExited()
+    private static void AssertLeasedProcessExited(string identityPath)
     {
-        string[] identity = File.ReadAllText(Lease).Split(':');
+        // The portable probe observes the directly owned root, not the Windows-native cooperating-child lease.
+        // Keep PID/start-time exit verification separate from the unchanged Windows-only lease admission path.
+        string[] identity = File.ReadAllText(identityPath).Split(':');
         int pid = int.Parse(identity[0], CultureInfo.InvariantCulture);
         long ticks = long.Parse(identity[1], CultureInfo.InvariantCulture);
         Process process;

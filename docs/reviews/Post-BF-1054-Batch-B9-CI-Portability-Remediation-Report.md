@@ -4,7 +4,7 @@
 |---|---|
 | **Document ID** | PP-AUD-038 |
 | **Category** | Engineering Review |
-| **Version** | 1.0 |
+| **Version** | 1.1 |
 | **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1040, BF-1054 |
@@ -13,9 +13,53 @@
 
 ## Disposition
 
-The portability correction, explicit CI routing and local repository acceptance are complete. The final compiled catalog contains **474 cases / 182 methods**: **285 portable cases / 106 methods** and **189 Windows cases / 76 methods**. The agent's final portable selection passed **285/285 on Windows**, and the exact solution-level portable command passed **2,731/2,731**; these are not Linux execution claims. **The user confirmed that the passing unmodified authoritative Windows release gate included the final fuzz suite**, closing the current-tree acceptance question. This is user-reported validation; no final gate log or per-project count was supplied. Execution of the revised hosted CI jobs remains pending a future user-published revision. No Linux runtime/environment is available here: WSL reports not installed, and Docker is unavailable. No environment or toolchain was installed to work around that limitation.
+The original v1.0 portability correction reached local acceptance with **474 fuzz cases / 182 methods**, a **285/285** portable Windows selection, a **2,731/2,731** portable solution run and the user-confirmed unmodified release-gate pass. That historical evidence remains below. The first revised hosted Ubuntu run subsequently selected **285 portable cases: 283 passed and 2 failed**. The narrow v1.1 continuation corrects test-fixture coupling to the Windows-only native child-lease reader; runner cleanup and exit assertions remain unchanged. Fresh local portable validation is **285/285**. Final permitted-context Windows validation is **476 passed, 0 failed, 0 skipped**, independently confirmed in the saved admin TRX, and **the user reports that the fresh authoritative release gate passed**. Local acceptance is complete. The earlier agent result of 474 passes and two symbolic-link fixture-creation failures remains preserved below. **Hosted Linux success is not established; publication and a hosted rerun are still required.** WSL is not installed and Docker is unavailable locally; no environment or toolchain was installed.
 
 **B9 / POST-P2-002 remains OPEN. No substantive coverage-guided campaign began.** No native driver, SharpFuzz instrumentation, compatibility-smoke rerun, general target expansion, other P2 item, canonical font editing or P1 optimization occurred. PP-AUD-029 through PP-AUD-037 remain historical evidence and are unchanged. This report does not retroactively claim that PP-AUD-036 or PP-AUD-037 established cross-platform CI.
+
+## Hosted Ubuntu continuation (v1.1)
+
+The continuation began from a **clean develop tree at 8ea9e9e25eb3605986636686a2078760a1cd52be**. The user had published the v1.0 remediation; this agent performed no commit, push, merge, tag, reset, clean or branch switch. Root AGENTS.md, PROJECT-CHARTER.md, this report, SmokeChildProcessTests, SupervisorTestChild, ChildProcess, InputFile, SmokeCommand and the related WorkerSupervisor implementation/tests were inspected before editing.
+
+The complete logs for [hosted run 37403970217](https://github.com/Jess-2000/PiratePDF/actions/runs/37403970217) were retrieved through the repository connector and retained in **artifacts/fuzz/ci-portability-linux-20261005/**. Ubuntu job **112077259918** used ubuntu-24.04, SDK **10.0.303** and runtime **10.0.12**. Restore and Release build passed; portable fuzz selection was **283 passed / 2 failed / 285 total**, with no skipped fuzz cases. Coverage verification and DocGen were not reached after the test failure; bounded failure-TRX retention succeeded. Windows job **112077259687** passed and its catalog check independently confirmed **474 passed cases / 182 methods / zero skipped**, including both real symbolic-link fixtures. These are pre-correction hosted results, not evidence for the new tree. Logs carry 2026-10-06 UTC timestamps, corresponding to the evening of 2026-10-05 in America/New_York.
+
+### Exact failure and diagnosis
+
+The two Ubuntu failures were **SmokeChildProcessTests.TimeoutReapsObservedLeasedProcess**, line **73**, and **SmokeChildProcessTests.ExplicitCancellationReapsObservedLeasedProcess**, line **56** (line **62** appears in its asynchronous finally stack). Both assertions inspect **result.CleanupSucceeded**. Neither failure reached the later PID/start-time exit assertion. Timeout/cancellation classification assertions passed before the cleanup assertion.
+
+Both fixtures launched the controlled managed process directly with `grandchild <Lease>`. Despite the fixture mode's name, that process was the directly owned root; it spawned no descendant. It wrote its own identity into `child.lease`, incorrectly coupling portable root-observation coverage to the separate native cooperating-child admission path. The exact cleanup sequence is `TerminateAsync(root)` then `ReapLeaseAsync(lease)` then pipe draining. ReapLeaseAsync reads an existing lease through `InputFile.ReadAsync`; that reader **unconditionally throws PlatformNotSupportedException on non-Windows before opening any file**. ChildProcess's existing cleanup catch includes NotSupportedException and sets CleanupSucceeded to false. Thus Ubuntu deterministically reports failed cleanup at precisely the logged assertions even after root termination. On Windows that bounded read is supported, and the already-terminated root identity can be admitted without this exception.
+
+This is evidenced test-fixture/platform coupling, not a demonstrated defect in Kill(entireProcessTree: true), WaitForExitAsync, Process.HasExited, /proc lifetime, PID reuse, disposal ordering or asynchronous termination observation. No Unix eventual-consistency accommodation is needed for the diagnosed failure. The related WorkerSupervisor tests use separate test-owned identity files; they do not pass those files to the Windows-only smoke lease reader. Both its root/descendant timeout and explicit-cancellation tests passed in the same Ubuntu log, and all **40** supervisor cases passed locally after the correction. No claim is made that this source diagnosis substitutes for the required corrected Ubuntu execution.
+
+### Correction and preserved invariant
+
+Only **SmokeChildProcessTests.cs** changes executable code. The two existing portable facts retain their names, route and every timeout, cancellation, CleanupSucceeded and PID/start-time exit assertion. Their controlled child now writes **root.identity** for independent observation, while the separate **child.lease** remains the native cooperating-child lease path supplied to ChildProcess. The directly owned process is still terminated and awaited by the same runner operation; the test still rejects a live process with the same PID/start time when that operation returns. No assertion kills a live process to turn failure into success.
+
+Two new explicitly Windows integration rows, **CooperatingLeaseCleanupRetainsWindowsAdmission(false/true)**, reuse the original existing-lease timeout/cancellation paths and the same exit assertions. They retain coverage of the bounded, security-sensitive lease-reader path rather than broadening Unix file admission or losing the former Windows checks. The existing portable tests are not marked Windows-only, skipped or replaced with nonasserting observations. WorkerSupervisor's existing process-tree coverage is unchanged.
+
+Runner/Engine/SDK implementation, InputFile's fail-closed Unix admission, the native smoke command, SharpFuzz glue, the driver and all dependencies are unchanged. SmokeCommand already refuses non-Windows execution; this correction tests the portable directly owned managed-process operation without implying Unix native-smoke or lease-reader support. No new public API, friend declaration, process architecture or security policy is introduced. Root deadlines remain **2 seconds for timeout / 10 seconds for explicit cancellation**, with the existing independent **5-second cleanup budget**; startup observation retains its existing five-second bounded helper. No arbitrary sleep, new polling loop, timeout extension or exception suppression is added. Native/SharpFuzz smoke is not rerun because its implementation path is unchanged.
+
+The current catalog is **285 portable cases / 106 methods + 191 Windows cases / 77 methods = 476 cases / 183 methods**. The two new Windows rows explain the entire increase from the hosted 474-case baseline; no original test is removed. The portable count remains exactly **285**.
+
+### Continuation validation
+
+| Check | Actual result / evidence |
+|---|---|
+| Before correction, two implicated facts on Windows | **2 passed, 0 failed, 0 skipped**; before/windows-before.trx. |
+| Repeated corrected portable timeout/cancellation facts on Windows | **10/10 invocations, 20/20 cases passed**, zero failed/skipped; repeated/focused-1.trx through focused-10.trx. |
+| All smoke-process cases on Windows | **9 passed, 0 failed, 0 skipped**; smoke/smoke.trx, including both new Windows lease rows. |
+| WorkerSupervisorTests | **40 passed, 0 failed, 0 skipped**; worker/worker-supervisor.trx. |
+| Full portable fuzz selection on Windows | **285 passed, 0 failed, 0 skipped**; portable/portable.trx; coverage verifier confirms **285 cases / 106 methods**. This is not corrected Linux execution evidence. |
+| Earlier agent-run complete Windows fuzz suite | **474 passed, 2 failed, 0 skipped, 476 total**; complete/complete.trx. Only the unchanged SeedLinkEscapeIsRejected and ArtifactLinkEscapeIsRejected fixtures fail while creating links, before validator invocation. |
+| Outside-sandbox link-fixture diagnostic | **0 passed, 2 fixture-creation failures, 0 skipped**; link-outside/link-outside.trx. Windows still denies the required privilege; this is not a sandbox-only restriction. |
+| Final permitted-context complete Windows fuzz suite | **476 passed, 0 failed, 0 skipped**; admin/complete-admin.trx. The agent independently parsed the saved user-run TRX and verified **476 cases / 183 methods**, including both real symbolic-link fixtures, both portable timeout/cancellation facts and both retained Windows lease rows. |
+| Runner and Targets Release builds | Both passed, **0 warnings / 0 errors**, using existing assets and --no-restore. |
+| Required current-tree authoritative release gate | **Passed, user-reported on 2026-10-05** in response to the requested permitted-context validation. No final gate log or aggregate count was supplied. No gate option or script is modified or bypassed. |
+| Corrected hosted Ubuntu run | **Pending publication and rerun**. No corrected Linux success is claimed. |
+| Local DocGen all / health / repair | **205 documents, 0 errors / 0 warnings; 91.6% / A-; repair 0 changes / 0 files / 0 diagnostics**. |
+| git diff --check | **Passed** after report updates and documentation generation. |
+
+The continuation changes **four review files**: tests/PiratePDF.Fuzz.Tests/SmokeChildProcessTests.cs; this PP-AUD-038 report; generated docs/Documentation-Index.md and docs/Documentation-Health.md. docs/ValidationReport.md was regenerated and remains byte-for-byte unchanged. Historical logs and fresh TRX evidence are ignored local artifacts, preserved separately from all prior evidence. Corpus bytes/oracles, CI configuration, production projects, PP-AUD-029 through PP-AUD-037 and the repository-wide audit are unchanged.
 
 ## Starting state and evidence
 
@@ -42,7 +86,7 @@ The earlier Linux fuzz-project result was 293 passed, 104 failed, 397 total. Som
 
 ### Complete routing inventory
 
-Unmarked tests mean portable, and execute on both OS jobs. `[Trait(TestPlatform.Key, TestPlatform.Windows)]` marks only the Windows path/file integration route. No Fact is skipped and no class is excluded everywhere. The compiled `platform-catalog` command gives the per-method route and inline-row count; this table groups that exhaustive catalog by class.
+This inventory records the **original v1.0, 474-case routing**; the v1.1 continuation adds only the two Windows smoke lease rows described above. Unmarked tests mean portable, and execute on both OS jobs. `[Trait(TestPlatform.Key, TestPlatform.Windows)]` marks only the Windows path/file integration route. No Fact is skipped and no class is excluded everywhere. The compiled `platform-catalog` command gives the per-method route and inline-row count; this table groups that exhaustive catalog by class.
 
 | Test class | Portable cases | Windows cases | Contract classification |
 |---|---:|---:|---|
@@ -106,7 +150,7 @@ The user subsequently reported **all then-current 461 tests passed** in response
 
 [GitHub's hosted-runner documentation](https://docs.github.com/en/actions/reference/runners/github-hosted-runners) states that hosted Windows VMs run as administrators with UAC disabled. That supports expecting ordinary Windows CI steps to create the fixtures without an elevation command. **It does not empirically establish the result for this new job.** The new Windows job runs both fixtures without policy changes or skip conditions; actual hosted privilege behavior remains to be confirmed by its first execution. A hosted privilege failure must remain a visible failure and be characterized before acceptance.
 
-## Validation ledger
+## Historical v1.0 validation ledger
 
 | Validation | Actual result |
 |---|---|
@@ -136,7 +180,7 @@ Direct CLI commands used the Release Runner DLL, explicit repository root **C:\D
 
 ## Exact files changed
 
-The review tree contains exactly **27 changed files**: 23 implementation/workflow/test-infrastructure files, this report and three reproducible DocGen outputs:
+The original v1.0 review tree contained exactly **27 changed files**: 23 implementation/workflow/test-infrastructure files, this report and three reproducible DocGen outputs. These changes are incorporated into the continuation's baseline; its five review files are listed above:
 
 1. .github/workflows/continuous-integration.yml
 2. tools/PiratePDF.Fuzz.Runner/CorpusValidator.cs
@@ -168,7 +212,7 @@ The review tree contains exactly **27 changed files**: 23 implementation/workflo
 
 ## Remaining acceptance and next action
 
-The completed working tree is ready for review, with local acceptance established by the user-confirmed release-gate pass. Both revised CI jobs must execute when the user chooses to publish a revision; no commit or push is authorized here. Hosted Ubuntu execution and hosted Windows real-link capability remain explicit limitations. No further manual local validation is required for this slice. Do not start the substantive B9 campaign or another maintenance item as part of this remediation. B9 / POST-P2-002 remains open independently of this CI remediation.
+The v1.0 user-confirmed release-gate pass and subsequent hosted Windows success remain historical acceptance evidence. The v1.1 correction has reached local acceptance with the independently verified **476/476** user-run fuzz suite and the user-reported fresh unmodified release-gate pass. No further manual local validation is required. The corrected Ubuntu job must still rerun following user publication; no commit or push is authorized here. The pre-correction hosted Windows job establishes real-link capability for that run, while corrected hosted Linux validation remains open. Do not start the substantive B9 campaign or another maintenance item as part of this remediation. B9 / POST-P2-002 remains open independently of this CI remediation.
 
 ## Revision history
 
@@ -177,3 +221,4 @@ The completed working tree is ready for review, with local acceptance establishe
 | 0.1 | 2026-09-28 | Characterize all 104 post-merge CI failures; separate portable policy from Windows file admission; preserve original tests, add routing/count enforcement, record fresh 461-case permitted-context evidence and pending hosted/gate acceptance. |
 | 0.2 | 2026-10-05 | Reconcile final 474-case routing, bounded finding-boundary hardening, 2,731-case portable solution evidence and full-solution Windows CI ownership; preserve the reported gate pass while requesting confirmation that it covered the final boundary changes. Hosted Ubuntu/Windows execution remains a post-publication validation step. |
 | 1.0 | 2026-10-05 | Record the user's confirmation that the passing unmodified release gate included the final fuzz suite; close local acceptance while preserving historical failures, evidence attribution, hosted CI limitations and open overall B9 status. |
+| 1.1 | 2026-10-05 | Characterize the first revised hosted Ubuntu 283/285 result and successful hosted Windows baseline; separate portable managed-root observation from Windows-only lease admission and retain two lease integration rows. Record repeated/focused/portable validation, close local acceptance with the independently verified 476/476 permitted-context suite and user-reported fresh gate pass, and preserve earlier failures. Corrected hosted Ubuntu validation remains pending. |
