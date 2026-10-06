@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+using System.Text;
 using BlackFlag.Engine.Rendering.Graphics;
 using BlackFlag.Engine.Rendering.Resources;
 
@@ -10,7 +12,7 @@ namespace BlackFlag.Engine.Rendering.DisplayList;
 /// </summary>
 public sealed class PdfDisplayTextRun : PdfDisplayItem
 {
-    private readonly PdfTextRunElement[] elements;
+    private readonly ReadOnlyCollection<PdfTextRunElement> elements;
 
     /// <summary>Initializes a text-run display item.</summary>
     public PdfDisplayTextRun(
@@ -28,7 +30,7 @@ public sealed class PdfDisplayTextRun : PdfDisplayItem
 
         Font = font;
         FontSize = fontSize;
-        this.elements = elements.ToArray();
+        this.elements = Array.AsReadOnly(elements.ToArray());
         TextMatrix = textMatrix;
     }
 
@@ -45,11 +47,35 @@ public sealed class PdfDisplayTextRun : PdfDisplayItem
     public PdfMatrix TextMatrix { get; }
 
     /// <summary>Gets all encoded text bytes concatenated in source order.</summary>
-    public ReadOnlyMemory<byte> EncodedBytes =>
-        elements
-            .Where(static element => element.Kind == PdfTextRunElementKind.Text)
-            .SelectMany(static element => element.EncodedBytes.ToArray())
-            .ToArray();
+    public ReadOnlyMemory<byte> EncodedBytes
+    {
+        get
+        {
+            int length = 0;
+            foreach (PdfTextRunElement element in elements)
+            {
+                if (element.Kind == PdfTextRunElementKind.Text)
+                {
+                    length = checked(length + element.EncodedBytes.Length);
+                }
+            }
+
+            byte[] result = new byte[length];
+            int offset = 0;
+            foreach (PdfTextRunElement element in elements)
+            {
+                if (element.Kind != PdfTextRunElementKind.Text)
+                {
+                    continue;
+                }
+
+                element.EncodedBytes.Span.CopyTo(result.AsSpan(offset));
+                offset += element.EncodedBytes.Length;
+            }
+
+            return result;
+        }
+    }
 
     /// <summary>
     /// Gets directly derivable Unicode text when every text element has such a
@@ -59,16 +85,23 @@ public sealed class PdfDisplayTextRun : PdfDisplayItem
     {
         get
         {
-            PdfTextRunElement[] textElements = elements
-                .Where(static element => element.Kind == PdfTextRunElementKind.Text)
-                .ToArray();
-
-            if (textElements.Any(static element => element.UnicodeText is null))
+            var builder = new StringBuilder();
+            foreach (PdfTextRunElement element in elements)
             {
-                return null;
+                if (element.Kind != PdfTextRunElementKind.Text)
+                {
+                    continue;
+                }
+
+                if (element.UnicodeText is null)
+                {
+                    return null;
+                }
+
+                builder.Append(element.UnicodeText);
             }
 
-            return string.Concat(textElements.Select(static element => element.UnicodeText));
+            return builder.ToString();
         }
     }
 }

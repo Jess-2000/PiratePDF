@@ -392,12 +392,6 @@ public sealed class PdfEditingSession :
             undo);
     }
 
-    internal PdfDocument GetDocument()
-    {
-        EnsureActive();
-        return document;
-    }
-
     internal void EnsureActive()
     {
         ObjectDisposedException.ThrowIf(

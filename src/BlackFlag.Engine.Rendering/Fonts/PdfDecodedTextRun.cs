@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using BlackFlag.Engine.Rendering.DisplayList;
 using BlackFlag.Engine.Rendering.Resources;
 
@@ -6,8 +7,8 @@ namespace BlackFlag.Engine.Rendering.Fonts;
 /// <summary>Contains the renderer-neutral decoded representation of a display text run.</summary>
 public sealed class PdfDecodedTextRun
 {
-    private readonly PdfDecodedGlyph[] glyphs;
-    private readonly PdfFontDecodeDiagnostic[] diagnostics;
+    private readonly ReadOnlyCollection<PdfDecodedGlyph> glyphs;
+    private readonly ReadOnlyCollection<PdfFontDecodeDiagnostic> diagnostics;
 
     internal PdfDecodedTextRun(
         PdfResolvedFont font,
@@ -17,8 +18,8 @@ public sealed class PdfDecodedTextRun
     {
         Font = font;
         Source = source;
-        this.glyphs = glyphs.ToArray();
-        this.diagnostics = diagnostics.ToArray();
+        this.glyphs = Array.AsReadOnly(glyphs.ToArray());
+        this.diagnostics = Array.AsReadOnly(diagnostics.ToArray());
     }
 
     /// <summary>Gets the resolved PDF font.</summary>

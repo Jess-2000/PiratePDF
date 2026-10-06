@@ -1,9 +1,12 @@
+using System.Collections.ObjectModel;
+
 namespace BlackFlag.Engine.Rendering.Fonts;
 
 /// <summary>Stores renderer-neutral mappings parsed from a PDF CMap.</summary>
 public sealed class PdfCMap
 {
-    private readonly PdfCodeSpaceRange[] codeSpaces;
+    private readonly ReadOnlyCollection<PdfCodeSpaceRange> codeSpaces;
+    private readonly int[] codeSpaceLengths;
     private readonly Dictionary<PdfCharacterCode, int> cidMappings;
     private readonly Dictionary<PdfCharacterCode, string> unicodeMappings;
 
@@ -13,7 +16,13 @@ public sealed class PdfCMap
         IDictionary<PdfCharacterCode, string> unicodeMappings,
         int writingMode)
     {
-        this.codeSpaces = codeSpaces.ToArray();
+        this.codeSpaces = Array.AsReadOnly(codeSpaces.ToArray());
+        codeSpaceLengths = this.codeSpaces.Count == 0
+            ? [1]
+            : [.. this.codeSpaces
+                .Select(static range => range.Length)
+                .Distinct()
+                .OrderDescending()];
         this.cidMappings = new Dictionary<PdfCharacterCode, int>(cidMappings);
         this.unicodeMappings = new Dictionary<PdfCharacterCode, string>(unicodeMappings);
         WritingMode = writingMode;
@@ -43,11 +52,7 @@ public sealed class PdfCMap
         ArgumentOutOfRangeException.ThrowIfNegative(offset);
         ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(offset, bytes.Length);
 
-        IEnumerable<int> lengths = codeSpaces.Length == 0
-            ? [1]
-            : codeSpaces.Select(static range => range.Length).Distinct().OrderDescending();
-
-        foreach (int length in lengths)
+        foreach (int length in codeSpaceLengths)
         {
             if (offset + length > bytes.Length)
             {
@@ -55,7 +60,7 @@ public sealed class PdfCMap
             }
 
             ReadOnlySpan<byte> candidate = bytes.Slice(offset, length);
-            bool accepted = codeSpaces.Length == 0;
+            bool accepted = codeSpaces.Count == 0;
             if (!accepted)
             {
                 foreach (PdfCodeSpaceRange range in codeSpaces)

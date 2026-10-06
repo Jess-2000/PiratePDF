@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "sharpfuzz.commandline": {
+      "version": "2.3.0",
+      "commands": [ "sharpfuzz" ]
+    }
+  }
+}

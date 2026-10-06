@@ -16,7 +16,7 @@ public sealed class PdfGlyphNameUnicodeMapTests
         string glyphName,
         string expected)
     {
-        Assert.True(PdfGlyphNameUnicodeMap.TryGetUnicode(glyphName, out string? actual));
+        Assert.True(PdfGlyphNameUnicodeMap.TryGetUnicode(glyphName, out string? actual, new System.Text.StringBuilder()));
         Assert.Equal(expected, actual);
     }
 }

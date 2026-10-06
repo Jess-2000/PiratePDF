@@ -1,6 +1,7 @@
 using System.Globalization;
 using PiratePDF.DocGen.Repair.Diagnostics;
 using PiratePDF.DocGen.Changes;
+using PiratePDF.DocGen.Models;
 using PiratePDF.DocGen.Repair.Metadata;
 
 namespace PiratePDF.DocGen.Repair.Rules;
@@ -43,16 +44,14 @@ internal sealed class IsoDateRepairRule
         PlanDateRepair(
             context,
             metadataFields,
-            "Last Updated",
-            changes,
-            diagnostics);
+            DocumentationContract.LastUpdated,
+            changes);
 
         PlanDateRepair(
             context,
             metadataFields,
-            "Next Review",
-            changes,
-            diagnostics);
+            DocumentationContract.NextReview,
+            changes);
     }
 
     // =========================================================================
@@ -63,8 +62,7 @@ internal sealed class IsoDateRepairRule
         RepairRuleContext context,
         Dictionary<string, MarkdownMetadataValueSpan> metadataFields,
         string fieldName,
-        List<DocumentChange> changes,
-        List<RepairDiagnostic> diagnostics)
+        List<DocumentChange> changes)
     {
         if (!metadataFields.TryGetValue(
                 fieldName,

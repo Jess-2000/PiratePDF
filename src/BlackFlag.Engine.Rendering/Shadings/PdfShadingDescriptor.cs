@@ -1,4 +1,4 @@
-
+using System.Collections.ObjectModel;
 using BlackFlag.Engine.Rendering.DisplayList;
 
 namespace BlackFlag.Engine.Rendering.Shadings;
@@ -6,7 +6,7 @@ namespace BlackFlag.Engine.Rendering.Shadings;
 /// <summary>Represents a renderer-neutral axial or radial PDF shading.</summary>
 public sealed class PdfShadingDescriptor
 {
-    private readonly PdfGradientStop[] stops;
+    private readonly ReadOnlyCollection<PdfGradientStop> stops;
 
     /// <summary>Initializes a shading descriptor.</summary>
     public PdfShadingDescriptor(
@@ -35,9 +35,9 @@ public sealed class PdfShadingDescriptor
         EndRadius = endRadius;
         ExtendStart = extendStart;
         ExtendEnd = extendEnd;
-        this.stops = stops.ToArray();
+        this.stops = Array.AsReadOnly(stops.ToArray());
 
-        if (this.stops.Length < 2)
+        if (this.stops.Count < 2)
         {
             throw new ArgumentException(
                 "A canonical shading requires at least two sampled color stops.",

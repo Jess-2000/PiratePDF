@@ -2,15 +2,13 @@ using System.Globalization;
 using System.Text;
 using PiratePDF.DocGen.Repair.Diagnostics;
 using PiratePDF.DocGen.Changes;
+using PiratePDF.DocGen.Models;
 
 namespace PiratePDF.DocGen.Repair.Rules;
 
 internal sealed class MissingRevisionHistoryRepairRule
     : IDocumentRepairRule
 {
-    private const string RevisionHistoryHeading =
-        "Revision History";
-
     public string Name =>
         "Missing revision history";
 
@@ -30,7 +28,7 @@ internal sealed class MissingRevisionHistoryRepairRule
         var document = context.Document;
 
         if (document.HasSection(
-                RevisionHistoryHeading))
+                DocumentationContract.RevisionHistoryHeading))
         {
             return;
         }
@@ -86,7 +84,9 @@ internal sealed class MissingRevisionHistoryRepairRule
                 "yyyy-MM-dd",
                 CultureInfo.InvariantCulture);
 
-        builder.Append("## Revision History");
+        builder.Append("## ");
+        builder.Append(
+            DocumentationContract.RevisionHistoryHeading);
         builder.Append(newline);
         builder.Append(newline);
 

@@ -104,9 +104,7 @@ public sealed class PdfFlateFilterDecoder : IPdfFilterDecoder
         try
         {
             using var source =
-                new MemoryStream(
-                    encodedCopy,
-                    writable: false);
+                new CompleteFlateInputStream(encodedCopy);
 
             using var stream =
                 new ZLibStream(
@@ -151,6 +149,29 @@ public sealed class PdfFlateFilterDecoder : IPdfFilterDecoder
             buffer.AsSpan().Clear();
             ArrayPool<byte>.Shared.Return(buffer);
             encodedCopy.AsSpan().Clear();
+        }
+    }
+
+    private sealed class CompleteFlateInputStream(byte[] encoded)
+        : MemoryStream(encoded, writable: false)
+    {
+        // Match the mutation codec's complete-member invariant. A finished
+        // inflater stops requesting input; EOF on another non-empty read
+        // means zlib still needs a header, final block or checksum byte.
+        public override int Read(byte[] buffer, int offset, int count) =>
+            RequireInput(base.Read(buffer, offset, count), count);
+
+        public override int Read(Span<byte> buffer) =>
+            RequireInput(base.Read(buffer), buffer.Length);
+
+        private static int RequireInput(int read, int requested)
+        {
+            if (read == 0 && requested > 0)
+            {
+                throw new InvalidDataException("The zlib input ended before decompression completed.");
+            }
+
+            return read;
         }
     }
 }

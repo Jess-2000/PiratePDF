@@ -1,16 +1,32 @@
 using System.Globalization;
 using System.Text;
+using BlackFlag.Engine.Filters;
 
 namespace BlackFlag.Engine.Rendering.Fonts;
 
 /// <summary>Parses the mapping constructs required from PDF CMap programs.</summary>
 public sealed class PdfCMapParser
 {
+    // A complete two-byte CID map needs fewer than 140,000 generated tokens.
+    // Cap token objects separately from decoded bytes and per-range expansion.
+    internal const int MaximumTokenCount = 1_000_000;
+
     /// <summary>Parses a decoded CMap byte sequence.</summary>
-    public static PdfCMap Parse(ReadOnlySpan<byte> decodedBytes)
+    public static PdfCMap Parse(ReadOnlySpan<byte> decodedBytes) =>
+        Parse(decodedBytes, (int)PdfFilterDecodeLimits.DefaultMaximumDecodedBytes, MaximumTokenCount);
+
+    internal static PdfCMap Parse(ReadOnlySpan<byte> decodedBytes, int maximumInputBytes, int maximumTokens)
     {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maximumInputBytes);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maximumTokens);
+        if (decodedBytes.Length > maximumInputBytes)
+        {
+            throw new InvalidDataException("CMap decoded input exceeds the byte limit.");
+        }
+
         string source = Encoding.ASCII.GetString(decodedBytes);
-        string[] tokens = Tokenize(source).ToArray();
+        // Indexed lookahead needs an eager snapshot; Tokenize bounds progress and token count as it yields.
+        string[] tokens = Tokenize(source, maximumTokens).Select(token => token.Value).ToArray();
 
         var codeSpaces = new List<PdfCodeSpaceRange>();
         var cidMappings = new Dictionary<PdfCharacterCode, int>();
@@ -114,14 +130,18 @@ public sealed class PdfCMapParser
         return new PdfCMap(codeSpaces, cidMappings, unicodeMappings, writingMode);
     }
 
-    private static IEnumerable<string> Tokenize(string source)
+    internal static IEnumerable<(string Value, int End)> Tokenize(string source, int maximumTokens)
     {
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maximumTokens);
         int index = 0;
+        int tokenCount = 0;
+        var delimiters = new Stack<char>();
         while (index < source.Length)
         {
             char value = source[index];
 
-            if (char.IsWhiteSpace(value))
+            if (value == '\0' || char.IsWhiteSpace(value))
             {
                 index++;
                 continue;
@@ -137,35 +157,109 @@ public sealed class PdfCMapParser
                 continue;
             }
 
-            if (value is '[' or ']')
+            // Check before creating the next token or growing delimiter state.
+            if (tokenCount == maximumTokens)
             {
-                yield return value.ToString();
-                index++;
-                continue;
-            }
-
-            if (value == '<')
-            {
-                int end = source.IndexOf('>', index + 1);
-                if (end < 0)
-                {
-                    throw new InvalidDataException("CMap hexadecimal token is unterminated.");
-                }
-
-                yield return source[index..(end + 1)];
-                index = end + 1;
-                continue;
+                throw new InvalidDataException("CMap token count exceeds the safety limit.");
             }
 
             int start = index;
-            while (index < source.Length &&
-                !char.IsWhiteSpace(source[index]) &&
-                source[index] is not '[' and not ']' and not '<' and not '>')
+            switch (value)
             {
-                index++;
+                case '<' when index + 1 < source.Length && source[index + 1] == '<':
+                    delimiters.Push('<');
+                    index += 2;
+                    break;
+                case '>':
+                    if (index + 1 >= source.Length || source[index + 1] != '>' ||
+                        !delimiters.TryPop(out char opening) || opening != '<')
+                    {
+                        throw new InvalidDataException("CMap has an unmatched dictionary closing delimiter.");
+                    }
+                    index += 2;
+                    break;
+                case '[':
+                    delimiters.Push('[');
+                    index++;
+                    break;
+                case ']':
+                    if (!delimiters.TryPop(out char arrayOpening) || arrayOpening != '[')
+                    {
+                        throw new InvalidDataException("CMap has an unmatched array closing delimiter.");
+                    }
+                    index++;
+                    break;
+                case '<':
+                    index++;
+                    while (index < source.Length && source[index] != '>')
+                    {
+                        if (source[index] == '<')
+                        {
+                            throw new InvalidDataException("CMap hexadecimal token contains an opening delimiter.");
+                        }
+                        index++;
+                    }
+                    if (index == source.Length)
+                    {
+                        throw new InvalidDataException("CMap hexadecimal token is unterminated.");
+                    }
+                    index++;
+                    break;
+                case '(':
+                    // Metadata strings may contain delimiters and escaped parentheses.
+                    int depth = 1;
+                    index++;
+                    while (index < source.Length && depth > 0)
+                    {
+                        char character = source[index++];
+                        if (character == '\\' && index < source.Length)
+                        {
+                            index++;
+                        }
+                        else if (character == '(')
+                        {
+                            depth++;
+                        }
+                        else if (character == ')')
+                        {
+                            depth--;
+                        }
+                    }
+                    if (depth != 0)
+                    {
+                        throw new InvalidDataException("CMap literal string is unterminated.");
+                    }
+                    break;
+                case ')':
+                    throw new InvalidDataException("CMap has an unmatched string closing delimiter.");
+                default:
+                    // Consume a name's slash, then stop at the next lexical delimiter.
+                    if (value == '/')
+                    {
+                        index++;
+                    }
+                    while (index < source.Length && source[index] != '\0' && !char.IsWhiteSpace(source[index]) &&
+                        source[index] is not '[' and not ']' and not '<' and not '>' and
+                        not '%' and not '/' and not '(' and not ')')
+                    {
+                        index++;
+                    }
+                    break;
             }
 
-            yield return source[start..index];
+            // One yield site: no token can be emitted from an unchanged position.
+            if (index <= start)
+            {
+                throw new InvalidDataException("CMap tokenizer did not advance.");
+            }
+
+            tokenCount++;
+            yield return (source[start..index], index);
+        }
+
+        if (delimiters.Count != 0)
+        {
+            throw new InvalidDataException("CMap has an unterminated dictionary or array.");
         }
     }
 
@@ -263,7 +357,7 @@ public sealed class PdfCMapParser
 
     private static byte[] AddBigEndian(byte[] value, int amount)
     {
-        byte[] result = value.ToArray();
+        byte[] result = [.. value];
         int carry = amount;
 
         for (int index = result.Length - 1; index >= 0 && carry > 0; index--)

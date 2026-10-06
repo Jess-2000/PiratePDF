@@ -1,10 +1,12 @@
+using System.Collections.ObjectModel;
+
 namespace BlackFlag.Engine.SDK.Security;
 
 /// <summary>Represents the stable SDK-facing result of one security evaluation.</summary>
 public sealed class DocumentSecuritySdkResult
 {
-    private readonly DocumentSecuritySdkFinding[] findings;
-    private readonly string[] interactions;
+    private readonly ReadOnlyCollection<DocumentSecuritySdkFinding> findings;
+    private readonly ReadOnlyCollection<string> interactions;
 
     /// <summary>Initializes an SDK security result.</summary>
     public DocumentSecuritySdkResult(
@@ -18,8 +20,8 @@ public sealed class DocumentSecuritySdkResult
         ArgumentNullException.ThrowIfNull(findings);
         ArgumentNullException.ThrowIfNull(interactions);
 
-        this.findings = findings.ToArray();
-        this.interactions = interactions.ToArray();
+        this.findings = Array.AsReadOnly(findings.ToArray());
+        this.interactions = Array.AsReadOnly(interactions.ToArray());
         IsBlocked = isBlocked;
         HasReport = hasReport;
         ManualInspection = manualInspection;

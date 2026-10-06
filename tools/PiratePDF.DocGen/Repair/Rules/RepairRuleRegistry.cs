@@ -5,6 +5,7 @@ internal static class RepairRuleRegistry
     private static readonly IDocumentRepairRule[] Rules =
     [
         new CanonicalStatusRepairRule(),
+        new MissingNextReviewRepairRule(),
         new IsoDateRepairRule(),
         new BrokenDocumentReferenceRepairRule(),
         new MissingRevisionHistoryRepairRule(),

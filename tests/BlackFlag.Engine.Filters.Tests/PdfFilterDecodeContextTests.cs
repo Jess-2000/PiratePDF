@@ -1,6 +1,4 @@
 using BlackFlag.Engine.Objects;
-using System;
-using Xunit;
 
 namespace BlackFlag.Engine.Filters.Tests;
 

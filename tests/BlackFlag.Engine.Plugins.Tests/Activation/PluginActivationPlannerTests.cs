@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -61,6 +62,21 @@ public sealed class PluginActivationPlannerTests : IDisposable
     }
 
     [Fact]
+    public async Task PlanExposesStableReadOnlyCollections()
+    {
+        Write("a", "org.sample.a", "1.0.0", """[{"id":"org.sample.missing","minimumVersion":"1.0.0"}]""");
+        Write("good", "org.sample.good", "1.0.0");
+
+        PluginActivationPlan plan = PluginActivationPlanner.Plan(
+            await PluginDiscoveryService.DiscoverAsync([root]),
+            new Version(1, 0));
+
+        AssertReadOnly(plan.ActivationOrder);
+        AssertReadOnly(plan.BlockedPlugins);
+        AssertReadOnly(plan.Issues);
+    }
+
+    [Fact]
     public async Task CancellationIsPropagated()
     {
         Write("a", "org.sample.a", "1.0.0"); PluginCatalog catalog = await PluginDiscoveryService.DiscoverAsync([root]); using var cts = new CancellationTokenSource(); cts.Cancel();
@@ -70,6 +86,14 @@ public sealed class PluginActivationPlannerTests : IDisposable
     {
         string path=Directory.CreateDirectory(Path.Combine(root,dir)).FullName; string deps=dependencies is null ? "" : $",\"dependencies\":{dependencies}";
         File.WriteAllText(Path.Combine(path,"plugin.json"), $"{{\"manifestVersion\":1,\"id\":\"{id}\",\"name\":\"Sample\",\"version\":\"{version}\",\"minimumSdkVersion\":\"{minimumSdk}\",\"entryPoint\":\"Sample.Plugin\"{deps}}}");
+    }
+    private static void AssertReadOnly<T>(IReadOnlyList<T> values)
+    {
+        Assert.NotEmpty(values);
+        Assert.IsNotType<T[]>(values);
+        IList<T> list = Assert.IsAssignableFrom<IList<T>>(values);
+        Assert.True(list.IsReadOnly);
+        Assert.Throws<NotSupportedException>(() => list.Clear());
     }
     public void Dispose(){ if(Directory.Exists(root)) Directory.Delete(root,true); GC.SuppressFinalize(this); }
 }

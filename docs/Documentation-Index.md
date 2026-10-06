@@ -52,6 +52,65 @@
 | BF-1052H | [BF-1052H — Cross-Structure Validation, Preservation, and Transactional Consistency](milestones/BF-1052H-Cross-Structure-Validation-Preservation-and-Transactional-Consistency.md) | Milestone | 1.0 | Implemented | 2026-08-15 |
 | BF-1052I | [BF-1052I — Services, SDK Exposure, and Integration Contracts](milestones/BF-1052I-Services-SDK-Exposure-and-Integration-Contracts.md) | Milestone | 1.0 | Implemented | 2026-08-15 |
 | BF-1052J | [BF-1052J — Adversarial, Integration, Performance, and Preservation Hardening](milestones/BF-1052J-Adversarial-Integration-Performance-and-Preservation-Hardening.md) | Milestone | 1.0 | Implemented | 2026-08-15 |
+| BF-1053A | [BF-1053A — Writing Architecture, Preservation Contracts, and Write Planning](milestones/BF-1053A-Writing-Architecture-Preservation-Contracts-and-Write-Planning.md) | Milestone | 1.0 | Implemented | 2026-08-15 |
+| BF-1053AA | [BF-1053AA — Unified Page-State Change-Set Writing Orchestration](milestones/BF-1053AA-Unified-Page-State-Change-Set-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-25 |
+| BF-1053AB | [BF-1053AB — Page-Tree Structural Change-Set Writing Orchestration](milestones/BF-1053AB-Page-Tree-Structural-Change-Set-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-25 |
+| BF-1053AC | [BF-1053AC — Unified Page Transaction Writing Orchestration](milestones/BF-1053AC-Unified-Page-Transaction-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-25 |
+| BF-1053AD | [BF-1053AD — Existing Nested Page-Tree Hierarchy Projection](milestones/BF-1053AD-Existing-Nested-Page-Tree-Hierarchy-Projection.md) | Milestone | 1.0 | Implemented | 2026-08-25 |
+| BF-1053AE | [BF-1053AE — Nested Page-Tree Insert/Remove Structural Projection](milestones/BF-1053AE-Nested-Page-Tree-Insert-Remove-Structural-Projection.md) | Milestone | 1.0 | Implemented | 2026-08-26 |
+| BF-1053AF | [BF-1053AF — Nested Page-Tree Cross-Node Move/Replace Projection](milestones/BF-1053AF-Nested-Page-Tree-Cross-Node-Move-Replace-Projection.md) | Milestone | 1.0 | Implemented | 2026-08-26 |
+| BF-1053AG | [BF-1053AG — Services-Layer Nested Page-Tree Structural Orchestration](milestones/BF-1053AG-Services-Layer-Nested-Page-Tree-Structural-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-26 |
+| BF-1053AH | [BF-1053AH — Nested Page Transaction Integration and Hardening](milestones/BF-1053AH-Nested-Page-Transaction-Integration-Hardening.md) | Milestone | 1.0 | Implemented | 2026-08-26 |
+| BF-1053AI | [BF-1053AI — Page-Tree Topology Management](milestones/BF-1053AI-Page-Tree-Topology-Management.md) | Milestone | 1.0 | Implemented | 2026-08-26 |
+| BF-1053AJ | [BF-1053AJ — Public Writing/Save Orchestration](milestones/BF-1053AJ-Public-Writing-Save-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-26 |
+| BF-1053AK | [BF-1053AK — End-to-End Preservation Conformance and Milestone Closure](milestones/BF-1053AK-End-to-End-Preservation-Conformance-and-Milestone-Closure.md) | Milestone | 1.0 | Implemented | 2026-08-26 |
+| BF-1053B | [BF-1053B — Primitive, Composite, and Indirect-Object Serialization](milestones/BF-1053B-Primitive-Composite-and-Indirect-Object-Serialization.md) | Milestone | 1.0 | Implemented | 2026-08-15 |
+| BF-1053C | [BF-1053C — Classic Full Rewrite and Cross-Reference Assembly](milestones/BF-1053C-Classic-Full-Rewrite-and-Cross-Reference-Assembly.md) | Milestone | 1.0 | Implemented | 2026-08-15 |
+| BF-1053D | [BF-1053D — Cross-Reference Stream Full-Rewrite Output](milestones/BF-1053D-Cross-Reference-Stream-Full-Rewrite-Output.md) | Milestone | 1.0 | Implemented | 2026-08-15 |
+| BF-1053E | [BF-1053E — Original Source Revision and Incremental Write Planning](milestones/BF-1053E-Original-Source-Revision-and-Incremental-Write-Planning.md) | Milestone | 1.0 | Implemented | 2026-08-15 |
+| BF-1053F | [BF-1053F — Traditional Incremental Update Serialization](milestones/BF-1053F-Traditional-Incremental-Update-Serialization.md) | Milestone | 1.0 | Implemented | 2026-08-16 |
+| BF-1053G | [BF-1053G — Incremental Cross-Reference Stream Serialization](milestones/BF-1053G-Incremental-Cross-Reference-Stream-Serialization.md) | Milestone | 1.0 | Implemented | 2026-08-16 |
+| BF-1053H | [BF-1053H — Indirect-Object Write Projection Foundation](milestones/BF-1053H-Indirect-Object-Write-Projection-Foundation.md) | Milestone | 1.0 | Implemented | 2026-08-16 |
+| BF-1053I | [BF-1053I — Document Information Dictionary Projection](milestones/BF-1053I-Document-Information-Dictionary-Projection.md) | Milestone | 1.0 | Implemented | 2026-08-16 |
+| BF-1053J | [BF-1053J — Reservation-Aware Object Allocation and Documentation Contract Hardening](milestones/BF-1053J-Reservation-Aware-Object-Allocation-and-Documentation-Contract-Hardening.md) | Milestone | 1.0 | Implemented | 2026-08-16 |
+| BF-1053K | [BF-1053K — Transactional Projection Planning and Object-Generation Safety](milestones/BF-1053K-Transactional-Projection-Planning-and-Object-Generation-Safety.md) | Milestone | 1.0 | Implemented | 2026-08-20 |
+| BF-1053L | [BF-1053L — Missing Document Information Object Creation](milestones/BF-1053L-Missing-Document-Information-Object-Creation.md) | Milestone | 1.0 | Implemented | 2026-08-20 |
+| BF-1053M | [BF-1053M — Projection-Aware Full-Rewrite Planning and Root README Correction](milestones/BF-1053M-Projection-Aware-Full-Rewrite-Planning-and-Root-README-Correction.md) | Milestone | 1.0 | Implemented | 2026-08-22 |
+| BF-1053N | [BF-1053N — Page Geometry Dictionary Projection](milestones/BF-1053N-Page-Geometry-Dictionary-Projection.md) | Milestone | 1.0 | Implemented | 2026-08-22 |
+| BF-1053O | [BF-1053O — Document Information Full-Rewrite Planning](milestones/BF-1053O-Document-Information-Full-Rewrite-Planning.md) | Milestone | 1.0 | Implemented | 2026-08-22 |
+| BF-1053P | [BF-1053P — Bound Page-Tree Dictionary Projection](milestones/BF-1053P-Bound-Page-Tree-Dictionary-Projection.md) | Milestone | 1.0 | Implemented | 2026-08-22 |
+| BF-1053Q | [BF-1053Q — Reservation-Aware New-Page Projection and Binding](milestones/BF-1053Q-Reservation-Aware-New-Page-Projection-and-Binding.md) | Milestone | 1.0 | Implemented | 2026-08-22 |
+| BF-1053R | [BF-1053R — Bound Annotation Common-State Projection](milestones/BF-1053R-Bound-Annotation-Common-State-Projection.md) | Milestone | 1.0 | Implemented | 2026-08-22 |
+| BF-1053S | [BF-1053S — Reservation-Aware New-Annotation Projection and Binding](milestones/BF-1053S-Reservation-Aware-New-Annotation-Projection-and-Binding.md) | Milestone | 1.0 | Implemented | 2026-08-23 |
+| BF-1053T | [BF-1053T — Explicit Annotation Targeting and Minimal Write Planning](milestones/BF-1053T-Explicit-Annotation-Targeting-and-Minimal-Write-Planning.md) | Milestone | 1.0 | Implemented | 2026-08-23 |
+| BF-1053U | [BF-1053U — Annotation Common-State Object-Only Planning](milestones/BF-1053U-Annotation-Common-State-Object-Only-Planning.md) | Milestone | 1.0 | Implemented | 2026-08-23 |
+| BF-1053V | [BF-1053V — Editing Change-Set Annotation Writing Orchestration](milestones/BF-1053V-Editing-Change-Set-Annotation-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-23 |
+| BF-1053W | [BF-1053W — Structural Annotation Change-Set Writing Orchestration](milestones/BF-1053W-Structural-Annotation-Change-Set-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-23 |
+| BF-1053X | [BF-1053X — Unified Annotation Transaction Writing Orchestration](milestones/BF-1053X-Unified-Annotation-Transaction-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-23 |
+| BF-1053Y | [BF-1053Y — Page Geometry Change-Set Writing Orchestration](milestones/BF-1053Y-Page-Geometry-Change-Set-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-25 |
+| BF-1053Z | [BF-1053Z — Page Rotation Change-Set Writing Orchestration](milestones/BF-1053Z-Page-Rotation-Change-Set-Writing-Orchestration.md) | Milestone | 1.0 | Implemented | 2026-08-25 |
+| BF-1054A | [BF-1054A — Existing Text Editing Architecture, Identity, and Preservation Contracts](milestones/BF-1054A-Existing-Text-Editing-Architecture-Identity-and-Preservation-Contracts.md) | Milestone | 1.0 | Implemented | 2026-08-27 |
+| BF-1054B | [BF-1054B — Existing Text Discovery and Provenance Mapping](milestones/BF-1054B-Existing-Text-Discovery-and-Provenance-Mapping.md) | Milestone | 1.0 | Implemented | 2026-08-27 |
+| BF-1054C | [BF-1054C — Same-Font Direct Text Replacement](milestones/BF-1054C-Same-Font-Direct-Text-Replacement.md) | Milestone | 1.0 | Implemented | 2026-08-27 |
+| BF-1054D | [BF-1054D — Composite TJ Editing and Position Preservation](milestones/BF-1054D-Composite-TJ-Editing-and-Position-Preservation.md) | Milestone | 1.0 | Implemented | 2026-08-27 |
+| BF-1054E | [BF-1054E — Find/Replace Transaction Integration](milestones/BF-1054E-Find-Replace-Transaction-Integration.md) | Milestone | 1.0 | Implemented | 2026-09-03 |
+| BF-1054F | [BF-1054F — Typography State Editing](milestones/BF-1054F-Typography-State-Editing.md) | Milestone | 1.0 | Implemented | 2026-09-03 |
+| BF-1054G | [BF-1054G — Canonical Existing-Font Selection and Resource Integration](milestones/BF-1054G-Canonical-Existing-Font-Selection-and-Resource-Integration.md) | Milestone | 1.0 | Implemented | 2026-09-03 |
+| BF-1054H | [BF-1054H — External Font Infrastructure Foundation](milestones/BF-1054H-External-Font-Infrastructure-Foundation.md) | Milestone | 1.0 | Implemented | 2026-09-03 |
+| BF-1054I | [BF-1054I — External Font Sanitization and Trusted Font-Program Boundary](milestones/BF-1054I-External-Font-Sanitization-and-Trusted-Font-Program-Boundary.md) | Milestone | 1.0 | Implemented | 2026-09-04 |
+| BF-1054J | [BF-1054J — PDF External TrueType Resource Construction and Full Embedding](milestones/BF-1054J-PDF-External-TrueType-Resource-Construction-and-Full-Embedding.md) | Milestone | 1.0 | Implemented | 2026-09-04 |
+| BF-1054K | [BF-1054K — TrueType Glyph Subsetting, Subset-Only Rights, and ToUnicode Generation](milestones/BF-1054K-TrueType-Glyph-Subsetting-Subset-Only-Rights-and-ToUnicode-Generation.md) | Milestone | 1.0 | Implemented | 2026-09-04 |
+| BF-1054L | [BF-1054L — Composite TrueType Glyph Dependency Closure and Subset Hardening](milestones/BF-1054L-Composite-TrueType-Glyph-Dependency-Closure-and-Subset-Hardening.md) | Milestone | 1.0 | Implemented | 2026-09-05 |
+| BF-1054M | [BF-1054M — Type0/CID Unicode TrueType Font Construction](milestones/BF-1054M-Type0-CID-Unicode-TrueType-Font-Construction.md) | Milestone | 1.0 | Implemented | 2026-09-05 |
+| BF-1054N | [BF-1054N — Canonical Resource Ownership and Collision-Safe Mutation](milestones/BF-1054N-Canonical-Resource-Ownership-and-Collision-Safe-Mutation.md) | Milestone | 1.0 | Implemented | 2026-09-05 |
+| BF-1054O | [BF-1054O — Form XObject Existing-Text Editing and Shared-Source Semantics](milestones/BF-1054O-Form-XObject-Existing-Text-and-Shared-Source-Semantics.md) | Milestone | 1.0 | Implemented | 2026-09-05 |
+| BF-1054P | [BF-1054P — Filtered Content-Stream Mutation and Safe Re-encoding](milestones/BF-1054P-Filtered-Content-Stream-Mutation-and-Safe-Re-encoding.md) | Milestone | 1.0 | Implemented | 2026-09-05 |
+| BF-1054Q | [BF-1054Q — External/Newly Embedded Font Integration into Existing Text](milestones/BF-1054Q-External-Newly-Embedded-Font-Integration-into-Existing-Text.md) | Milestone | 1.0 | Implemented | 2026-09-05 |
+| BF-1054R | [BF-1054R — Windows and macOS External Font Provider Adapters](milestones/BF-1054R-Windows-and-macOS-External-Font-Provider-Adapters.md) | Milestone | 1.0 | Implemented | 2026-09-05 |
+| BF-1054S | [BF-1054S — Existing-Text Styling, Script Positioning, Color, Compound Operators, and Decorations](milestones/BF-1054S-Existing-Text-Styling-Script-Color-Compound-Operators-and-Decorations.md) | Milestone | 1.0 | Implemented | 2026-09-05 |
+| BF-1054T | [BF-1054T — Text Advance Measurement and Width-Aware Existing-Text Adjustment](milestones/BF-1054T-Text-Advance-Measurement-and-Width-Aware-Existing-Text-Adjustment.md) | Milestone | 1.0 | Implemented | 2026-09-05 |
+| BF-1054U | [BF-1054U — Public Existing-Text Editing Services and SDK Integration](milestones/BF-1054U-Public-Existing-Text-Editing-Services-and-SDK-Integration.md) | Milestone | 1.0 | Implemented | 2026-09-05 |
+| BF-1054V | [BF-1054V — End-to-End Existing-Text Conformance, Provenance/Immutability Hardening, and BF-1054 Closure](milestones/BF-1054V-End-to-End-Existing-Text-Conformance-Provenance-Immutability-Hardening-and-Closure.md) | Milestone / Closure | 1.0 | Implemented | 2026-09-05 |
 | BF-DOC-0004 | [BlackFlag Engine — Parser Infrastructure RC1](Parser-Infrastructure-RC1.md) | Architecture | 0.4.0 | Tested | 2026-07-30 |
 | BF-DOC-0005 | [BlackFlag Engine 0.5.0 — PDF Object Model RC1](PDF-Object-Model-RC1.md) | Architecture | 0.5.0 | In Development | 2026-07-30 |
 | BF-DOC-1001 | [Documentation Template RC1](Documentation-Template-RC1.md) | Developer Documentation | 0.1.0 | In Development | 2026-07-30 |
@@ -75,11 +134,49 @@
 | PP-ARCH-001 | [PiratePDF Master Blueprint - Volume II: BlackFlag Engine Architecture](Blueprint/Volume-II-BlackFlag-Engine-Architecture.md) | Architecture | 1.1 | Approved | 2026-08-09 |
 | PP-ARCH-CONV-001 | [Passive Document Conversion Architecture](Architecture/PASSIVE-DOCUMENT-CONVERSION.md) | Architecture | 1.0 | Approved | 2026-08-06 |
 | PP-ARCH-MEM-001 | [BlackFlag Memory and Resource Architecture](Architecture/MEMORY-ARCHITECTURE.md) | Architecture | 1.0 | In Development | 2026-08-06 |
+| PP-AUD-001 | [Pre-BF-1054 C# Repository Engineering Audit](reviews/Pre-BF-1054-CSharp-Repository-Audit.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
+| PP-AUD-002 | [Pre-BF-1054 Batch 1 — Plugin Boundary Hardening](reviews/Pre-BF-1054-Batch-1-Plugin-Boundary-Hardening.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
+| PP-AUD-003 | [Pre-BF-1054 Batch 1 — Completion Report](reviews/Pre-BF-1054-Batch-1-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
+| PP-AUD-004 | [Pre-BF-1054 Batch 2 — Security Result Hardening](reviews/Pre-BF-1054-Batch-2-Security-Result-Hardening.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
+| PP-AUD-005 | [Pre-BF-1054 Batch 2 — Completion Report](reviews/Pre-BF-1054-Batch-2-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
+| PP-AUD-006 | [Pre-BF-1054 Batch 3 — Abstractions Test Quality](reviews/Pre-BF-1054-Batch-3-Abstractions-Test-Quality.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
+| PP-AUD-007 | [Pre-BF-1054 Batch 3 — Completion Report](reviews/Pre-BF-1054-Batch-3-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
+| PP-AUD-008 | [Pre-BF-1054 Structural-Refactoring Necessity Assessment](reviews/Pre-BF-1054-Structural-Refactoring-Necessity-Assessment.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
+| PP-AUD-009 | [Post-BF-1054 C# Repository Engineering, Security and Optimization Audit](reviews/Post-BF-1054-CSharp-Repository-Audit.md) | Engineering Review | 1.19 | Review | 2026-09-23 |
+| PP-AUD-010 | [Post-BF-1054 Batch B1 - Bounded Mutation Decode](reviews/Post-BF-1054-Batch-B1-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-06 |
+| PP-AUD-011 | [Post-BF-1054 Batch B2 - JPEG Preallocation Validation](reviews/Post-BF-1054-Batch-B2-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-07 |
+| PP-AUD-012 | [Post-BF-1054 Batch B3 - Allocated Font Resource Name](reviews/Post-BF-1054-Batch-B3-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-08 |
+| PP-AUD-013 | [Post-BF-1054 Batch B3A - CMap Tokenizer Progress and Bounds](reviews/Post-BF-1054-Batch-B3A-CMap-Tokenizer-Completion-Report.md) | Engineering Review | 1.1 | Review | 2026-09-08 |
+| PP-AUD-014 | [Post-BF-1054 Pre-B4 Expression and Materialization Review](reviews/Post-BF-1054-Pre-B4-Expression-and-Materialization-Review.md) | Engineering Review | 1.0 | Review | 2026-09-08 |
+| PP-AUD-015 | [Post-BF-1054 Batch B4A - Trusted Sanitized-Font Ownership](reviews/Post-BF-1054-Batch-B4A-Sanitized-Font-Ownership-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-09 |
+| PP-AUD-016 | [Post-BF-1054 B4A Ownership Candidate Characterization](reviews/Post-BF-1054-B4A-Ownership-Candidate-Characterization.md) | Engineering Review | 1.0 | Review | 2026-09-09 |
+| PP-AUD-017 | [Post-BF-1054 B4A-F1 - Existing-Text Descriptor Ownership](reviews/Post-BF-1054-B4A-F1-Descriptor-Ownership-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-10 |
+| PP-AUD-018 | [Post-BF-1054 B4A-F2 Source-Revision Ownership Completion Report](reviews/Post-BF-1054-B4A-F2-Source-Revision-Ownership-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-10 |
+| PP-AUD-019 | [Post-BF-1054 B4A-F3 Parser-Stream Ownership Completion Report](reviews/Post-BF-1054-B4A-F3-Parser-Stream-Ownership-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-12 |
+| PP-AUD-020 | [Post-BF-1054 B4A-F4 Character-Code Ownership Completion Report](reviews/Post-BF-1054-B4A-F4-Character-Code-Ownership-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-13 |
+| PP-AUD-021 | [Post-BF-1054 F3-OBS-01 Truncated-Flate Characterization](reviews/Post-BF-1054-F3-OBS-01-Truncated-Flate-Characterization.md) | Engineering Review | 1.0 | Review | 2026-09-13 |
+| PP-AUD-022 | [Post-BF-1054 Batch B4B - TrueType Subset Resource Limits](reviews/Post-BF-1054-Batch-B4B-Subset-Resource-Limits-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-13 |
+| PP-AUD-023 | [Post-BF-1054 Batch B4C - Malformed Font Numeric Lengths](reviews/Post-BF-1054-Batch-B4C-Malformed-Font-Numeric-Lengths-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-14 |
+| PP-AUD-024 | [Post-BF-1054 Batch B5 - Decoration Geometry and Operator Placement](reviews/Post-BF-1054-Batch-B5-Decoration-Geometry-and-Operator-Placement-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-15 |
+| PP-AUD-025 | [Post-BF-1054 Batch B6 - External Font Embedding Rights](reviews/Post-BF-1054-Batch-B6-External-Font-Embedding-Rights-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-16 |
+| PP-AUD-026 | [Post-BF-1054 Batch B7 - Stale Form Placement Provenance](reviews/Post-BF-1054-Batch-B7-Stale-Form-Placement-Provenance-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-21 |
+| PP-AUD-027 | [Post-BF-1054 Repository Dead-Code and Using Cleanup](reviews/Post-BF-1054-Repository-Dead-Code-and-Using-Cleanup-Report.md) | Engineering Review | 1.0 | Review | 2026-09-22 |
+| PP-AUD-028 | [Post-BF-1054 Batch B8 - Font Catalog Responsiveness](reviews/Post-BF-1054-Batch-B8-Font-Catalog-Responsiveness-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-23 |
+| PP-AUD-029 | [Post-BF-1054 Batch B9 - Bounded Fuzz and Corpus Approval Checkpoint](reviews/Post-BF-1054-Batch-B9-Bounded-Fuzz-and-Corpus-Completion-Report.md) | Engineering Review | 0.1 | Review | 2026-09-23 |
+| PP-AUD-030 | [Post-BF-1054 Batch B9 - Neutral Target Registry Completion Report](reviews/Post-BF-1054-Batch-B9-Neutral-Targets-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-23 |
+| PP-AUD-031 | [Post-BF-1054 Batch B9 - Neutral Single-Case Runner Report](reviews/Post-BF-1054-Batch-B9-Neutral-Runner-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-23 |
+| PP-AUD-032 | [Post-BF-1054 Batch B9 - Process Supervision Completion Report](reviews/Post-BF-1054-Batch-B9-Process-Supervision-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-24 |
+| PP-AUD-033 | [Post-BF-1054 Batch B9 - Owned Corpus and Manifest Report](reviews/Post-BF-1054-Batch-B9-Owned-Corpus-and-Manifest-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-24 |
+| PP-AUD-034 | [Post-BF-1054 Batch B9 - Deterministic Supervised Replay Report](reviews/Post-BF-1054-Batch-B9-Deterministic-Replay-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-24 |
+| PP-AUD-035 | [Post-BF-1054 Batch B9 - Deterministic Mutation Completion Report](reviews/Post-BF-1054-Batch-B9-Deterministic-Mutation-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-25 |
+| PP-AUD-036 | [Post-BF-1054 Batch B9 - Fuzz Toolchain Smoke Completion Report](reviews/Post-BF-1054-Batch-B9-Fuzz-Toolchain-Smoke-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-26 |
+| PP-AUD-037 | [Post-BF-1054 Batch B9 - Failure Artifact Reproduction and Promotion Report](reviews/Post-BF-1054-Batch-B9-Failure-Artifact-Reproduction-and-Promotion-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-27 |
+| PP-AUD-038 | [Post-BF-1054 Batch B9 - CI Portability Remediation Report](reviews/Post-BF-1054-Batch-B9-CI-Portability-Remediation-Report.md) | Engineering Review | 1.1 | Review | 2026-10-05 |
 | PP-CHARTER-001 | [PiratePDF Project Charter](Project-Charter.md) | Project Charter | 1.1 | Approved | 2026-08-09 |
-| PP-DEV-001 | [PiratePDF Master Blueprint - Volume IV: Engineering Standards](Blueprint/Volume-IV-Engineering-Standards.md) | Developer Documentation | 1.0 | Approved | 2026-07-24 |
+| PP-DEV-001 | [PiratePDF Master Blueprint - Volume IV: Engineering Standards](Blueprint/Volume-IV-Engineering-Standards.md) | Developer Documentation | 1.1 | Approved | 2026-08-15 |
 | PP-DEV-002 | [BlackFlag Engine Plugin Development Contract](04-Developer/Plugin-Development.md) | Developer Documentation | 1.0 | Implemented | 2026-08-13 |
 | PP-DOC-000 | [PiratePDF Documentation](README.md) | Documentation Index | 1.0 | Approved | 2026-07-24 |
-| PP-GOV-002 | [PiratePDF Documentation Standards](05-Governance/Documentation-Standards.md) | Governance | 1.0 | Approved | 2026-07-23 |
+| PP-GOV-002 | [PiratePDF Documentation Standards](05-Governance/Documentation-Standards.md) | Governance | 1.1 | Approved | 2026-08-16 |
 | PP-GOV-003 | [Documentation Validation Rules](05-Governance/Documentation-Validation-Rules.md) | Governance | 1.0 | Approved | 2026-07-24 |
 | PP-HIST-001 | [Building BlackFlag](BUILDING-BLACKFLAG.md) | Developer Guide | 0.1 | In Development | 2026-08-06 |
 | PP-HIST-BF-1040 | [BF-1040 Milestone Reflection](releases/BF-1040/Milestone-Reflection.md) | Project History | 1.0 | Tested | 2026-08-06 |

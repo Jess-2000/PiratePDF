@@ -15,30 +15,6 @@ public sealed partial class PdfLexer
             start);
     }
 
-    private PdfToken ReadDictionaryStart()
-    {
-        PdfSourcePosition start =
-            Position;
-
-        ConsumeExpectedByte(
-            (byte)'<');
-
-        if (
-            !cursor.TryPeekByte(out byte value) ||
-            value != (byte)'<')
-        {
-            throw new PdfLexerException(
-                "Hexadecimal string recognition has not yet been implemented",
-                start);
-        }
-
-        ConsumeByte();
-
-        return CreateToken(
-            PdfTokenKind.DictionaryStart,
-            start);
-    }
-
     private PdfToken ReadDictionaryEnd()
     {
         PdfSourcePosition start =

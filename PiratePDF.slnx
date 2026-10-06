@@ -5,6 +5,8 @@
     <Project Path="src/BlackFlag.Engine.Document/BlackFlag.Engine.Document.csproj" />
     <Project Path="src/BlackFlag.Engine.Editing/BlackFlag.Engine.Editing.csproj" />
     <Project Path="src/BlackFlag.Engine.Filters/BlackFlag.Engine.Filters.csproj" />
+    <Project Path="src/BlackFlag.Engine.Fonts/BlackFlag.Engine.Fonts.csproj" />
+    <Project Path="src/BlackFlag.Engine.Fonts.Platform/BlackFlag.Engine.Fonts.Platform.csproj" />
     <Project Path="src/BlackFlag.Engine.IO/BlackFlag.Engine.IO.csproj" />
     <Project Path="src/BlackFlag.Engine.Objects/BlackFlag.Engine.Objects.csproj" />
     <Project Path="src/BlackFlag.Engine.Parsing/BlackFlag.Engine.Parsing.csproj" />
@@ -27,6 +29,8 @@
     <Project Path="tests/BlackFlag.Engine.Document.Tests/BlackFlag.Engine.Document.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.Editing.Tests/BlackFlag.Engine.Editing.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.Filters.Tests/BlackFlag.Engine.Filters.Tests.csproj" />
+    <Project Path="tests/BlackFlag.Engine.Fonts.Tests/BlackFlag.Engine.Fonts.Tests.csproj" />
+    <Project Path="tests/BlackFlag.Engine.Fonts.Platform.Tests/BlackFlag.Engine.Fonts.Platform.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.IO.Tests/BlackFlag.Engine.IO.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.Objects.Tests/BlackFlag.Engine.Objects.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.Parsing.Tests/BlackFlag.Engine.Parsing.Tests.csproj" />
@@ -40,5 +44,6 @@
     <Project Path="tests/BlackFlag.Engine.Syntax.Tests/BlackFlag.Engine.Syntax.Tests.csproj" />
     <Project Path="tests/BlackFlag.Engine.Writing.Tests/BlackFlag.Engine.Writing.Tests.csproj" />
     <Project Path="tests/PiratePDF.DocGen.Tests/PiratePDF.DocGen.Tests.csproj" />
+    <Project Path="tests/PiratePDF.Fuzz.Tests/PiratePDF.Fuzz.Tests.csproj" />
   </Folder>
 </Solution>

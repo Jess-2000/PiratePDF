@@ -1,7 +1,6 @@
 using BlackFlag.Engine.Document.Decorations;
 using BlackFlag.Engine.Document.Forms;
 using BlackFlag.Engine.Document.Model;
-using BlackFlag.Engine.Document.Outlines;
 using BlackFlag.Engine.Document.Pages;
 using BlackFlag.Engine.Editing.Documents;
 

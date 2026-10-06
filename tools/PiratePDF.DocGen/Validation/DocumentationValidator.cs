@@ -56,6 +56,19 @@ internal static partial class DocumentationValidator
             issues.AddRange(
                 MarkdownStructureValidator.Validate(
                     document));
+
+            if (!document.HasSection(
+                    DocumentationContract.RevisionHistoryHeading))
+            {
+                issues.Add(
+                    new ValidationIssue(
+                        ValidationSeverity.Error,
+                        string.IsNullOrWhiteSpace(document.DocumentId)
+                            ? "(missing)"
+                            : document.DocumentId,
+                        document.FilePath,
+                        "Revision History section is missing."));
+            }
         }
 
         return new DocumentationValidationResult(
@@ -91,49 +104,49 @@ internal static partial class DocumentationValidator
 
         ValidateRequiredField(
             document.DocumentId,
-            "Document ID",
+            DocumentationContract.DocumentId,
             document,
             issues);
 
         ValidateRequiredField(
             document.Category,
-            "Category",
+            DocumentationContract.Category,
             document,
             issues);
 
         ValidateRequiredField(
             document.Version,
-            "Version",
+            DocumentationContract.Version,
             document,
             issues);
 
         ValidateRequiredField(
             document.Status,
-            "Status",
+            DocumentationContract.Status,
             document,
             issues);
 
         ValidateRequiredField(
             document.Owner,
-            "Owner",
+            DocumentationContract.Owner,
             document,
             issues);
 
         ValidateRequiredField(
             document.RelatedWorkItems,
-            "Related BF Work Items",
+            DocumentationContract.RelatedWorkItems,
             document,
             issues);
 
         ValidateRequiredField(
             document.LastUpdated,
-            "Last Updated",
+            DocumentationContract.LastUpdated,
             document,
             issues);
 
         ValidateRequiredField(
             document.NextReview,
-            "Next Review",
+            DocumentationContract.NextReview,
             document,
             issues);
     }

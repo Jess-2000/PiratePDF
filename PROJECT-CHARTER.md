@@ -1,9 +1,9 @@
 # BlackFlag Engine and PiratePDF Project Charter
 
-**Version:** 1.1
+**Version:** 1.2
 **Status:** Founding Charter
 **Adopted:** 2026-07-31
-**Last Updated:** 2026-08-09
+**Last Updated:** 2026-09-05
 
 > Dedicated to everyone who believes professional software should be built
 > with care.
@@ -59,9 +59,12 @@ why.
 
 ### Security
 
-Every document is treated as untrusted until safely analyzed.
+Every document, embedded resource, plugin input, native/runtime boundary, path,
+and external dependency is treated as untrusted until safely validated.
 
-Security is a guarantee, not an upgrade.
+Security is a guarantee, not an upgrade. It comes from reviewable architecture,
+bounded inputs, least privilege, strong isolation, and verifiable engineering—not
+from obscurity.
 
 ### User Control
 
@@ -146,6 +149,16 @@ Raw scanning, structural parsing, security analysis, policy enforcement, and
 the application interface remain separate layers with focused
 responsibilities.
 
+### Verifiable Distribution
+
+Official PiratePDF releases should be traceable to reviewed source and approved
+build inputs. Release processes protect signing credentials, record artifact
+identity and provenance, validate bundled dependencies, and use platform trust
+mechanisms appropriate to the supported operating systems.
+
+Release hardening may include native compilation, trimming, or symbol reduction,
+but those mechanisms never replace secure design, validation, or transparency.
+
 ### Universal Protection
 
 Every PiratePDF user receives the same passive protection, security preflight,
@@ -179,6 +192,8 @@ Where applicable, each milestone includes:
 - Architectural Decision Records,
 - documentation validation,
 - reproducible release verification,
+- security/adversarial validation proportional to the affected risk surface,
+- dependency and release-artifact provenance where applicable,
 - release automation, and
 - a traceable release tag.
 
@@ -203,7 +218,8 @@ Success means PiratePDF remains:
 - secure,
 - transparent,
 - maintainable,
-- performant, and
+- performant,
+- verifiably distributed, and
 - trusted.
 
 ## The North Star Test
@@ -215,6 +231,8 @@ Before accepting a significant decision, ask:
 3. Is the behavior transparent and explainable?
 4. Can this be maintained five years from now?
 5. Would we make the same decision if millions of users relied on it?
+6. Can users and contributors verify that official releases came from the
+   project and were produced through a controlled, reviewable process?
 
 A negative answer requires the design to be reconsidered.
 
@@ -248,6 +266,13 @@ principles remain.
 > We will improve continuously.
 > We will never sacrifice long-term quality for short-term convenience.
 > Because professional software deserves professional craftsmanship.
+
+## Revision History
+
+| Version | Date | Description |
+|---|---|---|
+| 1.1 | 2026-08-09 | Founding charter baseline for PiratePDF and BlackFlag Engine. |
+| 1.2 | 2026-09-05 | Strengthened durable security principles for native/runtime/dependency trust boundaries, verifiable distribution, release provenance, and risk-proportional adversarial validation. |
 
 ## Closing Statement
 

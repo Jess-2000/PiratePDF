@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
   build-test-and-validate:
-    name: Build, Test, and Validate
+    name: Portable Build, Test, and Validate
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -65,13 +65,35 @@ jobs:
           --configuration "$CONFIGURATION"
           --no-restore
 
-      - name: Run tests
+      - name: Run portable tests
         run: >
           dotnet test "$SOLUTION_PATH"
           --configuration "$CONFIGURATION"
           --no-build
           --no-restore
+          --filter "Platform!=Windows"
+          --results-directory ./TestResults/portable
+          --logger trx
           --logger "console;verbosity=normal"
+
+      - name: Verify portable fuzz test coverage
+        shell: pwsh
+        run: ./tests/PiratePDF.Fuzz.Tests/Test-PlatformCoverage.ps1 -ResultsDirectory ./TestResults/portable -Platform Portable
+
+      - name: Bound failed test-result evidence
+        id: portable_trx_bounds
+        if: failure()
+        shell: pwsh
+        run: ./tests/PiratePDF.Fuzz.Tests/Test-PlatformCoverage.ps1 -ResultsDirectory ./TestResults/portable -BoundsOnly
+
+      - name: Retain failed test results
+        if: failure() && steps.portable_trx_bounds.outcome == 'success'
+        uses: actions/upload-artifact@v7
+        with:
+          name: portable-test-results
+          path: TestResults/portable/*.trx
+          retention-days: 7
+          if-no-files-found: warn
 
       - name: Build DocGen Release artifact
         run: >
@@ -142,3 +164,74 @@ jobs:
           fi
 
           echo "No whitespace errors were detected."
+
+  windows-fuzz-contracts:
+    name: Windows Build and Test
+    runs-on: windows-latest
+    timeout-minutes: 20
+
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "1"
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "1"
+      NUGET_XMLDOC_MODE: skip
+      CONFIGURATION: Release
+      SOLUTION_PATH: ./PiratePDF.slnx
+
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up .NET 10
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Restore dependencies
+        run: dotnet restore "$env:SOLUTION_PATH"
+
+      - name: Build solution
+        run: dotnet build "$env:SOLUTION_PATH" --configuration "$env:CONFIGURATION" --no-restore
+
+      # No platform filter: Windows runs every solution test, including both real symbolic-link fixtures.
+      # Hosted Windows is expected to provide the privilege; fixture failure fails this job, never skips it.
+      - name: Run all tests
+        run: >
+          dotnet test "$env:SOLUTION_PATH"
+          --configuration "$env:CONFIGURATION" --no-build --no-restore
+          --results-directory ./TestResults/windows --logger trx
+          --logger "console;verbosity=normal"
+
+      - name: Verify both fuzz test categories executed
+        run: ./tests/PiratePDF.Fuzz.Tests/Test-PlatformCoverage.ps1 -ResultsDirectory ./TestResults/windows -Platform All
+
+      - name: Bound failed test-result evidence
+        id: windows_trx_bounds
+        if: failure()
+        run: ./tests/PiratePDF.Fuzz.Tests/Test-PlatformCoverage.ps1 -ResultsDirectory ./TestResults/windows -BoundsOnly
+
+      - name: Retain failed test results
+        if: failure() && steps.windows_trx_bounds.outcome == 'success'
+        uses: actions/upload-artifact@v7
+        with:
+          name: windows-test-results
+          path: TestResults/windows/*.trx
+          retention-days: 7
+          if-no-files-found: warn
+
+      - name: Verify repository cleanliness
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --check
+          if ($LASTEXITCODE -ne 0) { throw 'Whitespace validation failed.' }
+          git diff --exit-code
+          if ($LASTEXITCODE -ne 0) { throw 'Windows tests modified tracked files.' }
+          $unexpected = @(git ls-files --others --exclude-standard)
+          if ($LASTEXITCODE -ne 0 -or $unexpected.Count -ne 0) { throw 'Windows tests generated unexpected files.' }

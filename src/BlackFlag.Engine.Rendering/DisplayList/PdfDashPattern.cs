@@ -1,9 +1,11 @@
+using System.Collections.ObjectModel;
+
 namespace BlackFlag.Engine.Rendering.DisplayList;
 
 /// <summary>Represents an immutable PDF line dash pattern.</summary>
 public sealed class PdfDashPattern
 {
-    private readonly double[] elements;
+    private readonly ReadOnlyCollection<double> elements;
 
     /// <summary>Initializes a dash pattern.</summary>
     public PdfDashPattern(
@@ -11,7 +13,7 @@ public sealed class PdfDashPattern
         double phase)
     {
         ArgumentNullException.ThrowIfNull(elements);
-        this.elements = elements.ToArray();
+        this.elements = Array.AsReadOnly(elements.ToArray());
         Phase = phase;
     }
 

@@ -32,14 +32,14 @@ internal static class MarkdownMetadataParser
         return new DocumentMetadata(
             filePath,
             title,
-            GetValue(values, "Document ID"),
-            GetValue(values, "Category"),
-            GetValue(values, "Version"),
-            GetValue(values, "Status"),
-            GetValue(values, "Owner"),
-            GetValue(values, "Related BF Work Items"),
-            GetValue(values, "Last Updated"),
-            GetValue(values, "Next Review"));
+            GetValue(values, DocumentationContract.DocumentId),
+            GetValue(values, DocumentationContract.Category),
+            GetValue(values, DocumentationContract.Version),
+            GetValue(values, DocumentationContract.Status),
+            GetValue(values, DocumentationContract.Owner),
+            GetValue(values, DocumentationContract.RelatedWorkItems),
+            GetValue(values, DocumentationContract.LastUpdated),
+            GetValue(values, DocumentationContract.NextReview));
     }
 
     // =========================================================================
@@ -275,8 +275,7 @@ internal static class MarkdownMetadataParser
         cells = trimmed
             .Split(
                 '|',
-                StringSplitOptions.TrimEntries)
-            .ToArray();
+                StringSplitOptions.TrimEntries);
 
         return true;
     }

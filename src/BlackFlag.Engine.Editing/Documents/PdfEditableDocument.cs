@@ -1,20 +1,9 @@
-using BlackFlag.Engine.Document.Annotations;
-using BlackFlag.Engine.Document.Decorations;
-using BlackFlag.Engine.Document.Forms;
 using BlackFlag.Engine.Document.Metadata;
 using BlackFlag.Engine.Document.Model;
-using BlackFlag.Engine.Document.Objects;
-using BlackFlag.Engine.Document.Objects.Primitives;
-using BlackFlag.Engine.Document.Outlines;
-using BlackFlag.Engine.Document.Pages;
 using BlackFlag.Engine.Editing.Annotations;
 using BlackFlag.Engine.Editing.Decorations;
-using BlackFlag.Engine.Editing.Operations;
 using BlackFlag.Engine.Editing.Forms;
-using BlackFlag.Engine.Editing.Geometry;
-using BlackFlag.Engine.Editing.Metadata;
 using BlackFlag.Engine.Editing.Outlines;
-using BlackFlag.Engine.Editing.Structural;
 using BlackFlag.Engine.Editing.Ownership;
 using BlackFlag.Engine.Editing.Pages;
 

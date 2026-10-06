@@ -72,6 +72,8 @@ public sealed class PdfImageDecoder
         if (item.ImageResource is not null)
         {
             dictionary = item.ImageResource.Stream.Dictionary;
+            // Enforce the encoded-size ceiling before allocating the public snapshot.
+            ValidateEncodedLength(item.ImageResource.Stream.Length, limits);
             encoded = item.ImageResource.Stream.Data;
         }
         else
@@ -80,11 +82,7 @@ public sealed class PdfImageDecoder
                 ?? throw new InvalidOperationException("Image source is missing.");
             dictionary = inline.Dictionary;
             encoded = inline.EncodedBytes;
-        }
-
-        if (encoded.Length > limits.MaximumEncodedBytes)
-        {
-            throw new InvalidDataException("Encoded image exceeds the configured byte limit.");
+            ValidateEncodedLength(encoded.Length, limits);
         }
 
         int width = ReadPositiveInt(dictionary, WidthKey, WKey);
@@ -101,10 +99,9 @@ public sealed class PdfImageDecoder
                 dictionary,
                 cancellationToken);
 
-            PdfDecodedImage decoded = codec.Decode(
-                codecPayload,
-                dictionary,
-                cancellationToken);
+            PdfDecodedImage decoded = codec is IBoundedPdfImageCodec boundedCodec
+                ? boundedCodec.Decode(codecPayload, dictionary, limits, cancellationToken)
+                : codec.Decode(codecPayload, dictionary, cancellationToken);
 
             ValidateDimensions(decoded.Width, decoded.Height, limits);
             return new PdfImageDecodeResult(decoded, []);
@@ -306,9 +303,7 @@ public sealed class PdfImageDecoder
                 return [0, 1];
             }
 
-            return Enumerable.Range(0, components)
-                .SelectMany(_ => DefaultDecodePair)
-                .ToArray();
+            return [.. Enumerable.Range(0, components).SelectMany(_ => DefaultDecodePair)];
         }
 
         if (value is not PdfArray array || array.Count != components * 2)
@@ -316,7 +311,7 @@ public sealed class PdfImageDecoder
             throw new InvalidDataException("Image /Decode must contain two numbers per component.");
         }
 
-        return array.Select(ReadNumber).ToArray();
+        return [.. array.Select(ReadNumber)];
     }
 
     private static string ReadColorSpaceName(PdfDictionary dictionary)
@@ -460,11 +455,24 @@ public sealed class PdfImageDecoder
         _ => throw new InvalidDataException("Image numeric array contains a non-number.")
     };
 
-    private static void ValidateDimensions(
+    internal static void ValidateEncodedLength(int encodedLength, PdfImageDecodeLimits limits)
+    {
+        if (encodedLength > limits.MaximumEncodedBytes)
+        {
+            throw new InvalidDataException("Encoded image exceeds the configured byte limit.");
+        }
+    }
+
+    internal static int ValidateDimensions(
         int width,
         int height,
         PdfImageDecodeLimits limits)
     {
+        if (width <= 0 || height <= 0)
+        {
+            throw new InvalidDataException("Image dimensions must be positive integers.");
+        }
+
         if (width > limits.MaximumDimension || height > limits.MaximumDimension)
         {
             throw new InvalidDataException("Image dimension exceeds the configured limit.");
@@ -474,6 +482,26 @@ public sealed class PdfImageDecoder
         {
             throw new InvalidDataException("Decoded image exceeds the configured pixel limit.");
         }
+
+        // PdfDecodedImage and the RGBA copy use int-sized arrays. Establish
+        // their representable size before a backend can allocate native pixels.
+        int byteCount;
+        try
+        {
+            int pixelCount = checked(width * height);
+            byteCount = checked(pixelCount * 4);
+        }
+        catch (OverflowException exception)
+        {
+            throw new InvalidDataException("Decoded image RGBA size exceeds the supported range.", exception);
+        }
+
+        if (byteCount > Array.MaxLength)
+        {
+            throw new InvalidDataException("Decoded image RGBA size exceeds the supported array length.");
+        }
+
+        return byteCount;
     }
 
     private static byte ToByte(double value) =>

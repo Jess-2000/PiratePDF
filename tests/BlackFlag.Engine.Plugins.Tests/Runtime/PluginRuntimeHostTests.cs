@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using BlackFlag.Engine.Plugins.Activation;
 using BlackFlag.Engine.Plugins.Discovery;
@@ -12,6 +14,43 @@ namespace BlackFlag.Engine.Plugins.Tests.Runtime;
 
 public sealed class PluginRuntimeHostTests
 {
+    [Fact]
+    public void PackageContainmentAcceptsOnlyNormalizedChildren()
+    {
+        string root = Path.Combine(Path.GetTempPath(), "blackflag-package-boundary");
+        string package = Path.Combine(root, "plugin");
+
+        Assert.True(IsContained(package, package));
+        Assert.True(IsContained(package, Path.Combine(package, "nested", "plugin.dll")));
+        Assert.False(IsContained(package, Path.Combine(root, "plugin-sibling", "plugin.dll")));
+        Assert.False(IsContained(package, Path.Combine(package, "..", "outside", "plugin.dll")));
+    }
+
+    [Fact]
+    public void PackageContainmentRejectsCaseDifferentSiblingOnCaseSensitiveFileSystem()
+    {
+        string root = Path.Combine(
+            Path.GetTempPath(),
+            "blackflag-package-case-" + Guid.NewGuid().ToString("N"));
+        string package = Path.Combine(root, "package");
+
+        Directory.CreateDirectory(package);
+
+        try
+        {
+            if (Directory.Exists(Path.Combine(root, "PACKAGE")))
+                return;
+
+            Assert.False(IsContained(
+                package,
+                Path.Combine(root, "PACKAGE", "plugin.dll")));
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
+    }
+
     [Fact]
     public async Task ValidPluginActivatesAndSessionUnloadsIt()
     {
@@ -32,6 +71,41 @@ public sealed class PluginRuntimeHostTests
     }
 
     [Fact]
+    public async Task SessionExposesStableReadOnlyCollectionsAndStillCleansUp()
+    {
+        string root = CreatePackage("org.sample.extension");
+        var environment = new PluginRuntimeEnvironment();
+        var point = new PluginExtensionPoint<IPluginExtension>("test.extension");
+
+        try
+        {
+            PluginCatalog catalog = await PluginDiscoveryService.DiscoverAsync([Path.GetDirectoryName(root)!]);
+            PluginActivationPlan plan = PluginActivationPlanner.Plan(catalog, new Version(1, 0));
+            PluginRuntimeSession session = await PluginRuntimeHost.ActivateAsync(
+                plan,
+                new Version(1, 0),
+                environment: environment);
+
+            Assert.IsNotType<List<PluginRuntimeHandle>>(session.ActivePlugins);
+            Assert.Same(session.ActivePlugins, session.ActivePlugins);
+            IList<PluginRuntimeHandle> active = Assert.IsAssignableFrom<IList<PluginRuntimeHandle>>(session.ActivePlugins);
+            Assert.True(active.IsReadOnly);
+            Assert.Throws<NotSupportedException>(() => active.Clear());
+            Assert.Single(environment.Extensions.GetExtensions(point));
+
+            await session.DisposeAsync();
+            await session.DisposeAsync();
+
+            Assert.Empty(session.ActivePlugins);
+            Assert.Empty(environment.Extensions.GetExtensions(point));
+        }
+        finally
+        {
+            Directory.Delete(Path.GetDirectoryName(root)!, true);
+        }
+    }
+
+    [Fact]
     public async Task InitializationFailureDoesNotActivatePlugin()
     {
         string root = CreatePackage("org.sample.fail");
@@ -42,6 +116,11 @@ public sealed class PluginRuntimeHostTests
             await using PluginRuntimeSession session = await PluginRuntimeHost.ActivateAsync(plan, new Version(1,0));
             Assert.Empty(session.ActivePlugins);
             Assert.Contains(session.Issues, issue => issue.Kind == PluginRuntimeIssueKind.InitializationFailed);
+            Assert.IsNotType<List<PluginRuntimeIssue>>(session.Issues);
+            Assert.Same(session.Issues, session.Issues);
+            IList<PluginRuntimeIssue> issues = Assert.IsAssignableFrom<IList<PluginRuntimeIssue>>(session.Issues);
+            Assert.True(issues.IsReadOnly);
+            Assert.Throws<NotSupportedException>(() => issues.Clear());
         }
         finally { Directory.Delete(Path.GetDirectoryName(root)!, true); }
     }
@@ -184,6 +263,18 @@ public sealed class PluginRuntimeHostTests
     {
         using FileStream stream = new(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
         return stream.CanWrite;
+    }
+
+    private static bool IsContained(string packageRoot, string candidatePath)
+    {
+        Type type = typeof(PluginRuntimeHost).Assembly.GetType(
+            "BlackFlag.Engine.Plugins.Runtime.PluginPackagePath",
+            throwOnError: true)!;
+        MethodInfo method = type.GetMethod(
+            "Contains",
+            BindingFlags.Static | BindingFlags.NonPublic)!;
+
+        return (bool)method.Invoke(null, [packageRoot, candidatePath])!;
     }
 
     private static string CreatePackage(string id, string entryPoint = "BlackFlag.Engine.Plugins.TestPlugin.SamplePlugin, BlackFlag.Engine.Plugins.TestPlugin", string requiredCapabilities = "[]")
