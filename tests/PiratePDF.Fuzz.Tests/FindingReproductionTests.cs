@@ -13,6 +13,7 @@ public sealed class FindingReproductionTests
     [InlineData("F", FindingClass.UnexpectedManagedFailure, FindingExit.ReproducedFailure)]
     [InlineData("A", FindingClass.AbnormalExit, FindingExit.ReproducedFailure)]
     [InlineData("P", FindingClass.WorkerProtocolFailure, FindingExit.ReproducedFailure)]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task TwoFreshWorkersAgreeWithoutRewritingOriginal(string input, FindingClass expected, FindingExit exit)
     {
         using var fixture = new FindingFixture();
@@ -33,6 +34,7 @@ public sealed class FindingReproductionTests
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task AlternatingResultsAreNotReproducible()
     {
         using var fixture = new FindingFixture();
@@ -44,6 +46,7 @@ public sealed class FindingReproductionTests
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task StableDifferentOutcomeDoesNotConfirmDiscovery()
     {
         using var fixture = new FindingFixture();
@@ -56,6 +59,7 @@ public sealed class FindingReproductionTests
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task ChangedMetadataBetweenWorkersStopsNextLaunch()
     {
         using var fixture = new FindingFixture();
@@ -67,6 +71,7 @@ public sealed class FindingReproductionTests
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task ReproductionLedgerIsCreateNewAndBounded()
     {
         using var fixture = new FindingFixture();
@@ -81,6 +86,7 @@ public sealed class FindingReproductionTests
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task ExistingMalformedEvidenceIsNeverOverwritten()
     {
         using var fixture = new FindingFixture();
@@ -93,6 +99,7 @@ public sealed class FindingReproductionTests
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task TimeoutRetainsSeparateClassificationAndReapsWorkers()
     {
         using var fixture = new FindingFixture();
@@ -104,6 +111,7 @@ public sealed class FindingReproductionTests
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task CancellationAfterChildEntryIsNotRejection()
     {
         using var fixture = new FindingFixture();
@@ -123,6 +131,7 @@ public sealed class FindingReproductionTests
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task PreCancellationDoesNotLaunch()
     {
         using var fixture = new FindingFixture();

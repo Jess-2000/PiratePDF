@@ -10,7 +10,7 @@ public sealed class SmokeChildProcessTests : IDisposable
 {
     private readonly string directory = Path.Combine(ReplayFixture.FindRepository(), "artifacts", "fuzz",
         "smoke-process-tests", Guid.NewGuid().ToString("N"));
-    private static string Host => Path.GetFullPath(Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), "..", "..", "..", "dotnet.exe"));
+    private static string Host => Path.GetFullPath(Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), "..", "..", "..", OperatingSystem.IsWindows() ? "dotnet.exe" : "dotnet"));
     private static string Child => typeof(SupervisorTestChild).Assembly.Location;
     private string Lease => Path.Combine(directory, "child.lease");
 

@@ -14,11 +14,12 @@ public sealed class RunCommandTests : IDisposable
     public RunCommandTests() => Directory.CreateDirectory(directory);
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task BuiltInTargetExecutesWithExactKnownOutput()
     {
         string path = Input("48656c6c6f>"u8.ToArray());
         RunResult result = await new RunCommand().ExecuteAsync(Arguments(path, "filter-asciihex"));
-        if (UnsupportedPlatform(result)) return;
+
         AssertResult(result, RunExitCode.Success, "success", "TargetResult");
         using JsonDocument json = JsonDocument.Parse(result.Json);
         Assert.Equal("filter-asciihex", json.RootElement.GetProperty("target").GetString());
@@ -31,10 +32,11 @@ public sealed class RunCommandTests : IDisposable
     [InlineData("filter-asciihex")]
     [InlineData("filter-flate")]
     [InlineData("font-sanitize")]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task BuiltInMalformedInputIsExpectedTargetRejection(string id)
     {
         RunResult result = await new RunCommand().ExecuteAsync(Arguments(Input([255]), id));
-        if (UnsupportedPlatform(result)) return;
+
         AssertResult(result, RunExitCode.TargetRejected, "rejected", "TargetResult");
         using JsonDocument json = JsonDocument.Parse(result.Json);
         Assert.Equal(id == "font-sanitize" ? "MalformedHeader" : "InvalidData",
@@ -92,6 +94,7 @@ public sealed class RunCommandTests : IDisposable
     [InlineData(0)]
     [InlineData(4)]
     [InlineData(5)]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task InputAdmissionAcceptsEmptyAndExactLimitAndRejectsLimitPlusOne(int size)
     {
         int calls = 0;
@@ -102,26 +105,27 @@ public sealed class RunCommandTests : IDisposable
             return FuzzResult.Success(input);
         });
         RunResult result = await command.ExecuteAsync(Arguments(Input(new byte[size])));
-        if (UnsupportedPlatform(result)) { Assert.Equal(0, calls); return; }
         AssertResult(result, size > 4 ? RunExitCode.ValidationFailure : RunExitCode.Success,
             size > 4 ? "invalid" : "success", size > 4 ? "InputTooLarge" : "TargetResult");
         Assert.Equal(size > 4 ? 0 : 1, calls);
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task NonDefaultRegisteredVersionAndIsolationRemainMetadata()
     {
         var target = new FuzzTarget("worker", 7, 1, FuzzIsolation.DedicatedProcess,
             static (input, _) => FuzzResult.Success(input));
         var command = new RunCommand(new TargetRegistry([target]));
         RunResult result = await command.ExecuteAsync(Arguments(Input([1]), "worker", "v7"));
-        if (UnsupportedPlatform(result)) return;
+
         AssertResult(result, RunExitCode.Success, "success", "TargetResult");
         using JsonDocument json = JsonDocument.Parse(result.Json);
         Assert.Equal(7, json.RootElement.GetProperty("configurationVersion").GetInt32());
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task MissingDirectoryAndInvalidPathsNeverInvokeTarget()
     {
         int calls = 0;
@@ -132,20 +136,21 @@ public sealed class RunCommandTests : IDisposable
         foreach (string path in paths)
         {
             RunResult result = await command.ExecuteAsync(Arguments(path));
-            if (UnsupportedPlatform(result)) continue;
+
             AssertResult(result, RunExitCode.ValidationFailure, "invalid", "InputUnavailable");
         }
         Assert.Equal(0, calls);
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task ExclusiveFileLockRejectsBeforeTargetExecution()
     {
         string path = Input([1]);
         using var locked = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
         var command = Command(static (_, _) => throw new InvalidOperationException());
         RunResult result = await command.ExecuteAsync(Arguments(path));
-        if (UnsupportedPlatform(result)) return;
+
         AssertResult(result, RunExitCode.ValidationFailure, "invalid", "InputUnavailable");
     }
 
@@ -162,6 +167,7 @@ public sealed class RunCommandTests : IDisposable
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task CancellationDuringTargetCannotBecomeSuccessOrRejection(bool rejection)
     {
         using var cancellation = new CancellationTokenSource();
@@ -172,13 +178,14 @@ public sealed class RunCommandTests : IDisposable
             return rejection ? FuzzResult.Rejected("InvalidData") : FuzzResult.Success(input);
         });
         RunResult result = await command.ExecuteAsync(Arguments(Input([])), cancellation.Token);
-        if (UnsupportedPlatform(result)) return;
+
         AssertResult(result, RunExitCode.Cancelled, "cancelled", "Cancelled");
     }
 
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task FilterCancellationRequiresARequestedToken(bool requested)
     {
         using var cancellation = new CancellationTokenSource();
@@ -188,12 +195,13 @@ public sealed class RunCommandTests : IDisposable
             throw new PdfFilterDecodeException(PdfFilterDecodeFailure.Cancelled, "private document content");
         });
         RunResult result = await command.ExecuteAsync(Arguments(Input([])), cancellation.Token);
-        if (UnsupportedPlatform(result)) return;
+
         AssertResult(result, requested ? RunExitCode.Cancelled : RunExitCode.UnexpectedFailure,
             requested ? "cancelled" : "failure", requested ? "Cancelled" : "UnexpectedTargetFailure");
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task UnexpectedDefectsIncludingSpontaneousCancellationAreFailuresWithoutDetails()
     {
         string secret = "PRIVATE_DOCUMENT_TOKEN_123";
@@ -209,7 +217,7 @@ public sealed class RunCommandTests : IDisposable
         {
             // Synthetic failures do not allocate excessively, enter native code or crash the test process.
             RunResult result = await Command((_, _) => throw failure).ExecuteAsync(Arguments(path));
-            if (UnsupportedPlatform(result)) continue;
+
             AssertResult(result, RunExitCode.UnexpectedFailure, "failure", "UnexpectedTargetFailure");
             Assert.DoesNotContain(secret, result.Json);
             Assert.DoesNotContain(failure.GetType().Name, result.Json);
@@ -218,6 +226,7 @@ public sealed class RunCommandTests : IDisposable
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task RepeatOutputIgnoresCulturePathAndOptionOrder()
     {
         string firstPath = Input([1, 2, 3]);
@@ -240,6 +249,7 @@ public sealed class RunCommandTests : IDisposable
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task MaximumMetadataProducesBoundedOutputWithoutInputOrPath()
     {
         string id = new('a', 64);
@@ -250,7 +260,7 @@ public sealed class RunCommandTests : IDisposable
         var command = new RunCommand(new TargetRegistry([target]));
         string path = Input(Encoding.UTF8.GetBytes(privateInput));
         RunResult result = await command.ExecuteAsync(Arguments(path, id, "v2147483647"));
-        if (UnsupportedPlatform(result)) return;
+
         AssertResult(result, RunExitCode.TargetRejected, "rejected", "TargetResult");
         Assert.DoesNotContain(privateInput, result.Json);
         Assert.DoesNotContain(path, result.Json);
@@ -271,6 +281,7 @@ public sealed class RunCommandTests : IDisposable
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task ForeignCancellationTokenIsNotARequestedCancellation()
     {
         using var cancellation = new CancellationTokenSource();
@@ -282,7 +293,7 @@ public sealed class RunCommandTests : IDisposable
             throw new OperationCanceledException(foreign.Token);
         });
         RunResult result = await command.ExecuteAsync(Arguments(Input([])), cancellation.Token);
-        if (UnsupportedPlatform(result)) return;
+
         AssertResult(result, RunExitCode.UnexpectedFailure, "failure", "UnexpectedTargetFailure");
     }
 
@@ -311,13 +322,6 @@ public sealed class RunCommandTests : IDisposable
 
     private static string[] Arguments(string path, string id = "target", string version = "v1") =>
         ["run", "--target", id, "--input", path, "--config", version];
-
-    private static bool UnsupportedPlatform(RunResult result)
-    {
-        if (OperatingSystem.IsWindows()) return false;
-        AssertResult(result, RunExitCode.ValidationFailure, "invalid", "UnsupportedInputPlatform");
-        return true;
-    }
 
     private static void AssertResult(RunResult result, RunExitCode exitCode, string outcome, string code)
     {

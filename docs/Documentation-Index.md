@@ -171,6 +171,7 @@
 | PP-AUD-035 | [Post-BF-1054 Batch B9 - Deterministic Mutation Completion Report](reviews/Post-BF-1054-Batch-B9-Deterministic-Mutation-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-25 |
 | PP-AUD-036 | [Post-BF-1054 Batch B9 - Fuzz Toolchain Smoke Completion Report](reviews/Post-BF-1054-Batch-B9-Fuzz-Toolchain-Smoke-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-26 |
 | PP-AUD-037 | [Post-BF-1054 Batch B9 - Failure Artifact Reproduction and Promotion Report](reviews/Post-BF-1054-Batch-B9-Failure-Artifact-Reproduction-and-Promotion-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-27 |
+| PP-AUD-038 | [Post-BF-1054 Batch B9 - CI Portability Remediation Report](reviews/Post-BF-1054-Batch-B9-CI-Portability-Remediation-Report.md) | Engineering Review | 1.0 | Review | 2026-10-05 |
 | PP-CHARTER-001 | [PiratePDF Project Charter](Project-Charter.md) | Project Charter | 1.1 | Approved | 2026-08-09 |
 | PP-DEV-001 | [PiratePDF Master Blueprint - Volume IV: Engineering Standards](Blueprint/Volume-IV-Engineering-Standards.md) | Developer Documentation | 1.1 | Approved | 2026-08-15 |
 | PP-DEV-002 | [BlackFlag Engine Plugin Development Contract](04-Developer/Plugin-Development.md) | Developer Documentation | 1.0 | Implemented | 2026-08-13 |

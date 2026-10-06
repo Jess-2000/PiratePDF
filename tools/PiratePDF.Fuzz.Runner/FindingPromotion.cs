@@ -20,21 +20,14 @@ public static class FindingPromotion
             if (!FindingFiles.Id(seedId) || !Enum.IsDefined(decision)) return new(FindingExit.InvalidInvocation);
             using FileStream lease = store.Lock();
             FindingMetadata metadata = await store.LoadAsync(findingId, cancellationToken).ConfigureAwait(false);
+            // Preserve refusal before reading any ledger for an uncharacterized finding.
             if (metadata.Source.Related.Length == 0) return new(FindingExit.PromotionRefused);
             // A persisted prior reproduction is required; metadata alone cannot assert reproducibility.
             IReadOnlyList<FindingEvidence> ledger = await store.ReadEvidenceAsync(metadata, cancellationToken).ConfigureAwait(false);
             FindingEvidence? prior = ledger.LastOrDefault(static item => item.Agrees && item.Attempts[0].Classification is not
                 (FindingClass.Success or FindingClass.ExpectedRejection or FindingClass.Cancellation or FindingClass.Indeterminate or FindingClass.CleanupFailure));
-            if (prior is null) return new(FindingExit.PromotionRefused);
+            if (prior is null || !IsEligible(metadata, decision, prior.Attempts[0].Classification)) return new(FindingExit.PromotionRefused);
             bool corpusProposal = decision is PromotionDecision.CorpusFixedSuccess or PromotionDecision.CorpusFixedRejection;
-            if (corpusProposal && (metadata.Source.Origin is FindingOrigin.ControlledProbe or FindingOrigin.Unreviewed ||
-                metadata.Source.Kind == FindingKind.ControlledFixture || prior.Attempts[0].Classification != FindingClass.UnexpectedManagedFailure ||
-                metadata.Source.Observed != FindingClass.UnexpectedManagedFailure)) return new(FindingExit.PromotionRefused);
-            if (!corpusProposal && prior.Attempts[0].Classification is FindingClass.Success or FindingClass.ExpectedRejection or
-                FindingClass.Cancellation or FindingClass.Indeterminate or FindingClass.CleanupFailure)
-                return new(FindingExit.PromotionRefused);
-            if (decision == PromotionDecision.OrdinaryEngineRegression && (metadata.Source.Origin == FindingOrigin.ControlledProbe ||
-                prior.Attempts[0].Classification != FindingClass.UnexpectedManagedFailure)) return new(FindingExit.PromotionRefused);
             CorpusValidationResult corpus = await CorpusValidator.ValidateAsync(store.Repository, cancellationToken).ConfigureAwait(false);
             if (!corpus.IsValid) return new(FindingExit.IntegrityFailure, FindingClass.IntegrityFailure);
             if (corpus.Seeds.Any(seed => seed.Sha256 == metadata.Sha256 || seed.Id == seedId))
@@ -80,6 +73,19 @@ public static class FindingPromotion
         return result;
     }
 
+    /// <summary>Necessary metadata policy only; callers must still validate the ledger, bytes and fresh workers.</summary>
+    public static bool IsEligible(FindingMetadata metadata, PromotionDecision decision, FindingClass? priorFailure)
+    {
+        if (!Enum.IsDefined(decision) || metadata.Source.Related.Length == 0 || priorFailure is null ||
+            priorFailure is FindingClass.Success or FindingClass.ExpectedRejection or FindingClass.Cancellation or
+                FindingClass.Indeterminate or FindingClass.CleanupFailure) return false;
+        bool corpus = decision is PromotionDecision.CorpusFixedSuccess or PromotionDecision.CorpusFixedRejection;
+        if (corpus && (metadata.Source.Origin is FindingOrigin.ControlledProbe or FindingOrigin.Unreviewed ||
+            metadata.Source.Kind == FindingKind.ControlledFixture || priorFailure != FindingClass.UnexpectedManagedFailure ||
+            metadata.Source.Observed != FindingClass.UnexpectedManagedFailure)) return false;
+        return decision != PromotionDecision.OrdinaryEngineRegression ||
+            metadata.Source.Origin != FindingOrigin.ControlledProbe && priorFailure == FindingClass.UnexpectedManagedFailure;
+    }
     private static async Task StageCorpusAsync(FindingStore store, string staging, FindingMetadata metadata, string seedId,
         FindingClass expected, CorpusValidationResult corpus, List<string> files, List<string> directories, CancellationToken token)
     {

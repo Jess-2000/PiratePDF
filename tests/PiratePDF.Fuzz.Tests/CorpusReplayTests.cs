@@ -11,12 +11,12 @@ namespace PiratePDF.Fuzz.Tests;
 public sealed class CorpusReplayTests
 {
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task CommittedCorpusReplaysAllSeedsInManifestOrderWithRepeatableMetadata()
     {
         string repository = ReplayFixture.FindRepository();
         var replay = new CorpusReplay(ReplayFixture.Supervisor(real: true));
         ReplayResult first = await replay.RunAsync(repository);
-        if (Unsupported(first)) return;
         Assert.Equal(ReplayExitCode.Success, first.ExitCode);
         Assert.Equal(15, first.Admitted);
         Assert.Equal(15, first.Attempted);
@@ -41,6 +41,7 @@ public sealed class CorpusReplayTests
     [InlineData("a-rejected", "rejected", ReplayExitCode.Success)]
     [InlineData("a-success", "rejected", ReplayExitCode.OracleMismatch)]
     [InlineData("a-rejected", "success", ReplayExitCode.OracleMismatch)]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task OracleComparisonIsFailFastAndNeverRewritesExpectations(string id, string expected, ReplayExitCode exit)
     {
         using var fixture = new ReplayFixture();
@@ -48,7 +49,7 @@ public sealed class CorpusReplayTests
         fixture.Add("z-last");
         string before = File.ReadAllText(fixture.ManifestPath);
         ReplayResult result = await new CorpusReplay(ReplayFixture.Supervisor()).RunAsync(fixture.Repository);
-        if (Unsupported(result)) return;
+
         Assert.Equal(exit, result.ExitCode);
         Assert.Equal(exit == ReplayExitCode.Success ? 2 : 1, result.Executed);
         Assert.Equal(exit == ReplayExitCode.Success ? 0 : 1, result.Mismatched);
@@ -67,6 +68,7 @@ public sealed class CorpusReplayTests
     [InlineData("config", CorpusFailure.ConfigurationMismatch)]
     [InlineData("path", CorpusFailure.InvalidPath)]
     [InlineData("order", CorpusFailure.InvalidOrdering)]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task InitialIntegrityFailureExecutesZeroSeeds(string mode, CorpusFailure failure)
     {
         using var fixture = new ReplayFixture();
@@ -86,7 +88,7 @@ public sealed class CorpusReplayTests
             case "order": JsonNode first = fixture.Seeds[0]; fixture.Seeds.RemoveAt(0); fixture.Seeds.Add(first); fixture.Save(); break;
         }
         ReplayResult result = await new CorpusReplay(ReplayFixture.Supervisor()).RunAsync(fixture.Repository);
-        if (Unsupported(result)) return;
+
         Assert.Equal(ReplayExitCode.IntegrityFailure, result.ExitCode);
         Assert.Equal(failure, result.CorpusFailure);
         Assert.Equal(0, result.Admitted);
@@ -101,6 +103,7 @@ public sealed class CorpusReplayTests
     [InlineData("length", CorpusFailure.LengthMismatch)]
     [InlineData("over", CorpusFailure.SeedTooLarge)]
     [InlineData("missing", CorpusFailure.MissingSeed)]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task ChangeAfterValidationIsDetectedBeforeNextChild(string mode, CorpusFailure failure)
     {
         using var fixture = new ReplayFixture();
@@ -109,7 +112,7 @@ public sealed class CorpusReplayTests
         fixture.Add("z-last");
         string before = File.ReadAllText(fixture.ManifestPath);
         ReplayResult result = await new CorpusReplay(ReplayFixture.Supervisor()).RunAsync(fixture.Repository);
-        if (Unsupported(result)) return;
+
         Assert.Equal(ReplayExitCode.IntegrityFailure, result.ExitCode);
         Assert.Equal(failure, result.CorpusFailure);
         Assert.Equal(2, result.Admitted);
@@ -126,13 +129,14 @@ public sealed class CorpusReplayTests
     [InlineData("worker-failure", SupervisionStatus.WorkerFailure)]
     [InlineData("spontaneous-cancel", SupervisionStatus.WorkerFailure)]
     [InlineData("input-invalid", SupervisionStatus.Completed)]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task SupervisorFailuresCannotSatisfyRejectionOracle(string mode, SupervisionStatus status)
     {
         using var fixture = new ReplayFixture();
         fixture.Add("a-" + mode, "rejected");
         fixture.Add("z-last");
         ReplayResult result = await new CorpusReplay(ReplayFixture.Supervisor()).RunAsync(fixture.Repository);
-        if (Unsupported(result)) return;
+
         Assert.Equal(ReplayExitCode.SupervisionFailure, result.ExitCode);
         Assert.Equal(status, result.SupervisionStatus);
         Assert.Equal(1, result.Attempted);
@@ -143,6 +147,7 @@ public sealed class CorpusReplayTests
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task StartFailureRemainsDistinct()
     {
         using var fixture = new ReplayFixture();
@@ -150,7 +155,7 @@ public sealed class CorpusReplayTests
         var supervisor = new WorkerSupervisor(Path.Combine(fixture.Repository, OperatingSystem.IsWindows() ? "dotnet.exe" : "dotnet"),
             typeof(RunCommand).Assembly.Location);
         ReplayResult result = await new CorpusReplay(supervisor).RunAsync(fixture.Repository);
-        if (Unsupported(result)) return;
+
         Assert.Equal(ReplayExitCode.SupervisionFailure, result.ExitCode);
         Assert.Equal(SupervisionStatus.StartFailed, result.SupervisionStatus);
         Assert.Equal(0, result.Executed);
@@ -161,6 +166,7 @@ public sealed class CorpusReplayTests
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task TimeoutAndCancellationStopNewChildrenAfterCleanup(bool cancel)
     {
         using var fixture = new ReplayFixture();
@@ -170,13 +176,13 @@ public sealed class CorpusReplayTests
         var replay = new CorpusReplay(ReplayFixture.Supervisor(timeout: TimeSpan.FromSeconds(cancel ? 10 : 2)));
         Task<ReplayResult> pending = replay.RunAsync(fixture.Repository, cancellation.Token);
         string child = Path.Combine(fixture.Root, "filter-asciihex", "tree.child");
-        if (cancel && OperatingSystem.IsWindows())
+        if (cancel)
         {
             try { await WaitForFile(child); }
             finally { cancellation.Cancel(); }
         }
         ReplayResult result = await pending;
-        if (Unsupported(result)) return;
+
         Assert.Equal(cancel ? ReplayExitCode.Cancelled : ReplayExitCode.SupervisionFailure, result.ExitCode);
         Assert.Equal(cancel ? SupervisionStatus.Cancelled : SupervisionStatus.TimedOut, result.SupervisionStatus);
         Assert.Single(File.ReadAllLines(fixture.LogPath));
@@ -187,6 +193,7 @@ public sealed class CorpusReplayTests
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task TerminationFailureRemainsDistinctAndOwnedOrphanIsIndependentlyReaped()
     {
         using var fixture = new ReplayFixture();
@@ -196,7 +203,7 @@ public sealed class CorpusReplayTests
         try
         {
             ReplayResult result = await new CorpusReplay(ReplayFixture.Supervisor(timeout: TimeSpan.FromSeconds(2))).RunAsync(fixture.Repository);
-            if (Unsupported(result)) return;
+
             Assert.Equal(ReplayExitCode.SupervisionFailure, result.ExitCode);
             Assert.Equal(SupervisionStatus.TerminationFailed, result.SupervisionStatus);
             Assert.Single(File.ReadAllLines(fixture.LogPath));
@@ -204,7 +211,7 @@ public sealed class CorpusReplayTests
         }
         finally
         {
-            if (OperatingSystem.IsWindows()) await EnsureExited(child, expectAlreadyExited: false);
+            await EnsureExited(child, expectAlreadyExited: false);
         }
     }
 
@@ -222,17 +229,19 @@ public sealed class CorpusReplayTests
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task ExplicitReplayCommandUsesRealSupervisedCorpus()
     {
         string repository = ReplayFixture.FindRepository();
         ReplayResult result = await ReplayCommand.ExecuteAsync(["replay", "--repository-root", repository]);
-        if (Unsupported(result)) return;
+
         Assert.Equal(ReplayExitCode.Success, result.ExitCode);
         Assert.Equal(15, result.Matched);
         AssertSafe(result, repository);
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task SpacesAndShellCharactersRemainLiteralWithRealWorker()
     {
         using var fixture = new ReplayFixture();
@@ -242,7 +251,7 @@ public sealed class CorpusReplayTests
         Assert.False(start.UseShellExecute);
         Assert.Equal(fixture.SeedPath("a-success"), start.ArgumentList[5]);
         ReplayResult result = await new CorpusReplay(supervisor).RunAsync(fixture.Repository);
-        if (Unsupported(result)) return;
+
         Assert.Equal(ReplayExitCode.Success, result.ExitCode);
         AssertSafe(result, fixture.Repository);
     }
@@ -289,15 +298,6 @@ public sealed class CorpusReplayTests
         Assert.Equal("piratepdf-fuzz-corpus", document.RootElement.GetProperty("manifestSchema").GetString());
         foreach (string secret in new[] { repository, "PRIVATE", "Exception", "stdout", "stderr", "pid", "duration", "timestamp", "observation" })
             Assert.DoesNotContain(secret, result.Json);
-    }
-
-    private static bool Unsupported(ReplayResult result)
-    {
-        if (OperatingSystem.IsWindows()) return false;
-        Assert.Equal(ReplayExitCode.IntegrityFailure, result.ExitCode);
-        Assert.Equal(CorpusFailure.UnsupportedPlatform, result.CorpusFailure);
-        Assert.Equal(0, result.Attempted);
-        return true;
     }
 
     internal static async Task WaitForFile(string path)

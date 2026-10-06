@@ -49,7 +49,7 @@ public sealed class FindingStore
         {
             cancellationToken.ThrowIfCancellationRequested();
             string destination = CandidatePath(findingId);
-            ValidateSource(source);
+            FindingValidation.ValidateSource(source);
             string input = IncomingPath(artifactRelativePath);
             FuzzTarget target = TargetRegistry.Get(source.Target);
             ReadOnlyMemory<byte> bytes = await InputFile.ReadAsync(input, target.MaximumInputBytes, cancellationToken).ConfigureAwait(false);
@@ -62,7 +62,7 @@ public sealed class FindingStore
             if (!corpus.IsValid) throw new FindingException(FindingExit.IntegrityFailure);
             if (retained.Any(item => item.Sha256 == metadata.Sha256) || corpus.Seeds.Any(seed => seed.Sha256 == metadata.Sha256))
                 return new(FindingExit.Duplicate, FindingClass.Duplicate, metadata);
-            if (retained.Count >= MaximumFindings || retained.Sum(static item => item.Length) > MaximumRunBytes - bytes.Length)
+            if (!FindingValidation.CanRetain(retained.Count, retained.Sum(static item => item.Length), bytes.Length))
                 throw new FindingException(FindingExit.LimitExceeded);
             if (Path.Exists(destination)) throw new FindingException(FindingExit.Duplicate);
             string pending = Path.Combine(RunPath, "pending");
@@ -137,7 +137,7 @@ public sealed class FindingStore
         }
         FindingMetadata metadata = FindingJson.Parse<FindingMetadata>(await InputFile.ReadAsync(
             Path.Combine(directory, "metadata.json"), MaximumMetadataBytes, cancellationToken).ConfigureAwait(false));
-        Validate(metadata, findingId);
+        FindingValidation.Validate(metadata, RunId, findingId);
         await VerifyAsync(Path.Combine(directory, "input.bin"), metadata, cancellationToken).ConfigureAwait(false);
         return metadata;
     }
@@ -165,47 +165,14 @@ public sealed class FindingStore
     internal static async Task VerifyAsync(string path, FindingMetadata metadata, CancellationToken token)
     {
         ReadOnlyMemory<byte> bytes = await InputFile.ReadAsync(path, metadata.InputCeiling, token).ConfigureAwait(false);
-        if (bytes.Length != metadata.Length || FindingFiles.Digest(bytes) != metadata.Sha256)
+        if (!FindingValidation.MatchesContent(metadata, bytes))
             throw new FindingException(FindingExit.IntegrityFailure);
     }
 
     internal string IncomingPath(string relative)
     {
-        if (string.IsNullOrEmpty(relative) || relative.Length > 256) throw new FindingException(FindingExit.InvalidInvocation);
-        string[] parts = relative.Split('/');
-        if (parts.Length is < 2 or > 4 || parts[0] != "incoming" || parts.Any(static part => part.Length is 0 or > 96 ||
-            part[0] == '.' || part.Contains("..", StringComparison.Ordinal) ||
-            !part.All(static c => c is >= 'a' and <= 'z' or >= 'A' and <= 'Z' or >= '0' and <= '9' or '-' or '_' or '.')))
-            throw new FindingException(FindingExit.InvalidInvocation);
+        string[] parts = FindingValidation.IncomingParts(relative);
         return Path.Combine(Repository, "artifacts", "fuzz", Path.Combine(parts));
     }
 
-    private void Validate(FindingMetadata metadata, string id)
-    {
-        if (metadata.Schema != "piratepdf-fuzz-finding" || metadata.Version != 1 || metadata.RunId != RunId ||
-            metadata.FindingId != id || !FindingFiles.Hash(metadata.Sha256) || metadata.Length < 0 ||
-            metadata.Rights != "repository-owned-no-external-license-asserted" || metadata.Reproduction != "unattempted" ||
-            metadata.Minimization != "not-requested" || metadata.Promotion != "not-requested")
-            throw new FindingException(FindingExit.IntegrityFailure);
-        ValidateSource(metadata.Source);
-        int ceiling = TargetRegistry.Get(metadata.Source.Target).MaximumInputBytes;
-        if (metadata.InputCeiling != ceiling || metadata.Length > ceiling) throw new FindingException(FindingExit.IntegrityFailure);
-    }
-
-    internal static void ValidateSource(FindingSource source)
-    {
-        if (source is null || !FindingFiles.Id(source.Target) || !FindingFiles.Id(source.OriginId) ||
-            !FindingFiles.Hash(source.ParentSha256) || !FindingFiles.Hash(source.TargetAssemblySha256) ||
-            !FindingFiles.Hash(source.WorkerAssemblySha256) || source.SourceRevision is not { Length: 40 } ||
-            !source.SourceRevision.All(static c => c is >= '0' and <= '9' or >= 'a' and <= 'f') ||
-            source.Toolchain is not ("neutral-net10-v1" or "pp-aud-036") ||
-            !Enum.IsDefined(source.Kind) || !Enum.IsDefined(source.Observed) ||
-            source.Origin is not (FindingOrigin.OwnedGenerated or FindingOrigin.OwnedSeedMutation or FindingOrigin.ControlledProbe) ||
-            source.Seed is < 0 || source.Related is null || source.Related.Length > 64 ||
-            !source.Related.All(static c => c is >= 'A' and <= 'Z' or >= '0' and <= '9' or '-'))
-            throw new FindingException(FindingExit.IntegrityFailure);
-        FuzzTarget target = TargetRegistry.Get(source.Target);
-        if (target.ConfigurationVersion != source.ConfigurationVersion || target.MaximumInputBytes > MaximumArtifactBytes)
-            throw new FindingException(FindingExit.IntegrityFailure);
-    }
 }

@@ -4,6 +4,7 @@ using PiratePDF.Fuzz.Runner;
 
 namespace PiratePDF.Fuzz.Tests;
 
+[Trait(TestPlatform.Key, TestPlatform.Windows)]
 public sealed class FindingStorageTests
 {
     [Fact]

@@ -37,11 +37,11 @@ public sealed class CorpusManifestTests : IDisposable
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task CommittedManifestAndInventoryValidateWithoutExecutingTargets()
     {
         string root = FindRepository();
         CorpusValidationResult result = await CorpusValidator.ValidateAsync(root);
-        if (Unsupported(result)) return;
         Assert.Equal(CorpusFailure.None, result.Failure);
         Assert.Equal(15, result.Seeds.Count);
         Assert.Equal(new[] { 6, 6, 3 }, result.Seeds.GroupBy(seed => seed.Target).Select(group => group.Count()));
@@ -166,43 +166,48 @@ public sealed class CorpusManifestTests : IDisposable
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task HashMismatchRejects()
     {
         File.WriteAllBytes(SeedPath, [63]);
-        await Expect(CorpusFailure.HashMismatch);
+        await ExpectFiles(CorpusFailure.HashMismatch);
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task LengthMismatchRejects()
     {
         Seed["length"] = 2;
         Save();
-        await Expect(CorpusFailure.LengthMismatch);
+        await ExpectFiles(CorpusFailure.LengthMismatch);
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task MissingSeedRejects()
     {
         File.Delete(SeedPath);
-        await Expect(CorpusFailure.MissingSeed);
+        await ExpectFiles(CorpusFailure.MissingSeed);
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task UnlistedSeedRejects()
     {
         File.WriteAllBytes(Path.Combine(Path.GetDirectoryName(SeedPath), "unlisted.bin"), [1]);
-        await Expect(CorpusFailure.UnlistedFile);
+        await ExpectFiles(CorpusFailure.UnlistedFile);
     }
 
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task DeclaredAndActualOversizedSeedsReject(bool declared)
     {
         int length = TargetRegistry.Get("filter-asciihex").MaximumInputBytes + 1;
         if (declared) { Seed["length"] = length; Save(); }
         else File.WriteAllBytes(SeedPath, new byte[length]);
-        await Expect(CorpusFailure.SeedTooLarge);
+        await ExpectFiles(CorpusFailure.SeedTooLarge);
     }
 
     [Theory]
@@ -230,11 +235,12 @@ public sealed class CorpusManifestTests : IDisposable
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task ExcessiveFilesystemEnumerationRejectsBeforeHashing()
     {
         for (int index = 0; index <= CorpusValidator.MaximumFileSystemEntries; index++)
             File.WriteAllBytes(Path.Combine(Path.GetDirectoryName(SeedPath), "unlisted-" + index + ".bin"), []);
-        await Expect(CorpusFailure.TooManyFiles);
+        await ExpectFiles(CorpusFailure.TooManyFiles);
     }
 
     [Theory]
@@ -282,23 +288,25 @@ public sealed class CorpusManifestTests : IDisposable
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task MissingManifestIsDistinctAndCancellationEscapes()
     {
         File.Delete(ManifestPath);
-        await Expect(CorpusFailure.MissingManifest);
+        await ExpectFiles(CorpusFailure.MissingManifest);
         using var cancellation = new CancellationTokenSource();
         cancellation.Cancel();
         await Assert.ThrowsAnyAsync<OperationCanceledException>(() => CorpusValidator.ValidateAsync(repository, cancellation.Token));
     }
 
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task SeedLinkEscapeIsRejected()
     {
         string outside = Path.Combine(repository, "outside.bin");
         File.WriteAllBytes(outside, [62]);
         File.Delete(SeedPath);
         File.CreateSymbolicLink(SeedPath, outside);
-        try { await Expect(CorpusFailure.UnsafePath); }
+        try { await ExpectFiles(CorpusFailure.UnsafePath); }
         finally { File.Delete(SeedPath); }
     }
 
@@ -308,23 +316,24 @@ public sealed class CorpusManifestTests : IDisposable
 
     private void Save() => File.WriteAllText(ManifestPath, manifest.ToJsonString(), new UTF8Encoding(false));
 
-    private async Task Expect(CorpusFailure expected)
+    private Task Expect(CorpusFailure expected)
     {
-        CorpusValidationResult result = await CorpusValidator.ValidateAsync(repository);
-        if (Unsupported(result)) return;
+        // Only this test-owned bounded metadata file is read; no untrusted-file admission is being asserted.
+        AssertMetadataResult(CorpusValidator.ValidateMetadata(File.ReadAllBytes(ManifestPath)), expected);
+        return Task.CompletedTask;
+    }
+
+    private async Task ExpectFiles(CorpusFailure expected) =>
+        AssertMetadataResult(await CorpusValidator.ValidateAsync(repository), expected);
+
+    private void AssertMetadataResult(CorpusValidationResult result, CorpusFailure expected)
+    {
         Assert.Equal(expected, result.Failure);
         if (expected != CorpusFailure.None) Assert.Empty(result.Seeds);
         Assert.InRange(Encoding.UTF8.GetByteCount(result.ToJson()), 1, 100);
         Assert.DoesNotContain(repository, result.ToJson());
         Assert.DoesNotContain("PRIVATE", result.ToJson());
         Assert.DoesNotContain("Exception", result.ToJson());
-    }
-
-    private static bool Unsupported(CorpusValidationResult result)
-    {
-        if (OperatingSystem.IsWindows()) return false;
-        Assert.Equal(CorpusFailure.UnsupportedPlatform, result.Failure);
-        return true;
     }
 
     private static string FindRepository()

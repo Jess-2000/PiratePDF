@@ -11,21 +11,8 @@ internal sealed record FindingEvidence(string Schema, int Version, string RunId,
         FindingId == metadata.FindingId && Target == metadata.Source.Target && ConfigurationVersion == metadata.Source.ConfigurationVersion &&
         Sha256 == metadata.Sha256 && Length == metadata.Length && Toolchain == "neutral-net10-v1" &&
         FindingFiles.Hash(WorkerSha256) && FindingFiles.Hash(TargetSha256) && Reproduction == index &&
-        Attempts is { Length: > 0 and <= FindingStore.RequiredAttempts } &&
-        Attempts.Select((attempt, position) => attempt is not null && attempt.Attempt == position + 1 &&
-            Consistent(attempt)).All(static valid => valid) &&
+        Attempts is { Length: > 0 and <= FindingStore.RequiredAttempts } && FindingReproduction.AreAttemptsValid(Attempts) &&
         Agrees == (Attempts.Length == 2 && Attempts[0].Classification == Attempts[1].Classification && Attempts[0].Code == Attempts[1].Code);
-
-    private static bool Consistent(FindingAttempt attempt) => attempt.Classification switch
-    {
-        FindingClass.Success or FindingClass.ExpectedRejection => attempt.Code == "TargetResult",
-        FindingClass.UnexpectedManagedFailure => attempt.Code == "UnexpectedTargetFailure",
-        FindingClass.WorkerProtocolFailure or FindingClass.AbnormalExit or FindingClass.Timeout or
-            FindingClass.Cancellation or FindingClass.CleanupFailure => attempt.Code == "NoWorkerRecord",
-        FindingClass.Indeterminate => attempt.Code is "NoWorkerRecord" or "Cancelled" or "InputUnavailable" or
-            "InputTooLarge" or "UnsupportedInputPlatform" or "UnexpectedRunnerFailure",
-        _ => false
-    };
 }
 
 /// <summary>Two fresh supervised workers, bounded identity checks, and no exception-message oracle.</summary>
@@ -72,10 +59,39 @@ public sealed class FindingReproduction(WorkerSupervisor supervisor)
         }
         catch (OperationCanceledException) when (token.IsCancellationRequested) { interruption = FindingClass.Cancellation; }
         catch (Exception error) when (FindingFiles.IsAdmissionError(error)) { interruption = FindingClass.IntegrityFailure; }
-        bool agrees = attempts.Count == FindingStore.RequiredAttempts &&
-            attempts[0].Classification == attempts[1].Classification && attempts[0].Code == attempts[1].Code;
-        FindingClass outcome = interruption ?? (agrees ? attempts[0].Classification : attempts.Count == 2 ?
-            FindingClass.NonReproducible : attempts[0].Classification);
+        FindingResult result = Assess(metadata, attempts, interruption);
+        // With no child attempt there is no execution evidence to retain. Original bytes/metadata remain intact.
+        if (attempts.Count == 0) return result;
+        var evidence = new FindingEvidence("piratepdf-finding-reproduction", 1, metadata.RunId, id,
+            metadata.Sha256, metadata.Length, metadata.Source.Target, metadata.Source.ConfigurationVersion,
+            "neutral-net10-v1", supervisor.WorkerIdentity, WorkerSupervisor.TargetIdentity, reproduction, result.Agrees, attempts.ToArray());
+        byte[] evidenceBytes = JsonSerializer.SerializeToUtf8Bytes(evidence, FindingJson.Options);
+        if (evidenceBytes.Length > FindingStore.MaximumEvidenceBytes) throw new FindingException(FindingExit.LimitExceeded);
+        await FindingFiles.WriteNewAsync(Path.Combine(directory, FindingStore.EvidenceName(reproduction)),
+            evidenceBytes, CancellationToken.None).ConfigureAwait(false);
+        return result;
+    }
+
+    /// <summary>Assesses bounded worker evidence without reading or rewriting the discovery snapshot.</summary>
+    public static FindingResult Assess(FindingMetadata metadata, IReadOnlyList<FindingAttempt> attempts, FindingClass? interruption = null)
+    {
+        ArgumentNullException.ThrowIfNull(metadata);
+        ArgumentNullException.ThrowIfNull(attempts);
+        try { FindingValidation.Validate(metadata, metadata.RunId, metadata.FindingId); }
+        catch (Exception error) when (FindingFiles.IsAdmissionError(error))
+        {
+            throw new ArgumentException("Invalid discovery metadata.", nameof(metadata), error);
+        }
+        if (attempts.Count > FindingStore.RequiredAttempts || attempts.Count == 0 && interruption is null ||
+            interruption is not (null or FindingClass.Cancellation or FindingClass.IntegrityFailure))
+            throw new ArgumentException("A bounded execution or interruption is required.", nameof(attempts));
+        var snapshot = new FindingAttempt[attempts.Count];
+        for (int index = 0; index < snapshot.Length; index++) snapshot[index] = attempts[index];
+        if (!AreAttemptsValid(snapshot)) throw new ArgumentException("Invalid execution evidence.", nameof(attempts));
+        bool agrees = snapshot.Length == FindingStore.RequiredAttempts &&
+            snapshot[0].Classification == snapshot[1].Classification && snapshot[0].Code == snapshot[1].Code;
+        FindingClass outcome = interruption ?? (agrees ? snapshot[0].Classification : snapshot.Length == 2 ?
+            FindingClass.NonReproducible : snapshot[0].Classification);
         FindingExit exit = outcome switch
         {
             FindingClass.Success or FindingClass.ExpectedRejection => FindingExit.Success,
@@ -86,18 +102,29 @@ public sealed class FindingReproduction(WorkerSupervisor supervisor)
             _ => FindingExit.ReproducedFailure
         };
         if (agrees && outcome != metadata.Source.Observed) exit = FindingExit.NonReproducible;
-        var result = new FindingResult(exit, outcome, metadata, attempts, agrees);
-        // With no child attempt there is no execution evidence to retain. Original bytes/metadata remain intact.
-        if (attempts.Count == 0) return result;
-        var evidence = new FindingEvidence("piratepdf-finding-reproduction", 1, metadata.RunId, id,
-            metadata.Sha256, metadata.Length, metadata.Source.Target, metadata.Source.ConfigurationVersion,
-            "neutral-net10-v1", supervisor.WorkerIdentity, WorkerSupervisor.TargetIdentity, reproduction, agrees, attempts.ToArray());
-        byte[] evidenceBytes = JsonSerializer.SerializeToUtf8Bytes(evidence, FindingJson.Options);
-        if (evidenceBytes.Length > FindingStore.MaximumEvidenceBytes) throw new FindingException(FindingExit.LimitExceeded);
-        await FindingFiles.WriteNewAsync(Path.Combine(directory, FindingStore.EvidenceName(reproduction)),
-            evidenceBytes, CancellationToken.None).ConfigureAwait(false);
-        return result;
+        return new FindingResult(exit, outcome, metadata, snapshot, agrees);
     }
+
+    internal static bool AreAttemptsValid(IReadOnlyList<FindingAttempt> attempts)
+    {
+        for (int index = 0; index < attempts.Count; index++)
+        {
+            FindingAttempt attempt = attempts[index];
+            if (attempt is null || attempt.Attempt != index + 1 || !IsConsistent(attempt)) return false;
+        }
+        return true;
+    }
+
+    private static bool IsConsistent(FindingAttempt attempt) => attempt.Classification switch
+    {
+        FindingClass.Success or FindingClass.ExpectedRejection => attempt.Code == "TargetResult",
+        FindingClass.UnexpectedManagedFailure => attempt.Code == "UnexpectedTargetFailure",
+        FindingClass.WorkerProtocolFailure or FindingClass.AbnormalExit or FindingClass.Timeout or
+            FindingClass.Cancellation or FindingClass.CleanupFailure => attempt.Code == "NoWorkerRecord",
+        FindingClass.Indeterminate => attempt.Code is "NoWorkerRecord" or "Cancelled" or "InputUnavailable" or
+            "InputTooLarge" or "UnsupportedInputPlatform" or "UnexpectedRunnerFailure",
+        _ => false
+    };
 
     /// <summary>Maps bounded supervisor evidence; a generic managed failure is not proof of an engine defect.</summary>
     public static FindingClass Classify(SupervisionStatus status, int? exit, string? code) => status switch
@@ -128,11 +155,7 @@ public static class FindingMinimization
             using FileStream lease = store.Lock();
             FindingMetadata original = await store.LoadAsync(originalId, cancellationToken).ConfigureAwait(false);
             FindingMetadata smaller = await store.LoadAsync(smallerId, cancellationToken).ConfigureAwait(false);
-            if (original.Source.Target != smaller.Source.Target || original.Source.ConfigurationVersion != smaller.Source.ConfigurationVersion ||
-                original.Source.Related.Length == 0 || original.Source.Related != smaller.Source.Related ||
-                smaller.Length >= original.Length || smaller.Source.ParentSha256 != original.Sha256 ||
-                original.Source.Observed != FindingClass.UnexpectedManagedFailure || smaller.Source.Observed != original.Source.Observed)
-                return new(FindingExit.MinimizationRefused);
+            if (!CanCompare(original, smaller)) return new(FindingExit.MinimizationRefused);
             var reproduction = new FindingReproduction(supervisor);
             FindingResult first = await reproduction.RunLockedAsync(store, originalId, cancellationToken).ConfigureAwait(false);
             if (!first.Agrees || first.Classification != FindingClass.UnexpectedManagedFailure) return Refused(first);
@@ -145,6 +168,13 @@ public static class FindingMinimization
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { return new(FindingExit.Cancelled, FindingClass.Cancellation); }
         catch (Exception error) when (FindingFiles.IsAdmissionError(error)) { return FindingFiles.Failure(error); }
     }
+
+    /// <summary>Necessary metadata eligibility only; comparison still requires four supervised executions.</summary>
+    public static bool CanCompare(FindingMetadata original, FindingMetadata smaller) =>
+        !(original.Source.Target != smaller.Source.Target || original.Source.ConfigurationVersion != smaller.Source.ConfigurationVersion ||
+                original.Source.Related.Length == 0 || original.Source.Related != smaller.Source.Related ||
+                smaller.Length >= original.Length || smaller.Source.ParentSha256 != original.Sha256 ||
+                original.Source.Observed != FindingClass.UnexpectedManagedFailure || smaller.Source.Observed != original.Source.Observed);
 
     private static FindingResult Refused(FindingResult result) => result.ExitCode is FindingExit.Cancelled or FindingExit.InfrastructureFailure ? result :
         new(FindingExit.MinimizationRefused, result.Classification, result.Metadata, result.Attempts, result.Agrees);

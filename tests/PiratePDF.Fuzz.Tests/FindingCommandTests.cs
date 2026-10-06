@@ -8,6 +8,7 @@ namespace PiratePDF.Fuzz.Tests;
 public sealed class FindingCommandTests
 {
     [Fact]
+    [Trait(TestPlatform.Key, TestPlatform.Windows)]
     public async Task RetainAndReproduceRealTargetThroughStrictCommand()
     {
         using var fixture = new FindingFixture();
@@ -39,7 +40,7 @@ public sealed class FindingCommandTests
     [InlineData("wrong-case-decision")]
     public async Task UntrustedOptionsCannotSelectExecutablesOrDestinations(string fault)
     {
-        using var fixture = new FindingFixture();
+        using var fixture = new ReplayFixture();
         string[] args = ["reproduce-finding", "--repository-root", fixture.Repository, "--run", "owned-run", "--finding", "case-one"];
         args = fault switch
         {
@@ -53,6 +54,7 @@ public sealed class FindingCommandTests
             "numeric-decision" => ["propose-promotion", .. args[1..], "--seed", "seed-one", "--decision", "0"],
             _ => ["propose-promotion", .. args[1..], "--seed", "seed-one", "--decision", "ordinaryEngineRegression"]
         };
+        Assert.False(FindingCommand.IsValidInvocation(args));
         Assert.Equal(FindingExit.InvalidInvocation, (await FindingCommand.ExecuteAsync(args)).ExitCode);
         Assert.False(File.Exists(Path.Combine(fixture.Repository, "finding-executions.log")));
     }

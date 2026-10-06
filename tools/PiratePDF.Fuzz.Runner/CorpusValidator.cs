@@ -11,6 +11,16 @@ public static class CorpusValidator
     public const int MaximumEntries = 128;
     public const int MaximumFileSystemEntries = 256;
 
+    /// <summary>Checks metadata only. Success does not assert inventory, byte identity or safe filesystem admission.</summary>
+    public static CorpusValidationResult ValidateMetadata(ReadOnlyMemory<byte> manifest)
+    {
+        if (manifest.Length > MaximumManifestBytes) return new(CorpusFailure.ManifestTooLarge);
+        try { return new(CorpusFailure.None, CorpusManifestParser.Parse(manifest)); }
+        catch (CorpusValidationException error) { return new(error.Failure); }
+        catch (JsonException) { return new(CorpusFailure.InvalidManifest); }
+        catch (InvalidOperationException) { return new(CorpusFailure.InvalidManifest); }
+    }
+
     public static async Task<CorpusValidationResult> ValidateAsync(string repositoryRoot, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -23,7 +33,9 @@ public static class CorpusValidator
             try { manifest = await InputFile.ReadAsync(Path.Combine(root, "manifest.json"), MaximumManifestBytes, cancellationToken).ConfigureAwait(false); }
             catch (InputTooLargeException) { return new(CorpusFailure.ManifestTooLarge); }
             catch (Exception error) when (error is FileNotFoundException or DirectoryNotFoundException) { return new(CorpusFailure.MissingManifest); }
-            IReadOnlyList<CorpusSeed> seeds = CorpusManifestParser.Parse(manifest);
+            CorpusValidationResult metadata = ValidateMetadata(manifest);
+            if (!metadata.IsValid) return metadata;
+            IReadOnlyList<CorpusSeed> seeds = metadata.Seeds;
             CheckInventory(root, seeds, cancellationToken);
             foreach (CorpusSeed seed in seeds)
             {

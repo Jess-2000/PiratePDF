@@ -11,6 +11,12 @@ public static class SupervisorTestChild
 {
     public static async Task<int> Main(string[] args)
     {
+        if (args.Length == 1 && args[0] == "platform-catalog")
+        {
+            Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(TestPlatform.Catalog()));
+            return 0;
+        }
+
         if (args.Length == 1 && args[0] == "filter-asciihex")
         {
             Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(args));
