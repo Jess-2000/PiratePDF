@@ -4,12 +4,12 @@
 |---|---|
 | **Document ID** | PP-DEV-002 |
 | **Category** | Developer Documentation |
-| **Version** | 1.0 |
+| **Version** | 1.1 |
 | **Status** | Implemented |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1050 |
-| **Last Updated** | 2026-08-13 |
-| **Next Review** | 2026-11-13 |
+| **Last Updated** | 2026-10-31 |
+| **Next Review** | 2027-01-31 |
 
 ## Purpose
 
@@ -53,6 +53,14 @@ Initialization is transactional for extension registration. If initialization fa
 
 Plugin authors must not depend on immediate garbage collection after unload. Managed plugin assemblies are loaded without retaining the package DLL handle; native library lifetime has separate operating-system semantics.
 
+Under [PP-GOV-005](../05-Governance/Platform-Support-and-Native-Lifetime.md),
+native modules may remain loaded for the application's process lifetime.
+Immediate deterministic native-image release is not required for v1. Process
+termination is the reliable final release boundary; replacing an already-loaded
+native dependency may require restarting the application. Managed deactivation,
+disposal and collectible-context unload requests remain required. Do not free
+runtime-owned handles manually or introduce speculative native ownership.
+
 ## Capabilities
 
 Capabilities are host-defined, typed resources identified by `PluginCapabilityKey<T>`. A plugin may retrieve only a capability declared in its manifest. Required capabilities must be available and authorized before initialization. Optional capabilities may return `null`; plugins must handle absence without treating it as a host failure.
@@ -91,4 +99,5 @@ Do not use exceptions as a way to request optional host features. Declare option
 
 | Version | Date | Description |
 |---|---|---|
+| 1.1 | 2026-10-31 | Clarify owner-approved process-resident native module lifetime and restart requirements while preserving managed lifecycle and runtime handle ownership. |
 | 1.0 | 2026-08-13 | Published the BF-1050 plugin developer contract and canonical SDK-only reference pattern. |

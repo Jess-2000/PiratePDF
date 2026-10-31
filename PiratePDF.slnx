@@ -46,4 +46,10 @@
     <Project Path="tests/PiratePDF.DocGen.Tests/PiratePDF.DocGen.Tests.csproj" />
     <Project Path="tests/PiratePDF.Fuzz.Tests/PiratePDF.Fuzz.Tests.csproj" />
   </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/PiratePDF.DocGen/PiratePDF.DocGen.csproj" />
+    <Project Path="tools/PiratePDF.Fuzz.Runner/PiratePDF.Fuzz.Runner.csproj" />
+    <Project Path="tools/PiratePDF.Fuzz.Targets/PiratePDF.Fuzz.Targets.csproj" />
+    <Project Path="tools/PiratePDF.NativeProvisioning/PiratePDF.NativeProvisioning.csproj" />
+  </Folder>
 </Solution>

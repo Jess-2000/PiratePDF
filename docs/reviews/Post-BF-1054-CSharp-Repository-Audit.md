@@ -4,14 +4,75 @@
 |---|---|
 | **Document ID** | PP-AUD-009 |
 | **Category** | Engineering Review |
-| **Version** | 1.19 |
+| **Version** | 1.24 |
 | **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1049, BF-1050, BF-1051, BF-1053, BF-1054 |
-| **Last Updated** | 2026-09-23 |
-| **Next Review** | 2026-12-06 |
+| **Last Updated** | 2026-10-31 |
+| **Next Review** | 2027-01-31 |
 
 ## 1. Executive summary
+
+**B12 reconciliation, 2026-10-31:** [PP-DEP-001](../dependencies/README.md)
+records 21 resolved NuGet package/version pairs, 20 native runtime assets,
+preserved package notices and approved pinned CycloneDX 6.3.1 generation.
+Three schema-valid SBOMs cover the engine, solution and separate SharpFuzz
+project; their union matches repository resolution. [PP-DEP-002](../dependencies/License-Provenance-Resolution.md)
+reconciles all 13 repository findings and 26 generator identities, 117 DLL origins
+and retained original legal texts. The owner confirmed non-revenue-generating
+use and accepted the three json-everything components' documented binary terms.
+The owner confirmed the full remediation gate passed, separately from the same
+five agent symbolic-link privilege failures. **B12 / POST-P2-005 is complete.**
+This evidence is not a general distribution-compliance opinion. No dependencies are upgraded and
+no desktop graph is invented. B11 remains open for actual application startup/
+distribution; B16 remains final maintenance before BF-1055. The approved desktop
+milestone numbers BF-1056 through BF-1058 remain provisional planning only.
+
+**B11 reconciliation, 2026-10-31:** [PP-AUD-041](Post-BF-1054-Batch-B11-Packaged-Native-Resolution-Completion-Report.md)
+remains partial: **Windows qualification remains**. [PP-GOV-005](../05-Governance/Platform-Support-and-Native-Lifetime.md)
+settles Windows 10/11 x64 as the sole official v1 platform and accepts native
+modules remaining process-resident; Linux/macOS and deterministic native-image
+unloading no longer block v1. The physical containment/fallback correction
+passes its existing plugin suite (48/48); Skia and Services pass 25/25 and
+553/553. However, the owner confirms no desktop entry project exists, and the
+project inventory corroborates this. No actual application distribution,
+startup/ready signal or application-native failure behavior can be qualified.
+Do not substitute a test/tool publish. Windows CI retains full tests and gains
+blocking documentation controls; Linux is workflow-level optional. A real
+distribution CI step and hosted validation remain pending. Earlier statements
+below retain their historical scope. B9/H2b and final planned B16 boundaries
+are unchanged; B11 is not closed and B12 is not started.
+
+**B10 disposition, 2026-10-27:** [PP-AUD-040](Post-BF-1054-Batch-B10-Reopen-Render-Conformance-Completion-Report.md)
+closes POST-P2-003 with 29 new deterministic parse/edit/save/reopen/render
+cases and four demonstrated scoped corrections: glyph orientation/clip geometry,
+font-resource save orchestration, duplicated Form placement and Type0 descendant
+resolution. Services passes 553/553; the agent's full gate has 3,406 passes and
+five existing fixture-creation privilege failures out of 3,411, zero skips.
+The user subsequently reports all tests and explicitly confirms the entire
+unchanged gate passed in the requested permitted context. That success is
+user-reported, not an agent-observed privileged run. Earlier failed evidence
+is retained. POST-P2-004 is next in the authorized sequence; it has not begun.
+POST-P2-002 remains open with native H2b deferred, disabled and unqualified.
+
+**Current governance update, 2026-10-26:** the owner-approved
+[PP-GOV-004](../05-Governance/H2b-Deferral-and-Maintenance-Sequencing.md)
+defers native H2b to an unspecified future PiratePDF update. It remains
+incomplete, unqualified and disabled; POST-P2-002 stays open with partially
+verified managed fuzzing and no demonstrated substantive coverage-guided
+campaign completion. B10 / POST-P2-003 is the next authorized maintenance
+item, followed by POST-P2-004, 005, 006, 007 and 008, independently of H2b
+qualification/B9 closure. Existing item acceptance and release gates are
+unchanged; packaged native resolution/fallback is not H2b activation.
+BF-1055 remains separate product development. The dated records below retain
+their original counts and dispositions as history, not current sequencing.
+
+Current verification scopes are recorded separately in PP-GOV-004: nine
+direct managed cases pass; R1's broader Release fuzz run had 909 passes/five
+fixture failures/zero skips out of 914, and its full gate had 3,377 passes/five
+failures/zero skips out of 3,382. The later filtered run had 239 passes/two
+fixture failures/zero skips out of 241. Exact original test names/provenance
+are retained; none of the blocked security assertions is marked passed.
 
 **B9 approval checkpoint, 2026-09-23:** POST-P2-002 remains open. Repository inventory and a bounded target/corpus/isolation design are recorded in the [B9 approval-checkpoint report](Post-BF-1054-Batch-B9-Bounded-Fuzz-and-Corpus-Completion-Report.md). No suitable coverage-guided tool is already approved; the report proposes pinned testing-only tooling for explicit approval. No harness, corpus, dependency or CI change has been implemented, and no fuzz campaign is claimed. Other findings retain their existing dispositions.
 
@@ -144,7 +205,7 @@ The current structural assessment supersedes the original audit's decomposition 
 | POST-P0-015 | P0 | Ordinary Flate accepts incomplete members and publishes shortened decoded values | F3-OBS-01 matrix; actual ObjStm integer 42 becomes 4 |
 | AUD-P1-001 / AUD-P1-002 | P1 candidates | Recovery materialization; repeated identifier sorting | Measurement required; carried forward, not established P1 benefits |
 | POST-P2-001 | P2 | Font catalog build lacks cancellation propagation and aggregate policy | Implemented and closed in B8; PP-AUD-028 |
-| POST-P2-002 | P2 | High-risk byte boundaries lack an operational fuzz/corpus workflow | Open; B9 inventory/design complete for dependency-approval checkpoint, PP-AUD-029 |
+| POST-P2-002 | P2 | Operational fuzz/corpus and campaign acceptance remains incomplete | Open; managed partially verified, native H2b deferred/disabled; independent B10/P2 sequencing approved by PP-GOV-004 |
 | POST-P2-003 | P2 | BF-1054 integration assertions do not establish reopen/render conformance | Test-content inspection |
 | POST-P2-004 | P2 | Packaged native resolution and fallback policy lack platform fixtures | Source and deployment-evidence gap |
 | POST-P2-005 | P2 | Dependency provenance, notices and SBOM readiness incomplete | Repository-evidence gap |
@@ -358,6 +419,19 @@ Smallest proposal: add bounded entry-point harnesses, owned minimized corpus and
 
 ### POST-P2-003: new feature tests under-prove preservation conformance
 
+**Closed through B10, 2026-10-27:** [PP-AUD-040](Post-BF-1054-Batch-B10-Reopen-Render-Conformance-Completion-Report.md)
+records 29 new deterministic integration cases, structured reopen and owned-font
+render assertions, traditional/stream xref and full/incremental output, exact
+prefix/generation/unknown-key preservation, Form reuse, external-font collision
+ownership, rollback/save-failure/history and SDK invalidation coverage. Four
+concrete defects were reproduced and corrected within the approved batch.
+Affected complete suites pass; the user confirms the entire unchanged release
+gate passed after the five existing symbolic-link fixtures were rerun in a
+permitted context. No security test was weakened or waived. The fixture-only
+parser-to-editable adapter is not a new general production importer; platform
+and unsupported-feature limits are explicit in the report. Original audit
+evidence below remains historical.
+
 **Locations:** tests/BlackFlag.Engine.Services.Tests/Text/PdfExternalExistingTextFontServiceTests.cs, PdfFormPlacementCloneProjectorTests.cs, PdfExistingTextReplacementServiceTests.cs; tests/BlackFlag.Engine.Services.Tests/Fonts/PdfExternalType0TrueTypeResourceProjectorTests.cs; tests/BlackFlag.Engine.SDK.Adapters.Tests/Editing/PdfExistingTextSdkSessionTests.cs.
 
 External-font service tests cover shaping rejection and operation metadata rather than the complete ChangeFont workflow. Several "full rewrite" tests assert substrings; the incremental replacement fixture begins with a deliberately synthetic source revision, not a fully reopenable original PDF. These are useful narrow tests but cannot establish font/resource/geometry/preservation conformance. The P0 findings show specific consequences.
@@ -366,6 +440,14 @@ Smallest proposal: add a few complete parse/edit/save/reopen/render fixtures, ta
 
 ### POST-P2-004: native resolution policy lacks packaged-platform proof
 
+**Current reconciliation, 2026-10-31:** PP-AUD-041 implements and tests approved
+physical containment, within-package redirection, bounded traversal, system
+loading and retained unresolved-name fallback. Under B11-D1 through D4,
+application Windows x64 distribution/startup is the remaining qualification
+gap because no desktop project exists. Native residency is accepted; macOS and
+Linux are deferred community targets, not v1 blockers. The original finding
+and recommendation below document the pre-correction scope.
+
 **Locations:** src/BlackFlag.Engine.Plugins/Runtime/PluginLoadContext.cs, LoadUnmanagedDll:28; src/BlackFlag.Engine.Rendering.Skia/Images/SkiaDctImageCodec.cs; src/BlackFlag.Engine.Rendering.Skia/Fonts/SkiaFontRealizer.cs.
 
 Resolved plugin paths receive lexical package containment. An unresolved native name returns zero, allowing runtime fallback; physical reparse/symlink containment is not established by the lexical helper. No malicious packaged-library reproduction was run. Prior Batch 1 expressly did not prove native/reparse sandboxing, so this is a new policy/fixture gap, not a regression in that fix.
@@ -373,6 +455,17 @@ Resolved plugin paths receive lexical package containment. An unresolved native 
 Smallest proposal: specify allowed native dependencies and fallback behavior, then test actual packaged DLL/dylib resolution from a writable unrelated current directory and redirected paths. Do not blanket-block system libraries or redesign plugin isolation without approval. Risk: high compatibility if loader behavior changes. Test Windows/macOS packages plus applicable Linux assets and unload/dispose behavior. No speed claim; native fuzzing must be out of process. **Batch B11; not a BF-1054 regression.**
 
 ### POST-P2-005: dependency and SBOM provenance is incomplete
+
+**Current B12 reconciliation, 2026-10-31:** resolved inventory, native hashes,
+included notice texts, reproducible generation and schema/coverage/hash/negative
+validation now exist under `docs/dependencies/`. PP-DEP-002 reconciles the 13
+repository findings, historical xunit.abstractions licensing and 26 generator
+identities with original texts and binary/archive correspondence. The owner
+confirmed current non-revenue-generating use under the retained OSMFEULA terms.
+Licensing/provenance review is resolved; the owner confirmed remediation full-gate
+success. **POST-P2-005 is closed** for the current repository checkpoint. Structural SBOM validation
+alone does not establish distribution compliance.
+The original baseline and proposal below retain their historical scope.
 
 **Locations:** Directory.Packages.props, global.json, src/BlackFlag.Engine.Rendering.Skia/BlackFlag.Engine.Rendering.Skia.csproj, .github/workflows/continuous-integration.yml.
 
@@ -591,7 +684,15 @@ Concrete cross-file mismatches are:
 
 These support using existing contracts consistently, not adding a second font model, generic orchestration framework, or speculative cache. Similar font-table readers and test builders are maintenance seams to evaluate during real defect fixes; no independent broad DRY batch is justified.
 
-## 23. Proposed implementation batches
+## 23. Historical proposed implementation batches
+
+**Current authorization, 2026-10-26:** PP-GOV-004 supersedes the sequential
+B9-first prerequisite. The owner authorizes B10 / POST-P2-003, then
+POST-P2-004 through POST-P2-008 in numeric order, independently of deferred
+native H2b. Each item's existing acceptance, dependency, signing/publishing
+and security approval boundaries remain. The original proposal table and
+approval recommendations below are historical; they neither revoke this
+authorization nor close B9, H2b or another finding.
 
 **This table records the Phase A proposals and the later B3A addition; the report itself grants no approval.** The user subsequently approved B1, B2, B3 and B3A as separate batches; see the [B1 completion record](Post-BF-1054-Batch-B1-Completion-Report.md), [B2 completion record](Post-BF-1054-Batch-B2-Completion-Report.md), [B3 completion record](Post-BF-1054-Batch-B3-Completion-Report.md) and [B3A completion record](Post-BF-1054-Batch-B3A-CMap-Tokenizer-Completion-Report.md). Explicit user approval remains required for every other batch, including serious P0 issues. Accept each implementation batch only after targeted tests, affected-project tests, diff checks and the full unmodified release gate.
 
@@ -688,12 +789,19 @@ Source searches and prior-review reconciliation are not formal verification. Sus
 
 Every current tracked hand-authored C# file is accounted for by the review/reconciliation method in section 4 and the appendix: **1,019 of 1,019**, with **142 current changed-file reviews and 877 unchanged-file reconciliations**. No source file was selected for change because of size alone.
 
+The following sentence preserves the original Phase A conclusion; later
+implementation approvals and current PP-GOV-004 sequencing are recorded
+above and supersede it as a continuation instruction:
+
 Phase A ends with this report and the proposed batches. **Phase B has not begun and requires explicit user approval.**
 
 ## Revision History
 
 | Version | Date | Description |
 |---|---|---|
+| 1.24 | 2026-10-31 | Reconcile B12 historical package/tool evidence, archive correspondence and owner-confirmed use terms; retain distinct validation scopes and open desktop qualification. |
+| 1.23 | 2026-10-31 | Reconcile B12 dependency/SBOM implementation and explicit remaining notice/provenance review, preserving dependency versions, historical evidence and open desktop qualification. |
+| 1.22 | 2026-10-31 | Reconcile B11-D1 through D4, accepted native residency, Windows-only v1 scope, passing existing engine suites and absent desktop distribution/startup qualification; preserve prior findings and B16 reservation. |
 | 1.0 | 2026-09-06 | Post-BF-1054 audit, prior-work reconciliation, bounded reproductions, updated security/deployment review and proposed approval-gated batches. |
 | 1.1 | 2026-09-07 | Record separately approved B2 implementation disposition and completion evidence; retain the historical audit baseline and all other findings. |
 | 1.2 | 2026-09-08 | Record separately approved B3 disposition and link its validation evidence and limitations; retain the historical audit baseline and other findings. |
@@ -714,6 +822,8 @@ Phase A ends with this report and the proposed batches. **Phase B has not begun 
 | 1.17 | 2026-09-22 | Record the separately approved post-B7 dead-code and unused-import hygiene pass without changing finding dispositions. |
 | 1.18 | 2026-09-23 | Close POST-P2-001 through B8 cancellation/retry and finite aggregate discovery policy, with full release-gate validation; retain unrelated findings and measurement requirements. |
 | 1.19 | 2026-09-23 | Record B9 target/corpus/isolation design and external-tool approval checkpoint; keep POST-P2-002 open and other findings unchanged. |
+| 1.20 | 2026-10-26 | Record PP-GOV-004 native H2b deferral and independent B10/P2 authorization; reconcile partial managed verification scopes without closing B9 or altering historical audit findings/security/release acceptance. |
+| 1.21 | 2026-10-27 | Close POST-P2-003 through PP-AUD-040's 29 integration cases and four scoped corrections; distinguish agent-observed fixture failures from user-confirmed complete gate success; retain open B9/H2b and remaining P2 boundaries. |
 
 ## Appendix A. Per-file coverage ledger
 

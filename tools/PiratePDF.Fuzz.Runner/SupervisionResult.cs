@@ -20,6 +20,13 @@ public enum SupervisionStatus
 /// <summary>Safe metadata only. Captured child bytes never leave the supervisor.</summary>
 public sealed class SupervisionResult
 {
+    internal SupervisionResult(CampaignWorkerReply reply, FuzzTarget target) : this(reply.Status, target, reply.ExitCode, reply.Code)
+    {
+        StdoutRetainedBytes = reply.Stdout;
+        StderrRetainedBytes = reply.Stderr;
+        StdoutTruncated = reply.StdoutTruncated;
+        StderrTruncated = reply.StderrTruncated;
+    }
     internal SupervisionResult(SupervisionStatus status, FuzzTarget? target = null, int? exitCode = null,
         string? workerCode = null, BoundedCapture? output = null, BoundedCapture? error = null)
     {

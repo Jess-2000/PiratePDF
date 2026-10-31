@@ -28,7 +28,12 @@ BlackFlag Engine is the document-processing core behind PiratePDF. Its architect
 
 A central design goal is **preservation-aware editing and writing**. Editing determines what the logical document becomes; Writing determines how that result is serialized. This separation helps PiratePDF avoid unnecessary document reconstruction and retain unrelated structures and object identities where practical.
 
-The engine is designed to remain platform-agnostic. PiratePDF Version 1.0 targets Windows and macOS, while broader Linux support is planned for a later release.
+The engine is designed to remain platform-agnostic. PiratePDF v1 officially
+targets **Windows 10/11 x64 only**. Linux and macOS are deferred to future
+community-led support. Existing cross-platform code remains in place. See
+[platform support and native lifetime](docs/05-Governance/Platform-Support-and-Native-Lifetime.md).
+There is no desktop application entry project yet; application distribution
+and startup qualification remain open under B11.
 
 ## Current Engineering Areas
 
@@ -45,7 +50,34 @@ Development to date includes substantial work in these areas:
 - existing-text discovery/editing, find/replace, typography/style/decorations, font embedding/subsetting paths, width-aware adjustment, and SDK/service exposure completed through BF-1054.
 
 
+## Maintenance continuation — 2026-10-31
+
+[PP-GOV-004](docs/05-Governance/H2b-Deferral-and-Maintenance-Sequencing.md)
+defers native H2b execution/security qualification to an unspecified future
+PiratePDF update. It remains incomplete, unqualified and disabled; its code,
+evidence and fail-closed protections are preserved. Managed fuzzing remains
+partially verified, and B9 / POST-P2-002 remains open.
+
+**B10 / POST-P2-003 is complete; B11 / POST-P2-004 remains partial** because
+there is no desktop entry project to qualify its actual Windows x64
+distribution/startup. POST-P2-005 through POST-P2-008 follow in the approved
+sequence, with B16 reserved as the final cleanup/profile batch. This sequence
+is independent of native H2b qualification.
+Existing acceptance/release gates remain unchanged. POST-P2-004 covers
+packaged-platform dependency resolution/fallback, not H2b activation.
+BF-1055 remains separate product development. No production native fuzzing
+or unsandboxed fallback for untrusted PDFs is authorized. See the
+[amended maintenance handoff](docs/handoffs/PiratePDF-Maintenance-Handoff-Post-BF-1054-Part1.md)
+for current status and distinct validation scopes.
+
 ## Security Posture
+
+Repository dependency evidence, preserved third-party notices and schema-validated
+engine/tooling SBOMs are documented in the [dependency accountability procedure](docs/dependencies/README.md).
+They are not an application-distribution SBOM or a claim of legal compliance;
+the [version-specific review](docs/dependencies/License-Provenance-Resolution.md)
+records applicable notices and the owner's current tool-use decision. Review
+changed versions, terms and actual distributed artifacts before shipping.
 
 PiratePDF is offline-first and treats documents, embedded resources, plugins, paths, metadata, and native/runtime boundaries as untrusted. Security work prioritizes bounded parsing and resource use, passive handling of active PDF content, fuzzing/adversarial corpus testing, least privilege, controlled native-library loading, plugin/SDK isolation, and minimizing sensitive document-data lifetime.
 

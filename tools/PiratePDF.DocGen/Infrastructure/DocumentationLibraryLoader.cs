@@ -45,9 +45,10 @@ internal static class DocumentationLibraryLoader
                 "*.md",
                 SearchOption.AllDirectories)
             .Where(ShouldInclude)
-            .Select(MarkdownDocumentParser.Parse);
+            .Select(MarkdownDocumentParser.Parse)
+            .ToArray();
 
-        return new DocumentationLibrary(documents);
+        return new DocumentationLibrary(HistoricalMetadataSupplements.Apply(fullDirectoryPath, documents));
     }
 
     // =========================================================================

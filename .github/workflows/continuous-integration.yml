@@ -22,8 +22,10 @@ concurrency:
 
 jobs:
   build-test-and-validate:
-    name: Portable Build, Test, and Validate
+    name: Optional Linux Compatibility
     runs-on: ubuntu-latest
+    # B11-D3: compatibility signal only; Windows x64 is the sole v1 target.
+    continue-on-error: true
     timeout-minutes: 20
 
     env:
@@ -197,8 +199,58 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore "$env:SOLUTION_PATH"
 
+      - name: Restore separately scoped managed-fuzz dependencies
+        run: |
+          dotnet restore ./tools/PiratePDF.Fuzz.SharpFuzz/PiratePDF.Fuzz.SharpFuzz.csproj --locked-mode --configfile ./tools/dependencies/NuGet.Config
+          if ($LASTEXITCODE -ne 0) { throw 'Locked tooling restore failed.' }
+
+      - name: Verify dependency inventory and SBOMs
+        shell: powershell
+        run: |
+          dotnet tool install CycloneDX --version 6.3.1 --allow-roll-forward --tool-path ./artifacts/fuzz/b12-ci-tools --configfile ./tools/dependencies/NuGet.Config
+          if ($LASTEXITCODE -ne 0) { throw 'Pinned SBOM tool installation failed.' }
+          ./tools/dependencies/Export-DependencyInventory.ps1 -OutputDirectory ./docs/dependencies
+          ./tools/dependencies/Export-Sbom.ps1 -CycloneDxPath ./artifacts/fuzz/b12-ci-tools/dotnet-CycloneDX.exe -OutputDirectory ./docs/dependencies
+          ./tools/dependencies/Test-DependencyPipeline.ps1 -EvidenceDirectory ./artifacts/fuzz/b12-ci-evidence
+          git diff --exit-code -- ./docs/dependencies
+          if ($LASTEXITCODE -ne 0) { throw 'Dependency evidence drifted; regenerate and review.' }
+
+      - name: Retain dependency accountability artifacts
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: dependency-accountability
+          path: |
+            docs/dependencies/*.json
+            docs/dependencies/*.xml
+            docs/dependencies/THIRD-PARTY-NOTICES.txt
+            docs/dependencies/licenses/*.txt
+            docs/dependencies/evidence/*.txt
+          retention-days: 7
+          if-no-files-found: error
+
       - name: Build solution
         run: dotnet build "$env:SOLUTION_PATH" --configuration "$env:CONFIGURATION" --no-restore
+
+      # Keep documentation controls blocking when Linux compatibility is optional.
+      - name: Generate and validate documentation
+        run: |
+          dotnet ./tools/PiratePDF.DocGen/bin/Release/net10.0/PiratePDF.DocGen.dll all
+          if ($LASTEXITCODE -ne 0) { throw 'Documentation validation failed.' }
+          dotnet ./tools/PiratePDF.DocGen/bin/Release/net10.0/PiratePDF.DocGen.dll health
+          if ($LASTEXITCODE -ne 0) { throw 'Documentation health analysis failed.' }
+          dotnet ./tools/PiratePDF.DocGen/bin/Release/net10.0/PiratePDF.DocGen.dll repair
+          if ($LASTEXITCODE -ne 0) { throw 'Documentation repair preview failed.' }
+          $report = Get-Content -LiteralPath ./docs/Document-Changes.md -Raw
+          foreach ($metric in @('Changes', 'Files')) {
+            $match = [regex]::Match($report, "(?im)^\s*\|\s*$metric\s*\|\s*(\d+)\s*\|\s*$")
+            if (-not $match.Success -or [int]$match.Groups[1].Value -ne 0) {
+              throw "Documentation repair preview has a missing or nonzero $metric count."
+            }
+          }
+
+      # No desktop entry project exists yet. Do not publish a test/tool as the
+      # application. PP-AUD-041 tracks missing distribution/startup qualification.
 
       # No platform filter: Windows runs every solution test, including both real symbolic-link fixtures.
       # Hosted Windows is expected to provide the privilege; fixture failure fails this job, never skips it.

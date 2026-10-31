@@ -24,6 +24,15 @@ UI
 BlackFlag Engine must remain platform-agnostic. Platform-specific
 behavior belongs in application or platform adapters.
 
+**Owner-approved v1 scope, 2026-10-31:** Windows 10/11 x64 is the sole official
+target; Linux/macOS are deferred to community-led support. Native modules may
+remain process-resident; retain managed unload/disposal, never add speculative
+native-handle release, and document restart requirements for replacing loaded
+modules. See [PP-GOV-005](docs/05-Governance/Platform-Support-and-Native-Lifetime.md).
+No desktop entry project exists yet. B11 remains partial pending actual
+application distribution/startup qualification; do not replace it with a tool
+or test publish, or build a new application under maintenance authority.
+
 ## Sources of truth
 
 Before making a substantial change, locate and read the relevant
@@ -67,6 +76,24 @@ user selects another approved roadmap item.
 For continuation details, read
 `docs/handoffs/PiratePDF-Maintenance-Handoff-Post-BF-1054-Part1.md`.
 
+**Current continuation decision — 2026-10-26:**
+[PP-GOV-004](docs/05-Governance/H2b-Deferral-and-Maintenance-Sequencing.md)
+defers native H2b execution/qualification to an unspecified future PiratePDF
+update. It remains incomplete, unqualified, blocked and disabled; B9 /
+POST-P2-002 remains open and managed fuzzing partially verified. Native H2b
+qualification and POST-P2-002 closure are not prerequisites for B10 or the
+remaining P2 maintenance work. **B10 / POST-P2-003 is complete as of 2026-10-27**;
+see [PP-AUD-040](docs/reviews/Post-BF-1054-Batch-B10-Reopen-Render-Conformance-Completion-Report.md)
+for 29 integration cases, scoped corrections and user-confirmed full-gate success.
+**POST-P2-004 is next**, followed by 005, 006, 007 and 008, with their existing
+acceptance requirements. Do not start a further batch without its task scope.
+POST-P2-004 is packaged-platform dependency resolution/fallback, not H2b
+activation. BF-1055 remains a separate product-development milestone subject
+to its roadmap/acceptance rules. Do not resume native qualification, expand
+the privileged controller or introduce an unsandboxed fallback from earlier
+task prompts. Preserve code, evidence, seeds and all refusal/fail-closed gates.
+Development sequencing permission does not waive release-gate requirements.
+
 Do not reopen completed BF-1054 behavior during unrelated maintenance.
 Historical milestone documents remain historical records.
 
@@ -82,6 +109,91 @@ Never trade a higher priority for a lower one without explicit approval.
 Apply: - K.I.S.S. - D.R.Y. - Y.A.G.N.I. - Zero-trust handling of
 untrusted document/input data. - Small, reviewable, evidence-based
 changes.
+
+## Minimum sufficient engineering — project-wide rule
+
+Build only what the approved requirements demonstrably need. Favor the
+smallest understandable, supportable change that preserves correctness,
+document fidelity, security, compatibility, and existing contracts.
+K.I.S.S., D.R.Y., and Y.A.G.N.I. are decision rules, not permission to
+weaken required guarantees.
+
+- Reuse and narrowly extend existing components before introducing new
+  interfaces, providers, factories, frameworks, services, or dependencies.
+- Prefer supported .NET and operating-system facilities to custom
+  infrastructure. Do not build a general-purpose platform for a single
+  current use case.
+- Require a concrete, evidenced need for every new abstraction, policy
+  option, privileged component, or dependency. State the simpler
+  alternative considered and its specific insufficiency.
+- Keep configuration and lifecycle states minimal. Avoid duplicate
+  mechanisms that provide no distinct, demonstrated protection.
+- Prefer cohesive, auditable code and proportional tests over excessive
+  fragmentation, speculative extensibility, or redundant coverage.
+- Minimize operational privileges, setup steps, platform coupling, and
+  future maintenance obligations. Keep Windows-specific isolation out of
+  the platform-agnostic BlackFlag Engine.
+- When a requirement appears to demand a driver, privileged service,
+  virtual-machine orchestration, broad rewrite, or comparable complexity,
+  stop for an explicit architecture/scope decision; do not implement it
+  automatically.
+- In design reviews, compare candidate approaches on mandatory security
+  and correctness first, then existing-code reuse, maintainability,
+  implementation simplicity, and ongoing operational cost. A failed
+  mandatory guarantee cannot be offset by convenience or a weighted score.
+- Do not infer authorization to implement from approval to investigate.
+  Clearly distinguish read-only review, source implementation, privileged
+  provisioning, security qualification, and milestone acceptance.
+
+For any proposed significant new component or dependency, explain the
+specific requirement, why existing facilities cannot meet it, the
+smallest viable alternative, and the ongoing maintenance burden.
+
+### Current H2b security boundary — deferred; qualification still required
+
+Post-BF-1054 B9 / POST-P2-002 remains open. H2b is partially implemented,
+not security-qualified or accepted, and production native fuzz execution
+remains disabled. The fixed native desktop attester and parent-side decoder
+have been implemented; their tests do not establish LPAC process isolation.
+Native qualification is deferred under PP-GOV-004; do not treat it as the
+next maintenance task. Historical qualification was blocked by Windows
+error 2 during LPAC creation. A subsequent elevated release-gate run reported 3,214
+passing tests with zero failures/skips but failed documentation validation
+with 45 metadata/history findings across five preexisting B9 reports.
+Consult the current timestamped reports and actual repository state rather
+than treating these historical counts as a live status assertion.
+PP-GOV-004 preserves the distinct October 26 R1 broader result (five denied
+link fixtures) and later filtered 241-case result (two denied fixtures).
+Neither scope marks blocked security assertions passed or closes B9.
+
+The approved two-stage desktop-verification design is for implementation
+and qualification, not an exemption from security checks. Enforce trusted
+image/dependency admission, LPAC restrictions, creation-time Job containment,
+restricted handles, and restrictive station/desktop configuration before
+resume. Qualify a fixed native attester that reports and exits first; qualify
+CLR/SharpFuzz initialization and the actual production worker separately.
+No untrusted work may begin before parent-validated worker attestation.
+The attester's success never qualifies a different process. Preserve
+fail-closed termination and cleanup on failed, missing, or late evidence.
+
+A controlled Windows test demonstrated that a fully restricted token could
+write to an outside file with a NULL DACL, while an empty DACL denied the
+write. Restricted-token checks and VHDX capacity limits alone do not prove
+filesystem confinement. Network-capable brokers and non-network IPC also
+require explicit analysis; WFP is not a universal local-IPC boundary.
+Production activation requires direct passing evidence for every mandatory
+H2b gate, including filesystem, network/IPC, bounded storage, desktop,
+identity, Job, handle, and runtime controls. FAILED, BLOCKED, or UNKNOWN
+keeps production execution disabled.
+
+Within an expressly approved H2b implementation/remediation batch, Codex may
+fix directly related source, interop, test, packaging, metadata-validation,
+and release-gate defects without separate approval for each ordinary repair.
+It must not weaken security guarantees, broaden privileges, or undertake
+privileged WFP/VHDX/account/service provisioning without separate approval.
+No VM fallback is assumed available. Preserve intentional `PiratePDF.slnx`
+changes and all user-owned working-tree changes; do not rewrite historical
+reports or immutable fuzz seeds.
 
 ## Repository-wide optimization rule
 
@@ -606,6 +718,46 @@ coherent changes. 4. Run targeted tests. 5. Run broader affected-project
 tests. 6. Run `git diff --check`. 7. Run the full PiratePDF release gate
 when the batch is intended for acceptance. 8. Summarize changes,
 evidence, tests, remaining risks, and deferred findings.
+
+## Documentation metadata and historical evidence remediation
+
+For an approved documentation, release-gate, or directly related engineering
+batch, Codex is authorized to investigate and **fix missing, incorrect, or
+inconsistent metadata and change-history records** without stopping for
+approval after each ordinary correction. This includes current maintained
+documents, metadata manifests, indexes, sidecar records, validation code,
+and regression tests when the evidence supports the correction. This is
+standing engineering authority within the selected task scope, not permission
+to change unrelated documents or fabricate provenance.
+
+- Establish the governing schema and document classification before editing.
+  For each finding, identify the affected file, rule, missing/invalid value,
+  authoritative source of the proposed correction, and applicable policy.
+- Correct current mutable documentation in place when appropriate, retaining
+  accurate authorship, timestamps, version history, and change descriptions.
+  Do not invent historical dates, approvals, authors, or validation results.
+- Treat completed B9 qualification reports, prior milestone reports, test
+  artifacts, and other accepted historical evidence as **immutable**. Do not
+  rewrite, regenerate, rename, delete, or silently rebaseline these files to
+  satisfy a newer schema. Preserve the 15 immutable fuzz seeds.
+- If historical evidence lacks metadata, use a separately versioned,
+  append-only manifest, sidecar, or erratum **only when repository policy
+  permits it**. Record the original path and digest, exact factual correction,
+  provenance, author/date of the new record, and link to the unchanged source.
+  Never represent new metadata as if it existed when the original was made.
+- If the validator applies current-document requirements retroactively,
+  correct its classification/scope using explicit, testable rules. Do not
+  globally exempt `artifacts/fuzz/`, suppress genuine failures, or weaken
+  validation of new reports and current documents. Preserve integrity checks
+  for historical evidence.
+- If a historical defect cannot be corrected without changing immutable
+  content, or the governing policy is ambiguous, leave it unresolved and
+  request a policy decision. A passing release gate is not justification
+  for falsifying evidence.
+- Add positive and negative regression tests, run relevant validation and
+  the release gate, and report the before/after findings and remaining errors.
+  Metadata fixes do not by themselves qualify H2b or authorize production
+  native execution.
 
 ## Release gate
 

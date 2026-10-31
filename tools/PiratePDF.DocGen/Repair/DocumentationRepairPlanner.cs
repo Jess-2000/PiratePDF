@@ -1,4 +1,5 @@
 using PiratePDF.DocGen.Changes;
+using PiratePDF.DocGen.Infrastructure;
 using PiratePDF.DocGen.Library;
 using PiratePDF.DocGen.Repair.Diagnostics;
 using PiratePDF.DocGen.Repair.Rules;
@@ -25,6 +26,14 @@ internal static class DocumentationRepairPlanner
 
         foreach (var document in library.AllDocuments)
         {
+            // Valid supplements satisfy registration requirements without rewriting evidence.
+            if (document.MetadataSupplementPath is not null) continue;
+            if (HistoricalMetadataSupplements.IsHistoricalPath(document.FilePath))
+            {
+                diagnostics.Add(new RepairDiagnostic(RepairDiagnosticSeverity.Error, "HistoricalMetadata",
+                    document.FilePath, document.DocumentId, "Immutable historical report requires a valid supplement; no rewrite proposed."));
+                continue;
+            }
             var context = new RepairRuleContext(
                 library,
                 document);

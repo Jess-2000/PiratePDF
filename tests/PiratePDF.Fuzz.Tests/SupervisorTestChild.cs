@@ -11,6 +11,14 @@ public static class SupervisorTestChild
 {
     public static async Task<int> Main(string[] args)
     {
+        if (args.Length == 4 && args[0] == "native-probe") return await NativeProbeAsync(args);
+
+        if (args.Length == 5 && args[0] is "gate-worker" or "gate-root")
+            return await CampaignGateTestChild.RunAsync(args);
+
+        if (args.Length == 5 && args[0] == "ticket-admission")
+            return await CampaignAdmissionTestChild.RunAsync(args);
+
         if (args.Length == 1 && args[0] == "platform-catalog")
         {
             Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(TestPlatform.Catalog()));
@@ -37,6 +45,8 @@ public static class SupervisorTestChild
         }
 
         if (args.Length != 7 || args[0] != "run") return 91;
+        if (Path.GetFileName(args[4]) == "case.bin" && args[4].Contains(Path.Combine("artifacts", "fuzz", "incoming"), StringComparison.Ordinal))
+            return await CampaignTestChild.RunAsync(args);
         if (Path.GetFileName(args[4]) == "input.bin" && args[4].Contains(Path.Combine("artifacts", "fuzz", "findings"), StringComparison.Ordinal))
             return await FindingTestChild.RunAsync(args);
         if (Path.GetFileName(Path.GetDirectoryName(args[4])) == "mutation-work") return await MutationTestChild.RunAsync(args);
@@ -140,6 +150,50 @@ public static class SupervisorTestChild
         }
         Console.WriteLine(record.ToJsonString());
         return 0;
+    }
+
+    private static async Task<int> NativeProbeAsync(string[] args)
+    {
+        string directory = args[2];
+        string mode = args[1];
+        if (mode == "child")
+        {
+            string identity = Path.Combine(directory, args[3]);
+            WriteIdentity(identity + ".pending");
+            File.Move(identity + ".pending", identity);
+            WriteIdentity(Path.Combine(directory, "owned.child.identity"));
+            await Task.Delay(TimeSpan.FromSeconds(60));
+            return 99;
+        }
+        WriteIdentity(Path.Combine(directory, "root.identity"));
+        switch (mode)
+        {
+            case "exit0": return 0;
+            case "exit17": return 17;
+            case "stdout": await WriteBlocksAsync(Console.OpenStandardOutput(), 64); return 0;
+            case "stderr": await WriteBlocksAsync(Console.OpenStandardError(), 64); return 0;
+            case "both":
+                await Task.WhenAll(WriteBlocksAsync(Console.OpenStandardOutput(), 64), WriteBlocksAsync(Console.OpenStandardError(), 64));
+                return 0;
+            case "malformed": File.WriteAllText(Path.Combine(directory, "child.lease"), "not-an-identity"); break;
+            case "self": WriteIdentity(Path.Combine(directory, "child.lease")); break;
+            case "external":
+                while (!File.Exists(Path.Combine(directory, "external.identity"))) await Task.Delay(10);
+                File.Copy(Path.Combine(directory, "external.identity"), Path.Combine(directory, "child.lease"), overwrite: false);
+                break;
+            case "root-child":
+            case "inherited-unleased":
+                var start = new ProcessStartInfo(Environment.ProcessPath!) { UseShellExecute = false, CreateNoWindow = true };
+                foreach (string value in new[] { typeof(SupervisorTestChild).Assembly.Location, "native-probe", "child", directory,
+                    mode == "root-child" ? "child.lease" : "unowned.identity" }) start.ArgumentList.Add(value);
+                using (Process child = Process.Start(start)!)
+                {
+                    while (!File.Exists(Path.Combine(directory, "release"))) await Task.Delay(10);
+                    return 0; // The controlled cooperating child deliberately remains alive with inherited pipes.
+                }
+        }
+        await Task.Delay(TimeSpan.FromSeconds(60));
+        return 99;
     }
 
     private static async Task WriteBlocksAsync(Stream stream, int blocks)

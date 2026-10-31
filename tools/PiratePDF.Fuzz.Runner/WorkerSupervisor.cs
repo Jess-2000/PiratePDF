@@ -76,8 +76,20 @@ public sealed class WorkerSupervisor
         return start;
     }
 
-    public async Task<SupervisionResult> RunAsync(string targetId, string inputPath, int configurationVersion,
-        CancellationToken cancellationToken = default)
+    public Task<SupervisionResult> RunAsync(string targetId, string inputPath, int configurationVersion,
+        CancellationToken cancellationToken = default) => RunCoreAsync(targetId, inputPath, configurationVersion, null, 0, cancellationToken);
+
+    /// <summary>Campaign-only gated worker; gate ownership remains with the caller until confirmed exit.</summary>
+    public Task<SupervisionResult> RunCampaignAsync(string targetId, string inputPath, int configurationVersion,
+        CampaignWorkerGate gate, int caseIndex, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(gate);
+        if (caseIndex is < 0 or >= CampaignConfiguration.MaximumCases) return Task.FromResult(new SupervisionResult(SupervisionStatus.InvalidRequest));
+        return RunCoreAsync(targetId, inputPath, configurationVersion, gate, caseIndex, cancellationToken);
+    }
+
+    private async Task<SupervisionResult> RunCoreAsync(string targetId, string inputPath, int configurationVersion,
+        CampaignWorkerGate? gate, int caseIndex, CancellationToken cancellationToken)
     {
         ProcessStartInfo start;
         FuzzTarget target;
@@ -85,6 +97,13 @@ public sealed class WorkerSupervisor
         {
             start = CreateStartInfo(targetId, inputPath, configurationVersion);
             target = TargetRegistry.Get(targetId);
+            if (gate is not null)
+            {
+                start.ArgumentList.Clear();
+                foreach (string argument in new[] { workerAssembly, "campaign-worker-internal", targetId, inputPath,
+                    gate.PipeName, gate.InvocationHash, caseIndex.ToString(CultureInfo.InvariantCulture) })
+                    start.ArgumentList.Add(argument);
+            }
         }
         catch (ArgumentException)
         {
@@ -114,6 +133,7 @@ public sealed class WorkerSupervisor
         SupervisionStatus status = SupervisionStatus.Completed;
         try
         {
+            if (gate is not null) await gate.RegisterAsync(process, caseIndex, deadline.Token).ConfigureAwait(false);
             // The deadline covers exit AND EOF; inherited pipes must not extend worker execution indefinitely.
             await execution.WaitAsync(deadline.Token).ConfigureAwait(false);
         }
@@ -121,9 +141,10 @@ public sealed class WorkerSupervisor
         {
             status = cancellationToken.IsCancellationRequested ? SupervisionStatus.Cancelled : SupervisionStatus.TimedOut;
         }
-        catch (Exception error) when (error is IOException or InvalidOperationException or Win32Exception)
+        catch (Exception error) when (error is IOException or InvalidOperationException or Win32Exception ||
+            (gate is not null && error is ArgumentException or System.Text.Json.JsonException))
         {
-            status = SupervisionStatus.CaptureFailed;
+            status = gate is { Acknowledged: false } ? SupervisionStatus.InvalidProtocol : SupervisionStatus.CaptureFailed;
         }
 
         // Cleanup has an independent finite budget even when the caller token is cancelled.
@@ -148,6 +169,9 @@ public sealed class WorkerSupervisor
                 status = SupervisionStatus.TerminationFailed;
             }
         }
+
+        if (gate is not null && !gate.ConfirmExit() && !await gate.CleanupAsync(cleanup.Token).ConfigureAwait(false))
+            status = SupervisionStatus.TerminationFailed;
 
         try
         {
