@@ -16,6 +16,20 @@ public readonly record struct CampaignProcessIdentity(int ProcessId, long StartT
     {
         ArgumentNullException.ThrowIfNull(process);
         if (process.HasExited) throw new InvalidOperationException("Process instance has exited.");
+        // Linux Process.StartTime is reconstructed from boot-time clocks and can
+        // differ by milliseconds between observers. /proc stat field 22 is
+        // the kernel's stable, per-process start tick count.
+        if (OperatingSystem.IsLinux())
+        {
+            string stat = File.ReadAllText($"/proc/{process.Id}/stat");
+            int end = stat.LastIndexOf(')');
+            if (end < 0) throw new IOException("Invalid Linux process stat.");
+            string[] fields = stat[(end + 2)..].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            if (fields.Length <= 19 || !long.TryParse(fields[19], System.Globalization.NumberStyles.None,
+                    System.Globalization.CultureInfo.InvariantCulture, out long start) || start <= 0)
+                throw new IOException("Invalid Linux process start ticks.");
+            return new(process.Id, start);
+        }
         return new(process.Id, process.StartTime.ToUniversalTime().Ticks);
     }
 
