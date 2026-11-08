@@ -286,7 +286,11 @@ public sealed class NativeProcessSupervisorTests : IDisposable
         Process process;
         try { process = Process.GetProcessById(pid); }
         catch (ArgumentException) { return null; }
-        if (process.StartTime.ToUniversalTime().Ticks == ticks) return process;
+        // Linux reconstructs Process.StartTime from a boot-time clock; repeated
+        // observations can differ slightly even for the same process.
+        long observed = process.StartTime.ToUniversalTime().Ticks;
+        if (OperatingSystem.IsLinux() ? Math.Abs(observed - ticks) < TimeSpan.TicksPerSecond
+            : observed == ticks) return process;
         process.Dispose();
         return null;
     }
