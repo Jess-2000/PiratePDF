@@ -249,5 +249,17 @@ $native = @($packageRecords | ForEach-Object {
     }
 })
 Write-Json (Join-Path $OutputDirectory 'native-assets.json') $native
-[IO.File]::WriteAllText((Join-Path $OutputDirectory 'THIRD-PARTY-NOTICES.txt'), ($noticeLines -join "`n") + "`n", $utf8)
+# Normalize only the generated notice summary, not retained upstream evidence or metadata.
+# Empty optional fields must not leave a trailing space; emit one final newline.
+$cleanNoticeLines = @($noticeLines | ForEach-Object { ([string]$_).TrimEnd(' ', "`t") })
+while ($cleanNoticeLines.Count -gt 0 -and $cleanNoticeLines[-1] -eq '') {
+    $cleanNoticeLines = @($cleanNoticeLines | Select-Object -SkipLast 1)
+}
+$noticeText = ($cleanNoticeLines -join "`n") + "`n"
+if ($noticeText -match '(?m)[ `t]+
+Write-Host "Inventoried $($projects.Count) projects, $($packageRecords.Count) resolved packages."
+ -or $noticeText -match "`n`n$") {
+    throw 'Generated third-party notices contain trailing whitespace or extra blank lines at EOF.'
+}
+[IO.File]::WriteAllText((Join-Path $OutputDirectory 'THIRD-PARTY-NOTICES.txt'), $noticeText, $utf8)
 Write-Host "Inventoried $($projects.Count) projects, $($packageRecords.Count) resolved packages."
