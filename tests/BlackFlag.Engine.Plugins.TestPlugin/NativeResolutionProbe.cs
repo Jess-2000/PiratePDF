@@ -112,12 +112,28 @@ public static class NativeResolutionProbe
             Console.WriteLine("MISSING=DllNotFoundException");
             return 2;
         }
+        catch (Exception exception) when (IsIncompatibleNativeDependency(exception))
+        {
+            // A system-wide Skia library can be found even when the isolated
+            // package has no native asset. An incompatible ABI must fail closed.
+            Console.WriteLine("MISSING=IncompatibleNativeSkia");
+            return 2;
+        }
     }
 
     private static bool IsMissingNativeDependency(Exception exception)
     {
         for (Exception? cause = exception; cause is not null; cause = cause.InnerException)
             if (cause is DllNotFoundException) return true;
+        return false;
+    }
+
+    private static bool IsIncompatibleNativeDependency(Exception exception)
+    {
+        for (Exception? cause = exception; cause is not null; cause = cause.InnerException)
+            if (cause is InvalidOperationException &&
+                cause.Message.Contains("native libSkiaSharp library", StringComparison.Ordinal) &&
+                cause.Message.Contains("incompatible", StringComparison.Ordinal)) return true;
         return false;
     }
 
