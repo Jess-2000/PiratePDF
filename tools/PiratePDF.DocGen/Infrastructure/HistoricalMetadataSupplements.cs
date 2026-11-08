@@ -48,12 +48,20 @@ internal static class HistoricalMetadataSupplements
             if (record is null) throw new InvalidDataException("Missing historical registration.");
             int index = Array.IndexOf(Originals, record.OriginalPath?.StartsWith("docs/", StringComparison.Ordinal) == true
                 ? record.OriginalPath[5..] : "");
-            if (index < 0 || !seen.Add(record.OriginalPath!) || record.Version != 1 ||
-                record.DocumentId != $"PP-HIST-B9-{index + 1:000}" || record.Registered != "2026-10-24" ||
-                record.NextReview != "2027-01-24" || record.HistoricalMetadata != "Unknown; not reconstructed." ||
-                record.History != "2026-10-24: Initial corrective registration; original report unchanged." ||
-                record.PolicySha256 != policyHash)
-                throw new InvalidDataException("Unsupported, conflicting or unsubstantiated historical registration.");
+            // Report the rejected invariant without weakening historical provenance enforcement.
+            string? invalidField =
+                index < 0 ? "OriginalPath" :
+                !seen.Add(record.OriginalPath!) ? "DuplicateOriginalPath" :
+                record.Version != 1 ? "Version" :
+                record.DocumentId != $"PP-HIST-B9-{index + 1:000}" ? "DocumentId" :
+                record.Registered != "2026-10-24" ? "Registered" :
+                record.NextReview != "2027-01-24" ? "NextReview" :
+                record.HistoricalMetadata != "Unknown; not reconstructed." ? "HistoricalMetadata" :
+                record.History != "2026-10-24: Initial corrective registration; original report unchanged." ? "History" :
+                record.PolicySha256 != policyHash ? "PolicySha256" : null;
+            if (invalidField is not null)
+                throw new InvalidDataException(
+                    $"Unsupported, conflicting or unsubstantiated historical registration at entry {Array.IndexOf(records, record) + 1}: {invalidField}.");
             string originalPath = Path.GetFullPath(Path.Combine(root, Originals[index]));
             int position = Array.FindIndex(documents, document => string.Equals(document.FilePath, originalPath, StringComparison.OrdinalIgnoreCase));
             if (position < 0 || record.OriginalSha256 != Convert.ToHexString(SHA256.HashData(ReadBounded(originalPath))))
