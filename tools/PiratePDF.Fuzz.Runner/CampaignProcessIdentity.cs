@@ -41,7 +41,7 @@ public readonly record struct CampaignProcessIdentity(int ProcessId, long StartT
             using Process process = Process.GetProcessById(ProcessId);
             return Observe(process) == this;
         }
-        catch (Exception error) when (error is ArgumentException or InvalidOperationException or Win32Exception or NotSupportedException)
+        catch (Exception error) when (error is ArgumentException or InvalidOperationException or Win32Exception or NotSupportedException or IOException or UnauthorizedAccessException)
         { return false; }
     }
 }
