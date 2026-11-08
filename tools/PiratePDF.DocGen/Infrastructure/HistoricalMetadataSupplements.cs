@@ -58,7 +58,7 @@ internal static class HistoricalMetadataSupplements
                 record.NextReview != "2027-01-24" ? "NextReview" :
                 record.HistoricalMetadata != "Unknown; not reconstructed." ? "HistoricalMetadata" :
                 record.History != "2026-10-24: Initial corrective registration; original report unchanged." ? "History" :
-                record.PolicySha256 != policyHash ? "PolicySha256" : null;
+                record.PolicySha256 != policyHash ? $"PolicySha256 (registered={record.PolicySha256 ?? "<null>"}, computed={policyHash})" : null;
             if (invalidField is not null)
                 throw new InvalidDataException(
                     $"Unsupported, conflicting or unsubstantiated historical registration at entry {Array.IndexOf(records, record) + 1}: {invalidField}.");
