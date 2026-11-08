@@ -2,16 +2,75 @@
 
 | Field | Value |
 |---|---|
+| 1.26 | 2026-11-08 | Record scoped B14 deployment evidence, metadata/plugin incompatibilities, toolchain security servicing and future desktop/packaging implications. |
 | **Document ID** | PP-AUD-009 |
 | **Category** | Engineering Review |
-| **Version** | 1.24 |
+| **Version** | 1.28 |
 | **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1049, BF-1050, BF-1051, BF-1053, BF-1054 |
-| **Last Updated** | 2026-10-31 |
-| **Next Review** | 2027-01-31 |
+| **Last Updated** | 2026-11-08 |
+| **Next Review** | 2027-02-08 |
 
 ## 1. Executive summary
+
+**B14B currency maintenance, 2026-11-08:** B14A is complete. B14B is complete with owner-reported final source-serviced full-gate success. Eight
+development groups, 48 audited projects, the SkiaSharp 4.150.7 patch and fourteen
+currency negative cases pass. The owner reported elevated full-gate success
+separately from the agent's 3,423 passes/five link-privilege failures out of 3,428.
+B15 is next, followed by B16 and BF-1055. PP-GOV-007 governs servicing cadence,
+supported inputs, affected-package rebuilds, artifact classification and
+owner-approved exceptions. Reusable local verification supplies later B15
+integration while retaining separate hosted and official-release qualification.
+The owner-approved CycloneDX source-serviced development variant
+6.3.1-piratepdf.b14b.1 pins Pkcs 8.0.2. The original vulnerable bundle is
+blocked. Fresh isolated builds reproduce all 41 runtime files. The tool's
+24-package audit is clear and upstream .NET 10 tests pass 356 cases with two
+preexisting skips. The owner reported final elevated full-gate success.
+[Currency policy](../05-Governance/Runtime-Dependency-and-Artifact-Currency.md).
+[B14B report](Post-BF-1054-Batch-B14B-Artifact-Currency-Report.md).
+
+**B14A security servicing, 2026-11-08:** the approved batch selects verified
+SDK 10.0.403 and runtime/compiler 10.0.14. The narrow AOT restore now succeeds
+with auditing enabled. Separate framework-dependent and self-contained
+Windows x64 publishes succeed. B14A is complete with the owner's separately
+reported elevated patched-toolchain full-gate success. B14-SEC-001 is remediated
+for these selected inputs. The agent gate retains five link-privilege failures.
+B15 is next under its own scope. Historical B14 measurements
+retain their .NET 10.0.10 environment.
+[B14A report](Post-BF-1054-Batch-B14A-Runtime-Toolchain-Security-Report.md).
+
+**B14 evaluation, 2026-11-08:** controlled publishes support the untrimmed
+framework-dependent and self-contained selected developer/fixture workloads.
+Trim analysis fails DocGen metadata and actual plugin loading/activation.
+AOT restores fail a compiler security advisory, and the dynamic managed-plugin
+host conflicts with Native AOT's documented model. Retain the framework-dependent
+JIT developer baseline, investigate self-contained packaging under actual future
+requirements, defer trimming and reject AOT for the current plugin-enabled host.
+The compiler/runtime servicing finding is separate release-readiness work.
+[B14 report](Post-BF-1054-Batch-B14-Deployment-Compatibility-Report.md).
+
+**POST-P2-007 is closed as the approved deployment evaluation**, with
+owner-confirmed B14 gate success and passing documentation/preservation checks.
+Trim/AOT support is deferred/rejected as recorded. B14-SEC-001's selected
+toolchain/runtime inputs are serviced under B14A. Actual official deployment
+retains its separate qualification and servicing requirements.
+
+**B13 reconciliation, 2026-11-08:** PP-GOV-006 now governs local PDF form
+events and prohibited script effects across the engine, SDK, Services and
+desktop integration. PP-REL-001 defines Windows signing/provenance acceptance
+with deferred production provisioning and final-artifact qualification.
+The B13 Markdown inventory classifies all relevant current and historical
+documents. Current guidance reconciles Windows-only v1, authoritative engine
+state, B12 completion and B13/B14/B15/B16 sequencing before BF-1055. Planned
+native CSV merge/composition remains separate feature work with a 25,000 record
+ceiling and whole-letter output integrity.
+[B13 report](Post-BF-1054-Batch-B13-Signing-Provenance-and-Documentation-Reconciliation-Report.md).
+
+The revised documentation scope is complete with owner-confirmed November 8
+full-gate success. The agent's five symbolic-link privilege failures remain
+separate evidence. POST-P2-006 retains official signed-distribution qualification
+pending actual executable/packaging and production provisioning.
 
 **B12 reconciliation, 2026-10-31:** [PP-DEP-001](../dependencies/README.md)
 records 21 resolved NuGet package/version pairs, 20 native runtime assets,
@@ -475,6 +534,15 @@ Smallest proposal: inventory direct/transitive/native purpose, versions, license
 
 ### POST-P2-006: official release integrity is not demonstrated
 
+**Current B13 reconciliation, 2026-11-08:** the Windows release contract
+defines source/build identity, final SHA-256, B12 accountability references,
+credential isolation and signature verification/failure handling. Production
+certificate provisioning and signed application/installer qualification remain
+deferred to the future executable/packaging scope. POST-P2-006 retains that
+official-distribution acceptance gap. Historical platform wording below records
+the original finding, with current v1 platform authority in PP-GOV-005.
+[Windows release contract](../releases/Windows-Release-Signing-and-Provenance.md).
+
 **Locations:** .github/workflows/continuous-integration.yml, Directory.Build.props, Invoke-PiratePDFReleaseGate.ps1.
 
 The tracked workflow builds/tests; no official Windows Authenticode or macOS signing/notarization/package-attestation workflow was identified. Deterministic compilation alone does not establish reproducible signed packages or signing-key protection. No shipped artifact was examined, so this is a readiness gap rather than a claim about existing public releases.
@@ -482,6 +550,14 @@ The tracked workflow builds/tests; no official Windows Authenticode or macOS sig
 Smallest proposal: define a release-only pipeline and acceptance checklist for immutable inputs, protected signing identity, timestamp/notarization verification, hashes/provenance and credential-free build logs. Actual credential setup, publishing and signing need separate authorization. Risk: high operational sensitivity. Validate tampered/wrong-signature rejection and clean-machine install/native loading on each official platform. Fuzzing and performance are not applicable. **Batch B13, after B11/B12; not BF-1054 implementation.**
 
 ### POST-P2-007: AOT/trimming support is unproven
+
+**B14 reconciliation, 2026-11-08:** PP-AUD-044 and PP-DEV-003 record supported
+untrimmed publish validation, actual trim diagnostics, security-blocked AOT
+restore and repeated local measurements. The recommendation retains JIT and
+defers trim/AOT adoption as detailed there. This evaluates deployment suitability
+without claiming a trimmed/AOT-compatible product or actual desktop qualification.
+The scoped evaluation is complete with separately reported owner gate success.
+The original finding below retains its original assessment scope.
 
 **Locations:** src/BlackFlag.Engine.Plugins/Runtime/PluginRuntimeHost.cs, Load/Activator.CreateInstance; PluginLoadContext.cs; Rendering.Skia project and platform-font adapters; project publish configuration.
 
@@ -799,6 +875,9 @@ Phase A ends with this report and the proposed batches. **Phase B has not begun 
 
 | Version | Date | Description |
 |---|---|---|
+| 1.28 | 2026-11-08 | Apply B14B permanent artifact currency policy and servicing/verification guidance. |
+| 1.27 | 2026-11-08 | Record approved B14A SDK/runtime security servicing and separate validation/acceptance evidence. |
+| 1.25 | 2026-11-08 | Reconcile B13 policy/documentation evidence while retaining official signed-distribution qualification as a release acceptance gap. |
 | 1.24 | 2026-10-31 | Reconcile B12 historical package/tool evidence, archive correspondence and owner-confirmed use terms; retain distinct validation scopes and open desktop qualification. |
 | 1.23 | 2026-10-31 | Reconcile B12 dependency/SBOM implementation and explicit remaining notice/provenance review, preserving dependency versions, historical evidence and open desktop qualification. |
 | 1.22 | 2026-10-31 | Reconcile B11-D1 through D4, accepted native residency, Windows-only v1 scope, passing existing engine suites and absent desktop distribution/startup qualification; preserve prior findings and B16 reservation. |

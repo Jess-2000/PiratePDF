@@ -10,7 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SharpFuzz" PrivateAssets="all" />
+    <!-- Keep this tooling dependency private while retaining its runtime assets in published utility outputs. -->
+    <PackageReference Include="SharpFuzz" PrivateAssets="all" Publish="true" />
     <ProjectReference Include="../PiratePDF.Fuzz.Targets/PiratePDF.Fuzz.Targets.csproj" />
   </ItemGroup>
 

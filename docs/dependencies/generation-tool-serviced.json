@@ -1,0 +1,224 @@
+{
+  "Format": "PiratePDF source-serviced SBOM tool v1",
+  "Id": "PiratePDF.CycloneDX.Serviced",
+  "Version": "6.3.1-piratepdf.b14b.1",
+  "Scope": "development-only",
+  "Upstream": "https://github.com/CycloneDX/cyclonedx-dotnet",
+  "Commit": "6938a02734b0c30e1a59976f5bd592f1ee8be1eb",
+  "SourceArchiveUrl": "https://api.github.com/repos/CycloneDX/cyclonedx-dotnet/zipball/6938a02734b0c30e1a59976f5bd592f1ee8be1eb",
+  "SourceArchiveSHA512": "F7B129EBE9E85563F9B6A303B7D7A89D4BDE67B9E36FE1032816C1C10384E5EFF09A17F1116F56A8C74FABEEDFD4A9E2BBE3127CA6C6B54B45F410140F641F2B",
+  "Patch": "Add the central transitive System.Security.Cryptography.Pkcs pin only; build net10.0 with explicit development identity.",
+  "PatchedPropertiesSHA256": "1674398653F6658CB04636E46F3FB608B9D119466349FCA0812AFD458D7ED9C3",
+  "SDK": "10.0.403",
+  "Runtime": "10.0.14",
+  "Pkcs": "8.0.2",
+  "Approval": "Owner approved the source rebuild with Pkcs 8.0.2 in the B14B conversation on 2026-11-08.",
+  "ReproducibleRuntimeFiles": true,
+  "AuditReportedVulnerabilities": 0,
+  "Packages": [
+    "CycloneDX.Core/12.1.1",
+    "Humanizer.Core/3.0.1",
+    "Json.More.Net/3.0.0",
+    "JsonPointer.Net/7.0.0",
+    "JsonSchema.Net/9.1.1",
+    "Newtonsoft.Json/13.0.3",
+    "NuGet.Common/7.6.0",
+    "NuGet.Configuration/7.6.0",
+    "NuGet.DependencyResolver.Core/7.6.0",
+    "NuGet.Frameworks/7.6.0",
+    "NuGet.LibraryModel/7.6.0",
+    "NuGet.Packaging/7.6.0",
+    "NuGet.ProjectModel/7.6.0",
+    "NuGet.Protocol/7.6.0",
+    "NuGet.Versioning/7.6.0",
+    "protobuf-net.Core/3.2.56",
+    "protobuf-net/3.2.56",
+    "System.CommandLine/2.0.8",
+    "System.IO.Abstractions/22.2.0",
+    "System.Security.Cryptography.Pkcs/8.0.2",
+    "System.Security.Cryptography.ProtectedData/8.0.0",
+    "TestableIO.System.IO.Abstractions.Wrappers/22.2.0",
+    "TestableIO.System.IO.Abstractions/22.2.0",
+    "Testably.Abstractions.FileSystem.Interface/10.3.0"
+  ],
+  "Files": [
+    {
+      "Name": "cs/System.CommandLine.resources.dll",
+      "Sha256": "781eb1a4d72482f17bfda5e657acd70a87e80f2c9c6d93e0971cdbcb37bb1135"
+    },
+    {
+      "Name": "CycloneDX.Core.dll",
+      "Sha256": "2d612a6634d101d85629300c2eb21f30b5402e1d8f1c64b1597a589a88016ced"
+    },
+    {
+      "Name": "CycloneDX.deps.json",
+      "Sha256": "ed44a0708fc78626644454f0a77093cef12068cd2f7f6f3b51312ed006f1e7f3"
+    },
+    {
+      "Name": "CycloneDX.dll",
+      "Sha256": "b80268e161ec2b8697de20adce8217aee8848d1eed5790576fdab4caed2b8012"
+    },
+    {
+      "Name": "CycloneDX.exe",
+      "Sha256": "fd30abaafc06f7ef221bbc725ff9e572ad2e039f2b5b80bc8d935ce7b2970d56"
+    },
+    {
+      "Name": "CycloneDX.runtimeconfig.json",
+      "Sha256": "5a624b7c489aa06c247a40172edcf55243c60c8cca4e654ec14ce7baafdf7ca5"
+    },
+    {
+      "Name": "de/System.CommandLine.resources.dll",
+      "Sha256": "d6575eacb8df62c04f698edf6f3d23d038cf9dd715abc0610e4c1a7beb1156ac"
+    },
+    {
+      "Name": "es/System.CommandLine.resources.dll",
+      "Sha256": "f277e5c4b458d38a1d4e0cac51453736c080b9a0261afcefdeed203374ae7b7b"
+    },
+    {
+      "Name": "fr/System.CommandLine.resources.dll",
+      "Sha256": "d2a2b637edd842a20843a2b4e166a6b14a8813ef01b93bc1bba6747bc26dd687"
+    },
+    {
+      "Name": "Humanizer.dll",
+      "Sha256": "deacf1954c330a47b8a5d735271e576dea4937d1e5bd2a145f3accf86afebbce"
+    },
+    {
+      "Name": "it/System.CommandLine.resources.dll",
+      "Sha256": "759c5e004f0be77e6186b24c6c087a0db468883e4a344170751b0e03eb5d6360"
+    },
+    {
+      "Name": "ja/System.CommandLine.resources.dll",
+      "Sha256": "e0becf1e50e649414c5da64b2ea299a6bf7526a65fda3e99201ddba964d28e50"
+    },
+    {
+      "Name": "Json.More.dll",
+      "Sha256": "60209f8059007cc7f33978fe48c5bf14e288f0dd6927793f9de2a48db118185a"
+    },
+    {
+      "Name": "JsonPointer.Net.dll",
+      "Sha256": "ee9ff8632f7ac50c8c3d830de409e3f1fc092a3af27e8a4ee1aef162e241de28"
+    },
+    {
+      "Name": "JsonSchema.Net.dll",
+      "Sha256": "e331b71a6f083bb5620a2bf50d58321ae5adc6271b748fe1051c8d2f9e58a578"
+    },
+    {
+      "Name": "ko/System.CommandLine.resources.dll",
+      "Sha256": "9e60cb3d7282d6076be6c729e5c1bd56f0778b7294f9a2fd16896db2af59df17"
+    },
+    {
+      "Name": "Newtonsoft.Json.dll",
+      "Sha256": "22c649f75fce5be7c7ccda8880473b634ef69ecf33f5d1ab8ad892caf47d5a07"
+    },
+    {
+      "Name": "NuGet.Common.dll",
+      "Sha256": "2486b7d4b891d509c92c45913decf1c58bd0b762e85a116577f181aa632ea629"
+    },
+    {
+      "Name": "NuGet.Configuration.dll",
+      "Sha256": "69f2f90c3298b068101986f8d0e468b9c7cd37acf26eafad3201710e608914ca"
+    },
+    {
+      "Name": "NuGet.DependencyResolver.Core.dll",
+      "Sha256": "56ca6d4bfd8780d2233df707026c2a000172a69f03b41427793eb5124f8d1d7a"
+    },
+    {
+      "Name": "NuGet.Frameworks.dll",
+      "Sha256": "80528b5f0c5482a33866669d460df7120c1b1a135e38d3337fa31207ba0398bb"
+    },
+    {
+      "Name": "NuGet.LibraryModel.dll",
+      "Sha256": "736f024d8778a5c5fb9dc1ed405692157c9475b0e67f478d917db16b4e96cbdc"
+    },
+    {
+      "Name": "NuGet.Packaging.dll",
+      "Sha256": "05a065acafaf18c02c5abb44542eb838f0a6516a7fb17b79a077e4f42a5b0eda"
+    },
+    {
+      "Name": "NuGet.ProjectModel.dll",
+      "Sha256": "7273f6a3f470276c578b7d43698d45d0591c40b976452f2b5a04ec0eb3e0e4e2"
+    },
+    {
+      "Name": "NuGet.Protocol.dll",
+      "Sha256": "66f70be58ef42aae6e16e8f16667aca73abca9b472ea10267d2cfc76553566e3"
+    },
+    {
+      "Name": "NuGet.Versioning.dll",
+      "Sha256": "457f94606721f8534623b572cde896050750357da0172d139faa25defd5042c8"
+    },
+    {
+      "Name": "pl/System.CommandLine.resources.dll",
+      "Sha256": "958eaa254c712736ec72bc7adae6c2c1a39ec5685d91d14da86a3d09b9c3f170"
+    },
+    {
+      "Name": "protobuf-net.Core.dll",
+      "Sha256": "18f2f6976f101c804d7c7314739fefce4dafa6d63ff4c3986e45d59967bd2777"
+    },
+    {
+      "Name": "protobuf-net.dll",
+      "Sha256": "78d95efd88bce208a2aa412f193ed534e4b6337f8c15ff9171b8696946200edf"
+    },
+    {
+      "Name": "pt-BR/System.CommandLine.resources.dll",
+      "Sha256": "f717760558d3e0d77171523e86f2f4ba715052cfca2984ac07fc9a4cef761c51"
+    },
+    {
+      "Name": "ru/System.CommandLine.resources.dll",
+      "Sha256": "1a2cf8bf1fcdec69f6714258e10b40b8478e92a416ca42607a6812c26aff2b64"
+    },
+    {
+      "Name": "System.CommandLine.dll",
+      "Sha256": "b3cfb3ca790a19efa2ae73e47786bd272230f38eced1b84ca68b97dadcd8ea3c"
+    },
+    {
+      "Name": "System.IO.Abstractions.dll",
+      "Sha256": "181b9fa8f6a6766635d98d62ae3d91148cb7d68d1de8ca6bd536080c0f14a195"
+    },
+    {
+      "Name": "System.Security.Cryptography.Pkcs.dll",
+      "Sha256": "443c614ab2f18918770ee5187e5deb39cd09c06a475ca6ed58c7a4b466d3e658"
+    },
+    {
+      "Name": "System.Security.Cryptography.ProtectedData.dll",
+      "Sha256": "5e04d6cff3b6fe9706908970cd594861f0c08b3824f7827b2331b5f4fcee1bd1"
+    },
+    {
+      "Name": "TestableIO.System.IO.Abstractions.dll",
+      "Sha256": "ba7774dbb25962063b443eaf5072a615b5f6b5712aa9b2200e17c6bb839ffb15"
+    },
+    {
+      "Name": "TestableIO.System.IO.Abstractions.Wrappers.dll",
+      "Sha256": "105981013ea30cad518ceba023d0bde217aa6225bd49007b57424574edbf2a2f"
+    },
+    {
+      "Name": "Testably.Abstractions.FileSystem.Interface.dll",
+      "Sha256": "29c9ce9ee28db07fd527c5662e047172771cd872d54e430997040626e03e293d"
+    },
+    {
+      "Name": "tr/System.CommandLine.resources.dll",
+      "Sha256": "1992790191940d189c8ca111c139ee26a0617abda1a0d4ada1cba669de80d2ed"
+    },
+    {
+      "Name": "zh-Hans/System.CommandLine.resources.dll",
+      "Sha256": "855fa5dd7c3ff3837e089065e806313ccbb8c1d66bdbf53da4347d4552c28b7e"
+    },
+    {
+      "Name": "zh-Hant/System.CommandLine.resources.dll",
+      "Sha256": "c10b72a4552f25df0ab2afe11625c1174d879f2548feca6fd208730791723b92"
+    }
+  ],
+  "LegalFiles": [
+    {
+      "Name": "LICENSE",
+      "Sha256": "6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae"
+    },
+    {
+      "Name": "NOTICE",
+      "Sha256": "35d78ed4a70916bf503ef5cd2ca1fd1115b1631545239902988d40195b6ab558"
+    },
+    {
+      "Name": "SERVICING-NOTICE.txt",
+      "Sha256": "b9893ba3491082a03ad2fe15cc31e47b7a264ceb64bc4967b37769d6abad074f"
+    }
+  ]
+}

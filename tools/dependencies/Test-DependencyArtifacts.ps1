@@ -8,6 +8,11 @@ $expected = @($inventory.Packages | ForEach-Object { "$($_.Id)/$($_.Version)" } 
 if ($expected.Count -ne $inventory.Packages.Count) { throw 'Duplicate package identity in inventory.' }
 $review = Get-Content -LiteralPath (Join-Path $ArtifactDirectory 'license-review.json') -Raw | ConvertFrom-Json
 $tool = Get-Content -LiteralPath (Join-Path $ArtifactDirectory 'generation-tool.json') -Raw | ConvertFrom-Json
+if ($tool.Scope -ne 'historical-blocked-vendor-tool' -or $tool.CurrentExecutionPermitted -ne $false) {
+    throw 'The vulnerable original SBOM bundle must remain blocked historical evidence.'
+}
+& (Join-Path $PSScriptRoot 'Test-ServicedSbomTool.ps1') -ArtifactDirectory $ArtifactDirectory
+if (-not $?) { throw 'Current serviced SBOM producer evidence failed validation.' }
 $reviewIds = @($review.Components.Identity | Sort-Object -Unique)
 if ($reviewIds.Count -ne $review.Components.Count) { throw 'Duplicate license-review identity.' }
 $toolIds = @($tool.BundledDependencies.Dependencies.Identity | Sort-Object -Unique)

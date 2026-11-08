@@ -1,0 +1,35 @@
+{
+  "Format": "PiratePDF artifact security baseline v1",
+  "Policy": "PP-GOV-007",
+  "ReviewedOn": "2026-11-08",
+  "SDK": "10.0.403",
+  "Runtime": "10.0.14",
+  "Compiler": "10.0.14",
+  "TargetFramework": "net10.0",
+  "RuntimeHashes": {
+    "coreclr.dll": "1BC65B8D45474B19ADF3CA85CE881087AFF599FFC72B2C1A323E878227757B65",
+    "System.Private.CoreLib.dll": "69D56E12535D3A8F2F8F89AC8F97577E6DC788D26F2E7B69BE8FB5F6FF17FF28",
+    "System.IO.Compression.Native.dll": "CE43BB776A6DF4ABE190D0E77096046475709F8E8B0C823E10CB7B39099C32A4"
+  },
+  "NativeHashes": {
+    "libSkiaSharp.dll": "832EDF69408297A3AD77AB511273EF59937BA4445C1B65B8717D65215AA0364C",
+    "runtimes/win-x64/native/libSkiaSharp.dll": "832EDF69408297A3AD77AB511273EF59937BA4445C1B65B8717D65215AA0364C",
+    "runtimes/win-arm64/native/libSkiaSharp.dll": "BB1F995889E98A435863451A1E81BC3760853334167039F702F05B098E9F33A2",
+    "runtimes/win-x86/native/libSkiaSharp.dll": "E1B7B46393CFDF89B4FE5C3D427637CDD2E6B13E65CD011D2398C387CCA784F9"
+  },
+  "SkiaSharp": "4.150.7",
+  "SbomTool": {
+    "Id": "PiratePDF.CycloneDX.Serviced",
+    "Version": "6.3.1-piratepdf.b14b.1",
+    "UpstreamCommit": "6938a02734b0c30e1a59976f5bd592f1ee8be1eb",
+    "SourceArchiveSHA512": "F7B129EBE9E85563F9B6A303B7D7A89D4BDE67B9E36FE1032816C1C10384E5EFF09A17F1116F56A8C74FABEEDFD4A9E2BBE3127CA6C6B54B45F410140F641F2B",
+    "Pkcs": "8.0.2",
+    "PkcsArchiveSHA512": "6fb6cbf867b8cac6beb53bcc982178907e1d57d7074dc85652058258ec04a68523127d234be60eb0a7a5bebb5d4c47a617dc3aa8226d82c3e83459ed0644ac46",
+    "PkcsWindowsDllSHA256": "443c614ab2f18918770ee5187e5deb39cd09c06a475ca6ed58c7a4b466d3e658",
+    "MainDllSHA256": "b80268e161ec2b8697de20adce8217aee8848d1eed5790576fdab4caed2b8012",
+    "PatchedPropertiesSHA256": "1674398653F6658CB04636E46F3FB608B9D119466349FCA0812AFD458D7ED9C3",
+    "Approval": "Owner approved the source rebuild with Pkcs 8.0.2 in the B14B conversation on 2026-11-08."
+  },
+  "PublisherMetadata": "https://builds.dotnet.microsoft.com/dotnet/release-metadata/10.0/releases.json",
+  "Advisory": "https://github.com/dotnet/runtime/security/advisories/GHSA-p3jp-9v83-76w9"
+}

@@ -4,14 +4,29 @@
 |---|---|
 | **Document ID** | PP-GOV-004 |
 | **Category** | Governance |
-| **Version** | 1.1 |
+| **Version** | 1.3 |
 | **Status** | Approved |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1054, BF-1055 |
-| **Last Updated** | 2026-10-31 |
-| **Next Review** | 2027-01-31 |
+| **Last Updated** | 2026-11-08 |
+| **Next Review** | 2027-02-08 |
 
 ## Owner decision and authority
+
+**November 8 reconciliation:** B10 and B12 are complete. B11 retains actual
+Windows desktop distribution/startup qualification. B13 documentation and
+signing/provenance reconciliation is complete, with official signed-release
+qualification deferred. B14 evaluation and B14A security servicing are complete.
+B14B artifact currency is complete. B15 and final B16 precede
+BF-1055. BF-1056 through BF-1058 remain provisional. The October 26 order and
+dated qualification evidence below retain their original scope. The active
+handoff supplies the latest execution state.
+[Maintenance handoff](../handoffs/PiratePDF-Maintenance-Handoff-Post-BF-1054-Part1.md).
+
+PP-GOV-007 governs runtime/dependency and artifact currency. Servicing or
+rebuilding tooling supplies developer evidence only and does not qualify or
+activate deferred H2b. All native execution/admission gates below retain their
+fail-closed requirements. [Currency policy](Runtime-Dependency-and-Artifact-Currency.md).
 
 **October 31 continuation:** [PP-GOV-005](Platform-Support-and-Native-Lifetime.md)
 records B11-D1 through D4: Windows 10/11 x64-only v1, deferred community-led
@@ -79,7 +94,6 @@ reported as new executions during this documentation update:
 
 | Evidence | Recorded result | Meaning |
 |---|---|---|
-| 1.1 | 2026-10-31 | Link approved B11 Windows-only v1 and native-residency decisions, missing desktop qualification target and retained final B16 reservation; preserve all native H2b deferral/refusal requirements. |
 | [R1 completion](../../artifacts/fuzz/h2b-a1-r1-20261026-01/H2b-A1-R1-Preflight-Security-Remediation-Completion.md), 2026-10-26, full Release fuzz suite | 909 passed, 5 failed, 0 skipped / 914 | Original TRX identifies all five fixture-creation failures below |
 | Same R1 unmodified release gate, 2026-10-26 | 3,377 passed, 5 failed, 0 skipped / 3,382 | Gate failed; documentation stage was not reached |
 | [Later managed report](../../artifacts/fuzz/Managed-Fuzzing-Completion-and-H2b-Simplification-Report.md), corroborated by owner; [dated companion report](../../artifacts/fuzz/PdfCraft-Inspired-Managed-Fuzzer-Completion-Report-20261026-232600.md) | 239 passed, 2 failed, 0 skipped / 241 | Filtered scope; configuration not explicitly specified in recorded command; no original filtered TRX located in this review |
@@ -169,4 +183,7 @@ are authorized by this documentation assignment.
 
 | Version | Date | Description |
 |---|---|---|
+| 1.3 | 2026-11-08 | Link B14B artifact currency governance and retain independent native/plugin qualification. |
+| 1.2 | 2026-11-08 | Add current maintenance reconciliation and move the misplaced prior revision entry to the history table. |
+| 1.1 | 2026-10-31 | Link approved B11 Windows-only v1 and native-residency decisions, missing desktop qualification target and retained final B16 reservation; preserve all native H2b deferral/refusal requirements. |
 | 1.0 | 2026-10-26 | Record owner-approved native H2b deferral, partial managed status with separate validation scopes, unchanged security/release requirements and independent B10/P2 maintenance authorization. |

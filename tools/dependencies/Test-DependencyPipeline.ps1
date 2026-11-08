@@ -10,7 +10,7 @@ $EvidenceDirectory = [IO.Path]::GetFullPath($EvidenceDirectory)
 $validator = Join-Path $PSScriptRoot 'Test-DependencyArtifacts.ps1'
 & $validator -ArtifactDirectory $ArtifactDirectory
 if (-not $?) { throw 'Positive artifact validation failed.' }
-foreach ($scenario in @('schema','hash','notice','coverage','private-path','upstream-evidence','review-identity')) {
+foreach ($scenario in @('schema','hash','notice','coverage','private-path','upstream-evidence','review-identity','serviced-producer','serviced-evidence')) {
     $directory = Join-Path $EvidenceDirectory ($scenario + '-' + [Guid]::NewGuid().ToString('N'))
     [void][IO.Directory]::CreateDirectory($directory)
     foreach ($file in @(Get-ChildItem -LiteralPath $ArtifactDirectory -File | Where-Object Extension -In @('.json','.xml'))) {
@@ -47,6 +47,18 @@ foreach ($scenario in @('schema','hash','notice','coverage','private-path','upst
             $review = Get-Content -LiteralPath $file -Raw | ConvertFrom-Json
             $review.Components[0].Identity = 'fixture/0.0.0'
             [IO.File]::WriteAllText($file, ($review | ConvertTo-Json -Depth 20))
+        }
+        'serviced-producer' {
+            $file = Join-Path $directory 'generation-tool-serviced.json'
+            $producer = Get-Content $file -Raw | ConvertFrom-Json
+            $producer.Pkcs = '8.0.1'
+            $producer | ConvertTo-Json -Depth 20 | Set-Content $file
+        }
+        'serviced-evidence' {
+            $file = Join-Path $directory 'serviced-tool-review.json'
+            $serviced = Get-Content $file -Raw | ConvertFrom-Json
+            $serviced.NewComponent.ArchiveSha512 = '0' * 128
+            $serviced | ConvertTo-Json -Depth 20 | Set-Content $file
         }
     }
     # These children must fail. Capture stderr without converting the expected

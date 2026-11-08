@@ -4,21 +4,21 @@
 |---|---|
 | **Document ID** | PP-VSN-001 |
 | **Category** | Vision |
-| **Version** | 1.2 |
+| **Version** | 1.3 |
 | **Status** | Approved |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1000, BF-8000 |
-| **Last Updated** | 2026-10-31 |
-| **Next Review** | 2027-01-31 |
+| **Last Updated** | 2026-11-08 |
+| **Next Review** | 2027-02-08 |
 
 ---
 
 ## Volume I â€” Vision and Product Strategy
 
-**Document ID:** PP-BP-VOL1  
-**Version:** 1.2
+**Legacy volume alias:** PP-BP-VOL1
+**Version:** 1.3
 **Status:** Approved  
-**Last Updated:** October 31, 2026
+**Last Updated:** November 8, 2026
 **Owners:** PiratePDF Project
 
 ---
@@ -208,6 +208,10 @@ Committed capabilities include:
 - Plugin support.
 - Support for PDFs containing 6,000 pages or more.
 - FusionPro workflow integration where technically and legally possible.
+- Planned native CSV data merge and composition under separately scoped feature
+  work, with a maximum 25,000 records per job, complete-letter output boundaries
+  and bounded memory/disk-backed spooling. Advanced delivery commitments require
+  their milestone scope. Optional FusionPro interoperability remains separate.
 - Batch PDF processing and document conversion.
 - Batch text and image replacement.
 - Watched folders and saved production presets.
@@ -234,6 +238,14 @@ organization, presets, and context-sensitive controls, but those usability
 choices must not become hidden commercial tiers.
 
 ## 6. User Groups
+
+Current delivery and security decisions are governed by the Windows desktop
+sequence and canonical form-event policy. Approved product vision spans future
+releases as well as the initial Windows version. Application-level merge,
+composition and scripting requirements are recorded in the application
+specification with implementation status and scope.
+[Application specification](Volume-III-PiratePDF-Application-Specification.md),
+[Document form policy](../05-Governance/Document-Form-JavaScript-Policy.md).
 
 PiratePDF serves both everyday document users and specialized production
 workflows through the same product.
@@ -640,6 +652,7 @@ Deferred features must remain clearly labeled and must not quietly enter an acti
 
 | Version | Date | Description |
 |---|---|---|
+| 1.3 | 2026-11-08 | Reconcile current form policy and planned native data merge with separately scoped delivery commitments. |
 | 1.0 | 2026-07-24 | Standardized document metadata and Blueprint structure. |
 | 1.1 | 2026-08-09 | Replaced the planned commercial-tier strategy with one complete free and open-source PiratePDF product. |
 | 1.2 | 2026-10-31 | Apply owner-approved Windows 10/11 x64-only v1 scope; defer Linux/macOS to community-led support while preserving the platform-neutral architecture and identifying the missing desktop qualification target. |

@@ -4,18 +4,25 @@
 |---|---|
 | **Document ID** | PP-DEV-002 |
 | **Category** | Developer Documentation |
-| **Version** | 1.1 |
+| **Version** | 1.3 |
 | **Status** | Implemented |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1050 |
-| **Last Updated** | 2026-10-31 |
-| **Next Review** | 2027-01-31 |
+| **Last Updated** | 2026-11-08 |
+| **Next Review** | 2027-02-08 |
 
 ## Purpose
 
 This document defines the supported BF-1050 plugin authoring contract. Third-party plugin assemblies compile against `BlackFlag.Engine.SDK` only. `BlackFlag.Engine.Plugins` is host orchestration and is not a plugin dependency.
 
 The canonical source example is `samples/BlackFlag.Engine.ReferencePlugin`.
+
+PP-GOV-007 applies to SDK/plugin packages and their managed/native dependencies.
+Track compatible supported runtime requirements, audit dependencies, preserve
+version-specific legal/provenance evidence and rebuild affected embedded
+runtime/native packages before distribution. A currency verification pass
+retains the plugin admission/capability boundaries and its actual qualification
+scope. [Currency policy](../05-Governance/Runtime-Dependency-and-Artifact-Currency.md).
 
 ## Project Boundary
 
@@ -79,6 +86,12 @@ Each active plugin uses a collectible `AssemblyLoadContext` for managed dependen
 
 `AssemblyLoadContext` is **not a security sandbox**. In-process plugin code executes with the operating-system permissions of the PiratePDF process. BF-1050 capability and extension policy constrains supported engine access, but it cannot make arbitrary hostile managed code safe. Truly hostile plugin isolation requires a separate process and operating-system boundary and is outside BF-1050.
 
+Document-embedded scripts remain subject to PP-GOV-006 in all host modes.
+Plugin grants cannot authorize prohibited script effects or turn embedded
+scripts into trusted application operations. Future local form-event support
+requires shared SDK/Services/desktop enforcement and qualified sandboxing.
+[Document form policy](../05-Governance/Document-Form-JavaScript-Policy.md).
+
 ## Compatibility and Versioning
 
 Manifest and SDK compatibility use numeric `System.Version` values with omitted build/revision components treated as zero for plugin comparisons. The current compatibility rule requires the same SDK major version and a host SDK version at least as high as `minimumSdkVersion`.
@@ -99,5 +112,7 @@ Do not use exceptions as a way to request optional host features. Declare option
 
 | Version | Date | Description |
 |---|---|---|
+| 1.3 | 2026-11-08 | Link B14B artifact currency governance and retain independent native/plugin qualification. |
+| 1.2 | 2026-11-08 | Apply canonical document-form restrictions to plugin-originated host access. |
 | 1.1 | 2026-10-31 | Clarify owner-approved process-resident native module lifetime and restart requirements while preserving managed lifecycle and runtime handle ownership. |
 | 1.0 | 2026-08-13 | Published the BF-1050 plugin developer contract and canonical SDK-only reference pattern. |

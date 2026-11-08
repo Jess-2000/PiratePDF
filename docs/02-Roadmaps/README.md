@@ -2,14 +2,15 @@
 
 | Field | Value |
 |---|---|
+| 1.7 | 2026-11-08 | Record scoped B14 deployment evidence, metadata/plugin incompatibilities, toolchain security servicing and future desktop/packaging implications. |
 | **Document ID** | PP-ROAD-000 |
 | **Category** | Roadmap |
-| **Version** | 1.5 |
+| **Version** | 1.8 |
 | **Status** | Approved |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1025, BF-1054, BF-1055 |
-| **Last Updated** | 2026-10-31 |
-| **Next Review** | 2027-01-31 |
+| **Last Updated** | 2026-11-08 |
+| **Next Review** | 2027-02-08 |
 
 ---
 
@@ -31,7 +32,10 @@ Current maintenance order is defined by
 [PP-GOV-004](../05-Governance/H2b-Deferral-and-Maintenance-Sequencing.md),
 the [amended handoff](../handoffs/PiratePDF-Maintenance-Handoff-Post-BF-1054-Part1.md)
 and [Future Roadmap](../Blueprint/Volume-VI-Future-Roadmap.md): B10 /
-POST-P2-003 complete, POST-P2-004 / B11 active, then POST-P2-005 through POST-P2-008, independently of
+POST-P2-003 / B10 complete, B11 partial pending desktop qualification, B12
+complete, B13 documentation complete, B14 deployment evaluation complete and
+B14A security servicing complete. B14B artifact currency is complete, then scoped
+B15 and final B16, independently of
 native H2b qualification. Native H2b is deferred to an unspecified future
 update, incomplete, unqualified and disabled; managed fuzzing remains
 partially verified and B9 open. All item acceptance, security/refusal and
@@ -50,7 +54,25 @@ by B11, does not reopen native H2b and does not close B9.
 
 B12 / POST-P2-005 is complete: [dependency accountability](../dependencies/README.md)
 and all initial licensing/provenance findings are reconciled, with owner-confirmed
-remediation gate success. B13 requires its own task scope before implementation.
+remediation gate success. The November 8 B13 assignment authorizes repository
+documentation reconciliation and the release signing/provenance contract.
+Production signing provisioning and final signed-distribution qualification
+remain dependencies of the future executable/packaging workstreams.
+[Windows release contract](../releases/Windows-Release-Signing-and-Provenance.md).
+
+The revised B13 documentation scope is complete with owner-confirmed November 8
+full-gate success. Official signed-distribution acceptance under POST-P2-006
+remains partial. The scoped B14 evaluation is recorded below.
+
+B14's November 8 assignment evaluates current published developer/test workloads.
+Its recommendation retains framework-dependent untrimmed JIT, considers
+self-contained deployment for future packaging requirements, defers trimming
+and rejects AOT for the present runtime-loaded managed-plugin host. A compiler/
+runtime security servicing finding requires separate release-readiness work.
+The B14 evaluation is complete with owner-confirmed gate success and passing
+documentation/preservation checks. The report retains unsupported-mode results
+and the unresolved B14-SEC-001 servicing item. B15 is next and requires its own scope.
+[B14 evaluation](../reviews/Post-BF-1054-Batch-B14-Deployment-Compatibility-Report.md).
 B16 is the final planned maintenance batch **before BF-1055**. The approved
 [desktop sequence](Windows-Desktop-Development-Sequence.md) reserves provisional
 BF-1056 foundation, BF-1057 editing integration and BF-1058 packaging/installer
@@ -73,7 +95,6 @@ Tracks release planning, feature freezes, beta milestones, and production releas
 
 # Related Documents
 
-- PP-GOV-002 — Project Governance Guide
 - PP-GOV-002 — Documentation Standards
 - PP-GOV-003 — Documentation Validation Rules
 
@@ -83,6 +104,8 @@ Tracks release planning, feature freezes, beta milestones, and production releas
 
 | Version | Date | Description |
 |---|---|---|
+| 1.8 | 2026-11-08 | Apply B14B permanent artifact currency policy and servicing/verification guidance. |
+| 1.6 | 2026-11-08 | Reconcile B13 policy, current guidance, authority references and release/maintenance sequencing. |
 | 1.5 | 2026-10-31 | Record B12 completion after licensing/provenance remediation and owner-confirmed full-gate success; preserve later-batch authorization boundaries. |
 | 1.4 | 2026-10-31 | Link B12 dependency evidence and approved provisional desktop development sequence; retain B16 as final maintenance before BF-1055 and B11's open distribution acceptance. |
 | 1.3 | 2026-10-31 | Reconcile Windows-only v1 and accepted process-resident native lifetime; retain actual desktop qualification as B11's open gap. |

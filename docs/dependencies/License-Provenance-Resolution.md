@@ -4,14 +4,21 @@
 |---|---|
 | **Document ID** | PP-DEP-002 |
 | **Category** | Developer Documentation |
-| **Version** | 1.0 |
+| **Version** | 1.1 |
 | **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1054 |
-| **Last Updated** | 2026-10-31 |
-| **Next Review** | 2027-01-31 |
+| **Last Updated** | 2026-11-08 |
+| **Next Review** | 2027-02-08 |
 
 ## Evidence and distribution scope
+
+PP-GOV-007 now governs future servicing and artifact currency. Its review
+cadence and owner-exception process supplement this version-specific legal
+register. A clean vulnerability audit or a newer release cannot substitute for
+the exact archive, native and legal provenance review. Retain accepted B12
+evidence and review changed package terms before qualifying serviced artifacts.
+[Currency policy](../05-Governance/Runtime-Dependency-and-Artifact-Currency.md).
 
 [license-review.json](license-review.json) is the reviewed input register. It
 retains exact source URLs, immutable commits, archive SHA-512, original package
@@ -19,16 +26,25 @@ manifest SHA-256, legal-text SHA-256, verification methods and obligations for
 39 identities: all 13 repository findings and 26 unique generator identities.
 Files are original bytes under `licenses/` and `evidence/`, named by SHA-256.
 The original six packaged texts remain; there are now 33 unique legal texts
-and 45 manifest/historical evidence files. Absence of packaged text was an
-evidence gap, not a finding that a license was violated. No software was modified.
+and 45 original manifest/historical evidence files. The source-serviced tool adds one Pkcs 8.0.2 manifest. Absence of packaged text was an
+evidence gap, not a finding that a license was violated. The B12 legal remediation
+retained the original software. B14B separately adds the owner-approved
+source-serviced development-tool variant described below.
 
 Repository findings are development/test-only. Assemblies may appear in local
 test/tool build output; that does not make them production engine dependencies.
-The generator and its dependencies are redistributed inside the installed tool
-package, used locally/in CI, and are not included in an engine or desktop release.
+The original generator and its dependencies were redistributed inside the installed tool
+package and were used locally/in CI. That original bundle is now blocked.
+The source-serviced producer replaces it for current development and CI.
+Generator dependencies remain outside the engine/desktop release graph.
 Newtonsoft.Json also appears in repository test resolution; its tool row does
-not erase that usage. The four existing Skia production packages and 20 native
-assets retain their original evidence and hashes. No desktop distribution exists.
+not erase that usage. The four Skia production packages and 20 native assets
+were serviced under the owner-approved B14B patch review to 4.150.7. Their seven
+packaged legal texts are byte-identical to the reviewed 4.150.1 texts. Current
+inventory/SBOM outputs carry the new archive and native hashes, while eight
+original B12 inventory/accountability records are preserved under
+history/b12-20261031. Existing legal/evidence bytes and completed reports
+retain their original scope. No desktop distribution exists.
 Future shipping selection, license/NOTICE delivery and native bundled notices
 must be reconciled against that actual artifact. SDK/OS/hosted-action internals
 are outside these NuGet graph scopes, as documented in PP-DEP-001.
@@ -139,6 +155,18 @@ was initiated. No other B12 licensing decision remains unresolved.
 
 ## Reproducibility and review procedure
 
+B14B additionally approves the source-serviced development variant
+6.3.1-piratepdf.b14b.1. The original bundle's Pkcs 8.0.1 advisories are retained
+and its execution is blocked. The exact upstream source and Apache LICENSE/
+NOTICE are preserved, the dependency-pin modification is marked and a servicing
+notice accompanies the output. Pkcs 8.0.2's signed archive, immutable source,
+manifest and all four original legal texts are reviewed in
+[serviced-tool-review.json](serviced-tool-review.json). The texts are unchanged.
+All other active package versions and the three exact owner-reviewed
+json-everything agreements remain unchanged. The original 39-identity register
+continues to describe its original bundle. Active source-build provenance is
+[generation-tool-serviced.json](generation-tool-serviced.json).
+
 Normal regeneration consumes this reviewed register and preserved bytes
 offline; it never replaces them with current-branch text. Inventory checks
 reviewed archive hashes before reconciling packaged-metadata findings. The
@@ -156,4 +184,5 @@ for an older version. Hosted CI is unverified until integration.
 
 | Version | Date | Description |
 |---|---|---|
+| 1.1 | 2026-11-08 | Apply B14B permanent artifact currency policy and servicing/verification guidance. |
 | 1.0 | 2026-10-31 | Reconcile all 13 repository findings and 26 generator identities using retained version-specific legal evidence, binary correspondence and owner-confirmed non-revenue-generating use. |

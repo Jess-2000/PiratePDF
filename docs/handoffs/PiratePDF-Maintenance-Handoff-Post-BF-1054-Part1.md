@@ -2,14 +2,15 @@
 
 | Field | Value |
 |---|---|
+| 1.11 | 2026-11-08 | Record scoped B14 deployment evidence, metadata/plugin incompatibilities, toolchain security servicing and future desktop/packaging implications. |
 | **Document ID** | PP-HANDOFF-001 |
 | **Category** | Engineering Handoff |
-| **Version** | 1.9 |
+| **Version** | 1.13 |
 | **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1040, BF-1054 |
-| **Last Updated** | 2026-10-31 |
-| **Next Review** | 2027-01-31 |
+| **Last Updated** | 2026-11-08 |
+| **Next Review** | 2027-02-08 |
 
 
 **Checkpoint:** Post-BF-1054 Maintenance Part 1
@@ -28,7 +29,127 @@ branch is seven commits ahead)
 **CI state:** corrected cross-platform CI passed; `main` CI after the
 GitHub pull-request merge is green.
 
-## Current dependency provenance continuation — 2026-10-31
+## B14B artifact currency continuation — 2026-11-08
+
+**Current sequencing amendment.** B14A is complete. B14B artifact currency is
+complete under PP-AUD-046 with owner-reported final source-serviced full-gate success, followed by B15, final B16 and BF-1055 under their own scopes.
+Eight development artifact groups, 48 audited project scopes, fourteen currency
+negative scenarios and the SkiaSharp 4.150.7 patch are verified. The owner
+reported elevated full-gate success separately from the retained agent run's
+3,423 passes and five link-privilege failures out of 3,428 tests. Current
+SBOM/notices/native hashes are refreshed, with eight exact B12 records preserved
+under docs/dependencies/history/b12-20261031. Machine-wide .NET servicing remains
+an owner-managed obligation. [B14B report](../reviews/Post-BF-1054-Batch-B14B-Artifact-Currency-Report.md).
+PP-GOV-007 establishes permanent runtime/dependency and artifact servicing,
+affected-package rebuilds, historical/blocked classifications and explicit
+owner exceptions. Test-ArtifactCurrency.ps1 provides local reusable verification
+for B15 integration. Official desktop distribution/startup, signing and hosted
+qualification retain their separate requirements. Completed B12/B13/B14/B14A
+reports and historical inventories remain preserved.
+The owner-approved source-serviced SBOM tool is CycloneDX
+6.3.1-piratepdf.b14b.1 with Pkcs 8.0.2. Fresh isolated builds reproduce its
+41 runtime files, and its 24-package audit is clear. Upstream .NET 10 tests
+pass 356 cases with two preexisting skips. The nine dependency-pipeline
+negative cases pass. The final source-serviced agent gate again passes 3,423
+of 3,428 tests with only the five privilege failures. The owner reported elevated acceptance of
+this final checkpoint, separately from the earlier owner-reported pass.
+[Currency policy](../05-Governance/Runtime-Dependency-and-Artifact-Currency.md).
+
+## B14 deployment continuation — 2026-11-08
+
+The owner authorizes scoped Native AOT/trimming investigation and measurements.
+PP-AUD-044 records the framework-dependent/self-contained developer publishes,
+existing DocGen and 29 B10 conformance plus six security/plugin checks, repeated
+timing/memory observations and retained unsupported-mode failures. It recommends
+retaining untrimmed framework-dependent JIT, investigating self-contained
+packaging under actual installer/servicing requirements, deferring trimming
+and rejecting Native AOT for the current runtime-loaded managed-plugin host.
+[B14 report](../reviews/Post-BF-1054-Batch-B14-Deployment-Compatibility-Report.md).
+
+Trim analysis fails current reflection-based DocGen JSON and production plugin
+loading/activation. The test-dependent probe also has a separate trimmed RID
+limitation. Both AOT restores refuse SDK-selected ILCompiler 10.0.10 under a
+high-severity security advisory. Compiler/runtime servicing is a separate
+release-readiness item. PP-DEV-003 records source symbols, reproduction and
+future desktop implications. Shared production build defaults remain intact.
+[Deployment compatibility](../04-Developer/Deployment-Compatibility.md).
+
+B14 / POST-P2-007 is complete as the scoped deployment evaluation. The owner
+confirmed the B14 release gate passed on November 8, separate from the retained
+agent run with five symbolic-link privilege failures. Documentation validates
+227 documents without findings, and preservation checks report zero unexpected
+changes. B14-SEC-001's original finding is serviced by the B14A continuation below.
+B13 documentation acceptance and its owner-confirmed gate remain the prior
+checkpoint. B11 desktop distribution
+and official signing qualification remain open. B9/H2b remain deferred/disabled
+and unqualified. B15 is next in the approved sequence and requires its task
+scope, followed by final B16 before BF-1055. No desktop qualification follows
+from these developer/fixture publishes.
+
+## B14A security servicing continuation — 2026-11-08
+
+The owner-approved B14A batch selects publisher-checksummed SDK 10.0.403 and
+runtime/compiler 10.0.14. Both CI SDK selections and ordinary net10.0 runtime
+selection are reconciled. The patched SDK resides in ignored local evidence,
+with machine-wide installation under owner control. Framework-dependent and
+self-contained Windows x64 publishes succeed, and the narrow AOT restore
+selects patched ILCompiler 10.0.14 with auditing enabled. B14A is complete with
+the owner's separately reported elevated full-gate success through the
+corrected local-SDK launcher. The retained agent run has five link-privilege
+failures. B14-SEC-001 is remediated for the selected inputs. B15 is next under
+its own task scope.
+The original B14 report and measurements retain their .NET 10.0.10 identities.
+[B14A security report](../reviews/Post-BF-1054-Batch-B14A-Runtime-Toolchain-Security-Report.md).
+
+## B13 documentation and release continuation — 2026-11-08
+
+The owner authorizes repository-wide Markdown reconciliation and the B13
+signing/provenance documentation contract. PP-GOV-006 is the canonical form
+JavaScript policy. It permits supported local form events only under qualified
+sandbox/policy enforcement and prohibits automatic document-open/close or
+unattended scripting, external I/O/transmission, arbitrary filesystem/process/
+code access, dynamic modules and privileged effects. Safe Mode disables
+document scripts. The current engine provides passive discovery and assessment.
+The script runtime, event dispatcher and desktop controls require future scope.
+[Form policy](../05-Governance/Document-Form-JavaScript-Policy.md).
+
+PP-REL-001 defines development/official release identity, final SHA-256,
+source/build provenance, SBOM/notices, isolated credentials and signature
+verification/failure handling. Production certificates, signing pipeline and
+final application/installer qualification remain deferred. B11 still requires
+actual Windows desktop distribution/startup evidence.
+[Windows release contract](../releases/Windows-Release-Signing-and-Provenance.md).
+
+B12 remains complete under PP-AUD-042 v1.2. The B13 assignment's stale wording
+about outstanding B12 findings was reconciled explicitly with the owner, who
+directed preservation of completion. B9 remains open and native H2b remains
+deferred, disabled and unqualified. B10 is complete. Following B13 documentation
+completion, continue through scoped B14, B15 and final B16 before BF-1055.
+Provisional BF-1056 through BF-1058 await
+registry reconciliation. The dated continuation sections below retain their
+original checkpoints.
+
+Planned native data merge/composition uses local CSV mapping, a 25,000 record
+ceiling, independently paginated letters, complete-letter output boundaries,
+automatic batching and bounded memory/disk spooling. Cancellation, recovery
+and verified outputs are requirements. Advanced delivery needs a scoped feature
+milestone and remains separate from optional FusionPro interoperability.
+[Application specification](../Blueprint/Volume-III-PiratePDF-Application-Specification.md).
+
+The B13 report records the Markdown inventory, resolved contradictions,
+historical references, validation and acceptance recommendation.
+[B13 report](../reviews/Post-BF-1054-Batch-B13-Signing-Provenance-and-Documentation-Reconciliation-Report.md).
+
+The revised B13 documentation reconciliation is complete. All 279 Markdown
+files are classified, current local links resolve and DocGen validates 225
+documents without findings. The owner confirmed the full B13 release gate
+passed on November 8. This is user-reported validation, distinct from the
+retained agent run with five symbolic-link fixture privilege failures.
+Official signed-distribution qualification under POST-P2-006 remains partial
+pending executable/packaging and production provisioning. B14 is next in the
+approved sequence and requires its own task scope.
+
+## Dependency provenance continuation — 2026-10-31
 
 The owner's B12 / POST-P2-005 assignment authorizes dependency accountability,
 not modernization or desktop implementation. [PP-DEP-001](../dependencies/README.md)
@@ -496,14 +617,17 @@ If later work becomes uncertain:
    only as immutable historical reference; do not restore/reset over current work.
 3. Read this amendment, root `AGENTS.md` and PP-GOV-004.
 4. Compare current state with accepted history without changing Git state.
-5. Continue the scoped POST-P2-004 / B11 assignment, with remaining managed
-   verification tracked separately. Do not resume deferred native H2b from
-   historical continuation instructions.
+5. Follow the latest scoped assignment and dated reconciliation above.
+   Track remaining B11 desktop and B9 managed verification
+   independently and apply PP-GOV-004 to historical native H2b instructions.
 
 ## Revision history
 
 | Version | Date | Description |
 |---|---|---|
+| 1.13 | 2026-11-08 | Apply B14B permanent artifact currency policy and servicing/verification guidance. |
+| 1.12 | 2026-11-08 | Record approved B14A SDK/runtime security servicing and separate validation/acceptance evidence. |
+| 1.10 | 2026-11-08 | Record B13 scope, canonical form and release policies, owner-preserved B12 completion and current maintenance continuation. |
 | 1.0 | 2026-10-05 | Establish the authoritative Post-BF-1054 Maintenance Part 1 continuation and recovery handoff at integrated checkpoint `095ad01`; record the accepted PP-AUD-038 CI state, open B9 / POST-P2-002 campaign boundary, recovery snapshot, security and Git/Codex operating rules, and remaining P2 sequence. |
 | 1.1 | 2026-10-26 | Record native H2b deferral and partial managed status, distinct five broader/two filtered fixture failures, independent B10/P2 continuation and unchanged security/release criteria; preserve original checkpoint history. |
 | 1.2 | 2026-10-27 | Record separate B10 conformance completion, 29 added cases and user-confirmed full-gate success while retaining denied attempts, open B9 and deferred native H2b; identify POST-P2-004 as next without beginning it. |

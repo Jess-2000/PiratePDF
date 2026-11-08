@@ -85,8 +85,36 @@ qualification and POST-P2-002 closure are not prerequisites for B10 or the
 remaining P2 maintenance work. **B10 / POST-P2-003 is complete as of 2026-10-27**;
 see [PP-AUD-040](docs/reviews/Post-BF-1054-Batch-B10-Reopen-Render-Conformance-Completion-Report.md)
 for 29 integration cases, scoped corrections and user-confirmed full-gate success.
-**POST-P2-004 is next**, followed by 005, 006, 007 and 008, with their existing
-acceptance requirements. Do not start a further batch without its task scope.
+**November 8 continuation:** B11 remains partial pending actual Windows desktop
+distribution/startup qualification. B12 / POST-P2-005 is complete under
+PP-AUD-042 v1.2 and the owner's confirmed remediation gate success. B13 /
+POST-P2-006 documentation reconciliation is complete under PP-AUD-043 and the
+owner-confirmed November 8 full gate. Official signed-distribution qualification
+remains partial pending executable/packaging and production provisioning.
+B14 / POST-P2-007 evaluation is complete with owner-confirmed November 8 gate
+success. It recommends retaining untrimmed framework-dependent
+JIT as the developer baseline, investigating untrimmed self-contained Windows
+packaging, deferring trimming and rejecting Native AOT for the current dynamic
+managed-plugin host. PP-AUD-044 and PP-DEV-003 record measurements, actual
+diagnostics and the SDK-selected compiler security advisory. The owner-approved
+B14A security servicing batch selects SDK 10.0.403 and runtime 10.0.14 and
+is complete under PP-AUD-045 with owner-confirmed patched-toolchain full-gate
+success. B14-SEC-001 is remediated for these selected inputs.
+B14B is complete under PP-AUD-046 with owner-reported final source-serviced full-gate success.
+Its eight development artifact groups, SkiaSharp 4.150.7 patch, audits and
+reusable checks are verified. The permanent policy is
+PP-GOV-007. Preserve completed B12/B13/B14/B14A evidence and historical inventories.
+The approved development SBOM producer is the source-serviced CycloneDX
+6.3.1-piratepdf.b14b.1 variant with Pkcs 8.0.2. The original vendor bundle is
+blocked by two dependency advisories. Preserve its historical evidence.
+Verify current publisher servicing metadata, audit dependencies and native inputs,
+and rebuild or explicitly block outdated supported artifacts. Artifact currency
+verification is local reusable tooling for later B15 integration. Hosted-CI and
+official desktop qualification retain their separate acceptance requirements.
+B15 is next,
+followed by final maintenance B16 before BF-1055. BF-1056 through
+BF-1058 remain provisional until milestone registry reconciliation. Each batch
+retains its acceptance requirements and requires its own task scope.
 POST-P2-004 is packaged-platform dependency resolution/fallback, not H2b
 activation. BF-1055 remains a separate product-development milestone subject
 to its roadmap/acceptance rules. Do not resume native qualification, expand
@@ -596,8 +624,13 @@ least-privilege boundaries for speed.
 -   Fuzz high-risk byte-oriented boundaries and add deterministic
     regression fixtures for reproducible crashes, hangs, corruption, or
     invariant violations.
--   PDF JavaScript, launch actions, embedded executables/files, external
-    commands, and network actions must not execute implicitly.
+-   Follow the canonical document-form JavaScript policy in
+    `docs/05-Governance/Document-Form-JavaScript-Policy.md`. Supported local form
+    events require qualified sandbox/policy enforcement. Safe Mode disables
+    document scripts. Document-open/close/unattended scripting, external I/O,
+    data transmission, arbitrary file/process/code access, dynamic modules and
+    privilege acquisition remain prohibited in every editing mode. Passive
+    import/render/save/inspection never executes document scripts.
 -   Minimize sensitive document/credential data lifetime and copies. Do
     not claim guaranteed erasure of arbitrary managed memory; clear
     mutable secret buffers only where technically meaningful.
@@ -611,10 +644,11 @@ least-privilege boundaries for speed.
     warnings as engineering work and validate reflection, serialization,
     plugins, SkiaSharp/native assets, fonts/images, and platform
     adapters.
--   Official Windows release artifacts should be Authenticode-signed;
-    official macOS artifacts should be code-signed/notarized. Protect
-    signing credentials, record hashes/provenance, and pursue
-    reproducible/deterministic release builds where practical.
+-   Official Windows v1 release artifacts require the signing/provenance
+    acceptance contract in `docs/releases/Windows-Release-Signing-and-Provenance.md`.
+    Protect signing credentials and record final SHA-256/provenance. Production
+    provisioning and signed-distribution qualification await their scoped work.
+    Linux/macOS remain deferred community-oriented targets under PP-GOV-005.
 
 ## Manual commands and elevated execution
 

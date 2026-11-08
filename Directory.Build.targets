@@ -1,0 +1,6 @@
+<Project>
+  <!-- Apply after project/profile properties so station-only admission still requires an explicit runtime. -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0' and '$(StationOnly)' != 'true' and '$(RuntimeFrameworkVersion)' == ''">
+    <RuntimeFrameworkVersion>10.0.14</RuntimeFrameworkVersion>
+  </PropertyGroup>
+</Project>

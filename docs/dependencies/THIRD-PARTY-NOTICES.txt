@@ -104,7 +104,7 @@ Reviewed license: MIT (original package declaration above is unchanged)
 Reviewed text: licenses/e0ca5bd780510a0511a1dd4328eac0eb7decd8f8f6a48950fc6956b666bcfce4.txt (source: https://raw.githubusercontent.com/Metalnem/sharpfuzz/7dde242459c5459cb988fb8ace4397a9485d720f/LICENSE)
 Redistribution: When redistributing copies/substantial portions, preserve copyright and permission notice.
 
-SkiaSharp.NativeAssets.Linux/4.150.1
+SkiaSharp.NativeAssets.Linux/4.150.7
 ====================================
 Source: https://api.nuget.org/v3/index.json
 License declaration: MIT
@@ -114,7 +114,7 @@ Repository: https://go.microsoft.com/fwlink/?linkid=868515
 Included text: licenses/89101e35a8c66fd4d6dffc1763259161d35cb564c169714ec227a768c89f2938.txt (original: LICENSE.txt)
 Included text: licenses/21504c46c4c58aa64c1055bd2dcbc5f9a136b4b8c412ed3cc6740e22c5b127f5.txt (original: THIRD-PARTY-NOTICES.txt)
 
-SkiaSharp.NativeAssets.macOS/4.150.1
+SkiaSharp.NativeAssets.macOS/4.150.7
 ====================================
 Source: https://api.nuget.org/v3/index.json
 License declaration: MIT
@@ -124,7 +124,7 @@ Repository: https://go.microsoft.com/fwlink/?linkid=868515
 Included text: licenses/89101e35a8c66fd4d6dffc1763259161d35cb564c169714ec227a768c89f2938.txt (original: LICENSE.txt)
 Included text: licenses/21504c46c4c58aa64c1055bd2dcbc5f9a136b4b8c412ed3cc6740e22c5b127f5.txt (original: THIRD-PARTY-NOTICES.txt)
 
-SkiaSharp.NativeAssets.Win32/4.150.1
+SkiaSharp.NativeAssets.Win32/4.150.7
 ====================================
 Source: https://api.nuget.org/v3/index.json
 License declaration: MIT
@@ -134,7 +134,7 @@ Repository: https://go.microsoft.com/fwlink/?linkid=868515
 Included text: licenses/89101e35a8c66fd4d6dffc1763259161d35cb564c169714ec227a768c89f2938.txt (original: LICENSE.txt)
 Included text: licenses/21504c46c4c58aa64c1055bd2dcbc5f9a136b4b8c412ed3cc6740e22c5b127f5.txt (original: THIRD-PARTY-NOTICES.txt)
 
-SkiaSharp/4.150.1
+SkiaSharp/4.150.7
 =================
 Source: https://api.nuget.org/v3/index.json
 License declaration: MIT
@@ -239,8 +239,8 @@ Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082
 Reviewed text: licenses/e9dcf94cc4864ba47aeaaec879cfabaf3feadb813c77af480c3ad14c6de0ed79.txt (source: https://raw.githubusercontent.com/xunit/xunit/9712244020d385955d33136b3fe3e87de43539cd/license.txt)
 Redistribution: When redistributing, provide Apache-2.0 text, retain applicable attribution/NOTICE; mark modified files if any. Evidence copies do not modify component software.
 
-SBOM GENERATION TOOL - DEVELOPMENT ONLY
-See license-review.json for exact bundled identities, archive and binary correspondence.
+HISTORICAL UPSTREAM SBOM TOOL - BLOCKED FROM CURRENT EXECUTION
+See license-review.json for original bundled identities, archive and binary correspondence.
 2026-10-31 conversation: Owner confirms non-revenue-generating use and accepts the documented terms for Json.More.Net 3.0.0, JsonPointer.Net 7.0.0 and JsonSchema.Net 9.1.1.
 
 CycloneDX.Core/12.1.1
@@ -399,4 +399,15 @@ Testably.Abstractions.FileSystem.Interface/10.3.0
 Reviewed license: MIT
 Redistribution: When redistributing copies/substantial portions, preserve copyright and permission notice.
 Reviewed text: licenses/024f2e034ea52d1b47be884bda1bd9b776ceddbfb2a7cc4d49f79255c8ed483c.txt (source: https://raw.githubusercontent.com/Testably/Testably.Abstractions/9b967ee024caa2d47e3ac27a23d26ea55cd20ded/LICENSE)
+
+CURRENT SOURCE-SERVICED SBOM TOOL - DEVELOPMENT ONLY
+PiratePDF.CycloneDX.Serviced 6.3.1-piratepdf.b14b.1; upstream Apache-2.0 source, original LICENSE/NOTICE and modification notice retained.
+See generation-tool-serviced.json and serviced-tool-review.json. Unchanged exact components retain the original reviewed obligations above.
+System.Security.Cryptography.Pkcs/8.0.2
+Reviewed license: MIT
+Redistribution: When redistributing copies/substantial portions, preserve copyright and permission notice.
+Reviewed text: licenses/97c1a7b3da6a4c6ad516448719f45114b41a4d4c5aa300a944476e2e4f5da438.txt (source: https://raw.githubusercontent.com/dotnet/runtime/b9a49e4a6d3a444a3685e318c74a7892d01873f7/THIRD-PARTY-NOTICES.TXT)
+Reviewed text: licenses/b60b2912da28eaa6518593c9e2efb5334ee062d3c42e80d8fdfa806b3dc52977.txt (source: https://api.nuget.org/v3-flatcontainer/system.security.cryptography.pkcs/8.0.2/system.security.cryptography.pkcs.8.0.2.nupkg#THIRD-PARTY-NOTICES.TXT)
+Reviewed text: licenses/cfc21f5e8bd655ae997eec916138b707b1d290b83272c02a95c9f821b8c87310.txt (source: https://raw.githubusercontent.com/dotnet/runtime/b9a49e4a6d3a444a3685e318c74a7892d01873f7/LICENSE.TXT)
+Reviewed text: licenses/d7a68596ab69b06f51ca278a6545148e4269a9381c26d597c13df5d88e08cf5b.txt (source: https://api.nuget.org/v3-flatcontainer/system.security.cryptography.pkcs/8.0.2/system.security.cryptography.pkcs.8.0.2.nupkg#LICENSE.TXT)
 

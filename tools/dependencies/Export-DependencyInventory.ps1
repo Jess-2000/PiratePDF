@@ -14,8 +14,9 @@ $utf8 = New-Object Text.UTF8Encoding($false)
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 $reviewRoot = Join-Path $RepositoryRoot 'docs/dependencies'
 $review = Get-Content -LiteralPath (Join-Path $reviewRoot 'license-review.json') -Raw | ConvertFrom-Json
+$servicedReview = Get-Content -LiteralPath (Join-Path $reviewRoot 'serviced-tool-review.json') -Raw | ConvertFrom-Json
 # Retained upstream evidence is an input, never fetched from moving URLs in CI.
-foreach ($evidence in @($review.Components | ForEach-Object { $_.ManifestEvidence; $_.LegalTexts })) {
+foreach ($evidence in @(@($review.Components) + @($servicedReview.NewComponent) | ForEach-Object { $_.ManifestEvidence; $_.LegalTexts })) {
     if ($evidence.Artifact -notmatch '^(licenses|evidence)/[a-f0-9]{64}\.txt$') { throw 'Invalid reviewed evidence path.' }
     $source = Join-Path $reviewRoot $evidence.Artifact
     if ((Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash -ine $evidence.Sha256) { throw 'Reviewed evidence hash mismatch.' }
@@ -24,6 +25,7 @@ foreach ($evidence in @($review.Components | ForEach-Object { $_.ManifestEvidenc
     if ($source -ine $destination) { [IO.File]::Copy($source, $destination, $true) }
 }
 if ($reviewRoot -ine $OutputDirectory) { [IO.File]::Copy((Join-Path $reviewRoot 'license-review.json'), (Join-Path $OutputDirectory 'license-review.json'), $true) }
+if ($reviewRoot -ine $OutputDirectory) { [IO.File]::Copy((Join-Path $reviewRoot 'serviced-tool-review.json'), (Join-Path $OutputDirectory 'serviced-tool-review.json'), $true) }
 
 function Write-Json($Path, $Value) {
     [IO.File]::WriteAllText($Path, (($Value | ConvertTo-Json -Depth 35) -replace "`r`n", "`n") + "`n", $utf8)
@@ -207,12 +209,19 @@ foreach ($key in @($packages.Keys | Sort-Object)) {
     foreach ($issue in $record.ReviewIssues) { $noticeLines += "REVIEW REQUIRED: $issue" }
     $noticeLines += ''
 }
-$noticeLines += @('SBOM GENERATION TOOL - DEVELOPMENT ONLY', 'See license-review.json for exact bundled identities, archive and binary correspondence.', $review.OwnerDecision, '')
+$noticeLines += @('HISTORICAL UPSTREAM SBOM TOOL - BLOCKED FROM CURRENT EXECUTION', 'See license-review.json for original bundled identities, archive and binary correspondence.', $review.OwnerDecision, '')
 foreach ($component in @($review.Components | Where-Object Usage -eq 'sbom-tool')) {
     $noticeLines += @($component.Identity, "Reviewed license: $($component.ReviewedLicense)", "Redistribution: $($component.Obligations)")
     foreach ($notice in $component.LegalTexts) { $noticeLines += "Reviewed text: $($notice.Artifact) (source: $($notice.Source))" }
     $noticeLines += ''
 }
+$noticeLines += @('CURRENT SOURCE-SERVICED SBOM TOOL - DEVELOPMENT ONLY',
+    'PiratePDF.CycloneDX.Serviced 6.3.1-piratepdf.b14b.1; upstream Apache-2.0 source, original LICENSE/NOTICE and modification notice retained.',
+    'See generation-tool-serviced.json and serviced-tool-review.json. Unchanged exact components retain the original reviewed obligations above.',
+    $servicedReview.NewComponent.Identity, ('Reviewed license: ' + $servicedReview.NewComponent.ReviewedLicense),
+    ('Redistribution: ' + $servicedReview.NewComponent.Obligations))
+foreach ($notice in $servicedReview.NewComponent.LegalTexts) { $noticeLines += "Reviewed text: $($notice.Artifact) (source: $($notice.Source))" }
+$noticeLines += ''
 $central = @()
 foreach ($relative in @(& git -C $RepositoryRoot ls-files --cached --others --exclude-standard -- '*Directory.Packages.props' | Sort-Object -Unique)) {
     $document = Read-PackageXml (Join-Path $RepositoryRoot $relative)

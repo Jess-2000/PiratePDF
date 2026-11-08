@@ -198,6 +198,8 @@ public sealed class NativeProcessSupervisorTests : IDisposable
             using Process? child = FixtureProcess("unowned.identity");
             Assert.NotNull(root);
             Assert.NotNull(child);
+            // Retain the query handle before releasing the root so its exit code survives process teardown.
+            _ = root.SafeHandle;
             File.WriteAllText(Path.Combine(directory, "release"), "release");
             await root.WaitForExitAsync().WaitAsync(TimeSpan.FromSeconds(5));
             Assert.Equal(0, root.ExitCode);

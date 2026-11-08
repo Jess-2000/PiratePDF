@@ -60,7 +60,9 @@ partially verified, and B9 / POST-P2-002 remains open.
 
 **B10 / POST-P2-003 is complete; B11 / POST-P2-004 remains partial** because
 there is no desktop entry project to qualify its actual Windows x64
-distribution/startup. POST-P2-005 through POST-P2-008 follow in the approved
+distribution/startup. B12 / POST-P2-005 is complete. The current B13 /
+POST-P2-006 documentation reconciliation is complete and precedes scoped B14, B15 and final B16
+before BF-1055 in the approved
 sequence, with B16 reserved as the final cleanup/profile batch. This sequence
 is independent of native H2b qualification.
 Existing acceptance/release gates remain unchanged. POST-P2-004 covers
@@ -81,7 +83,18 @@ changed versions, terms and actual distributed artifacts before shipping.
 
 PiratePDF is offline-first and treats documents, embedded resources, plugins, paths, metadata, and native/runtime boundaries as untrusted. Security work prioritizes bounded parsing and resource use, passive handling of active PDF content, fuzzing/adversarial corpus testing, least privilege, controlled native-library loading, plugin/SDK isolation, and minimizing sensitive document-data lifetime.
 
-Official release hardening is expected to include dependency/SBOM review, artifact provenance and hashes, Windows Authenticode signing, and macOS code signing/notarization. Native AOT may be evaluated for deployment hardening and performance characteristics, but it is **not** treated as an obfuscation guarantee or security boundary.
+The approved form security policy permits supported local field events only
+under sandbox and policy enforcement. Safe Mode disables document scripts.
+The present engine provides passive discovery and reporting. Script runtime
+and desktop event integration require separate qualification.
+[Document form policy](docs/05-Governance/Document-Form-JavaScript-Policy.md).
+
+Official Windows release requirements cover Authenticode, source/build identity,
+final SHA-256 hashes, dependency/SBOM evidence and isolated signing credentials.
+Production provisioning and final signed-artifact qualification are deferred to
+the executable/packaging and release workstreams. Native AOT remains a
+deployment choice requiring its own compatibility validation.
+[Signing and provenance](docs/releases/Windows-Release-Signing-and-Provenance.md).
 
 ## Documentation
 
@@ -103,6 +116,21 @@ The repository documentation is maintained as part of the product. Good starting
 - [Milestone Documentation](docs/milestones/) — detailed records of completed BlackFlag work slices.
 
 The broader documentation library is available from [docs/README.md](docs/README.md).
+
+## Developer toolchain
+
+[Runtime, dependency and artifact currency](docs/05-Governance/Runtime-Dependency-and-Artifact-Currency.md)
+governs servicing checks, affected-package rebuilds, minimum secure runtimes,
+native/dependency review and owner-approved exceptions. B14A is complete.
+B14B artifact currency is complete with eight verified development groups,
+the SkiaSharp 4.150.7 patch and owner-reported elevated gate success.
+B15 is next, followed by B16 and BF-1055.
+Historical artifacts retain their original evidence and distribution restrictions.
+
+Use .NET SDK 10.0.403 as selected by global.json and CI. Ordinary net10.0
+outputs require runtime 10.0.14 or a compatible later patch. The B14A security
+report tracks patched-runtime validation and gate acceptance. Local SDK setup
+and deployment guidance are in [Deployment compatibility](docs/04-Developer/Deployment-Compatibility.md).
 
 ## Repository Layout
 

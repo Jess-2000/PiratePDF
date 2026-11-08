@@ -4,12 +4,12 @@
 |---|---|
 | **Document ID** | PP-GOV-003 |
 | **Category** | Governance |
-| **Version** | 1.0 |
+| **Version** | 1.1 |
 | **Status** | Approved |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1028 |
-| **Last Updated** | 2026-07-24 |
-| **Next Review** | 2026-10-24 |
+| **Last Updated** | 2026-11-08 |
+| **Next Review** | 2027-02-08 |
 
 ---
 
@@ -142,6 +142,8 @@ The following files are generated automatically and shall not be edited manually
 
 - Documentation-Index.md
 - ValidationReport.md
+- Documentation-Health.md
+- Document-Changes.md
 
 ---
 
@@ -161,7 +163,6 @@ Additional exclusions may be added as the documentation system evolves.
 Future versions of DocGen are expected to validate:
 
 - required document sections
-- revision history
 - broken internal links
 - architecture references
 - duplicate work item references
@@ -171,7 +172,6 @@ Future versions of DocGen are expected to validate:
 
 # Related Documents
 
-- PP-GOV-002 — Project Governance Guide
 - PP-GOV-002 — Documentation Standards
 
 ---
@@ -180,5 +180,6 @@ Future versions of DocGen are expected to validate:
 
 | Version | Date | Description |
 |---|---|---|
+| 1.1 | 2026-11-08 | Reconcile generated-output catalog and implemented revision-history validation with actual DocGen behavior. |
 | 1.0 | 2026-07-24 | Initial document. |
 
