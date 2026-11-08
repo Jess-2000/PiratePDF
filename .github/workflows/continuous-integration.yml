@@ -5,11 +5,13 @@ on:
     branches:
       - main
       - develop
+      - maintenance/post-BF-1054-repository-review
 
   pull_request:
     branches:
       - main
       - develop
+      - maintenance/post-BF-1054-repository-review
 
   workflow_dispatch:
 
@@ -214,6 +216,86 @@ jobs:
           ./tools/dependencies/Test-DependencyPipeline.ps1 -EvidenceDirectory ./artifacts/fuzz/b12-ci-evidence
           git diff --exit-code -- ./docs/dependencies
           if ($LASTEXITCODE -ne 0) { throw 'Dependency evidence drifted; regenerate and review.' }
+          # B15: prevent generated notice whitespace regressions independently of
+          # artifact hashes and preserve the historical B12 snapshot unchanged.
+          $notices = [IO.File]::ReadAllText((Join-Path (Get-Location).Path 'docs/dependencies/THIRD-PARTY-NOTICES.txt'))
+          if ($notices -match '(?m)[ \t]+
+
+      - name: Retain dependency accountability artifacts
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: dependency-accountability
+          path: |
+            docs/dependencies/*.json
+            docs/dependencies/*.xml
+            docs/dependencies/THIRD-PARTY-NOTICES.txt
+            docs/dependencies/licenses/*.txt
+            docs/dependencies/evidence/*.txt
+          retention-days: 7
+          if-no-files-found: error
+
+      - name: Build solution
+        run: dotnet build "$env:SOLUTION_PATH" --configuration "$env:CONFIGURATION" --no-restore
+
+      # Keep documentation controls blocking when Linux compatibility is optional.
+      - name: Generate and validate documentation
+        run: |
+          dotnet ./tools/PiratePDF.DocGen/bin/Release/net10.0/PiratePDF.DocGen.dll all
+          if ($LASTEXITCODE -ne 0) { throw 'Documentation validation failed.' }
+          dotnet ./tools/PiratePDF.DocGen/bin/Release/net10.0/PiratePDF.DocGen.dll health
+          if ($LASTEXITCODE -ne 0) { throw 'Documentation health analysis failed.' }
+          dotnet ./tools/PiratePDF.DocGen/bin/Release/net10.0/PiratePDF.DocGen.dll repair
+          if ($LASTEXITCODE -ne 0) { throw 'Documentation repair preview failed.' }
+          $report = Get-Content -LiteralPath ./docs/Document-Changes.md -Raw
+          foreach ($metric in @('Changes', 'Files')) {
+            $match = [regex]::Match($report, "(?im)^\s*\|\s*$metric\s*\|\s*(\d+)\s*\|\s*$")
+            if (-not $match.Success -or [int]$match.Groups[1].Value -ne 0) {
+              throw "Documentation repair preview has a missing or nonzero $metric count."
+            }
+          }
+
+      # No desktop entry project exists yet. Do not publish a test/tool as the
+      # application. PP-AUD-041 tracks missing distribution/startup qualification.
+
+      # No platform filter: Windows runs every solution test, including both real symbolic-link fixtures.
+      # Hosted Windows is expected to provide the privilege; fixture failure fails this job, never skips it.
+      - name: Run all tests
+        run: >
+          dotnet test "$env:SOLUTION_PATH"
+          --configuration "$env:CONFIGURATION" --no-build --no-restore
+          --results-directory ./TestResults/windows --logger trx
+          --logger "console;verbosity=normal"
+
+      - name: Verify both fuzz test categories executed
+        run: ./tests/PiratePDF.Fuzz.Tests/Test-PlatformCoverage.ps1 -ResultsDirectory ./TestResults/windows -Platform All
+
+      - name: Bound failed test-result evidence
+        id: windows_trx_bounds
+        if: failure()
+        run: ./tests/PiratePDF.Fuzz.Tests/Test-PlatformCoverage.ps1 -ResultsDirectory ./TestResults/windows -BoundsOnly
+
+      - name: Retain failed test results
+        if: failure() && steps.windows_trx_bounds.outcome == 'success'
+        uses: actions/upload-artifact@v7
+        with:
+          name: windows-test-results
+          path: TestResults/windows/*.trx
+          retention-days: 7
+          if-no-files-found: warn
+
+      - name: Verify repository cleanliness
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --check
+          if ($LASTEXITCODE -ne 0) { throw 'Whitespace validation failed.' }
+          git diff --exit-code
+          if ($LASTEXITCODE -ne 0) { throw 'Windows tests modified tracked files.' }
+          $unexpected = @(git ls-files --others --exclude-standard)
+          if ($LASTEXITCODE -ne 0 -or $unexpected.Count -ne 0) { throw 'Windows tests generated unexpected files.' }
+ -or $notices.EndsWith("`n`n") -or -not $notices.EndsWith("`n")) {
+            throw 'Generated third-party notices contain trailing whitespace or an invalid final newline.'
+          }
 
       - name: Retain dependency accountability artifacts
         if: ${{ !cancelled() }}
