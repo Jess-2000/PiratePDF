@@ -1,986 +1,986 @@
 {
-    "Id":  "CycloneDX",
-    "Version":  "6.3.1",
-    "Scope":  "historical-blocked-vendor-tool",
-    "Source":  "https://api.nuget.org/v3/index.json",
-    "Approval":  "Owner approval in B12 conversation, 2026-10-31",
-    "DeclaredLicense":  "Apache-2.0",
-    "Upstream":  "https://github.com/CycloneDX/cyclonedx-dotnet",
-    "Commit":  "6938a02734b0c30e1a59976f5bd592f1ee8be1eb",
-    "RestoreContentHashSha512":  "RFtwxYGoxPZCfbyC+x3e66kC44eVL9Sn9m3SVVEG87/Zj+Sp1AGh7+P8SgqUEp8Thl0FFd3ka880KGNrxbXDTw==",
-    "ArchiveSha512Hex":  "c69d4cb77b444007528ada15c14dc57f7f873c3e81cdf08db790c164cd7a26ab6fda63790ac80be397df044dc67edf4e64722f61d9abbec40ed2138ed7023bc9",
-    "BundledDependencies":  [
-                                {
-                                    "Graph":  "tools/net10.0/any/CycloneDX.deps.json",
-                                    "Dependencies":  [
-                                                         {
-                                                             "Identity":  "CycloneDX.Core/12.1.1",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#CycloneDX.Core/12.1.1",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "CycloneDX/6.3.1",
-                                                             "Type":  "project",
-                                                             "Provenance":  "license-review.json#CycloneDX/6.3.1",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "Humanizer.Core/3.0.1",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#Humanizer.Core/3.0.1",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "Json.More.Net/3.0.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#Json.More.Net/3.0.0",
-                                                             "ReviewStatus":  "owner-confirmed-non-revenue-use"
-                                                         },
-                                                         {
-                                                             "Identity":  "JsonPointer.Net/7.0.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#JsonPointer.Net/7.0.0",
-                                                             "ReviewStatus":  "owner-confirmed-non-revenue-use"
-                                                         },
-                                                         {
-                                                             "Identity":  "JsonSchema.Net/9.1.1",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#JsonSchema.Net/9.1.1",
-                                                             "ReviewStatus":  "owner-confirmed-non-revenue-use"
-                                                         },
-                                                         {
-                                                             "Identity":  "Newtonsoft.Json/13.0.3",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#Newtonsoft.Json/13.0.3",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.Common/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.Common/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.Configuration/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.Configuration/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.DependencyResolver.Core/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.DependencyResolver.Core/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.Frameworks/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.Frameworks/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.LibraryModel/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.LibraryModel/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.Packaging/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.Packaging/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.ProjectModel/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.ProjectModel/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.Protocol/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.Protocol/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.Versioning/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.Versioning/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "protobuf-net.Core/3.2.56",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#protobuf-net.Core/3.2.56",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "protobuf-net/3.2.56",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#protobuf-net/3.2.56",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "System.CommandLine/2.0.8",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#System.CommandLine/2.0.8",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "System.IO.Abstractions/22.2.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#System.IO.Abstractions/22.2.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "System.Security.Cryptography.Pkcs/8.0.1",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#System.Security.Cryptography.Pkcs/8.0.1",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "System.Security.Cryptography.ProtectedData/8.0.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#System.Security.Cryptography.ProtectedData/8.0.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "TestableIO.System.IO.Abstractions.Wrappers/22.2.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#TestableIO.System.IO.Abstractions.Wrappers/22.2.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "TestableIO.System.IO.Abstractions/22.2.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#TestableIO.System.IO.Abstractions/22.2.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "Testably.Abstractions.FileSystem.Interface/10.3.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#Testably.Abstractions.FileSystem.Interface/10.3.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         }
-                                                     ]
-                                },
-                                {
-                                    "Graph":  "tools/net8.0/any/CycloneDX.deps.json",
-                                    "Dependencies":  [
-                                                         {
-                                                             "Identity":  "CycloneDX.Core/12.1.1",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#CycloneDX.Core/12.1.1",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "CycloneDX/6.3.1",
-                                                             "Type":  "project",
-                                                             "Provenance":  "license-review.json#CycloneDX/6.3.1",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "Humanizer.Core/2.14.1",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#Humanizer.Core/2.14.1",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "Json.More.Net/3.0.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#Json.More.Net/3.0.0",
-                                                             "ReviewStatus":  "owner-confirmed-non-revenue-use"
-                                                         },
-                                                         {
-                                                             "Identity":  "JsonPointer.Net/7.0.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#JsonPointer.Net/7.0.0",
-                                                             "ReviewStatus":  "owner-confirmed-non-revenue-use"
-                                                         },
-                                                         {
-                                                             "Identity":  "JsonSchema.Net/9.1.1",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#JsonSchema.Net/9.1.1",
-                                                             "ReviewStatus":  "owner-confirmed-non-revenue-use"
-                                                         },
-                                                         {
-                                                             "Identity":  "Newtonsoft.Json/13.0.3",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#Newtonsoft.Json/13.0.3",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.Common/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.Common/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.Configuration/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.Configuration/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.DependencyResolver.Core/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.DependencyResolver.Core/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.Frameworks/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.Frameworks/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.LibraryModel/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.LibraryModel/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.Packaging/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.Packaging/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.ProjectModel/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.ProjectModel/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.Protocol/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.Protocol/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.Versioning/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.Versioning/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "protobuf-net.Core/3.2.56",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#protobuf-net.Core/3.2.56",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "protobuf-net/3.2.56",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#protobuf-net/3.2.56",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "System.CommandLine/2.0.8",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#System.CommandLine/2.0.8",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "System.IO.Abstractions/22.2.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#System.IO.Abstractions/22.2.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "System.Security.Cryptography.Pkcs/8.0.1",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#System.Security.Cryptography.Pkcs/8.0.1",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "System.Security.Cryptography.ProtectedData/8.0.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#System.Security.Cryptography.ProtectedData/8.0.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "TestableIO.System.IO.Abstractions.Wrappers/22.2.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#TestableIO.System.IO.Abstractions.Wrappers/22.2.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "TestableIO.System.IO.Abstractions/22.2.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#TestableIO.System.IO.Abstractions/22.2.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "Testably.Abstractions.FileSystem.Interface/10.3.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#Testably.Abstractions.FileSystem.Interface/10.3.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         }
-                                                     ]
-                                },
-                                {
-                                    "Graph":  "tools/net9.0/any/CycloneDX.deps.json",
-                                    "Dependencies":  [
-                                                         {
-                                                             "Identity":  "CycloneDX.Core/12.1.1",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#CycloneDX.Core/12.1.1",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "CycloneDX/6.3.1",
-                                                             "Type":  "project",
-                                                             "Provenance":  "license-review.json#CycloneDX/6.3.1",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "Humanizer.Core/3.0.1",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#Humanizer.Core/3.0.1",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "Json.More.Net/3.0.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#Json.More.Net/3.0.0",
-                                                             "ReviewStatus":  "owner-confirmed-non-revenue-use"
-                                                         },
-                                                         {
-                                                             "Identity":  "JsonPointer.Net/7.0.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#JsonPointer.Net/7.0.0",
-                                                             "ReviewStatus":  "owner-confirmed-non-revenue-use"
-                                                         },
-                                                         {
-                                                             "Identity":  "JsonSchema.Net/9.1.1",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#JsonSchema.Net/9.1.1",
-                                                             "ReviewStatus":  "owner-confirmed-non-revenue-use"
-                                                         },
-                                                         {
-                                                             "Identity":  "Newtonsoft.Json/13.0.3",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#Newtonsoft.Json/13.0.3",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.Common/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.Common/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.Configuration/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.Configuration/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.DependencyResolver.Core/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.DependencyResolver.Core/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.Frameworks/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.Frameworks/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.LibraryModel/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.LibraryModel/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.Packaging/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.Packaging/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.ProjectModel/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.ProjectModel/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.Protocol/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.Protocol/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "NuGet.Versioning/7.6.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#NuGet.Versioning/7.6.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "protobuf-net.Core/3.2.56",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#protobuf-net.Core/3.2.56",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "protobuf-net/3.2.56",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#protobuf-net/3.2.56",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "System.CommandLine/2.0.8",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#System.CommandLine/2.0.8",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "System.IO.Abstractions/22.2.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#System.IO.Abstractions/22.2.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "System.Security.Cryptography.Pkcs/8.0.1",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#System.Security.Cryptography.Pkcs/8.0.1",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "System.Security.Cryptography.ProtectedData/8.0.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#System.Security.Cryptography.ProtectedData/8.0.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "TestableIO.System.IO.Abstractions.Wrappers/22.2.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#TestableIO.System.IO.Abstractions.Wrappers/22.2.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "TestableIO.System.IO.Abstractions/22.2.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#TestableIO.System.IO.Abstractions/22.2.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         },
-                                                         {
-                                                             "Identity":  "Testably.Abstractions.FileSystem.Interface/10.3.0",
-                                                             "Type":  "package",
-                                                             "Provenance":  "license-review.json#Testably.Abstractions.FileSystem.Interface/10.3.0",
-                                                             "ReviewStatus":  "verified-evidence"
-                                                         }
-                                                     ]
-                                }
-                            ],
-    "BundledFiles":  [
-                         {
-                             "Name":  "tools/net10.0/any/cs/System.CommandLine.resources.dll",
-                             "Sha256":  "781eb1a4d72482f17bfda5e657acd70a87e80f2c9c6d93e0971cdbcb37bb1135"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/CycloneDX.Core.dll",
-                             "Sha256":  "2d612a6634d101d85629300c2eb21f30b5402e1d8f1c64b1597a589a88016ced"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/CycloneDX.deps.json",
-                             "Sha256":  "c420e51f67acae532a3bb847e207b5b233caaad46b59737f7a4fde7bcbb10e75"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/CycloneDX.dll",
-                             "Sha256":  "053b2626e527471dd71fbd5d9b06c4269ce8bf7a8f4968d262d2de9a02738f57"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/CycloneDX.runtimeconfig.json",
-                             "Sha256":  "0ea9b115324440e5745f6fc2bdf2cdf3e0b4293d29f9bcb2521ba6fca3aa366e"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/de/System.CommandLine.resources.dll",
-                             "Sha256":  "d6575eacb8df62c04f698edf6f3d23d038cf9dd715abc0610e4c1a7beb1156ac"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/es/System.CommandLine.resources.dll",
-                             "Sha256":  "f277e5c4b458d38a1d4e0cac51453736c080b9a0261afcefdeed203374ae7b7b"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/fr/System.CommandLine.resources.dll",
-                             "Sha256":  "d2a2b637edd842a20843a2b4e166a6b14a8813ef01b93bc1bba6747bc26dd687"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/Humanizer.dll",
-                             "Sha256":  "deacf1954c330a47b8a5d735271e576dea4937d1e5bd2a145f3accf86afebbce"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/it/System.CommandLine.resources.dll",
-                             "Sha256":  "759c5e004f0be77e6186b24c6c087a0db468883e4a344170751b0e03eb5d6360"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/ja/System.CommandLine.resources.dll",
-                             "Sha256":  "e0becf1e50e649414c5da64b2ea299a6bf7526a65fda3e99201ddba964d28e50"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/Json.More.dll",
-                             "Sha256":  "60209f8059007cc7f33978fe48c5bf14e288f0dd6927793f9de2a48db118185a"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/JsonPointer.Net.dll",
-                             "Sha256":  "ee9ff8632f7ac50c8c3d830de409e3f1fc092a3af27e8a4ee1aef162e241de28"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/JsonSchema.Net.dll",
-                             "Sha256":  "e331b71a6f083bb5620a2bf50d58321ae5adc6271b748fe1051c8d2f9e58a578"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/ko/System.CommandLine.resources.dll",
-                             "Sha256":  "9e60cb3d7282d6076be6c729e5c1bd56f0778b7294f9a2fd16896db2af59df17"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/Newtonsoft.Json.dll",
-                             "Sha256":  "22c649f75fce5be7c7ccda8880473b634ef69ecf33f5d1ab8ad892caf47d5a07"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/NuGet.Common.dll",
-                             "Sha256":  "2486b7d4b891d509c92c45913decf1c58bd0b762e85a116577f181aa632ea629"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/NuGet.Configuration.dll",
-                             "Sha256":  "69f2f90c3298b068101986f8d0e468b9c7cd37acf26eafad3201710e608914ca"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/NuGet.DependencyResolver.Core.dll",
-                             "Sha256":  "56ca6d4bfd8780d2233df707026c2a000172a69f03b41427793eb5124f8d1d7a"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/NuGet.Frameworks.dll",
-                             "Sha256":  "80528b5f0c5482a33866669d460df7120c1b1a135e38d3337fa31207ba0398bb"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/NuGet.LibraryModel.dll",
-                             "Sha256":  "736f024d8778a5c5fb9dc1ed405692157c9475b0e67f478d917db16b4e96cbdc"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/NuGet.Packaging.dll",
-                             "Sha256":  "05a065acafaf18c02c5abb44542eb838f0a6516a7fb17b79a077e4f42a5b0eda"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/NuGet.ProjectModel.dll",
-                             "Sha256":  "7273f6a3f470276c578b7d43698d45d0591c40b976452f2b5a04ec0eb3e0e4e2"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/NuGet.Protocol.dll",
-                             "Sha256":  "66f70be58ef42aae6e16e8f16667aca73abca9b472ea10267d2cfc76553566e3"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/NuGet.Versioning.dll",
-                             "Sha256":  "457f94606721f8534623b572cde896050750357da0172d139faa25defd5042c8"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/pl/System.CommandLine.resources.dll",
-                             "Sha256":  "958eaa254c712736ec72bc7adae6c2c1a39ec5685d91d14da86a3d09b9c3f170"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/protobuf-net.Core.dll",
-                             "Sha256":  "18f2f6976f101c804d7c7314739fefce4dafa6d63ff4c3986e45d59967bd2777"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/protobuf-net.dll",
-                             "Sha256":  "78d95efd88bce208a2aa412f193ed534e4b6337f8c15ff9171b8696946200edf"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/pt-BR/System.CommandLine.resources.dll",
-                             "Sha256":  "f717760558d3e0d77171523e86f2f4ba715052cfca2984ac07fc9a4cef761c51"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/ru/System.CommandLine.resources.dll",
-                             "Sha256":  "1a2cf8bf1fcdec69f6714258e10b40b8478e92a416ca42607a6812c26aff2b64"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/runtimes/win/lib/net8.0/System.Security.Cryptography.Pkcs.dll",
-                             "Sha256":  "d8e4b733fbaec1fe0e808fd6391479f190b170df03e309c5f07dc85445447d22"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/System.CommandLine.dll",
-                             "Sha256":  "b3cfb3ca790a19efa2ae73e47786bd272230f38eced1b84ca68b97dadcd8ea3c"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/System.IO.Abstractions.dll",
-                             "Sha256":  "181b9fa8f6a6766635d98d62ae3d91148cb7d68d1de8ca6bd536080c0f14a195"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/System.Security.Cryptography.Pkcs.dll",
-                             "Sha256":  "e2352938ed4f664f770a5c98ef067cb145304456d014d2c311d725c95c8a21a9"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/System.Security.Cryptography.ProtectedData.dll",
-                             "Sha256":  "5e04d6cff3b6fe9706908970cd594861f0c08b3824f7827b2331b5f4fcee1bd1"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/TestableIO.System.IO.Abstractions.dll",
-                             "Sha256":  "ba7774dbb25962063b443eaf5072a615b5f6b5712aa9b2200e17c6bb839ffb15"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/TestableIO.System.IO.Abstractions.Wrappers.dll",
-                             "Sha256":  "105981013ea30cad518ceba023d0bde217aa6225bd49007b57424574edbf2a2f"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/Testably.Abstractions.FileSystem.Interface.dll",
-                             "Sha256":  "29c9ce9ee28db07fd527c5662e047172771cd872d54e430997040626e03e293d"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/tr/System.CommandLine.resources.dll",
-                             "Sha256":  "1992790191940d189c8ca111c139ee26a0617abda1a0d4ada1cba669de80d2ed"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/zh-Hans/System.CommandLine.resources.dll",
-                             "Sha256":  "855fa5dd7c3ff3837e089065e806313ccbb8c1d66bdbf53da4347d4552c28b7e"
-                         },
-                         {
-                             "Name":  "tools/net10.0/any/zh-Hant/System.CommandLine.resources.dll",
-                             "Sha256":  "c10b72a4552f25df0ab2afe11625c1174d879f2548feca6fd208730791723b92"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/cs/System.CommandLine.resources.dll",
-                             "Sha256":  "781eb1a4d72482f17bfda5e657acd70a87e80f2c9c6d93e0971cdbcb37bb1135"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/CycloneDX.Core.dll",
-                             "Sha256":  "de0b1f933a844c993c7d27f05e4ad4a3fcc0532a9a0567c90ab0f2e852211624"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/CycloneDX.deps.json",
-                             "Sha256":  "b07dc5cbf896259592d3fb663bd4a3045417d54b204ad2bb6302849c81832bd9"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/CycloneDX.dll",
-                             "Sha256":  "69a46df137a9c4341baddeb744b4bec30ee3623e46705c7fb9c012b338405b35"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/CycloneDX.runtimeconfig.json",
-                             "Sha256":  "47e0954c13e81a2ae26bd69d464acaea57e8c028e33decb61d73a90b53a78df4"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/de/System.CommandLine.resources.dll",
-                             "Sha256":  "d6575eacb8df62c04f698edf6f3d23d038cf9dd715abc0610e4c1a7beb1156ac"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/es/System.CommandLine.resources.dll",
-                             "Sha256":  "f277e5c4b458d38a1d4e0cac51453736c080b9a0261afcefdeed203374ae7b7b"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/fr/System.CommandLine.resources.dll",
-                             "Sha256":  "d2a2b637edd842a20843a2b4e166a6b14a8813ef01b93bc1bba6747bc26dd687"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/Humanizer.dll",
-                             "Sha256":  "d6853075547d7e303efd60354d911a2ff18edba582cda2fa59d91a2e5dcf9e98"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/it/System.CommandLine.resources.dll",
-                             "Sha256":  "759c5e004f0be77e6186b24c6c087a0db468883e4a344170751b0e03eb5d6360"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/ja/System.CommandLine.resources.dll",
-                             "Sha256":  "e0becf1e50e649414c5da64b2ea299a6bf7526a65fda3e99201ddba964d28e50"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/Json.More.dll",
-                             "Sha256":  "ba0a6d8d407079bc95ccaf470a4f86d79bc7ab5ec16ff63b7a759216894011c8"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/JsonPointer.Net.dll",
-                             "Sha256":  "7ec0e2678061cc1baa3fb4ebb19779d92a3b197096f9ec30011e4d790c8afac8"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/JsonSchema.Net.dll",
-                             "Sha256":  "3e816a0d4a3b1625c4b8fa2d3b6d9c80516931560f7fdf75a326fed41ddd8711"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/ko/System.CommandLine.resources.dll",
-                             "Sha256":  "9e60cb3d7282d6076be6c729e5c1bd56f0778b7294f9a2fd16896db2af59df17"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/Newtonsoft.Json.dll",
-                             "Sha256":  "22c649f75fce5be7c7ccda8880473b634ef69ecf33f5d1ab8ad892caf47d5a07"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/NuGet.Common.dll",
-                             "Sha256":  "2486b7d4b891d509c92c45913decf1c58bd0b762e85a116577f181aa632ea629"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/NuGet.Configuration.dll",
-                             "Sha256":  "69f2f90c3298b068101986f8d0e468b9c7cd37acf26eafad3201710e608914ca"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/NuGet.DependencyResolver.Core.dll",
-                             "Sha256":  "56ca6d4bfd8780d2233df707026c2a000172a69f03b41427793eb5124f8d1d7a"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/NuGet.Frameworks.dll",
-                             "Sha256":  "80528b5f0c5482a33866669d460df7120c1b1a135e38d3337fa31207ba0398bb"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/NuGet.LibraryModel.dll",
-                             "Sha256":  "736f024d8778a5c5fb9dc1ed405692157c9475b0e67f478d917db16b4e96cbdc"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/NuGet.Packaging.dll",
-                             "Sha256":  "05a065acafaf18c02c5abb44542eb838f0a6516a7fb17b79a077e4f42a5b0eda"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/NuGet.ProjectModel.dll",
-                             "Sha256":  "7273f6a3f470276c578b7d43698d45d0591c40b976452f2b5a04ec0eb3e0e4e2"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/NuGet.Protocol.dll",
-                             "Sha256":  "66f70be58ef42aae6e16e8f16667aca73abca9b472ea10267d2cfc76553566e3"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/NuGet.Versioning.dll",
-                             "Sha256":  "457f94606721f8534623b572cde896050750357da0172d139faa25defd5042c8"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/pl/System.CommandLine.resources.dll",
-                             "Sha256":  "958eaa254c712736ec72bc7adae6c2c1a39ec5685d91d14da86a3d09b9c3f170"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/protobuf-net.Core.dll",
-                             "Sha256":  "18f2f6976f101c804d7c7314739fefce4dafa6d63ff4c3986e45d59967bd2777"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/protobuf-net.dll",
-                             "Sha256":  "78d95efd88bce208a2aa412f193ed534e4b6337f8c15ff9171b8696946200edf"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/pt-BR/System.CommandLine.resources.dll",
-                             "Sha256":  "f717760558d3e0d77171523e86f2f4ba715052cfca2984ac07fc9a4cef761c51"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/ru/System.CommandLine.resources.dll",
-                             "Sha256":  "1a2cf8bf1fcdec69f6714258e10b40b8478e92a416ca42607a6812c26aff2b64"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/runtimes/win/lib/net8.0/System.Security.Cryptography.Pkcs.dll",
-                             "Sha256":  "d8e4b733fbaec1fe0e808fd6391479f190b170df03e309c5f07dc85445447d22"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/System.CommandLine.dll",
-                             "Sha256":  "b3cfb3ca790a19efa2ae73e47786bd272230f38eced1b84ca68b97dadcd8ea3c"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/System.IO.Abstractions.dll",
-                             "Sha256":  "f72542b0c12115a60659750176e96de77bfc1e3b8a0c4051bbd4a0a0730699dc"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/System.Security.Cryptography.Pkcs.dll",
-                             "Sha256":  "e2352938ed4f664f770a5c98ef067cb145304456d014d2c311d725c95c8a21a9"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/System.Security.Cryptography.ProtectedData.dll",
-                             "Sha256":  "5e04d6cff3b6fe9706908970cd594861f0c08b3824f7827b2331b5f4fcee1bd1"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/TestableIO.System.IO.Abstractions.dll",
-                             "Sha256":  "01b333eef691c0b14801977f854aa5e140a307a2ccde606ec7e865f43dc7e4bc"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/TestableIO.System.IO.Abstractions.Wrappers.dll",
-                             "Sha256":  "94e92e41bfdca8a0eb41727d18206b6c1039ed6943704e94d3fa4f2f61b8f830"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/Testably.Abstractions.FileSystem.Interface.dll",
-                             "Sha256":  "059ea3fe717165bcd235df32966a6b46bdd665def856942c82478090ae576d5e"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/tr/System.CommandLine.resources.dll",
-                             "Sha256":  "1992790191940d189c8ca111c139ee26a0617abda1a0d4ada1cba669de80d2ed"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/zh-Hans/System.CommandLine.resources.dll",
-                             "Sha256":  "855fa5dd7c3ff3837e089065e806313ccbb8c1d66bdbf53da4347d4552c28b7e"
-                         },
-                         {
-                             "Name":  "tools/net8.0/any/zh-Hant/System.CommandLine.resources.dll",
-                             "Sha256":  "c10b72a4552f25df0ab2afe11625c1174d879f2548feca6fd208730791723b92"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/cs/System.CommandLine.resources.dll",
-                             "Sha256":  "781eb1a4d72482f17bfda5e657acd70a87e80f2c9c6d93e0971cdbcb37bb1135"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/CycloneDX.Core.dll",
-                             "Sha256":  "de0b1f933a844c993c7d27f05e4ad4a3fcc0532a9a0567c90ab0f2e852211624"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/CycloneDX.deps.json",
-                             "Sha256":  "c170d3b0b01599ce20e8ac19300bb607c25851484dc44cee29232ea28a70a85a"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/CycloneDX.dll",
-                             "Sha256":  "e1c9bd219fb06f047070896d0d337c70ed6b2646034cf19602967204468698cb"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/CycloneDX.runtimeconfig.json",
-                             "Sha256":  "526e7cda8c8bb79a005ca2a532a5859eb82c3f11b54552f9d19bbd6b855d6db8"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/de/System.CommandLine.resources.dll",
-                             "Sha256":  "d6575eacb8df62c04f698edf6f3d23d038cf9dd715abc0610e4c1a7beb1156ac"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/es/System.CommandLine.resources.dll",
-                             "Sha256":  "f277e5c4b458d38a1d4e0cac51453736c080b9a0261afcefdeed203374ae7b7b"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/fr/System.CommandLine.resources.dll",
-                             "Sha256":  "d2a2b637edd842a20843a2b4e166a6b14a8813ef01b93bc1bba6747bc26dd687"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/Humanizer.dll",
-                             "Sha256":  "0c4ede6496288430f199839114fda74d17c8c3a05fa1bf70686983b1eae3924f"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/it/System.CommandLine.resources.dll",
-                             "Sha256":  "759c5e004f0be77e6186b24c6c087a0db468883e4a344170751b0e03eb5d6360"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/ja/System.CommandLine.resources.dll",
-                             "Sha256":  "e0becf1e50e649414c5da64b2ea299a6bf7526a65fda3e99201ddba964d28e50"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/Json.More.dll",
-                             "Sha256":  "8a0dfe37ea778b4698cd9471cb47cb11ad35f7a64da580ff898ae1a5f68b14d1"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/JsonPointer.Net.dll",
-                             "Sha256":  "9e2aed308ea79ede824e1542992b2610c7f327aea12be15f9ebf70516786b482"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/JsonSchema.Net.dll",
-                             "Sha256":  "e331b71a6f083bb5620a2bf50d58321ae5adc6271b748fe1051c8d2f9e58a578"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/ko/System.CommandLine.resources.dll",
-                             "Sha256":  "9e60cb3d7282d6076be6c729e5c1bd56f0778b7294f9a2fd16896db2af59df17"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/Newtonsoft.Json.dll",
-                             "Sha256":  "22c649f75fce5be7c7ccda8880473b634ef69ecf33f5d1ab8ad892caf47d5a07"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/NuGet.Common.dll",
-                             "Sha256":  "2486b7d4b891d509c92c45913decf1c58bd0b762e85a116577f181aa632ea629"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/NuGet.Configuration.dll",
-                             "Sha256":  "69f2f90c3298b068101986f8d0e468b9c7cd37acf26eafad3201710e608914ca"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/NuGet.DependencyResolver.Core.dll",
-                             "Sha256":  "56ca6d4bfd8780d2233df707026c2a000172a69f03b41427793eb5124f8d1d7a"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/NuGet.Frameworks.dll",
-                             "Sha256":  "80528b5f0c5482a33866669d460df7120c1b1a135e38d3337fa31207ba0398bb"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/NuGet.LibraryModel.dll",
-                             "Sha256":  "736f024d8778a5c5fb9dc1ed405692157c9475b0e67f478d917db16b4e96cbdc"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/NuGet.Packaging.dll",
-                             "Sha256":  "05a065acafaf18c02c5abb44542eb838f0a6516a7fb17b79a077e4f42a5b0eda"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/NuGet.ProjectModel.dll",
-                             "Sha256":  "7273f6a3f470276c578b7d43698d45d0591c40b976452f2b5a04ec0eb3e0e4e2"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/NuGet.Protocol.dll",
-                             "Sha256":  "66f70be58ef42aae6e16e8f16667aca73abca9b472ea10267d2cfc76553566e3"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/NuGet.Versioning.dll",
-                             "Sha256":  "457f94606721f8534623b572cde896050750357da0172d139faa25defd5042c8"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/pl/System.CommandLine.resources.dll",
-                             "Sha256":  "958eaa254c712736ec72bc7adae6c2c1a39ec5685d91d14da86a3d09b9c3f170"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/protobuf-net.Core.dll",
-                             "Sha256":  "18f2f6976f101c804d7c7314739fefce4dafa6d63ff4c3986e45d59967bd2777"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/protobuf-net.dll",
-                             "Sha256":  "78d95efd88bce208a2aa412f193ed534e4b6337f8c15ff9171b8696946200edf"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/pt-BR/System.CommandLine.resources.dll",
-                             "Sha256":  "f717760558d3e0d77171523e86f2f4ba715052cfca2984ac07fc9a4cef761c51"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/ru/System.CommandLine.resources.dll",
-                             "Sha256":  "1a2cf8bf1fcdec69f6714258e10b40b8478e92a416ca42607a6812c26aff2b64"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/runtimes/win/lib/net8.0/System.Security.Cryptography.Pkcs.dll",
-                             "Sha256":  "d8e4b733fbaec1fe0e808fd6391479f190b170df03e309c5f07dc85445447d22"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/System.CommandLine.dll",
-                             "Sha256":  "b3cfb3ca790a19efa2ae73e47786bd272230f38eced1b84ca68b97dadcd8ea3c"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/System.IO.Abstractions.dll",
-                             "Sha256":  "da80d881b3c6019146418c0eb92d11d6ba6e8d7b51b9df0b4457a949c40d56d4"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/System.Security.Cryptography.Pkcs.dll",
-                             "Sha256":  "e2352938ed4f664f770a5c98ef067cb145304456d014d2c311d725c95c8a21a9"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/System.Security.Cryptography.ProtectedData.dll",
-                             "Sha256":  "5e04d6cff3b6fe9706908970cd594861f0c08b3824f7827b2331b5f4fcee1bd1"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/TestableIO.System.IO.Abstractions.dll",
-                             "Sha256":  "0bc04821b027a951e965fa25cfb10682cbf76d32f2eed23dfe404308625e0738"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/TestableIO.System.IO.Abstractions.Wrappers.dll",
-                             "Sha256":  "c8be3dd671bc12e40ab896304526236542b343b57da7e2a18d678529f492c0ac"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/Testably.Abstractions.FileSystem.Interface.dll",
-                             "Sha256":  "91a99b620b9b24cdc4ee922569758381a160ad1c4dc6061d5252f7b721eef79b"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/tr/System.CommandLine.resources.dll",
-                             "Sha256":  "1992790191940d189c8ca111c139ee26a0617abda1a0d4ada1cba669de80d2ed"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/zh-Hans/System.CommandLine.resources.dll",
-                             "Sha256":  "855fa5dd7c3ff3837e089065e806313ccbb8c1d66bdbf53da4347d4552c28b7e"
-                         },
-                         {
-                             "Name":  "tools/net9.0/any/zh-Hant/System.CommandLine.resources.dll",
-                             "Sha256":  "c10b72a4552f25df0ab2afe11625c1174d879f2548feca6fd208730791723b92"
-                         }
-                     ],
-    "FileCoverage":  "Bundled runtime DLL/config files; optional XML documentation and PDBs excluded. Archive hash covers the complete package.",
-    "LicenseEvidence":  "license-review.json; retained version-specific upstream and package legal texts",
-    "OwnerDecision":  "2026-10-31 conversation: Owner confirms non-revenue-generating use and accepts the documented terms for Json.More.Net 3.0.0, JsonPointer.Net 7.0.0 and JsonSchema.Net 9.1.1.",
-    "Limitations":  [
-                        "Package declaration is unchanged; separately reviewed bundled licenses and binary correspondence are recorded in license-review.json.",
-                        "Evidence and owner-confirmed use do not constitute a general legal-compliance opinion.",
-                        "Tool is not part of the engine or a desktop distribution."
-                    ],
-    "BlockedAdvisories":  [
-                              "GHSA-846f-f764-76mx",
-                              "GHSA-2fmv-rv2c-59x7"
-                          ],
-    "CurrentExecutionPermitted":  false
+  "Id": "CycloneDX",
+  "Version": "6.3.1",
+  "Scope": "historical-blocked-vendor-tool",
+  "Source": "https://api.nuget.org/v3/index.json",
+  "Approval": "Owner approval in B12 conversation, 2026-10-31",
+  "DeclaredLicense": "Apache-2.0",
+  "Upstream": "https://github.com/CycloneDX/cyclonedx-dotnet",
+  "Commit": "6938a02734b0c30e1a59976f5bd592f1ee8be1eb",
+  "RestoreContentHashSha512": "RFtwxYGoxPZCfbyC+x3e66kC44eVL9Sn9m3SVVEG87/Zj+Sp1AGh7+P8SgqUEp8Thl0FFd3ka880KGNrxbXDTw==",
+  "ArchiveSha512Hex": "c69d4cb77b444007528ada15c14dc57f7f873c3e81cdf08db790c164cd7a26ab6fda63790ac80be397df044dc67edf4e64722f61d9abbec40ed2138ed7023bc9",
+  "BundledDependencies": [
+    {
+      "Graph": "tools/net10.0/any/CycloneDX.deps.json",
+      "Dependencies": [
+        {
+          "Identity": "CycloneDX.Core/12.1.1",
+          "Type": "package",
+          "Provenance": "license-review.json#CycloneDX.Core/12.1.1",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "CycloneDX/6.3.1",
+          "Type": "project",
+          "Provenance": "license-review.json#CycloneDX/6.3.1",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "Humanizer.Core/3.0.1",
+          "Type": "package",
+          "Provenance": "license-review.json#Humanizer.Core/3.0.1",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "Json.More.Net/3.0.0",
+          "Type": "package",
+          "Provenance": "license-review.json#Json.More.Net/3.0.0",
+          "ReviewStatus": "owner-confirmed-non-revenue-use"
+        },
+        {
+          "Identity": "JsonPointer.Net/7.0.0",
+          "Type": "package",
+          "Provenance": "license-review.json#JsonPointer.Net/7.0.0",
+          "ReviewStatus": "owner-confirmed-non-revenue-use"
+        },
+        {
+          "Identity": "JsonSchema.Net/9.1.1",
+          "Type": "package",
+          "Provenance": "license-review.json#JsonSchema.Net/9.1.1",
+          "ReviewStatus": "owner-confirmed-non-revenue-use"
+        },
+        {
+          "Identity": "Newtonsoft.Json/13.0.3",
+          "Type": "package",
+          "Provenance": "license-review.json#Newtonsoft.Json/13.0.3",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.Common/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.Common/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.Configuration/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.Configuration/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.DependencyResolver.Core/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.DependencyResolver.Core/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.Frameworks/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.Frameworks/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.LibraryModel/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.LibraryModel/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.Packaging/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.Packaging/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.ProjectModel/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.ProjectModel/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.Protocol/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.Protocol/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.Versioning/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.Versioning/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "protobuf-net.Core/3.2.56",
+          "Type": "package",
+          "Provenance": "license-review.json#protobuf-net.Core/3.2.56",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "protobuf-net/3.2.56",
+          "Type": "package",
+          "Provenance": "license-review.json#protobuf-net/3.2.56",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "System.CommandLine/2.0.8",
+          "Type": "package",
+          "Provenance": "license-review.json#System.CommandLine/2.0.8",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "System.IO.Abstractions/22.2.0",
+          "Type": "package",
+          "Provenance": "license-review.json#System.IO.Abstractions/22.2.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "System.Security.Cryptography.Pkcs/8.0.1",
+          "Type": "package",
+          "Provenance": "license-review.json#System.Security.Cryptography.Pkcs/8.0.1",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "System.Security.Cryptography.ProtectedData/8.0.0",
+          "Type": "package",
+          "Provenance": "license-review.json#System.Security.Cryptography.ProtectedData/8.0.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "TestableIO.System.IO.Abstractions.Wrappers/22.2.0",
+          "Type": "package",
+          "Provenance": "license-review.json#TestableIO.System.IO.Abstractions.Wrappers/22.2.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "TestableIO.System.IO.Abstractions/22.2.0",
+          "Type": "package",
+          "Provenance": "license-review.json#TestableIO.System.IO.Abstractions/22.2.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "Testably.Abstractions.FileSystem.Interface/10.3.0",
+          "Type": "package",
+          "Provenance": "license-review.json#Testably.Abstractions.FileSystem.Interface/10.3.0",
+          "ReviewStatus": "verified-evidence"
+        }
+      ]
+    },
+    {
+      "Graph": "tools/net8.0/any/CycloneDX.deps.json",
+      "Dependencies": [
+        {
+          "Identity": "CycloneDX.Core/12.1.1",
+          "Type": "package",
+          "Provenance": "license-review.json#CycloneDX.Core/12.1.1",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "CycloneDX/6.3.1",
+          "Type": "project",
+          "Provenance": "license-review.json#CycloneDX/6.3.1",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "Humanizer.Core/2.14.1",
+          "Type": "package",
+          "Provenance": "license-review.json#Humanizer.Core/2.14.1",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "Json.More.Net/3.0.0",
+          "Type": "package",
+          "Provenance": "license-review.json#Json.More.Net/3.0.0",
+          "ReviewStatus": "owner-confirmed-non-revenue-use"
+        },
+        {
+          "Identity": "JsonPointer.Net/7.0.0",
+          "Type": "package",
+          "Provenance": "license-review.json#JsonPointer.Net/7.0.0",
+          "ReviewStatus": "owner-confirmed-non-revenue-use"
+        },
+        {
+          "Identity": "JsonSchema.Net/9.1.1",
+          "Type": "package",
+          "Provenance": "license-review.json#JsonSchema.Net/9.1.1",
+          "ReviewStatus": "owner-confirmed-non-revenue-use"
+        },
+        {
+          "Identity": "Newtonsoft.Json/13.0.3",
+          "Type": "package",
+          "Provenance": "license-review.json#Newtonsoft.Json/13.0.3",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.Common/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.Common/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.Configuration/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.Configuration/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.DependencyResolver.Core/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.DependencyResolver.Core/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.Frameworks/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.Frameworks/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.LibraryModel/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.LibraryModel/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.Packaging/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.Packaging/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.ProjectModel/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.ProjectModel/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.Protocol/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.Protocol/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.Versioning/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.Versioning/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "protobuf-net.Core/3.2.56",
+          "Type": "package",
+          "Provenance": "license-review.json#protobuf-net.Core/3.2.56",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "protobuf-net/3.2.56",
+          "Type": "package",
+          "Provenance": "license-review.json#protobuf-net/3.2.56",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "System.CommandLine/2.0.8",
+          "Type": "package",
+          "Provenance": "license-review.json#System.CommandLine/2.0.8",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "System.IO.Abstractions/22.2.0",
+          "Type": "package",
+          "Provenance": "license-review.json#System.IO.Abstractions/22.2.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "System.Security.Cryptography.Pkcs/8.0.1",
+          "Type": "package",
+          "Provenance": "license-review.json#System.Security.Cryptography.Pkcs/8.0.1",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "System.Security.Cryptography.ProtectedData/8.0.0",
+          "Type": "package",
+          "Provenance": "license-review.json#System.Security.Cryptography.ProtectedData/8.0.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "TestableIO.System.IO.Abstractions.Wrappers/22.2.0",
+          "Type": "package",
+          "Provenance": "license-review.json#TestableIO.System.IO.Abstractions.Wrappers/22.2.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "TestableIO.System.IO.Abstractions/22.2.0",
+          "Type": "package",
+          "Provenance": "license-review.json#TestableIO.System.IO.Abstractions/22.2.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "Testably.Abstractions.FileSystem.Interface/10.3.0",
+          "Type": "package",
+          "Provenance": "license-review.json#Testably.Abstractions.FileSystem.Interface/10.3.0",
+          "ReviewStatus": "verified-evidence"
+        }
+      ]
+    },
+    {
+      "Graph": "tools/net9.0/any/CycloneDX.deps.json",
+      "Dependencies": [
+        {
+          "Identity": "CycloneDX.Core/12.1.1",
+          "Type": "package",
+          "Provenance": "license-review.json#CycloneDX.Core/12.1.1",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "CycloneDX/6.3.1",
+          "Type": "project",
+          "Provenance": "license-review.json#CycloneDX/6.3.1",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "Humanizer.Core/3.0.1",
+          "Type": "package",
+          "Provenance": "license-review.json#Humanizer.Core/3.0.1",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "Json.More.Net/3.0.0",
+          "Type": "package",
+          "Provenance": "license-review.json#Json.More.Net/3.0.0",
+          "ReviewStatus": "owner-confirmed-non-revenue-use"
+        },
+        {
+          "Identity": "JsonPointer.Net/7.0.0",
+          "Type": "package",
+          "Provenance": "license-review.json#JsonPointer.Net/7.0.0",
+          "ReviewStatus": "owner-confirmed-non-revenue-use"
+        },
+        {
+          "Identity": "JsonSchema.Net/9.1.1",
+          "Type": "package",
+          "Provenance": "license-review.json#JsonSchema.Net/9.1.1",
+          "ReviewStatus": "owner-confirmed-non-revenue-use"
+        },
+        {
+          "Identity": "Newtonsoft.Json/13.0.3",
+          "Type": "package",
+          "Provenance": "license-review.json#Newtonsoft.Json/13.0.3",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.Common/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.Common/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.Configuration/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.Configuration/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.DependencyResolver.Core/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.DependencyResolver.Core/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.Frameworks/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.Frameworks/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.LibraryModel/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.LibraryModel/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.Packaging/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.Packaging/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.ProjectModel/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.ProjectModel/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.Protocol/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.Protocol/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "NuGet.Versioning/7.6.0",
+          "Type": "package",
+          "Provenance": "license-review.json#NuGet.Versioning/7.6.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "protobuf-net.Core/3.2.56",
+          "Type": "package",
+          "Provenance": "license-review.json#protobuf-net.Core/3.2.56",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "protobuf-net/3.2.56",
+          "Type": "package",
+          "Provenance": "license-review.json#protobuf-net/3.2.56",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "System.CommandLine/2.0.8",
+          "Type": "package",
+          "Provenance": "license-review.json#System.CommandLine/2.0.8",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "System.IO.Abstractions/22.2.0",
+          "Type": "package",
+          "Provenance": "license-review.json#System.IO.Abstractions/22.2.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "System.Security.Cryptography.Pkcs/8.0.1",
+          "Type": "package",
+          "Provenance": "license-review.json#System.Security.Cryptography.Pkcs/8.0.1",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "System.Security.Cryptography.ProtectedData/8.0.0",
+          "Type": "package",
+          "Provenance": "license-review.json#System.Security.Cryptography.ProtectedData/8.0.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "TestableIO.System.IO.Abstractions.Wrappers/22.2.0",
+          "Type": "package",
+          "Provenance": "license-review.json#TestableIO.System.IO.Abstractions.Wrappers/22.2.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "TestableIO.System.IO.Abstractions/22.2.0",
+          "Type": "package",
+          "Provenance": "license-review.json#TestableIO.System.IO.Abstractions/22.2.0",
+          "ReviewStatus": "verified-evidence"
+        },
+        {
+          "Identity": "Testably.Abstractions.FileSystem.Interface/10.3.0",
+          "Type": "package",
+          "Provenance": "license-review.json#Testably.Abstractions.FileSystem.Interface/10.3.0",
+          "ReviewStatus": "verified-evidence"
+        }
+      ]
+    }
+  ],
+  "BundledFiles": [
+    {
+      "Name": "tools/net10.0/any/cs/System.CommandLine.resources.dll",
+      "Sha256": "781eb1a4d72482f17bfda5e657acd70a87e80f2c9c6d93e0971cdbcb37bb1135"
+    },
+    {
+      "Name": "tools/net10.0/any/CycloneDX.Core.dll",
+      "Sha256": "2d612a6634d101d85629300c2eb21f30b5402e1d8f1c64b1597a589a88016ced"
+    },
+    {
+      "Name": "tools/net10.0/any/CycloneDX.deps.json",
+      "Sha256": "c420e51f67acae532a3bb847e207b5b233caaad46b59737f7a4fde7bcbb10e75"
+    },
+    {
+      "Name": "tools/net10.0/any/CycloneDX.dll",
+      "Sha256": "053b2626e527471dd71fbd5d9b06c4269ce8bf7a8f4968d262d2de9a02738f57"
+    },
+    {
+      "Name": "tools/net10.0/any/CycloneDX.runtimeconfig.json",
+      "Sha256": "0ea9b115324440e5745f6fc2bdf2cdf3e0b4293d29f9bcb2521ba6fca3aa366e"
+    },
+    {
+      "Name": "tools/net10.0/any/de/System.CommandLine.resources.dll",
+      "Sha256": "d6575eacb8df62c04f698edf6f3d23d038cf9dd715abc0610e4c1a7beb1156ac"
+    },
+    {
+      "Name": "tools/net10.0/any/es/System.CommandLine.resources.dll",
+      "Sha256": "f277e5c4b458d38a1d4e0cac51453736c080b9a0261afcefdeed203374ae7b7b"
+    },
+    {
+      "Name": "tools/net10.0/any/fr/System.CommandLine.resources.dll",
+      "Sha256": "d2a2b637edd842a20843a2b4e166a6b14a8813ef01b93bc1bba6747bc26dd687"
+    },
+    {
+      "Name": "tools/net10.0/any/Humanizer.dll",
+      "Sha256": "deacf1954c330a47b8a5d735271e576dea4937d1e5bd2a145f3accf86afebbce"
+    },
+    {
+      "Name": "tools/net10.0/any/it/System.CommandLine.resources.dll",
+      "Sha256": "759c5e004f0be77e6186b24c6c087a0db468883e4a344170751b0e03eb5d6360"
+    },
+    {
+      "Name": "tools/net10.0/any/ja/System.CommandLine.resources.dll",
+      "Sha256": "e0becf1e50e649414c5da64b2ea299a6bf7526a65fda3e99201ddba964d28e50"
+    },
+    {
+      "Name": "tools/net10.0/any/Json.More.dll",
+      "Sha256": "60209f8059007cc7f33978fe48c5bf14e288f0dd6927793f9de2a48db118185a"
+    },
+    {
+      "Name": "tools/net10.0/any/JsonPointer.Net.dll",
+      "Sha256": "ee9ff8632f7ac50c8c3d830de409e3f1fc092a3af27e8a4ee1aef162e241de28"
+    },
+    {
+      "Name": "tools/net10.0/any/JsonSchema.Net.dll",
+      "Sha256": "e331b71a6f083bb5620a2bf50d58321ae5adc6271b748fe1051c8d2f9e58a578"
+    },
+    {
+      "Name": "tools/net10.0/any/ko/System.CommandLine.resources.dll",
+      "Sha256": "9e60cb3d7282d6076be6c729e5c1bd56f0778b7294f9a2fd16896db2af59df17"
+    },
+    {
+      "Name": "tools/net10.0/any/Newtonsoft.Json.dll",
+      "Sha256": "22c649f75fce5be7c7ccda8880473b634ef69ecf33f5d1ab8ad892caf47d5a07"
+    },
+    {
+      "Name": "tools/net10.0/any/NuGet.Common.dll",
+      "Sha256": "2486b7d4b891d509c92c45913decf1c58bd0b762e85a116577f181aa632ea629"
+    },
+    {
+      "Name": "tools/net10.0/any/NuGet.Configuration.dll",
+      "Sha256": "69f2f90c3298b068101986f8d0e468b9c7cd37acf26eafad3201710e608914ca"
+    },
+    {
+      "Name": "tools/net10.0/any/NuGet.DependencyResolver.Core.dll",
+      "Sha256": "56ca6d4bfd8780d2233df707026c2a000172a69f03b41427793eb5124f8d1d7a"
+    },
+    {
+      "Name": "tools/net10.0/any/NuGet.Frameworks.dll",
+      "Sha256": "80528b5f0c5482a33866669d460df7120c1b1a135e38d3337fa31207ba0398bb"
+    },
+    {
+      "Name": "tools/net10.0/any/NuGet.LibraryModel.dll",
+      "Sha256": "736f024d8778a5c5fb9dc1ed405692157c9475b0e67f478d917db16b4e96cbdc"
+    },
+    {
+      "Name": "tools/net10.0/any/NuGet.Packaging.dll",
+      "Sha256": "05a065acafaf18c02c5abb44542eb838f0a6516a7fb17b79a077e4f42a5b0eda"
+    },
+    {
+      "Name": "tools/net10.0/any/NuGet.ProjectModel.dll",
+      "Sha256": "7273f6a3f470276c578b7d43698d45d0591c40b976452f2b5a04ec0eb3e0e4e2"
+    },
+    {
+      "Name": "tools/net10.0/any/NuGet.Protocol.dll",
+      "Sha256": "66f70be58ef42aae6e16e8f16667aca73abca9b472ea10267d2cfc76553566e3"
+    },
+    {
+      "Name": "tools/net10.0/any/NuGet.Versioning.dll",
+      "Sha256": "457f94606721f8534623b572cde896050750357da0172d139faa25defd5042c8"
+    },
+    {
+      "Name": "tools/net10.0/any/pl/System.CommandLine.resources.dll",
+      "Sha256": "958eaa254c712736ec72bc7adae6c2c1a39ec5685d91d14da86a3d09b9c3f170"
+    },
+    {
+      "Name": "tools/net10.0/any/protobuf-net.Core.dll",
+      "Sha256": "18f2f6976f101c804d7c7314739fefce4dafa6d63ff4c3986e45d59967bd2777"
+    },
+    {
+      "Name": "tools/net10.0/any/protobuf-net.dll",
+      "Sha256": "78d95efd88bce208a2aa412f193ed534e4b6337f8c15ff9171b8696946200edf"
+    },
+    {
+      "Name": "tools/net10.0/any/pt-BR/System.CommandLine.resources.dll",
+      "Sha256": "f717760558d3e0d77171523e86f2f4ba715052cfca2984ac07fc9a4cef761c51"
+    },
+    {
+      "Name": "tools/net10.0/any/ru/System.CommandLine.resources.dll",
+      "Sha256": "1a2cf8bf1fcdec69f6714258e10b40b8478e92a416ca42607a6812c26aff2b64"
+    },
+    {
+      "Name": "tools/net10.0/any/runtimes/win/lib/net8.0/System.Security.Cryptography.Pkcs.dll",
+      "Sha256": "d8e4b733fbaec1fe0e808fd6391479f190b170df03e309c5f07dc85445447d22"
+    },
+    {
+      "Name": "tools/net10.0/any/System.CommandLine.dll",
+      "Sha256": "b3cfb3ca790a19efa2ae73e47786bd272230f38eced1b84ca68b97dadcd8ea3c"
+    },
+    {
+      "Name": "tools/net10.0/any/System.IO.Abstractions.dll",
+      "Sha256": "181b9fa8f6a6766635d98d62ae3d91148cb7d68d1de8ca6bd536080c0f14a195"
+    },
+    {
+      "Name": "tools/net10.0/any/System.Security.Cryptography.Pkcs.dll",
+      "Sha256": "e2352938ed4f664f770a5c98ef067cb145304456d014d2c311d725c95c8a21a9"
+    },
+    {
+      "Name": "tools/net10.0/any/System.Security.Cryptography.ProtectedData.dll",
+      "Sha256": "5e04d6cff3b6fe9706908970cd594861f0c08b3824f7827b2331b5f4fcee1bd1"
+    },
+    {
+      "Name": "tools/net10.0/any/TestableIO.System.IO.Abstractions.dll",
+      "Sha256": "ba7774dbb25962063b443eaf5072a615b5f6b5712aa9b2200e17c6bb839ffb15"
+    },
+    {
+      "Name": "tools/net10.0/any/TestableIO.System.IO.Abstractions.Wrappers.dll",
+      "Sha256": "105981013ea30cad518ceba023d0bde217aa6225bd49007b57424574edbf2a2f"
+    },
+    {
+      "Name": "tools/net10.0/any/Testably.Abstractions.FileSystem.Interface.dll",
+      "Sha256": "29c9ce9ee28db07fd527c5662e047172771cd872d54e430997040626e03e293d"
+    },
+    {
+      "Name": "tools/net10.0/any/tr/System.CommandLine.resources.dll",
+      "Sha256": "1992790191940d189c8ca111c139ee26a0617abda1a0d4ada1cba669de80d2ed"
+    },
+    {
+      "Name": "tools/net10.0/any/zh-Hans/System.CommandLine.resources.dll",
+      "Sha256": "855fa5dd7c3ff3837e089065e806313ccbb8c1d66bdbf53da4347d4552c28b7e"
+    },
+    {
+      "Name": "tools/net10.0/any/zh-Hant/System.CommandLine.resources.dll",
+      "Sha256": "c10b72a4552f25df0ab2afe11625c1174d879f2548feca6fd208730791723b92"
+    },
+    {
+      "Name": "tools/net8.0/any/cs/System.CommandLine.resources.dll",
+      "Sha256": "781eb1a4d72482f17bfda5e657acd70a87e80f2c9c6d93e0971cdbcb37bb1135"
+    },
+    {
+      "Name": "tools/net8.0/any/CycloneDX.Core.dll",
+      "Sha256": "de0b1f933a844c993c7d27f05e4ad4a3fcc0532a9a0567c90ab0f2e852211624"
+    },
+    {
+      "Name": "tools/net8.0/any/CycloneDX.deps.json",
+      "Sha256": "b07dc5cbf896259592d3fb663bd4a3045417d54b204ad2bb6302849c81832bd9"
+    },
+    {
+      "Name": "tools/net8.0/any/CycloneDX.dll",
+      "Sha256": "69a46df137a9c4341baddeb744b4bec30ee3623e46705c7fb9c012b338405b35"
+    },
+    {
+      "Name": "tools/net8.0/any/CycloneDX.runtimeconfig.json",
+      "Sha256": "47e0954c13e81a2ae26bd69d464acaea57e8c028e33decb61d73a90b53a78df4"
+    },
+    {
+      "Name": "tools/net8.0/any/de/System.CommandLine.resources.dll",
+      "Sha256": "d6575eacb8df62c04f698edf6f3d23d038cf9dd715abc0610e4c1a7beb1156ac"
+    },
+    {
+      "Name": "tools/net8.0/any/es/System.CommandLine.resources.dll",
+      "Sha256": "f277e5c4b458d38a1d4e0cac51453736c080b9a0261afcefdeed203374ae7b7b"
+    },
+    {
+      "Name": "tools/net8.0/any/fr/System.CommandLine.resources.dll",
+      "Sha256": "d2a2b637edd842a20843a2b4e166a6b14a8813ef01b93bc1bba6747bc26dd687"
+    },
+    {
+      "Name": "tools/net8.0/any/Humanizer.dll",
+      "Sha256": "d6853075547d7e303efd60354d911a2ff18edba582cda2fa59d91a2e5dcf9e98"
+    },
+    {
+      "Name": "tools/net8.0/any/it/System.CommandLine.resources.dll",
+      "Sha256": "759c5e004f0be77e6186b24c6c087a0db468883e4a344170751b0e03eb5d6360"
+    },
+    {
+      "Name": "tools/net8.0/any/ja/System.CommandLine.resources.dll",
+      "Sha256": "e0becf1e50e649414c5da64b2ea299a6bf7526a65fda3e99201ddba964d28e50"
+    },
+    {
+      "Name": "tools/net8.0/any/Json.More.dll",
+      "Sha256": "ba0a6d8d407079bc95ccaf470a4f86d79bc7ab5ec16ff63b7a759216894011c8"
+    },
+    {
+      "Name": "tools/net8.0/any/JsonPointer.Net.dll",
+      "Sha256": "7ec0e2678061cc1baa3fb4ebb19779d92a3b197096f9ec30011e4d790c8afac8"
+    },
+    {
+      "Name": "tools/net8.0/any/JsonSchema.Net.dll",
+      "Sha256": "3e816a0d4a3b1625c4b8fa2d3b6d9c80516931560f7fdf75a326fed41ddd8711"
+    },
+    {
+      "Name": "tools/net8.0/any/ko/System.CommandLine.resources.dll",
+      "Sha256": "9e60cb3d7282d6076be6c729e5c1bd56f0778b7294f9a2fd16896db2af59df17"
+    },
+    {
+      "Name": "tools/net8.0/any/Newtonsoft.Json.dll",
+      "Sha256": "22c649f75fce5be7c7ccda8880473b634ef69ecf33f5d1ab8ad892caf47d5a07"
+    },
+    {
+      "Name": "tools/net8.0/any/NuGet.Common.dll",
+      "Sha256": "2486b7d4b891d509c92c45913decf1c58bd0b762e85a116577f181aa632ea629"
+    },
+    {
+      "Name": "tools/net8.0/any/NuGet.Configuration.dll",
+      "Sha256": "69f2f90c3298b068101986f8d0e468b9c7cd37acf26eafad3201710e608914ca"
+    },
+    {
+      "Name": "tools/net8.0/any/NuGet.DependencyResolver.Core.dll",
+      "Sha256": "56ca6d4bfd8780d2233df707026c2a000172a69f03b41427793eb5124f8d1d7a"
+    },
+    {
+      "Name": "tools/net8.0/any/NuGet.Frameworks.dll",
+      "Sha256": "80528b5f0c5482a33866669d460df7120c1b1a135e38d3337fa31207ba0398bb"
+    },
+    {
+      "Name": "tools/net8.0/any/NuGet.LibraryModel.dll",
+      "Sha256": "736f024d8778a5c5fb9dc1ed405692157c9475b0e67f478d917db16b4e96cbdc"
+    },
+    {
+      "Name": "tools/net8.0/any/NuGet.Packaging.dll",
+      "Sha256": "05a065acafaf18c02c5abb44542eb838f0a6516a7fb17b79a077e4f42a5b0eda"
+    },
+    {
+      "Name": "tools/net8.0/any/NuGet.ProjectModel.dll",
+      "Sha256": "7273f6a3f470276c578b7d43698d45d0591c40b976452f2b5a04ec0eb3e0e4e2"
+    },
+    {
+      "Name": "tools/net8.0/any/NuGet.Protocol.dll",
+      "Sha256": "66f70be58ef42aae6e16e8f16667aca73abca9b472ea10267d2cfc76553566e3"
+    },
+    {
+      "Name": "tools/net8.0/any/NuGet.Versioning.dll",
+      "Sha256": "457f94606721f8534623b572cde896050750357da0172d139faa25defd5042c8"
+    },
+    {
+      "Name": "tools/net8.0/any/pl/System.CommandLine.resources.dll",
+      "Sha256": "958eaa254c712736ec72bc7adae6c2c1a39ec5685d91d14da86a3d09b9c3f170"
+    },
+    {
+      "Name": "tools/net8.0/any/protobuf-net.Core.dll",
+      "Sha256": "18f2f6976f101c804d7c7314739fefce4dafa6d63ff4c3986e45d59967bd2777"
+    },
+    {
+      "Name": "tools/net8.0/any/protobuf-net.dll",
+      "Sha256": "78d95efd88bce208a2aa412f193ed534e4b6337f8c15ff9171b8696946200edf"
+    },
+    {
+      "Name": "tools/net8.0/any/pt-BR/System.CommandLine.resources.dll",
+      "Sha256": "f717760558d3e0d77171523e86f2f4ba715052cfca2984ac07fc9a4cef761c51"
+    },
+    {
+      "Name": "tools/net8.0/any/ru/System.CommandLine.resources.dll",
+      "Sha256": "1a2cf8bf1fcdec69f6714258e10b40b8478e92a416ca42607a6812c26aff2b64"
+    },
+    {
+      "Name": "tools/net8.0/any/runtimes/win/lib/net8.0/System.Security.Cryptography.Pkcs.dll",
+      "Sha256": "d8e4b733fbaec1fe0e808fd6391479f190b170df03e309c5f07dc85445447d22"
+    },
+    {
+      "Name": "tools/net8.0/any/System.CommandLine.dll",
+      "Sha256": "b3cfb3ca790a19efa2ae73e47786bd272230f38eced1b84ca68b97dadcd8ea3c"
+    },
+    {
+      "Name": "tools/net8.0/any/System.IO.Abstractions.dll",
+      "Sha256": "f72542b0c12115a60659750176e96de77bfc1e3b8a0c4051bbd4a0a0730699dc"
+    },
+    {
+      "Name": "tools/net8.0/any/System.Security.Cryptography.Pkcs.dll",
+      "Sha256": "e2352938ed4f664f770a5c98ef067cb145304456d014d2c311d725c95c8a21a9"
+    },
+    {
+      "Name": "tools/net8.0/any/System.Security.Cryptography.ProtectedData.dll",
+      "Sha256": "5e04d6cff3b6fe9706908970cd594861f0c08b3824f7827b2331b5f4fcee1bd1"
+    },
+    {
+      "Name": "tools/net8.0/any/TestableIO.System.IO.Abstractions.dll",
+      "Sha256": "01b333eef691c0b14801977f854aa5e140a307a2ccde606ec7e865f43dc7e4bc"
+    },
+    {
+      "Name": "tools/net8.0/any/TestableIO.System.IO.Abstractions.Wrappers.dll",
+      "Sha256": "94e92e41bfdca8a0eb41727d18206b6c1039ed6943704e94d3fa4f2f61b8f830"
+    },
+    {
+      "Name": "tools/net8.0/any/Testably.Abstractions.FileSystem.Interface.dll",
+      "Sha256": "059ea3fe717165bcd235df32966a6b46bdd665def856942c82478090ae576d5e"
+    },
+    {
+      "Name": "tools/net8.0/any/tr/System.CommandLine.resources.dll",
+      "Sha256": "1992790191940d189c8ca111c139ee26a0617abda1a0d4ada1cba669de80d2ed"
+    },
+    {
+      "Name": "tools/net8.0/any/zh-Hans/System.CommandLine.resources.dll",
+      "Sha256": "855fa5dd7c3ff3837e089065e806313ccbb8c1d66bdbf53da4347d4552c28b7e"
+    },
+    {
+      "Name": "tools/net8.0/any/zh-Hant/System.CommandLine.resources.dll",
+      "Sha256": "c10b72a4552f25df0ab2afe11625c1174d879f2548feca6fd208730791723b92"
+    },
+    {
+      "Name": "tools/net9.0/any/cs/System.CommandLine.resources.dll",
+      "Sha256": "781eb1a4d72482f17bfda5e657acd70a87e80f2c9c6d93e0971cdbcb37bb1135"
+    },
+    {
+      "Name": "tools/net9.0/any/CycloneDX.Core.dll",
+      "Sha256": "de0b1f933a844c993c7d27f05e4ad4a3fcc0532a9a0567c90ab0f2e852211624"
+    },
+    {
+      "Name": "tools/net9.0/any/CycloneDX.deps.json",
+      "Sha256": "c170d3b0b01599ce20e8ac19300bb607c25851484dc44cee29232ea28a70a85a"
+    },
+    {
+      "Name": "tools/net9.0/any/CycloneDX.dll",
+      "Sha256": "e1c9bd219fb06f047070896d0d337c70ed6b2646034cf19602967204468698cb"
+    },
+    {
+      "Name": "tools/net9.0/any/CycloneDX.runtimeconfig.json",
+      "Sha256": "526e7cda8c8bb79a005ca2a532a5859eb82c3f11b54552f9d19bbd6b855d6db8"
+    },
+    {
+      "Name": "tools/net9.0/any/de/System.CommandLine.resources.dll",
+      "Sha256": "d6575eacb8df62c04f698edf6f3d23d038cf9dd715abc0610e4c1a7beb1156ac"
+    },
+    {
+      "Name": "tools/net9.0/any/es/System.CommandLine.resources.dll",
+      "Sha256": "f277e5c4b458d38a1d4e0cac51453736c080b9a0261afcefdeed203374ae7b7b"
+    },
+    {
+      "Name": "tools/net9.0/any/fr/System.CommandLine.resources.dll",
+      "Sha256": "d2a2b637edd842a20843a2b4e166a6b14a8813ef01b93bc1bba6747bc26dd687"
+    },
+    {
+      "Name": "tools/net9.0/any/Humanizer.dll",
+      "Sha256": "0c4ede6496288430f199839114fda74d17c8c3a05fa1bf70686983b1eae3924f"
+    },
+    {
+      "Name": "tools/net9.0/any/it/System.CommandLine.resources.dll",
+      "Sha256": "759c5e004f0be77e6186b24c6c087a0db468883e4a344170751b0e03eb5d6360"
+    },
+    {
+      "Name": "tools/net9.0/any/ja/System.CommandLine.resources.dll",
+      "Sha256": "e0becf1e50e649414c5da64b2ea299a6bf7526a65fda3e99201ddba964d28e50"
+    },
+    {
+      "Name": "tools/net9.0/any/Json.More.dll",
+      "Sha256": "8a0dfe37ea778b4698cd9471cb47cb11ad35f7a64da580ff898ae1a5f68b14d1"
+    },
+    {
+      "Name": "tools/net9.0/any/JsonPointer.Net.dll",
+      "Sha256": "9e2aed308ea79ede824e1542992b2610c7f327aea12be15f9ebf70516786b482"
+    },
+    {
+      "Name": "tools/net9.0/any/JsonSchema.Net.dll",
+      "Sha256": "e331b71a6f083bb5620a2bf50d58321ae5adc6271b748fe1051c8d2f9e58a578"
+    },
+    {
+      "Name": "tools/net9.0/any/ko/System.CommandLine.resources.dll",
+      "Sha256": "9e60cb3d7282d6076be6c729e5c1bd56f0778b7294f9a2fd16896db2af59df17"
+    },
+    {
+      "Name": "tools/net9.0/any/Newtonsoft.Json.dll",
+      "Sha256": "22c649f75fce5be7c7ccda8880473b634ef69ecf33f5d1ab8ad892caf47d5a07"
+    },
+    {
+      "Name": "tools/net9.0/any/NuGet.Common.dll",
+      "Sha256": "2486b7d4b891d509c92c45913decf1c58bd0b762e85a116577f181aa632ea629"
+    },
+    {
+      "Name": "tools/net9.0/any/NuGet.Configuration.dll",
+      "Sha256": "69f2f90c3298b068101986f8d0e468b9c7cd37acf26eafad3201710e608914ca"
+    },
+    {
+      "Name": "tools/net9.0/any/NuGet.DependencyResolver.Core.dll",
+      "Sha256": "56ca6d4bfd8780d2233df707026c2a000172a69f03b41427793eb5124f8d1d7a"
+    },
+    {
+      "Name": "tools/net9.0/any/NuGet.Frameworks.dll",
+      "Sha256": "80528b5f0c5482a33866669d460df7120c1b1a135e38d3337fa31207ba0398bb"
+    },
+    {
+      "Name": "tools/net9.0/any/NuGet.LibraryModel.dll",
+      "Sha256": "736f024d8778a5c5fb9dc1ed405692157c9475b0e67f478d917db16b4e96cbdc"
+    },
+    {
+      "Name": "tools/net9.0/any/NuGet.Packaging.dll",
+      "Sha256": "05a065acafaf18c02c5abb44542eb838f0a6516a7fb17b79a077e4f42a5b0eda"
+    },
+    {
+      "Name": "tools/net9.0/any/NuGet.ProjectModel.dll",
+      "Sha256": "7273f6a3f470276c578b7d43698d45d0591c40b976452f2b5a04ec0eb3e0e4e2"
+    },
+    {
+      "Name": "tools/net9.0/any/NuGet.Protocol.dll",
+      "Sha256": "66f70be58ef42aae6e16e8f16667aca73abca9b472ea10267d2cfc76553566e3"
+    },
+    {
+      "Name": "tools/net9.0/any/NuGet.Versioning.dll",
+      "Sha256": "457f94606721f8534623b572cde896050750357da0172d139faa25defd5042c8"
+    },
+    {
+      "Name": "tools/net9.0/any/pl/System.CommandLine.resources.dll",
+      "Sha256": "958eaa254c712736ec72bc7adae6c2c1a39ec5685d91d14da86a3d09b9c3f170"
+    },
+    {
+      "Name": "tools/net9.0/any/protobuf-net.Core.dll",
+      "Sha256": "18f2f6976f101c804d7c7314739fefce4dafa6d63ff4c3986e45d59967bd2777"
+    },
+    {
+      "Name": "tools/net9.0/any/protobuf-net.dll",
+      "Sha256": "78d95efd88bce208a2aa412f193ed534e4b6337f8c15ff9171b8696946200edf"
+    },
+    {
+      "Name": "tools/net9.0/any/pt-BR/System.CommandLine.resources.dll",
+      "Sha256": "f717760558d3e0d77171523e86f2f4ba715052cfca2984ac07fc9a4cef761c51"
+    },
+    {
+      "Name": "tools/net9.0/any/ru/System.CommandLine.resources.dll",
+      "Sha256": "1a2cf8bf1fcdec69f6714258e10b40b8478e92a416ca42607a6812c26aff2b64"
+    },
+    {
+      "Name": "tools/net9.0/any/runtimes/win/lib/net8.0/System.Security.Cryptography.Pkcs.dll",
+      "Sha256": "d8e4b733fbaec1fe0e808fd6391479f190b170df03e309c5f07dc85445447d22"
+    },
+    {
+      "Name": "tools/net9.0/any/System.CommandLine.dll",
+      "Sha256": "b3cfb3ca790a19efa2ae73e47786bd272230f38eced1b84ca68b97dadcd8ea3c"
+    },
+    {
+      "Name": "tools/net9.0/any/System.IO.Abstractions.dll",
+      "Sha256": "da80d881b3c6019146418c0eb92d11d6ba6e8d7b51b9df0b4457a949c40d56d4"
+    },
+    {
+      "Name": "tools/net9.0/any/System.Security.Cryptography.Pkcs.dll",
+      "Sha256": "e2352938ed4f664f770a5c98ef067cb145304456d014d2c311d725c95c8a21a9"
+    },
+    {
+      "Name": "tools/net9.0/any/System.Security.Cryptography.ProtectedData.dll",
+      "Sha256": "5e04d6cff3b6fe9706908970cd594861f0c08b3824f7827b2331b5f4fcee1bd1"
+    },
+    {
+      "Name": "tools/net9.0/any/TestableIO.System.IO.Abstractions.dll",
+      "Sha256": "0bc04821b027a951e965fa25cfb10682cbf76d32f2eed23dfe404308625e0738"
+    },
+    {
+      "Name": "tools/net9.0/any/TestableIO.System.IO.Abstractions.Wrappers.dll",
+      "Sha256": "c8be3dd671bc12e40ab896304526236542b343b57da7e2a18d678529f492c0ac"
+    },
+    {
+      "Name": "tools/net9.0/any/Testably.Abstractions.FileSystem.Interface.dll",
+      "Sha256": "91a99b620b9b24cdc4ee922569758381a160ad1c4dc6061d5252f7b721eef79b"
+    },
+    {
+      "Name": "tools/net9.0/any/tr/System.CommandLine.resources.dll",
+      "Sha256": "1992790191940d189c8ca111c139ee26a0617abda1a0d4ada1cba669de80d2ed"
+    },
+    {
+      "Name": "tools/net9.0/any/zh-Hans/System.CommandLine.resources.dll",
+      "Sha256": "855fa5dd7c3ff3837e089065e806313ccbb8c1d66bdbf53da4347d4552c28b7e"
+    },
+    {
+      "Name": "tools/net9.0/any/zh-Hant/System.CommandLine.resources.dll",
+      "Sha256": "c10b72a4552f25df0ab2afe11625c1174d879f2548feca6fd208730791723b92"
+    }
+  ],
+  "FileCoverage": "Bundled runtime DLL/config files; optional XML documentation and PDBs excluded. Archive hash covers the complete package.",
+  "LicenseEvidence": "license-review.json; retained version-specific upstream and package legal texts",
+  "OwnerDecision": "2026-10-31 conversation: Owner confirms non-revenue-generating use and accepts the documented terms for Json.More.Net 3.0.0, JsonPointer.Net 7.0.0 and JsonSchema.Net 9.1.1.",
+  "Limitations": [
+    "Package declaration is unchanged; separately reviewed bundled licenses and binary correspondence are recorded in license-review.json.",
+    "Evidence and owner-confirmed use do not constitute a general legal-compliance opinion.",
+    "Tool is not part of the engine or a desktop distribution."
+  ],
+  "BlockedAdvisories": [
+    "GHSA-846f-f764-76mx",
+    "GHSA-2fmv-rv2c-59x7"
+  ],
+  "CurrentExecutionPermitted": false
 }
