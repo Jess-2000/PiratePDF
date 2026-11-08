@@ -9,7 +9,7 @@ coverlet.collector/6.0.4
 ========================
 Source: https://api.nuget.org/v3/index.json
 License declaration: MIT
-Declared copyright: 
+Declared copyright:
 Upstream: https://github.com/coverlet-coverage/coverlet
 Repository: https://github.com/coverlet-coverage/coverlet.git
 Reviewed license: MIT (original package declaration above is unchanged)
@@ -87,7 +87,7 @@ SharpFuzz.Common/2.2.0
 Source: https://api.nuget.org/v3/index.json
 License declaration: MIT
 Declared copyright: Copyright © 2018, Nemanja Mijailovic
-Upstream: 
+Upstream:
 Repository: https://github.com/Metalnem/sharpfuzz.git
 Reviewed license: MIT (original package declaration above is unchanged)
 Reviewed text: licenses/e0ca5bd780510a0511a1dd4328eac0eb7decd8f8f6a48950fc6956b666bcfce4.txt (source: https://raw.githubusercontent.com/Metalnem/sharpfuzz/28c353b41a1ff60039bf78293dbd5edd9d7c3014/LICENSE)
@@ -98,7 +98,7 @@ SharpFuzz/2.3.0
 Source: https://api.nuget.org/v3/index.json
 License declaration: MIT
 Declared copyright: Copyright © 2018-2025, Nemanja Mijailovic
-Upstream: 
+Upstream:
 Repository: https://github.com/Metalnem/sharpfuzz.git
 Reviewed license: MIT (original package declaration above is unchanged)
 Reviewed text: licenses/e0ca5bd780510a0511a1dd4328eac0eb7decd8f8f6a48950fc6956b666bcfce4.txt (source: https://raw.githubusercontent.com/Metalnem/sharpfuzz/7dde242459c5459cb988fb8ace4397a9485d720f/LICENSE)
@@ -146,10 +146,10 @@ Included text: licenses/89101e35a8c66fd4d6dffc1763259161d35cb564c169714ec227a768
 xunit.abstractions/2.0.3
 ========================
 Source: https://api.nuget.org/v3/index.json
-License declaration: 
-Declared copyright: 
+License declaration:
+Declared copyright:
 Upstream: https://github.com/xunit/xunit
-Repository: 
+Repository:
 Reviewed license: Apache-2.0 (original package declaration above is unchanged)
 Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
 Reviewed text: licenses/e9dcf94cc4864ba47aeaaec879cfabaf3feadb813c77af480c3ad14c6de0ed79.txt (source: https://raw.githubusercontent.com/xunit/xunit/8d0cdc1cf585f5cf285d221e0c8ff793e6aeea30/license.txt)
@@ -160,7 +160,7 @@ xunit.analyzers/1.18.0
 Source: https://api.nuget.org/v3/index.json
 License declaration: Apache-2.0
 Declared copyright: Copyright (C) .NET Foundation
-Upstream: 
+Upstream:
 Repository: https://github.com/xunit/xunit.analyzers
 Reviewed license: Apache-2.0 (original package declaration above is unchanged)
 Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
@@ -172,7 +172,7 @@ xunit.assert/2.9.3
 Source: https://api.nuget.org/v3/index.json
 License declaration: Apache-2.0
 Declared copyright: Copyright (C) .NET Foundation
-Upstream: 
+Upstream:
 Repository: https://github.com/xunit/xunit
 Reviewed license: Apache-2.0 (original package declaration above is unchanged)
 Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
@@ -184,7 +184,7 @@ xunit.core/2.9.3
 Source: https://api.nuget.org/v3/index.json
 License declaration: Apache-2.0
 Declared copyright: Copyright (C) .NET Foundation
-Upstream: 
+Upstream:
 Repository: https://github.com/xunit/xunit
 Reviewed license: Apache-2.0 (original package declaration above is unchanged)
 Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
@@ -196,7 +196,7 @@ xunit.extensibility.core/2.9.3
 Source: https://api.nuget.org/v3/index.json
 License declaration: Apache-2.0
 Declared copyright: Copyright (C) .NET Foundation
-Upstream: 
+Upstream:
 Repository: https://github.com/xunit/xunit
 Reviewed license: Apache-2.0 (original package declaration above is unchanged)
 Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
@@ -208,7 +208,7 @@ xunit.extensibility.execution/2.9.3
 Source: https://api.nuget.org/v3/index.json
 License declaration: Apache-2.0
 Declared copyright: Copyright (C) .NET Foundation
-Upstream: 
+Upstream:
 Repository: https://github.com/xunit/xunit
 Reviewed license: Apache-2.0 (original package declaration above is unchanged)
 Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
@@ -220,7 +220,7 @@ xunit.runner.visualstudio/3.1.4
 Source: https://api.nuget.org/v3/index.json
 License declaration: Apache-2.0
 Declared copyright: Copyright (C) .NET Foundation
-Upstream: 
+Upstream:
 Repository: https://github.com/xunit/visualstudio.xunit
 Reviewed license: Apache-2.0 (original package declaration above is unchanged)
 Reviewed text: licenses/2db414dcd8f29ebc03790a1386e0a6ded2bb8813ba6763bd5df100d6f78c1b3d.txt (source: https://raw.githubusercontent.com/xunit/visualstudio.xunit/50e68bbb8b9ddd4b1bbb95d062b62010caf99909/License.txt)
@@ -232,7 +232,7 @@ xunit/2.9.3
 Source: https://api.nuget.org/v3/index.json
 License declaration: Apache-2.0
 Declared copyright: Copyright (C) .NET Foundation
-Upstream: 
+Upstream:
 Repository: https://github.com/xunit/xunit
 Reviewed license: Apache-2.0 (original package declaration above is unchanged)
 Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
@@ -410,4 +410,3 @@ Reviewed text: licenses/97c1a7b3da6a4c6ad516448719f45114b41a4d4c5aa300a944476e2e
 Reviewed text: licenses/b60b2912da28eaa6518593c9e2efb5334ee062d3c42e80d8fdfa806b3dc52977.txt (source: https://api.nuget.org/v3-flatcontainer/system.security.cryptography.pkcs/8.0.2/system.security.cryptography.pkcs.8.0.2.nupkg#THIRD-PARTY-NOTICES.TXT)
 Reviewed text: licenses/cfc21f5e8bd655ae997eec916138b707b1d290b83272c02a95c9f821b8c87310.txt (source: https://raw.githubusercontent.com/dotnet/runtime/b9a49e4a6d3a444a3685e318c74a7892d01873f7/LICENSE.TXT)
 Reviewed text: licenses/d7a68596ab69b06f51ca278a6545148e4269a9381c26d597c13df5d88e08cf5b.txt (source: https://api.nuget.org/v3-flatcontainer/system.security.cryptography.pkcs/8.0.2/system.security.cryptography.pkcs.8.0.2.nupkg#LICENSE.TXT)
-
