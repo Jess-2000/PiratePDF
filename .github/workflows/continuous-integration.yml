@@ -207,7 +207,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Locked tooling restore failed.' }
 
       - name: Verify dependency inventory and SBOMs
-        shell: powershell
+        # Match the PowerShell 7 JSON serialization used for reviewed B14B artifacts.
+        shell: pwsh
         run: |
           ./tools/dependencies/Build-ServicedSbomTool.ps1 -OutputDirectory ./artifacts/fuzz/b12-ci-tools-serviced
           if ($LASTEXITCODE -ne 0) { throw 'Pinned source-serviced SBOM tool build failed.' }
