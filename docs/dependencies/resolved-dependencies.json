@@ -789,6 +789,12 @@
           "Target": "net10.0",
           "Scope": "development",
           "Reference": "transitive"
+        },
+        {
+          "Project": "tools/PiratePDF.Fuzz.SharpFuzz/PiratePDF.Fuzz.SharpFuzz.csproj",
+          "Target": "net10.0/win-x64",
+          "Scope": "development",
+          "Reference": "transitive"
         }
       ],
       "NativeAssets": []
@@ -1629,6 +1635,12 @@
           "Target": "net10.0",
           "Scope": "development",
           "Reference": "transitive"
+        },
+        {
+          "Project": "tools/PiratePDF.Fuzz.SharpFuzz/PiratePDF.Fuzz.SharpFuzz.csproj",
+          "Target": "net10.0/win-x64",
+          "Scope": "development",
+          "Reference": "transitive"
         }
       ],
       "NativeAssets": [],
@@ -1667,6 +1679,12 @@
         {
           "Project": "tools/PiratePDF.Fuzz.SharpFuzz/PiratePDF.Fuzz.SharpFuzz.csproj",
           "Target": "net10.0",
+          "Scope": "development",
+          "Reference": "direct"
+        },
+        {
+          "Project": "tools/PiratePDF.Fuzz.SharpFuzz/PiratePDF.Fuzz.SharpFuzz.csproj",
+          "Target": "net10.0/win-x64",
           "Scope": "development",
           "Reference": "direct"
         }
@@ -1722,6 +1740,12 @@
           "Reference": "direct"
         },
         {
+          "Project": "src/BlackFlag.Engine.Rendering.Skia/BlackFlag.Engine.Rendering.Skia.csproj",
+          "Target": "net10.0/win-x64",
+          "Scope": "production",
+          "Reference": "direct"
+        },
+        {
           "Project": "tests/BlackFlag.Engine.Plugins.Tests/BlackFlag.Engine.Plugins.Tests.csproj",
           "Target": "net10.0",
           "Scope": "development",
@@ -1758,8 +1782,20 @@
           "Reference": "transitive"
         },
         {
+          "Project": "tools/PiratePDF.Fuzz.SharpFuzz/PiratePDF.Fuzz.SharpFuzz.csproj",
+          "Target": "net10.0/win-x64",
+          "Scope": "development",
+          "Reference": "transitive"
+        },
+        {
           "Project": "tools/PiratePDF.Fuzz.Targets/PiratePDF.Fuzz.Targets.csproj",
           "Target": "net10.0",
+          "Scope": "development",
+          "Reference": "transitive"
+        },
+        {
+          "Project": "tools/PiratePDF.Fuzz.Targets/PiratePDF.Fuzz.Targets.csproj",
+          "Target": "net10.0/win-x64",
           "Scope": "development",
           "Reference": "transitive"
         }
@@ -1907,6 +1943,12 @@
           "Reference": "transitive"
         },
         {
+          "Project": "src/BlackFlag.Engine.Rendering.Skia/BlackFlag.Engine.Rendering.Skia.csproj",
+          "Target": "net10.0/win-x64",
+          "Scope": "production",
+          "Reference": "transitive"
+        },
+        {
           "Project": "tests/BlackFlag.Engine.Plugins.Tests/BlackFlag.Engine.Plugins.Tests.csproj",
           "Target": "net10.0",
           "Scope": "development",
@@ -1943,8 +1985,20 @@
           "Reference": "transitive"
         },
         {
+          "Project": "tools/PiratePDF.Fuzz.SharpFuzz/PiratePDF.Fuzz.SharpFuzz.csproj",
+          "Target": "net10.0/win-x64",
+          "Scope": "development",
+          "Reference": "transitive"
+        },
+        {
           "Project": "tools/PiratePDF.Fuzz.Targets/PiratePDF.Fuzz.Targets.csproj",
           "Target": "net10.0",
+          "Scope": "development",
+          "Reference": "transitive"
+        },
+        {
+          "Project": "tools/PiratePDF.Fuzz.Targets/PiratePDF.Fuzz.Targets.csproj",
+          "Target": "net10.0/win-x64",
           "Scope": "development",
           "Reference": "transitive"
         }
@@ -1996,6 +2050,12 @@
           "Reference": "transitive"
         },
         {
+          "Project": "src/BlackFlag.Engine.Rendering.Skia/BlackFlag.Engine.Rendering.Skia.csproj",
+          "Target": "net10.0/win-x64",
+          "Scope": "production",
+          "Reference": "transitive"
+        },
+        {
           "Project": "tests/BlackFlag.Engine.Plugins.Tests/BlackFlag.Engine.Plugins.Tests.csproj",
           "Target": "net10.0",
           "Scope": "development",
@@ -2032,8 +2092,20 @@
           "Reference": "transitive"
         },
         {
+          "Project": "tools/PiratePDF.Fuzz.SharpFuzz/PiratePDF.Fuzz.SharpFuzz.csproj",
+          "Target": "net10.0/win-x64",
+          "Scope": "development",
+          "Reference": "transitive"
+        },
+        {
           "Project": "tools/PiratePDF.Fuzz.Targets/PiratePDF.Fuzz.Targets.csproj",
           "Target": "net10.0",
+          "Scope": "development",
+          "Reference": "transitive"
+        },
+        {
+          "Project": "tools/PiratePDF.Fuzz.Targets/PiratePDF.Fuzz.Targets.csproj",
+          "Target": "net10.0/win-x64",
           "Scope": "development",
           "Reference": "transitive"
         }
@@ -2120,6 +2192,12 @@
           "Reference": "direct"
         },
         {
+          "Project": "src/BlackFlag.Engine.Rendering.Skia/BlackFlag.Engine.Rendering.Skia.csproj",
+          "Target": "net10.0/win-x64",
+          "Scope": "production",
+          "Reference": "direct"
+        },
+        {
           "Project": "tests/BlackFlag.Engine.Plugins.Tests/BlackFlag.Engine.Plugins.Tests.csproj",
           "Target": "net10.0",
           "Scope": "development",
@@ -2156,8 +2234,20 @@
           "Reference": "transitive"
         },
         {
+          "Project": "tools/PiratePDF.Fuzz.SharpFuzz/PiratePDF.Fuzz.SharpFuzz.csproj",
+          "Target": "net10.0/win-x64",
+          "Scope": "development",
+          "Reference": "transitive"
+        },
+        {
           "Project": "tools/PiratePDF.Fuzz.Targets/PiratePDF.Fuzz.Targets.csproj",
           "Target": "net10.0",
+          "Scope": "development",
+          "Reference": "transitive"
+        },
+        {
+          "Project": "tools/PiratePDF.Fuzz.Targets/PiratePDF.Fuzz.Targets.csproj",
+          "Target": "net10.0/win-x64",
           "Scope": "development",
           "Reference": "transitive"
         }
