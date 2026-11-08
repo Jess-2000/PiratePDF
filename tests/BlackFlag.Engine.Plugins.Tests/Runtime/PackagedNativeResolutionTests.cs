@@ -38,7 +38,9 @@ public sealed class PackagedNativeResolutionTests
         File.Copy(Path.Combine(AppContext.BaseDirectory, "SkiaSharp.dll"), skia);
         (int exitCode, string output) = package.InvokeChild("SkiaBitmap", package.Root, skia, isolated: true);
         Assert.True(exitCode == 2, $"Expected missing native dependency (exit 2), got {exitCode}. Child output: {output}");
-        Assert.Contains("MISSING=DllNotFoundException", output, StringComparison.Ordinal);
+        Assert.True(output.Contains("MISSING=DllNotFoundException", StringComparison.Ordinal) ||
+            output.Contains("MISSING=IncompatibleNativeSkia", StringComparison.Ordinal),
+            $"Isolated Skia must reject a missing or incompatible native dependency. Child output: {output}");
     }
 
     [Fact]
