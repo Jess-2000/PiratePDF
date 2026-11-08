@@ -64,8 +64,12 @@ internal static class HistoricalMetadataSupplements
                     $"Unsupported, conflicting or unsubstantiated historical registration at entry {Array.IndexOf(records, record) + 1}: {invalidField}.");
             string originalPath = Path.GetFullPath(Path.Combine(root, Originals[index]));
             int position = Array.FindIndex(documents, document => string.Equals(document.FilePath, originalPath, StringComparison.OrdinalIgnoreCase));
-            if (position < 0 || record.OriginalSha256 != Convert.ToHexString(SHA256.HashData(ReadBounded(originalPath))))
-                throw new InvalidDataException("Historical report path/hash mismatch.");
+            if (position < 0)
+                throw new InvalidDataException($"Historical report entry {index + 1}: approved original is missing from parsed documents.");
+            string originalHash = Convert.ToHexString(SHA256.HashData(ReadBounded(originalPath)));
+            if (record.OriginalSha256 != originalHash)
+                throw new InvalidDataException(
+                    $"Historical report entry {index + 1}: OriginalSha256 mismatch (registered={record.OriginalSha256 ?? "<null>"}, computed={originalHash}).");
             DocumentationDocument original = documents[position];
             // Supplement only missing canonical fields; never override an existing header.
             if (original.Metadata != new DocumentMetadata(original.FilePath, original.Title, "", "", "", "", "", "", "", ""))
