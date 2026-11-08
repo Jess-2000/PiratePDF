@@ -203,7 +203,7 @@ jobs:
 
       - name: Restore separately scoped managed-fuzz dependencies
         run: |
-          dotnet restore ./tools/PiratePDF.Fuzz.SharpFuzz/PiratePDF.Fuzz.SharpFuzz.csproj --locked-mode --configfile ./tools/dependencies/NuGet.Config
+          dotnet restore ./tools/PiratePDF.Fuzz.SharpFuzz/PiratePDF.Fuzz.SharpFuzz.csproj --runtime win-x64 --locked-mode --configfile ./tools/dependencies/NuGet.Config
           if ($LASTEXITCODE -ne 0) { throw 'Locked tooling restore failed.' }
 
       - name: Verify dependency inventory and SBOMs
