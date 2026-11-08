@@ -105,16 +105,20 @@ public static class NativeResolutionProbe
             }
             return 0;
         }
-        catch (TargetInvocationException exception)
+        catch (Exception exception) when (IsMissingNativeDependency(exception))
         {
-            for (Exception? cause = exception; cause is not null; cause = cause.InnerException)
-                if (cause is DllNotFoundException)
-                {
-                    Console.WriteLine("MISSING=DllNotFoundException");
-                    return 2;
-                }
-            throw;
+            // Native loading may be wrapped in TypeInitializationException and/or
+            // TargetInvocationException, depending on the runtime and SkiaSharp version.
+            Console.WriteLine("MISSING=DllNotFoundException");
+            return 2;
         }
+    }
+
+    private static bool IsMissingNativeDependency(Exception exception)
+    {
+        for (Exception? cause = exception; cause is not null; cause = cause.InnerException)
+            if (cause is DllNotFoundException) return true;
+        return false;
     }
 
     public static int PackagedVersion() => SkiaVersion();
