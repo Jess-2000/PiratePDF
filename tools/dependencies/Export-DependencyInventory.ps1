@@ -256,9 +256,7 @@ while ($cleanNoticeLines.Count -gt 0 -and $cleanNoticeLines[-1] -eq '') {
     $cleanNoticeLines = @($cleanNoticeLines | Select-Object -SkipLast 1)
 }
 $noticeText = ($cleanNoticeLines -join "`n") + "`n"
-if ($noticeText -match '(?m)[ `t]+
-Write-Host "Inventoried $($projects.Count) projects, $($packageRecords.Count) resolved packages."
- -or $noticeText -match "`n`n$") {
+if ($noticeText -match '(?m)[ \t]+$' -or $noticeText.EndsWith("`n`n")) {
     throw 'Generated third-party notices contain trailing whitespace or extra blank lines at EOF.'
 }
 [IO.File]::WriteAllText((Join-Path $OutputDirectory 'THIRD-PARTY-NOTICES.txt'), $noticeText, $utf8)
