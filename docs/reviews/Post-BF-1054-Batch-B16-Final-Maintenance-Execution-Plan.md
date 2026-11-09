@@ -4,8 +4,8 @@
 |---|---|
 | **Document ID** | PP-AUD-047 |
 | **Category** | Engineering Review |
-| **Version** | 1.0 |
-| **Status** | Draft |
+| **Version** | 1.1 |
+| **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1055 |
 | **Last Updated** | 2026-11-08 |
@@ -33,17 +33,24 @@ The authoritative scope is [PP-ROAD-003](../02-Roadmaps/Windows-Desktop-Developm
 
 ## Acceptance checklist
 
-- [ ] Candidate inventory with semantic reachability and preservation decisions.
-- [ ] Focused regression tests for each source change.
-- [ ] Reproducible managed-fuzzer baseline with multiple measurements.
-- [ ] Before/after performance evidence for every claimed optimization.
-- [ ] Deterministic replay, corpus, finding, cancellation and security invariants verified.
-- [ ] Windows authoritative release gate and hosted CI pass on the final source commit.
-- [ ] Optional Linux compatibility signal reviewed without claiming official Linux support.
-- [ ] Documentation validation, dependency/artifact currency and repository preservation checks pass.
-- [ ] Completion report distinguishes demonstrated acceptance from deferred B9, H2b, B11 desktop and official signing/distribution requirements.
+- [x] Candidate inventory with semantic reachability and preservation decisions.
+- [x] Focused regression tests for each source change.
+- [x] Reproducible managed-fuzzer baseline with multiple measurements.
+- [x] Before/after performance evidence for every claimed optimization.
+- [x] Deterministic replay, corpus, finding, cancellation and security invariants verified.
+- [x] Windows authoritative release gate and hosted CI pass on the final source commit.
+- [x] Optional Linux compatibility signal reviewed without claiming official Linux support.
+- [x] Documentation validation, dependency/artifact currency and repository preservation checks pass.
+- [x] Completion report distinguishes demonstrated acceptance from deferred B9, H2b, B11 desktop and official signing/distribution requirements.
 
 ## Boundaries and sequencing
+
+Implementation and current verification are recorded in the
+[B16 completion report](Post-BF-1054-Batch-B16-Final-Maintenance-Completion-Report.md).
+The measured change reuses immutable filter configuration and removes three
+compiler-proven redundant test imports. The owner reports full-gate success.
+Both hosted jobs pass on final source a5c057c at run 42562113984. Formal B16
+acceptance is recommended on the recorded evidence.
 
 B16 does not close B9 / POST-P2-002, activate or qualify native H2b, qualify the absent Windows desktop distribution, provision signing credentials, or start BF-1055. The final source changes and acceptance evidence must be reviewed before B16 is marked complete.
 
@@ -51,4 +58,5 @@ B16 does not close B9 / POST-P2-002, activate or qualify native H2b, qualify the
 
 | Version | Date | Description |
 |---|---|---|
+| 1.1 | 2026-11-08 | Record implemented cleanup/optimization, reproducible evidence and passing final-source qualification supporting formal acceptance. |
 | 1.0 | 2026-11-08 | Establish B16 scoped execution and measurable acceptance plan after hosted B15 CI success. |

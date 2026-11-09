@@ -5,7 +5,7 @@
 | 1.11 | 2026-11-08 | Record scoped B14 deployment evidence, metadata/plugin incompatibilities, toolchain security servicing and future desktop/packaging implications. |
 | **Document ID** | PP-HANDOFF-001 |
 | **Category** | Engineering Handoff |
-| **Version** | 1.13 |
+| **Version** | 1.14 |
 | **Status** | Review |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1040, BF-1054 |
@@ -28,6 +28,24 @@ branch is seven commits ahead)
 `PiratePDF-BF-Post-1054-Maintenance-Part1-Snapshot.zip`
 **CI state:** corrected cross-platform CI passed; `main` CI after the
 GitHub pull-request merge is green.
+
+## B16 implementation continuation — 2026-11-08
+
+The B15 hosted checkpoint d031cfa passed run 42536472888. B16 implementation
+starts from clean 755a371. Source commit 4f9595d implements private immutable
+filter configuration reuse, three compiler-proven redundant import removals,
+two concurrent regression cases and owned-fixture measurement tooling.
+All 1,258 entry C# files are inventoried with compiler/context review.
+Measured allocations fall 408 bytes per filter case, with unchanged public/
+protected API metadata and deterministic mutation digests. The unchanged agent
+gate passes 3,425 of 3,430 tests and retains five link-privilege failures.
+The owner reports full-gate success. Hosted run 42562113984 passes Windows
+Build and Test and Optional Linux Compatibility on final source a5c057c.
+Currency verification passes six current outputs and 48 audited project
+scopes. DocGen validates 232 documents with zero findings. B16 implementation
+and verification are complete and formal acceptance is recommended. BF-1055
+requires accepted B16 and its own task.
+[B16 report](../reviews/Post-BF-1054-Batch-B16-Final-Maintenance-Completion-Report.md).
 
 ## B14B artifact currency continuation — 2026-11-08
 
@@ -625,6 +643,7 @@ If later work becomes uncertain:
 
 | Version | Date | Description |
 |---|---|---|
+| 1.14 | 2026-11-08 | Record verified B15 checkpoint and B16 implementation/verification supporting formal acceptance. |
 | 1.13 | 2026-11-08 | Apply B14B permanent artifact currency policy and servicing/verification guidance. |
 | 1.12 | 2026-11-08 | Record approved B14A SDK/runtime security servicing and separate validation/acceptance evidence. |
 | 1.10 | 2026-11-08 | Record B13 scope, canonical form and release policies, owner-preserved B12 completion and current maintenance continuation. |

@@ -5,7 +5,7 @@
 | 1.7 | 2026-11-08 | Record scoped B14 deployment evidence, metadata/plugin incompatibilities, toolchain security servicing and future desktop/packaging implications. |
 | **Document ID** | PP-ROAD-002 |
 | **Category** | Roadmap |
-| **Version** | 1.8 |
+| **Version** | 1.9 |
 | **Status** | Approved |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1000, BF-1054, BF-1055, BF-2000, BF-8000, BF-9000 |
@@ -35,9 +35,9 @@ Proceed independently of native H2b qualification in this authorized order:
 2. **POST-P2-004 / B11** — [Windows qualification remains; PP-AUD-041](../reviews/Post-BF-1054-Batch-B11-Packaged-Native-Resolution-Completion-Report.md). Windows 10/11 x64 is the sole v1 target; process-resident native modules are accepted under [PP-GOV-005](../05-Governance/Platform-Support-and-Native-Lifetime.md). No desktop project exists to publish/start; Linux/macOS and deterministic native-image unloading no longer block v1 acceptance.
 3. **POST-P2-005 / B12 — complete**, dependency provenance, notices and SBOM ([current evidence](../dependencies/README.md)); package/tool evidence reconciled and owner-confirmed remediation gate success.
 4. **POST-P2-006 / B13 — documentation reconciliation complete**, with owner-confirmed November 8 full-gate success. Official certificate provisioning and signed-distribution qualification remain partial pending the future executable/packaging scope.
-5. **POST-P2-007 / B14 — evaluation complete**, retaining the untrimmed JIT baseline, deferring trimming and rejecting Native AOT for the current dynamic managed-plugin host. The [B14 report](../reviews/Post-BF-1054-Batch-B14-Deployment-Compatibility-Report.md) retains its original runtime/toolchain finding, subsequently serviced under completed B14A. B14B artifact currency is complete under PP-GOV-007 and PP-AUD-046, with owner-reported elevated gate success. B15 is next.
-6. POST-P2-008 — CI release-gate/source-size parity.
-7. **B16 — final repository cleanup and measured managed-fuzzer optimization** (after POST-P2-008 and the final planned maintenance batch before BF-1055; reserved on 2026-10-27).
+5. **POST-P2-007 / B14 — evaluation complete**, retaining the untrimmed JIT baseline, deferring trimming and rejecting Native AOT for the current dynamic managed-plugin host. The [B14 report](../reviews/Post-BF-1054-Batch-B14-Deployment-Compatibility-Report.md) retains its original runtime/toolchain finding, subsequently serviced under completed B14A. B14B artifact currency is complete under PP-GOV-007 and PP-AUD-046, with owner-reported elevated gate success. B15's hosted checkpoint is recorded below.
+6. **POST-P2-008 / B15 — hosted checkpoint passed**, d031cfa at run 42536472888.
+7. **B16 — implemented and verified, formal acceptance recommended**, private immutable filter configuration reuse and compiler-proven redundant import cleanup. The [B16 report](../reviews/Post-BF-1054-Batch-B16-Final-Maintenance-Completion-Report.md) records measured allocation reduction, owner-reported full-gate success and passing final-source hosted Windows/Linux CI. B16 is the final planned maintenance batch before BF-1055.
 
 The owner's B12 assignment records the subsequent [desktop development
 sequence](../02-Roadmaps/Windows-Desktop-Development-Sequence.md): BF-1055
@@ -94,6 +94,7 @@ decision neither starts nor accepts it and invents no missing specification.
 
 | Version | Date | Description |
 |---|---|---|
+| 1.9 | 2026-11-08 | Record verified B15 checkpoint and B16 implementation/verification supporting formal acceptance. |
 | 1.8 | 2026-11-08 | Apply B14B permanent artifact currency policy and servicing/verification guidance. |
 | 1.6 | 2026-11-08 | Reconcile B13 policy, current guidance, authority references and release/maintenance sequencing. |
 | 1.5 | 2026-10-31 | Reconcile B12 licensing/provenance remediation without starting later batches or desktop implementation. |

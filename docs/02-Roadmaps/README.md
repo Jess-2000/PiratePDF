@@ -5,7 +5,7 @@
 | 1.7 | 2026-11-08 | Record scoped B14 deployment evidence, metadata/plugin incompatibilities, toolchain security servicing and future desktop/packaging implications. |
 | **Document ID** | PP-ROAD-000 |
 | **Category** | Roadmap |
-| **Version** | 1.8 |
+| **Version** | 1.9 |
 | **Status** | Approved |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1025, BF-1054, BF-1055 |
@@ -34,8 +34,10 @@ the [amended handoff](../handoffs/PiratePDF-Maintenance-Handoff-Post-BF-1054-Par
 and [Future Roadmap](../Blueprint/Volume-VI-Future-Roadmap.md): B10 /
 POST-P2-003 / B10 complete, B11 partial pending desktop qualification, B12
 complete, B13 documentation complete, B14 deployment evaluation complete and
-B14A security servicing complete. B14B artifact currency is complete, then scoped
-B15 and final B16, independently of
+B14A security servicing complete. B14B artifact currency is complete. The B15
+hosted checkpoint d031cfa passed. Final B16 implementation and verification are
+complete, with formal acceptance recommended under
+[PP-AUD-048](../reviews/Post-BF-1054-Batch-B16-Final-Maintenance-Completion-Report.md), independently of
 native H2b qualification. Native H2b is deferred to an unspecified future
 update, incomplete, unqualified and disabled; managed fuzzing remains
 partially verified and B9 open. All item acceptance, security/refusal and
@@ -104,6 +106,7 @@ Tracks release planning, feature freezes, beta milestones, and production releas
 
 | Version | Date | Description |
 |---|---|---|
+| 1.9 | 2026-11-08 | Record verified B15 checkpoint and B16 implementation/verification supporting formal acceptance. |
 | 1.8 | 2026-11-08 | Apply B14B permanent artifact currency policy and servicing/verification guidance. |
 | 1.6 | 2026-11-08 | Reconcile B13 policy, current guidance, authority references and release/maintenance sequencing. |
 | 1.5 | 2026-10-31 | Record B12 completion after licensing/provenance remediation and owner-confirmed full-gate success; preserve later-batch authorization boundaries. |

@@ -5,7 +5,7 @@
 | 1.2 | 2026-11-08 | Record scoped B14 deployment evidence, metadata/plugin incompatibilities, toolchain security servicing and future desktop/packaging implications. |
 | **Document ID** | PP-ROAD-003 |
 | **Category** | Roadmap |
-| **Version** | 1.4 |
+| **Version** | 1.5 |
 | **Status** | Approved |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1055, BF-1056, BF-1057, BF-1058, BF-8000 |
@@ -21,7 +21,8 @@ reconciled with the milestone registry before implementation. The existing
 BF-8000 application workstream is not silently renumbered or closed.
 
 B12, B13 documentation and B14 deployment evaluation are complete. Continue
-with scoped B15 after completed B14B artifact currency and B14A runtime/toolchain security remediation
+from the passed B15 hosted checkpoint d031cfa into current B16 after completed
+B14B artifact currency and B14A runtime/toolchain security remediation
 and owner-confirmed patched-toolchain gate success under
 [PP-AUD-045](../reviews/Post-BF-1054-Batch-B14A-Runtime-Toolchain-Security-Report.md),
 with **B16 as the final planned maintenance batch before BF-1055**. Its scope
@@ -29,8 +30,10 @@ remains semantic dead/unused/obsolete-code review and measured managed-fuzzer
 optimization, preserving public APIs, serialization, extension points,
 reflection/plugin/XAML/generated/platform entry points, deterministic replay,
 seed ownership, mutation semantics, findings, ceilings and failure reporting.
-No coverage, resource or security checks may be weakened. B16 is not implemented
-during B12. Then proceed through the separately governed product milestones:
+No coverage, resource or security checks may be weakened. B16 implementation
+and its formal acceptance recommendation are recorded in
+[PP-AUD-048](../reviews/Post-BF-1054-Batch-B16-Final-Maintenance-Completion-Report.md).
+Then proceed through the separately governed product milestones:
 
 | Provisional milestone | Approved planning direction |
 |---|---|
@@ -80,6 +83,7 @@ distribution. B14B's developer outputs retain their actual qualification scope.
 
 | Version | Date | Description |
 |---|---|---|
+| 1.5 | 2026-11-08 | Record verified B15 checkpoint and B16 implementation/verification supporting formal acceptance. |
 | 1.4 | 2026-11-08 | Apply B14B permanent artifact currency policy and servicing/verification guidance. |
 | 1.3 | 2026-11-08 | Record approved B14A SDK/runtime security servicing and separate validation/acceptance evidence. |
 | 1.1 | 2026-11-08 | Reconcile completed B12, current B13 and future form, native merge and signing qualification dependencies. |

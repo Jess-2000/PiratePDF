@@ -124,7 +124,10 @@ governs servicing checks, affected-package rebuilds, minimum secure runtimes,
 native/dependency review and owner-approved exceptions. B14A is complete.
 B14B artifact currency is complete with eight verified development groups,
 the SkiaSharp 4.150.7 patch and owner-reported elevated gate success.
-B15 is next, followed by B16 and BF-1055.
+B15 hosted checkpoint d031cfa passed. B16 cleanup and measured managed-filter
+optimization are implemented and verified, with formal acceptance recommended under the
+[B16 report](docs/reviews/Post-BF-1054-Batch-B16-Final-Maintenance-Completion-Report.md).
+BF-1055 follows accepted B16 under its own task scope.
 Historical artifacts retain their original evidence and distribution restrictions.
 
 Use .NET SDK 10.0.403 as selected by global.json and CI. Ordinary net10.0

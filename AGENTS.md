@@ -111,8 +111,12 @@ Verify current publisher servicing metadata, audit dependencies and native input
 and rebuild or explicitly block outdated supported artifacts. Artifact currency
 verification is local reusable tooling for later B15 integration. Hosted-CI and
 official desktop qualification retain their separate acceptance requirements.
-B15 is next,
-followed by final maintenance B16 before BF-1055. BF-1056 through
+B15 hosted checkpoint d031cfa is verified passed. B16 implementation is current
+under PP-AUD-047/048 with implementation/verification complete and formal
+acceptance recommended after owner-reported full-gate success and passing
+final-source hosted Windows/Linux CI at a5c057c.
+It reuses immutable managed-filter configuration and removes three redundant
+test imports. BF-1055 follows accepted B16 under its own task scope. BF-1056 through
 BF-1058 remain provisional until milestone registry reconciliation. Each batch
 retains its acceptance requirements and requires its own task scope.
 POST-P2-004 is packaged-platform dependency resolution/fallback, not H2b
