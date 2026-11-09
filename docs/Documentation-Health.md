@@ -9,18 +9,18 @@ Generated: 2026-11-08 20:22:55 UTC
 
 | Metric | Value |
 |---|---:|
-| Score | 91.4% |
+| Score | 91.5% |
 | Grade | A- |
 
 ## Library Statistics
 
 | Metric | Count |
 |---|---:|
-| Documents | 230 |
-| Sections | 2531 |
-| Revision-history entries | 341 |
+| Documents | 231 |
+| Sections | 2538 |
+| Revision-history entries | 342 |
 | Related-document references | 16 |
-| Related BF work-item references | 456 |
+| Related BF work-item references | 457 |
 
 ## Categories
 
@@ -32,7 +32,7 @@ Generated: 2026-11-08 20:22:55 UTC
 | Developer Guide | 1 |
 | Documentation Index | 1 |
 | Engineering Handoff | 1 |
-| Engineering Review | 48 |
+| Engineering Review | 49 |
 | Governance | 6 |
 | Historical Metadata Registration | 5 |
 | Milestone | 105 |
@@ -50,6 +50,7 @@ Generated: 2026-11-08 20:22:55 UTC
 | Value | Count |
 |---|---:|
 | Approved | 36 |
+| Draft | 1 |
 | Implemented | 114 |
 | In Development | 11 |
 | Review | 57 |
@@ -60,21 +61,21 @@ Generated: 2026-11-08 20:22:55 UTC
 
 | Value | Count |
 |---|---:|
-| PiratePDF Project | 230 |
+| PiratePDF Project | 231 |
 
 ## Coverage
 
 | Area | Covered | Total | Percentage |
 |---|---:|---:|---:|
-| Document IDs | 230 | 230 | 100.0% |
-| Versions | 230 | 230 | 100.0% |
-| Statuses | 230 | 230 | 100.0% |
-| Owners | 230 | 230 | 100.0% |
-| Last-updated dates | 230 | 230 | 100.0% |
-| Next-review dates | 230 | 230 | 100.0% |
-| Revision histories | 219 | 230 | 95.2% |
-| Related documents | 5 | 230 | 2.2% |
-| Related BF work items | 230 | 230 | 100.0% |
+| Document IDs | 231 | 231 | 100.0% |
+| Versions | 231 | 231 | 100.0% |
+| Statuses | 231 | 231 | 100.0% |
+| Owners | 231 | 231 | 100.0% |
+| Last-updated dates | 231 | 231 | 100.0% |
+| Next-review dates | 231 | 231 | 100.0% |
+| Revision histories | 220 | 231 | 95.2% |
+| Related documents | 5 | 231 | 2.2% |
+| Related BF work items | 231 | 231 | 100.0% |
 
 ## Validation
 
