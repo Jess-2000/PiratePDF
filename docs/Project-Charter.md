@@ -4,12 +4,12 @@
 |---|---|
 | **Document ID** | PP-CHARTER-001 |
 | **Category** | Project Charter |
-| **Version** | 1.1 |
+| **Version** | 1.2 |
 | **Status** | Approved |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1000, BF-2000, BF-8000 |
-| **Last Updated** | 2026-08-09 |
-| **Next Review** | 2026-11-09 |
+| **Last Updated** | 2026-11-08 |
+| **Next Review** | 2027-02-08 |
 
 ---
 
@@ -197,11 +197,20 @@ These ideas remain candidates for later releases and shall not distract from com
 
 ## Related Documents
 
+Current platform, form-event and release requirements are recorded in the
+governing Project Charter and linked policies. The native data-merge plan
+belongs to separately scoped future feature work, with CSV mapping, a 25,000
+record job ceiling and complete-letter output boundaries. Optional FusionPro
+interoperability has its own integration/licensing scope.
+[Governing charter](../PROJECT-CHARTER.md),
+[Application specification](Blueprint/Volume-III-PiratePDF-Application-Specification.md),
+[Document form policy](05-Governance/Document-Form-JavaScript-Policy.md),
+[Windows release contract](releases/Windows-Release-Signing-and-Provenance.md).
+
 - PP-VSN-000 — PiratePDF Master Blueprint
 - PP-VSN-001 — Vision and Product Strategy
 - PP-ARCH-001 — BlackFlag Engine Architecture
 - PP-ROAD-000 — Development Roadmap
-- PP-GOV-002 — Project Governance Guide
 - PP-GOV-002 — Documentation Standards
 
 ## Related BF Work Items
@@ -214,5 +223,6 @@ These ideas remain candidates for later releases and shall not distract from com
 
 | Version | Date | Description |
 |---|---|---|
+| 1.2 | 2026-11-08 | Reconcile B13 policy, current guidance, authority references and release/maintenance sequencing. |
 | 1.0 | 2026-07-24 | Standardized the project mission, product principles, and edition philosophy. |
 | 1.1 | 2026-08-09 | Replaced the planned product-tier split with one complete free and open-source PiratePDF product. |

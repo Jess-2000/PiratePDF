@@ -1,0 +1,412 @@
+PiratePDF / BlackFlag Engine - THIRD-PARTY NOTICES
+
+Generated from restored NuGet package metadata and packaged notice files.
+Scope: repository engine, tests and tools; NOT a desktop distribution.
+Declarations and included texts are evidence, not legal-compliance approval.
+Review issues must be resolved before redistributing affected components.
+
+coverlet.collector/6.0.4
+========================
+Source: https://api.nuget.org/v3/index.json
+License declaration: MIT
+Declared copyright:
+Upstream: https://github.com/coverlet-coverage/coverlet
+Repository: https://github.com/coverlet-coverage/coverlet.git
+Reviewed license: MIT (original package declaration above is unchanged)
+Reviewed text: licenses/17ace2f0bc2bdf6692db688a5e8f48b4d5a665ad35c9e2a6b8ea74d1e5797ac4.txt (source: https://raw.githubusercontent.com/coverlet-coverage/coverlet/90b21079d43cffae3a18f264e00962b9c8a1d57a/THIRD-PARTY-NOTICES.txt)
+Reviewed text: licenses/5411d507bc9242b6acad10772a8f5a3ae217f494c419a206a3b6d849c6ccc1c0.txt (source: https://raw.githubusercontent.com/coverlet-coverage/coverlet/90b21079d43cffae3a18f264e00962b9c8a1d57a/LICENSE)
+Redistribution: When redistributing copies/substantial portions, preserve copyright and permission notice.
+
+dnlib/4.4.0
+===========
+Source: https://api.nuget.org/v3/index.json
+License declaration: MIT
+Declared copyright: Copyright (C) 2012-2019 de4dot@gmail.com
+Upstream: https://github.com/0xd4d/dnlib
+Repository: https://github.com/0xd4d/dnlib
+Included text: licenses/ca38b47f5ec8b884d20d42a82b680e100df4edb4a5b45639349fcf2780651a16.txt (original: LICENSE.txt)
+
+Microsoft.CodeCoverage/17.14.1
+==============================
+Source: https://api.nuget.org/v3/index.json
+License declaration: MIT
+Declared copyright: © Microsoft Corporation. All rights reserved.
+Upstream: https://github.com/microsoft/vstest
+Repository: https://github.com/microsoft/vstest
+Included text: licenses/4fc4244935bbe3516164402c573f053a5d246571ed4d357e6cccd8ebec296bbc.txt (original: build/netstandard2.0/ThirdPartyNotices.txt)
+Included text: licenses/4fc4244935bbe3516164402c573f053a5d246571ed4d357e6cccd8ebec296bbc.txt (original: ThirdPartyNotices.txt)
+
+Microsoft.NET.Test.Sdk/17.14.1
+==============================
+Source: https://api.nuget.org/v3/index.json
+License declaration: MIT
+Declared copyright: © Microsoft Corporation. All rights reserved.
+Upstream: https://github.com/microsoft/vstest
+Repository: https://github.com/microsoft/vstest
+Reviewed license: MIT (original package declaration above is unchanged)
+Reviewed text: licenses/193b6793dacd7f80823027ef308b7ae688ad14b436cf3e3747b298ca446a5dbe.txt (source: https://raw.githubusercontent.com/microsoft/vstest/490850ae3fdc1b470e3804ceab4f6a41cf89ae51/THIRD-PARTY-NOTICES.txt)
+Reviewed text: licenses/4d0502953fdb7784a9ca9e1f7e93da5db076de7c52456d6a2a666327a1a9981d.txt (source: https://raw.githubusercontent.com/microsoft/vstest/490850ae3fdc1b470e3804ceab4f6a41cf89ae51/LICENSE)
+Redistribution: When redistributing copies/substantial portions, preserve copyright and permission notice.
+
+Microsoft.TestPlatform.ObjectModel/17.14.1
+==========================================
+Source: https://api.nuget.org/v3/index.json
+License declaration: MIT
+Declared copyright: © Microsoft Corporation. All rights reserved.
+Upstream: https://github.com/microsoft/vstest
+Repository: https://github.com/microsoft/vstest
+Reviewed license: MIT (original package declaration above is unchanged)
+Reviewed text: licenses/193b6793dacd7f80823027ef308b7ae688ad14b436cf3e3747b298ca446a5dbe.txt (source: https://raw.githubusercontent.com/microsoft/vstest/490850ae3fdc1b470e3804ceab4f6a41cf89ae51/THIRD-PARTY-NOTICES.txt)
+Reviewed text: licenses/4d0502953fdb7784a9ca9e1f7e93da5db076de7c52456d6a2a666327a1a9981d.txt (source: https://raw.githubusercontent.com/microsoft/vstest/490850ae3fdc1b470e3804ceab4f6a41cf89ae51/LICENSE)
+Redistribution: When redistributing copies/substantial portions, preserve copyright and permission notice.
+
+Microsoft.TestPlatform.TestHost/17.14.1
+=======================================
+Source: https://api.nuget.org/v3/index.json
+License declaration: MIT
+Declared copyright: © Microsoft Corporation. All rights reserved.
+Upstream: https://github.com/microsoft/vstest
+Repository: https://github.com/microsoft/vstest
+Included text: licenses/e2ce7628e0f67d0d724eea9d9286a6938bf1eedd253fc84b23d72ae54778a5f7.txt (original: ThirdPartyNotices.txt)
+
+Newtonsoft.Json/13.0.3
+======================
+Source: https://api.nuget.org/v3/index.json
+License declaration: MIT
+Declared copyright: Copyright © James Newton-King 2008
+Upstream: https://www.newtonsoft.com/json
+Repository: https://github.com/JamesNK/Newtonsoft.Json
+Included text: licenses/b98a397897ff55f76cddc380041507a95a896b2946e0188703bf0496793d6516.txt (original: LICENSE.md)
+Reviewed license: MIT (original package declaration above is unchanged)
+Reviewed text: licenses/b98a397897ff55f76cddc380041507a95a896b2946e0188703bf0496793d6516.txt (source: https://api.nuget.org/v3-flatcontainer/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg#LICENSE.md)
+Reviewed text: licenses/d7f83bbea3264a8e23d7739e44d9db1a4994b357274df6f00876eb2e623827ad.txt (source: https://raw.githubusercontent.com/JamesNK/Newtonsoft.Json/0a2e291c0d9c0c7675d445703e51750363a549ef/LICENSE.md)
+Redistribution: When redistributing copies/substantial portions, preserve copyright and permission notice.
+
+SharpFuzz.Common/2.2.0
+======================
+Source: https://api.nuget.org/v3/index.json
+License declaration: MIT
+Declared copyright: Copyright © 2018, Nemanja Mijailovic
+Upstream:
+Repository: https://github.com/Metalnem/sharpfuzz.git
+Reviewed license: MIT (original package declaration above is unchanged)
+Reviewed text: licenses/e0ca5bd780510a0511a1dd4328eac0eb7decd8f8f6a48950fc6956b666bcfce4.txt (source: https://raw.githubusercontent.com/Metalnem/sharpfuzz/28c353b41a1ff60039bf78293dbd5edd9d7c3014/LICENSE)
+Redistribution: When redistributing copies/substantial portions, preserve copyright and permission notice.
+
+SharpFuzz/2.3.0
+===============
+Source: https://api.nuget.org/v3/index.json
+License declaration: MIT
+Declared copyright: Copyright © 2018-2025, Nemanja Mijailovic
+Upstream:
+Repository: https://github.com/Metalnem/sharpfuzz.git
+Reviewed license: MIT (original package declaration above is unchanged)
+Reviewed text: licenses/e0ca5bd780510a0511a1dd4328eac0eb7decd8f8f6a48950fc6956b666bcfce4.txt (source: https://raw.githubusercontent.com/Metalnem/sharpfuzz/7dde242459c5459cb988fb8ace4397a9485d720f/LICENSE)
+Redistribution: When redistributing copies/substantial portions, preserve copyright and permission notice.
+
+SkiaSharp.NativeAssets.Linux/4.150.7
+====================================
+Source: https://api.nuget.org/v3/index.json
+License declaration: MIT
+Declared copyright: © Microsoft Corporation. All rights reserved.
+Upstream: https://go.microsoft.com/fwlink/?linkid=868515
+Repository: https://go.microsoft.com/fwlink/?linkid=868515
+Included text: licenses/89101e35a8c66fd4d6dffc1763259161d35cb564c169714ec227a768c89f2938.txt (original: LICENSE.txt)
+Included text: licenses/21504c46c4c58aa64c1055bd2dcbc5f9a136b4b8c412ed3cc6740e22c5b127f5.txt (original: THIRD-PARTY-NOTICES.txt)
+
+SkiaSharp.NativeAssets.macOS/4.150.7
+====================================
+Source: https://api.nuget.org/v3/index.json
+License declaration: MIT
+Declared copyright: © Microsoft Corporation. All rights reserved.
+Upstream: https://go.microsoft.com/fwlink/?linkid=868515
+Repository: https://go.microsoft.com/fwlink/?linkid=868515
+Included text: licenses/89101e35a8c66fd4d6dffc1763259161d35cb564c169714ec227a768c89f2938.txt (original: LICENSE.txt)
+Included text: licenses/21504c46c4c58aa64c1055bd2dcbc5f9a136b4b8c412ed3cc6740e22c5b127f5.txt (original: THIRD-PARTY-NOTICES.txt)
+
+SkiaSharp.NativeAssets.Win32/4.150.7
+====================================
+Source: https://api.nuget.org/v3/index.json
+License declaration: MIT
+Declared copyright: © Microsoft Corporation. All rights reserved.
+Upstream: https://go.microsoft.com/fwlink/?linkid=868515
+Repository: https://go.microsoft.com/fwlink/?linkid=868515
+Included text: licenses/89101e35a8c66fd4d6dffc1763259161d35cb564c169714ec227a768c89f2938.txt (original: LICENSE.txt)
+Included text: licenses/21504c46c4c58aa64c1055bd2dcbc5f9a136b4b8c412ed3cc6740e22c5b127f5.txt (original: THIRD-PARTY-NOTICES.txt)
+
+SkiaSharp/4.150.7
+=================
+Source: https://api.nuget.org/v3/index.json
+License declaration: MIT
+Declared copyright: © Microsoft Corporation. All rights reserved.
+Upstream: https://go.microsoft.com/fwlink/?linkid=868515
+Repository: https://go.microsoft.com/fwlink/?linkid=868515
+Included text: licenses/89101e35a8c66fd4d6dffc1763259161d35cb564c169714ec227a768c89f2938.txt (original: LICENSE.txt)
+
+xunit.abstractions/2.0.3
+========================
+Source: https://api.nuget.org/v3/index.json
+License declaration:
+Declared copyright:
+Upstream: https://github.com/xunit/xunit
+Repository:
+Reviewed license: Apache-2.0 (original package declaration above is unchanged)
+Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
+Reviewed text: licenses/e9dcf94cc4864ba47aeaaec879cfabaf3feadb813c77af480c3ad14c6de0ed79.txt (source: https://raw.githubusercontent.com/xunit/xunit/8d0cdc1cf585f5cf285d221e0c8ff793e6aeea30/license.txt)
+Redistribution: When redistributing, provide Apache-2.0 text, retain applicable attribution/NOTICE; mark modified files if any. Evidence copies do not modify component software.
+
+xunit.analyzers/1.18.0
+======================
+Source: https://api.nuget.org/v3/index.json
+License declaration: Apache-2.0
+Declared copyright: Copyright (C) .NET Foundation
+Upstream:
+Repository: https://github.com/xunit/xunit.analyzers
+Reviewed license: Apache-2.0 (original package declaration above is unchanged)
+Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
+Reviewed text: licenses/918c2d961b0b79dd3aaf50d00afa237940436dac80fee83de1ed646efc599d56.txt (source: https://raw.githubusercontent.com/xunit/xunit.analyzers/2620a4ddabcba16ceb64ea9ad19c566252015fe8/LICENSE)
+Redistribution: When redistributing, provide Apache-2.0 text, retain applicable attribution/NOTICE; mark modified files if any. Evidence copies do not modify component software.
+
+xunit.assert/2.9.3
+==================
+Source: https://api.nuget.org/v3/index.json
+License declaration: Apache-2.0
+Declared copyright: Copyright (C) .NET Foundation
+Upstream:
+Repository: https://github.com/xunit/xunit
+Reviewed license: Apache-2.0 (original package declaration above is unchanged)
+Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
+Reviewed text: licenses/e9dcf94cc4864ba47aeaaec879cfabaf3feadb813c77af480c3ad14c6de0ed79.txt (source: https://raw.githubusercontent.com/xunit/xunit/9712244020d385955d33136b3fe3e87de43539cd/license.txt)
+Redistribution: When redistributing, provide Apache-2.0 text, retain applicable attribution/NOTICE; mark modified files if any. Evidence copies do not modify component software.
+
+xunit.core/2.9.3
+================
+Source: https://api.nuget.org/v3/index.json
+License declaration: Apache-2.0
+Declared copyright: Copyright (C) .NET Foundation
+Upstream:
+Repository: https://github.com/xunit/xunit
+Reviewed license: Apache-2.0 (original package declaration above is unchanged)
+Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
+Reviewed text: licenses/e9dcf94cc4864ba47aeaaec879cfabaf3feadb813c77af480c3ad14c6de0ed79.txt (source: https://raw.githubusercontent.com/xunit/xunit/9712244020d385955d33136b3fe3e87de43539cd/license.txt)
+Redistribution: When redistributing, provide Apache-2.0 text, retain applicable attribution/NOTICE; mark modified files if any. Evidence copies do not modify component software.
+
+xunit.extensibility.core/2.9.3
+==============================
+Source: https://api.nuget.org/v3/index.json
+License declaration: Apache-2.0
+Declared copyright: Copyright (C) .NET Foundation
+Upstream:
+Repository: https://github.com/xunit/xunit
+Reviewed license: Apache-2.0 (original package declaration above is unchanged)
+Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
+Reviewed text: licenses/e9dcf94cc4864ba47aeaaec879cfabaf3feadb813c77af480c3ad14c6de0ed79.txt (source: https://raw.githubusercontent.com/xunit/xunit/9712244020d385955d33136b3fe3e87de43539cd/license.txt)
+Redistribution: When redistributing, provide Apache-2.0 text, retain applicable attribution/NOTICE; mark modified files if any. Evidence copies do not modify component software.
+
+xunit.extensibility.execution/2.9.3
+===================================
+Source: https://api.nuget.org/v3/index.json
+License declaration: Apache-2.0
+Declared copyright: Copyright (C) .NET Foundation
+Upstream:
+Repository: https://github.com/xunit/xunit
+Reviewed license: Apache-2.0 (original package declaration above is unchanged)
+Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
+Reviewed text: licenses/e9dcf94cc4864ba47aeaaec879cfabaf3feadb813c77af480c3ad14c6de0ed79.txt (source: https://raw.githubusercontent.com/xunit/xunit/9712244020d385955d33136b3fe3e87de43539cd/license.txt)
+Redistribution: When redistributing, provide Apache-2.0 text, retain applicable attribution/NOTICE; mark modified files if any. Evidence copies do not modify component software.
+
+xunit.runner.visualstudio/3.1.4
+===============================
+Source: https://api.nuget.org/v3/index.json
+License declaration: Apache-2.0
+Declared copyright: Copyright (C) .NET Foundation
+Upstream:
+Repository: https://github.com/xunit/visualstudio.xunit
+Reviewed license: Apache-2.0 (original package declaration above is unchanged)
+Reviewed text: licenses/2db414dcd8f29ebc03790a1386e0a6ded2bb8813ba6763bd5df100d6f78c1b3d.txt (source: https://raw.githubusercontent.com/xunit/visualstudio.xunit/50e68bbb8b9ddd4b1bbb95d062b62010caf99909/License.txt)
+Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
+Redistribution: When redistributing, provide Apache-2.0 text, retain applicable attribution/NOTICE; mark modified files if any. Evidence copies do not modify component software.
+
+xunit/2.9.3
+===========
+Source: https://api.nuget.org/v3/index.json
+License declaration: Apache-2.0
+Declared copyright: Copyright (C) .NET Foundation
+Upstream:
+Repository: https://github.com/xunit/xunit
+Reviewed license: Apache-2.0 (original package declaration above is unchanged)
+Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
+Reviewed text: licenses/e9dcf94cc4864ba47aeaaec879cfabaf3feadb813c77af480c3ad14c6de0ed79.txt (source: https://raw.githubusercontent.com/xunit/xunit/9712244020d385955d33136b3fe3e87de43539cd/license.txt)
+Redistribution: When redistributing, provide Apache-2.0 text, retain applicable attribution/NOTICE; mark modified files if any. Evidence copies do not modify component software.
+
+HISTORICAL UPSTREAM SBOM TOOL - BLOCKED FROM CURRENT EXECUTION
+See license-review.json for original bundled identities, archive and binary correspondence.
+2026-10-31 conversation: Owner confirms non-revenue-generating use and accepts the documented terms for Json.More.Net 3.0.0, JsonPointer.Net 7.0.0 and JsonSchema.Net 9.1.1.
+
+CycloneDX.Core/12.1.1
+Reviewed license: Apache-2.0
+Redistribution: When redistributing, provide Apache-2.0 text, retain applicable attribution/NOTICE; mark modified files if any. Evidence copies do not modify component software.
+Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
+Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet-library/27b9b5acbbb2198b43489cc840d1ad632d0124d8/LICENSE)
+Reviewed text: licenses/86928cfe51621f728c3d63c8de0a84be47750d3353145eefa89e728f7f6a26e0.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet-library/27b9b5acbbb2198b43489cc840d1ad632d0124d8/NOTICE)
+
+CycloneDX/6.3.1
+Reviewed license: Apache-2.0
+Redistribution: When redistributing, provide Apache-2.0 text, retain applicable attribution/NOTICE; mark modified files if any. Evidence copies do not modify component software.
+Reviewed text: licenses/35d78ed4a70916bf503ef5cd2ca1fd1115b1631545239902988d40195b6ab558.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/NOTICE)
+Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
+
+Humanizer.Core/2.14.1
+Reviewed license: MIT
+Redistribution: When redistributing copies/substantial portions, preserve copyright and permission notice.
+Reviewed text: licenses/e24ec7f2eea5c5f4b3e2c08308109ba99b49b4b56ea7ff0e0a178f2bdd4bbce8.txt (source: https://raw.githubusercontent.com/Humanizr/Humanizer/3ebc38de585fc641a04b0e78ed69468453b0f8a1/LICENSE)
+
+Humanizer.Core/3.0.1
+Reviewed license: MIT
+Redistribution: When redistributing copies/substantial portions, preserve copyright and permission notice.
+Reviewed text: licenses/e24ec7f2eea5c5f4b3e2c08308109ba99b49b4b56ea7ff0e0a178f2bdd4bbce8.txt (source: https://raw.githubusercontent.com/Humanizr/Humanizer/6e54d3786f4c4fe2cf665fa41d74a6e79bf9a85f/license.txt)
+
+Json.More.Net/3.0.0
+Reviewed license: OSMFEULA.txt
+Redistribution: MIT source notice plus packaged OSMFEULA. Owner confirms non-revenue-generating use and accepts documented terms on 2026-10-31; reassess upon revenue-generating use or changed distribution.
+Reviewed text: licenses/869642e6f3fc119d01364d609e0a79dc4239751a92444496469794f05f819c80.txt (source: https://api.nuget.org/v3-flatcontainer/json.more.net/3.0.0/json.more.net.3.0.0.nupkg#OSMFEULA.txt)
+Reviewed text: licenses/baebca0309090f4eca1b7a82c836cc91e48b2b92139c2280fb0ff69af922c2ae.txt (source: https://api.nuget.org/v3-flatcontainer/json.more.net/3.0.0/json.more.net.3.0.0.nupkg#LICENSE)
+Reviewed text: licenses/baebca0309090f4eca1b7a82c836cc91e48b2b92139c2280fb0ff69af922c2ae.txt (source: https://raw.githubusercontent.com/json-everything/json-everything/47232fecef1d1aab883acf6a0fa142c75f9a31da/LICENSE)
+
+JsonPointer.Net/7.0.0
+Reviewed license: OSMFEULA.txt
+Redistribution: MIT source notice plus packaged OSMFEULA. Owner confirms non-revenue-generating use and accepts documented terms on 2026-10-31; reassess upon revenue-generating use or changed distribution.
+Reviewed text: licenses/869642e6f3fc119d01364d609e0a79dc4239751a92444496469794f05f819c80.txt (source: https://api.nuget.org/v3-flatcontainer/jsonpointer.net/7.0.0/jsonpointer.net.7.0.0.nupkg#OSMFEULA.txt)
+Reviewed text: licenses/baebca0309090f4eca1b7a82c836cc91e48b2b92139c2280fb0ff69af922c2ae.txt (source: https://api.nuget.org/v3-flatcontainer/jsonpointer.net/7.0.0/jsonpointer.net.7.0.0.nupkg#LICENSE)
+Reviewed text: licenses/baebca0309090f4eca1b7a82c836cc91e48b2b92139c2280fb0ff69af922c2ae.txt (source: https://raw.githubusercontent.com/json-everything/json-everything/47232fecef1d1aab883acf6a0fa142c75f9a31da/LICENSE)
+
+JsonSchema.Net/9.1.1
+Reviewed license: OSMFEULA.txt
+Redistribution: MIT source notice plus packaged OSMFEULA. Owner confirms non-revenue-generating use and accepts documented terms on 2026-10-31; reassess upon revenue-generating use or changed distribution.
+Reviewed text: licenses/869642e6f3fc119d01364d609e0a79dc4239751a92444496469794f05f819c80.txt (source: https://api.nuget.org/v3-flatcontainer/jsonschema.net/9.1.1/jsonschema.net.9.1.1.nupkg#OSMFEULA.txt)
+Reviewed text: licenses/baebca0309090f4eca1b7a82c836cc91e48b2b92139c2280fb0ff69af922c2ae.txt (source: https://raw.githubusercontent.com/json-everything/json-everything/519ad0e0d6bebd440580d497b2137c7ea730a5ef/LICENSE)
+
+Newtonsoft.Json/13.0.3
+Reviewed license: MIT
+Redistribution: When redistributing copies/substantial portions, preserve copyright and permission notice.
+Reviewed text: licenses/b98a397897ff55f76cddc380041507a95a896b2946e0188703bf0496793d6516.txt (source: https://api.nuget.org/v3-flatcontainer/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg#LICENSE.md)
+Reviewed text: licenses/d7f83bbea3264a8e23d7739e44d9db1a4994b357274df6f00876eb2e623827ad.txt (source: https://raw.githubusercontent.com/JamesNK/Newtonsoft.Json/0a2e291c0d9c0c7675d445703e51750363a549ef/LICENSE.md)
+
+NuGet.Common/7.6.0
+Reviewed license: Apache-2.0
+Redistribution: When redistributing, provide Apache-2.0 text, retain applicable attribution/NOTICE; mark modified files if any. Evidence copies do not modify component software.
+Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
+Reviewed text: licenses/f1e3c903178e459ebd0c25d2dc65ebf11163c0a0d3ae46690943dffd5813040e.txt (source: https://raw.githubusercontent.com/NuGet/NuGet.Client/f333d9ade72a3409b54795f649efcac8f362054d/LICENSE.txt)
+
+NuGet.Configuration/7.6.0
+Reviewed license: Apache-2.0
+Redistribution: When redistributing, provide Apache-2.0 text, retain applicable attribution/NOTICE; mark modified files if any. Evidence copies do not modify component software.
+Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
+Reviewed text: licenses/f1e3c903178e459ebd0c25d2dc65ebf11163c0a0d3ae46690943dffd5813040e.txt (source: https://raw.githubusercontent.com/NuGet/NuGet.Client/f333d9ade72a3409b54795f649efcac8f362054d/LICENSE.txt)
+
+NuGet.DependencyResolver.Core/7.6.0
+Reviewed license: Apache-2.0
+Redistribution: When redistributing, provide Apache-2.0 text, retain applicable attribution/NOTICE; mark modified files if any. Evidence copies do not modify component software.
+Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
+Reviewed text: licenses/f1e3c903178e459ebd0c25d2dc65ebf11163c0a0d3ae46690943dffd5813040e.txt (source: https://raw.githubusercontent.com/NuGet/NuGet.Client/f333d9ade72a3409b54795f649efcac8f362054d/LICENSE.txt)
+
+NuGet.Frameworks/7.6.0
+Reviewed license: Apache-2.0
+Redistribution: When redistributing, provide Apache-2.0 text, retain applicable attribution/NOTICE; mark modified files if any. Evidence copies do not modify component software.
+Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
+Reviewed text: licenses/f1e3c903178e459ebd0c25d2dc65ebf11163c0a0d3ae46690943dffd5813040e.txt (source: https://raw.githubusercontent.com/NuGet/NuGet.Client/f333d9ade72a3409b54795f649efcac8f362054d/LICENSE.txt)
+
+NuGet.LibraryModel/7.6.0
+Reviewed license: Apache-2.0
+Redistribution: When redistributing, provide Apache-2.0 text, retain applicable attribution/NOTICE; mark modified files if any. Evidence copies do not modify component software.
+Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
+Reviewed text: licenses/f1e3c903178e459ebd0c25d2dc65ebf11163c0a0d3ae46690943dffd5813040e.txt (source: https://raw.githubusercontent.com/NuGet/NuGet.Client/f333d9ade72a3409b54795f649efcac8f362054d/LICENSE.txt)
+
+NuGet.Packaging/7.6.0
+Reviewed license: Apache-2.0
+Redistribution: When redistributing, provide Apache-2.0 text, retain applicable attribution/NOTICE; mark modified files if any. Evidence copies do not modify component software.
+Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
+Reviewed text: licenses/f1e3c903178e459ebd0c25d2dc65ebf11163c0a0d3ae46690943dffd5813040e.txt (source: https://raw.githubusercontent.com/NuGet/NuGet.Client/f333d9ade72a3409b54795f649efcac8f362054d/LICENSE.txt)
+
+NuGet.ProjectModel/7.6.0
+Reviewed license: Apache-2.0
+Redistribution: When redistributing, provide Apache-2.0 text, retain applicable attribution/NOTICE; mark modified files if any. Evidence copies do not modify component software.
+Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
+Reviewed text: licenses/f1e3c903178e459ebd0c25d2dc65ebf11163c0a0d3ae46690943dffd5813040e.txt (source: https://raw.githubusercontent.com/NuGet/NuGet.Client/f333d9ade72a3409b54795f649efcac8f362054d/LICENSE.txt)
+
+NuGet.Protocol/7.6.0
+Reviewed license: Apache-2.0
+Redistribution: When redistributing, provide Apache-2.0 text, retain applicable attribution/NOTICE; mark modified files if any. Evidence copies do not modify component software.
+Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
+Reviewed text: licenses/f1e3c903178e459ebd0c25d2dc65ebf11163c0a0d3ae46690943dffd5813040e.txt (source: https://raw.githubusercontent.com/NuGet/NuGet.Client/f333d9ade72a3409b54795f649efcac8f362054d/LICENSE.txt)
+
+NuGet.Versioning/7.6.0
+Reviewed license: Apache-2.0
+Redistribution: When redistributing, provide Apache-2.0 text, retain applicable attribution/NOTICE; mark modified files if any. Evidence copies do not modify component software.
+Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
+Reviewed text: licenses/f1e3c903178e459ebd0c25d2dc65ebf11163c0a0d3ae46690943dffd5813040e.txt (source: https://raw.githubusercontent.com/NuGet/NuGet.Client/f333d9ade72a3409b54795f649efcac8f362054d/LICENSE.txt)
+
+protobuf-net.Core/3.2.56
+Reviewed license: Apache-2.0
+Redistribution: When redistributing, provide Apache-2.0 text, retain applicable attribution/NOTICE; mark modified files if any. Evidence copies do not modify component software.
+Reviewed text: licenses/2054377b5c04fb70c67fe91ca12417e9d413e533169f1270ef69bd815f3053f3.txt (source: https://raw.githubusercontent.com/protobuf-net/protobuf-net/dfdfce61a739cfd76f05fcdacf8a4b3b9e94e684/Licence.txt)
+Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
+
+protobuf-net/3.2.56
+Reviewed license: Apache-2.0
+Redistribution: When redistributing, provide Apache-2.0 text, retain applicable attribution/NOTICE; mark modified files if any. Evidence copies do not modify component software.
+Reviewed text: licenses/2054377b5c04fb70c67fe91ca12417e9d413e533169f1270ef69bd815f3053f3.txt (source: https://raw.githubusercontent.com/protobuf-net/protobuf-net/dfdfce61a739cfd76f05fcdacf8a4b3b9e94e684/Licence.txt)
+Reviewed text: licenses/6c29f22a4a7385285c6f579ec9f33c5e989f00739d6b257243a0b082ec9447ae.txt (source: https://raw.githubusercontent.com/CycloneDX/cyclonedx-dotnet/6938a02734b0c30e1a59976f5bd592f1ee8be1eb/LICENSE)
+
+System.CommandLine/2.0.8
+Reviewed license: MIT
+Redistribution: When redistributing copies/substantial portions, preserve copyright and permission notice.
+Reviewed text: licenses/4bef6a7e7b359869d751c9ff70274a80a0f626927afa5a0681583c1b1861267b.txt (source: https://raw.githubusercontent.com/dotnet/dotnet/94ea82652cdd4e0f8046b5bd5becbd11461482ca/THIRD-PARTY-NOTICES.txt)
+Reviewed text: licenses/ae48df11a335dc1a615f4f938b69cba73bcf4485c4f97af49b38efb0f216353b.txt (source: https://raw.githubusercontent.com/dotnet/dotnet/94ea82652cdd4e0f8046b5bd5becbd11461482ca/LICENSE.TXT)
+
+System.IO.Abstractions/22.2.0
+Reviewed license: MIT
+Redistribution: When redistributing copies/substantial portions, preserve copyright and permission notice.
+Reviewed text: licenses/9b4f46dc8e65bb14714479eb4de76b7a1e2e7f9eff7ab1eb0e9dea712f19b1ed.txt (source: https://raw.githubusercontent.com/TestableIO/System.IO.Abstractions/ec68061d1cf181d50f089f979301f874885bf0be/LICENSE)
+
+System.Security.Cryptography.Pkcs/8.0.1
+Reviewed license: MIT
+Redistribution: When redistributing copies/substantial portions, preserve copyright and permission notice.
+Reviewed text: licenses/97c1a7b3da6a4c6ad516448719f45114b41a4d4c5aa300a944476e2e4f5da438.txt (source: https://raw.githubusercontent.com/dotnet/runtime/81cabf2857a01351e5ab578947c7403a5b128ad1/THIRD-PARTY-NOTICES.TXT)
+Reviewed text: licenses/b60b2912da28eaa6518593c9e2efb5334ee062d3c42e80d8fdfa806b3dc52977.txt (source: https://api.nuget.org/v3-flatcontainer/system.security.cryptography.pkcs/8.0.1/system.security.cryptography.pkcs.8.0.1.nupkg#THIRD-PARTY-NOTICES.TXT)
+Reviewed text: licenses/cfc21f5e8bd655ae997eec916138b707b1d290b83272c02a95c9f821b8c87310.txt (source: https://raw.githubusercontent.com/dotnet/runtime/81cabf2857a01351e5ab578947c7403a5b128ad1/LICENSE.TXT)
+Reviewed text: licenses/d7a68596ab69b06f51ca278a6545148e4269a9381c26d597c13df5d88e08cf5b.txt (source: https://api.nuget.org/v3-flatcontainer/system.security.cryptography.pkcs/8.0.1/system.security.cryptography.pkcs.8.0.1.nupkg#LICENSE.TXT)
+
+System.Security.Cryptography.ProtectedData/8.0.0
+Reviewed license: MIT
+Redistribution: When redistributing copies/substantial portions, preserve copyright and permission notice.
+Reviewed text: licenses/19c19dcac9f3ee6302cfbc6745bb8e79f08efc4c933eb8dc5509bf14b88347ec.txt (source: https://api.nuget.org/v3-flatcontainer/system.security.cryptography.protecteddata/8.0.0/system.security.cryptography.protecteddata.8.0.0.nupkg#THIRD-PARTY-NOTICES.TXT)
+Reviewed text: licenses/7238e7fd468427aa3fe45b1d0cee1c3e2d93ff96692820768521e9780225d473.txt (source: https://raw.githubusercontent.com/dotnet/runtime/5535e31a712343a63f5d7d796cd874e563e5ac14/THIRD-PARTY-NOTICES.TXT)
+Reviewed text: licenses/cfc21f5e8bd655ae997eec916138b707b1d290b83272c02a95c9f821b8c87310.txt (source: https://raw.githubusercontent.com/dotnet/runtime/5535e31a712343a63f5d7d796cd874e563e5ac14/LICENSE.TXT)
+Reviewed text: licenses/d7a68596ab69b06f51ca278a6545148e4269a9381c26d597c13df5d88e08cf5b.txt (source: https://api.nuget.org/v3-flatcontainer/system.security.cryptography.protecteddata/8.0.0/system.security.cryptography.protecteddata.8.0.0.nupkg#LICENSE.TXT)
+
+TestableIO.System.IO.Abstractions.Wrappers/22.2.0
+Reviewed license: MIT
+Redistribution: When redistributing copies/substantial portions, preserve copyright and permission notice.
+Reviewed text: licenses/9b4f46dc8e65bb14714479eb4de76b7a1e2e7f9eff7ab1eb0e9dea712f19b1ed.txt (source: https://raw.githubusercontent.com/TestableIO/System.IO.Abstractions/ec68061d1cf181d50f089f979301f874885bf0be/LICENSE)
+
+TestableIO.System.IO.Abstractions/22.2.0
+Reviewed license: MIT
+Redistribution: When redistributing copies/substantial portions, preserve copyright and permission notice.
+Reviewed text: licenses/9b4f46dc8e65bb14714479eb4de76b7a1e2e7f9eff7ab1eb0e9dea712f19b1ed.txt (source: https://raw.githubusercontent.com/TestableIO/System.IO.Abstractions/ec68061d1cf181d50f089f979301f874885bf0be/LICENSE)
+
+Testably.Abstractions.FileSystem.Interface/10.3.0
+Reviewed license: MIT
+Redistribution: When redistributing copies/substantial portions, preserve copyright and permission notice.
+Reviewed text: licenses/024f2e034ea52d1b47be884bda1bd9b776ceddbfb2a7cc4d49f79255c8ed483c.txt (source: https://raw.githubusercontent.com/Testably/Testably.Abstractions/9b967ee024caa2d47e3ac27a23d26ea55cd20ded/LICENSE)
+
+CURRENT SOURCE-SERVICED SBOM TOOL - DEVELOPMENT ONLY
+PiratePDF.CycloneDX.Serviced 6.3.1-piratepdf.b14b.1; upstream Apache-2.0 source, original LICENSE/NOTICE and modification notice retained.
+See generation-tool-serviced.json and serviced-tool-review.json. Unchanged exact components retain the original reviewed obligations above.
+System.Security.Cryptography.Pkcs/8.0.2
+Reviewed license: MIT
+Redistribution: When redistributing copies/substantial portions, preserve copyright and permission notice.
+Reviewed text: licenses/97c1a7b3da6a4c6ad516448719f45114b41a4d4c5aa300a944476e2e4f5da438.txt (source: https://raw.githubusercontent.com/dotnet/runtime/b9a49e4a6d3a444a3685e318c74a7892d01873f7/THIRD-PARTY-NOTICES.TXT)
+Reviewed text: licenses/b60b2912da28eaa6518593c9e2efb5334ee062d3c42e80d8fdfa806b3dc52977.txt (source: https://api.nuget.org/v3-flatcontainer/system.security.cryptography.pkcs/8.0.2/system.security.cryptography.pkcs.8.0.2.nupkg#THIRD-PARTY-NOTICES.TXT)
+Reviewed text: licenses/cfc21f5e8bd655ae997eec916138b707b1d290b83272c02a95c9f821b8c87310.txt (source: https://raw.githubusercontent.com/dotnet/runtime/b9a49e4a6d3a444a3685e318c74a7892d01873f7/LICENSE.TXT)
+Reviewed text: licenses/d7a68596ab69b06f51ca278a6545148e4269a9381c26d597c13df5d88e08cf5b.txt (source: https://api.nuget.org/v3-flatcontainer/system.security.cryptography.pkcs/8.0.2/system.security.cryptography.pkcs.8.0.2.nupkg#LICENSE.TXT)

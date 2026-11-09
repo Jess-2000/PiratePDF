@@ -4,12 +4,12 @@
 |---|---|
 | **Document ID** | PP-DOC-000 |
 | **Category** | Documentation Index |
-| **Version** | 1.0 |
+| **Version** | 1.2 |
 | **Status** | Approved |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1025, BF-1026, BF-1027, BF-1028 |
-| **Last Updated** | 2026-07-24 |
-| **Next Review** | 2026-10-24 |
+| **Last Updated** | 2026-11-08 |
+| **Next Review** | 2027-02-08 |
 
 ---
 
@@ -25,8 +25,8 @@ New contributors should begin with:
 
 1. [Project Charter](Project-Charter.md)
 2. [Master Blueprint](Blueprint/README.md)
-3. [Development Roadmap](02-Roadmaps/Development-Roadmap.md)
-4. [Project Governance](05-Governance/Project-Governance-Guide.md)
+3. [Development Roadmap](02-Roadmaps/README.md)
+4. [Governing Project Charter](../PROJECT-CHARTER.md)
 5. [Documentation Standards](05-Governance/Documentation-Standards.md)
 6. [Architecture Decision Records](ADR/README.md)
 7. [Technical Specifications](Technical-Specifications/README.md)
@@ -44,7 +44,7 @@ The Master Blueprint defines PiratePDFâ€™s product vision, high-level archi
 Roadmaps track engineering work, product capabilities, release planning, and intentionally deferred ideas.
 
 - [Roadmaps](02-Roadmaps/README.md)
-- [Development Roadmap](02-Roadmaps/Development-Roadmap.md)
+- [Development Roadmap](02-Roadmaps/README.md)
 
 ### Technical Specifications
 
@@ -56,9 +56,19 @@ Technical specifications define subsystem responsibilities, contracts, boundarie
 
 Governance documents define how PiratePDF is planned, documented, reviewed, tested, and maintained.
 
-- [Project Governance Guide](05-Governance/Project-Governance-Guide.md)
+- [Governing Project Charter](../PROJECT-CHARTER.md)
 - [Documentation Standards](05-Governance/Documentation-Standards.md)
 - [Documentation Validation Rules](05-Governance/Documentation-Validation-Rules.md)
+- [Document form JavaScript policy](05-Governance/Document-Form-JavaScript-Policy.md)
+- [Windows signing and provenance](releases/Windows-Release-Signing-and-Provenance.md)
+- [Runtime, dependency and artifact currency](05-Governance/Runtime-Dependency-and-Artifact-Currency.md)
+
+The current handoff and roadmap govern maintenance sequencing and acceptance.
+Completed milestone/release reports and dated qualification evidence retain
+their historical scope. Subsequent policy decisions apply through current
+guidance and never retroactively qualify old evidence. PP-GOV-006 supplies
+current form-event policy, and PP-GOV-005 supplies Windows v1 platform scope.
+[Maintenance handoff](handoffs/PiratePDF-Maintenance-Handoff-Post-BF-1054-Part1.md).
 
 ### Architecture Decisions
 
@@ -104,28 +114,6 @@ PP-ADR-006
 
 | Version | Date | Description |
 |---|---|---|
-| 1.0 | 2026-07-25 | Added missing revision history section. |
-
-## Revision History
-
-| Version | Date | Description |
-|---|---|---|
-| 1.0 | 2026-07-25 | Added missing revision history section. |
-
-## Revision History
-
-| Version | Date | Description |
-|---|---|---|
-| 1.0 | 2026-07-25 | Added missing revision history section. |
-
-## Revision History
-
-| Version | Date | Description |
-|---|---|---|
-| 1.0 | 2026-07-25 | Added missing revision history section. |
-
-## Revision History
-
-| Version | Date | Description |
-|---|---|---|
+| 1.2 | 2026-11-08 | Apply B14B permanent artifact currency policy and servicing/verification guidance. |
+| 1.1 | 2026-11-08 | Repair current navigation and authority links, link form/release policies and collapse repeated identical history blocks. |
 | 1.0 | 2026-07-25 | Added missing revision history section. |

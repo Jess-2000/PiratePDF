@@ -4,12 +4,12 @@
 |---|---|
 | **Document ID** | PP-ADR-INDEX-001 |
 | **Category** | Architecture Decision Record |
-| **Version** | 1.2 |
+| **Version** | 1.3 |
 | **Status** | Approved |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1000, BF-1039, BF-1048, BF-8000 |
-| **Last Updated** | 2026-08-09 |
-| **Next Review** | 2026-11-09 |
+| **Last Updated** | 2026-11-08 |
+| **Next Review** | 2027-02-08 |
 
 ---
 
@@ -36,8 +36,17 @@ PiratePDF and BlackFlag Engine.
 | [ADR-0011](ADR-0011-passive-document-conversion.md) | Convert Documents as Passive Content | Accepted | BF-1040 |
 | [ADR-0012](ADR-0012-pure-filter-transformations.md) | Implement Filter Decoders as Pure Transformations | Accepted | BF-1040 |
 | [ADR-0013](ADR-0013-one-free-open-source-edition.md) | Use One Free and Open-Source PiratePDF Edition | Accepted | BF-1048 |
+| [ADR-0014](ADR-0014-require-independent-source-implementation.md) | Require Independent Source Implementation | Accepted | BF-1000, BF-1048, BF-8000 |
 
 ## Lifecycle
+
+ADR text records the decision and implementation context at its stated date.
+Milestone-specific future-work statements retain that historical scope.
+Current maintenance status, platform support and form-script execution policy
+are reconciled in the active handoff and governed policies.
+[Maintenance handoff](../handoffs/PiratePDF-Maintenance-Handoff-Post-BF-1054-Part1.md),
+[Form policy](../05-Governance/Document-Form-JavaScript-Policy.md),
+[Platform policy](../05-Governance/Platform-Support-and-Native-Lifetime.md).
 
 ADR lifecycle values are:
 
@@ -64,6 +73,7 @@ ADR-0001.
 
 | Version | Date | Description |
 |---|---|---|
+| 1.3 | 2026-11-08 | Catalog existing ADR-0014 and link current authority while preserving dated decision records. |
 | 1.0 | 2026-07-31 | Created the authoritative ADR index through ADR-0009. |
 | 1.1 | 2026-08-06 | Added ADR-0010 through ADR-0012 for BF-1040. |
 | 1.2 | 2026-08-09 | Added ADR-0013 and marked ADR-0005 superseded by the single-edition open-source product decision. |

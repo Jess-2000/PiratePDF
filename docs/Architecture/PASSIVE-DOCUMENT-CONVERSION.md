@@ -4,12 +4,12 @@
 |---|---|
 | **Document ID** | PP-ARCH-CONV-001 |
 | **Category** | Architecture |
-| **Version** | 1.0 |
+| **Version** | 1.1 |
 | **Status** | Approved |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1040, BF-7000 |
-| **Last Updated** | 2026-08-06 |
-| **Next Review** | 2026-11-06 |
+| **Last Updated** | 2026-11-08 |
+| **Next Review** | 2027-02-08 |
 
 ## Principle
 
@@ -32,6 +32,12 @@ external refresh behavior, or document-triggered network communication.
 
 Executable behavior and embedded objects are omitted rather than activated or
 transferred. The original source remains unchanged.
+
+The local PDF form-event policy governs future supported interactive behavior
+after explicit event admission. Conversion remains passive and never transfers
+source macros or scripts into the output. Imported data cannot invoke trusted
+application operations to obtain external privileges.
+[Document form policy](../05-Governance/Document-Form-JavaScript-Policy.md).
 
 ## Content Preservation
 
@@ -57,4 +63,5 @@ inspection, conversion, and future format capabilities.
 
 | Version | Date | Description |
 |---|---|---|
+| 1.1 | 2026-11-08 | Clarify passive conversion scope alongside the local PDF form-event policy. |
 | 1.0 | 2026-08-06 | Established passive conversion and the version 1.0 format scope. |

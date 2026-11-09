@@ -1,0 +1,7 @@
+# Preserve byte-exact historical B9 reports and their SHA-256 registrations across Windows and Linux checkouts.
+/docs/reviews/Post-BF-1054-B9-Coverage-Guided-Campaign-Readiness.md text eol=lf
+/docs/reviews/Post-BF-1054-B9-Phase-A-Completion-2-Final-Integration.md text eol=lf
+/docs/reviews/Post-BF-1054-B9-Phase-A-Completion-2-Remaining-Independent-Supervision-and-Handoff.md text eol=lf
+/docs/reviews/Post-BF-1054-B9-Phase-A-Completion-2-Stabilization.md text eol=lf
+/docs/reviews/Post-BF-1054-B9-Phase-A-Completion-2B-Independent-Parent-and-Worker-Ownership.md text eol=lf
+/docs/05-Governance/Documentation-Standards.md text eol=lf

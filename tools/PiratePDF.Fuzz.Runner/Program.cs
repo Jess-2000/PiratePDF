@@ -11,6 +11,28 @@ if (args.Length == 0 || args[0] != "smoke")
     Console.CancelKeyPress += cancelHandler;
     try
     {
+        if (args.Length == 3 && args[0] == "station-artifact-inspect")
+        {
+            Console.WriteLine(StationArtifactInspection.Inspect(args[1], args[2]));
+            return 0;
+        }
+
+        if (args.Length > 0 && args[0] == "station-lease-receive")
+        {
+            if (!OperatingSystem.IsWindows() || args.Length != 2) return 64;
+            return await NativeStationTransaction.RunReceiverAsync(args[1], cancellation.Token);
+        }
+
+        if (args.Length > 0 && args[0] == "campaign-worker-internal")
+            return await CampaignGatedWorkerCommand.ExecuteAsync(args, cancellation.Token);
+
+        if (args.Length > 0 && args[0] == "campaign-mutate")
+        {
+            CampaignResult campaignResult = await CampaignCommand.ExecuteAsync(args, cancellation.Token);
+            Console.WriteLine(campaignResult.Json);
+            return campaignResult.ExitCode;
+        }
+
         if (args.Length > 0 && args[0] is "retain-finding" or "reproduce-finding" or "compare-minimization" or "propose-promotion")
         {
             FindingResult findingResult = await FindingCommand.ExecuteAsync(args, cancellation.Token);

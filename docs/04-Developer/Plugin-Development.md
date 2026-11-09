@@ -4,18 +4,25 @@
 |---|---|
 | **Document ID** | PP-DEV-002 |
 | **Category** | Developer Documentation |
-| **Version** | 1.0 |
+| **Version** | 1.3 |
 | **Status** | Implemented |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1050 |
-| **Last Updated** | 2026-08-13 |
-| **Next Review** | 2026-11-13 |
+| **Last Updated** | 2026-11-08 |
+| **Next Review** | 2027-02-08 |
 
 ## Purpose
 
 This document defines the supported BF-1050 plugin authoring contract. Third-party plugin assemblies compile against `BlackFlag.Engine.SDK` only. `BlackFlag.Engine.Plugins` is host orchestration and is not a plugin dependency.
 
 The canonical source example is `samples/BlackFlag.Engine.ReferencePlugin`.
+
+PP-GOV-007 applies to SDK/plugin packages and their managed/native dependencies.
+Track compatible supported runtime requirements, audit dependencies, preserve
+version-specific legal/provenance evidence and rebuild affected embedded
+runtime/native packages before distribution. A currency verification pass
+retains the plugin admission/capability boundaries and its actual qualification
+scope. [Currency policy](../05-Governance/Runtime-Dependency-and-Artifact-Currency.md).
 
 ## Project Boundary
 
@@ -53,6 +60,14 @@ Initialization is transactional for extension registration. If initialization fa
 
 Plugin authors must not depend on immediate garbage collection after unload. Managed plugin assemblies are loaded without retaining the package DLL handle; native library lifetime has separate operating-system semantics.
 
+Under [PP-GOV-005](../05-Governance/Platform-Support-and-Native-Lifetime.md),
+native modules may remain loaded for the application's process lifetime.
+Immediate deterministic native-image release is not required for v1. Process
+termination is the reliable final release boundary; replacing an already-loaded
+native dependency may require restarting the application. Managed deactivation,
+disposal and collectible-context unload requests remain required. Do not free
+runtime-owned handles manually or introduce speculative native ownership.
+
 ## Capabilities
 
 Capabilities are host-defined, typed resources identified by `PluginCapabilityKey<T>`. A plugin may retrieve only a capability declared in its manifest. Required capabilities must be available and authorized before initialization. Optional capabilities may return `null`; plugins must handle absence without treating it as a host failure.
@@ -70,6 +85,12 @@ Plugins should not cache host implementation details or attempt to mutate the ho
 Each active plugin uses a collectible `AssemblyLoadContext` for managed dependency resolution, version isolation, and unloadability. The host shares its SDK identity so a plugin cannot substitute a private incompatible SDK copy.
 
 `AssemblyLoadContext` is **not a security sandbox**. In-process plugin code executes with the operating-system permissions of the PiratePDF process. BF-1050 capability and extension policy constrains supported engine access, but it cannot make arbitrary hostile managed code safe. Truly hostile plugin isolation requires a separate process and operating-system boundary and is outside BF-1050.
+
+Document-embedded scripts remain subject to PP-GOV-006 in all host modes.
+Plugin grants cannot authorize prohibited script effects or turn embedded
+scripts into trusted application operations. Future local form-event support
+requires shared SDK/Services/desktop enforcement and qualified sandboxing.
+[Document form policy](../05-Governance/Document-Form-JavaScript-Policy.md).
 
 ## Compatibility and Versioning
 
@@ -91,4 +112,7 @@ Do not use exceptions as a way to request optional host features. Declare option
 
 | Version | Date | Description |
 |---|---|---|
+| 1.3 | 2026-11-08 | Link B14B artifact currency governance and retain independent native/plugin qualification. |
+| 1.2 | 2026-11-08 | Apply canonical document-form restrictions to plugin-originated host access. |
+| 1.1 | 2026-10-31 | Clarify owner-approved process-resident native module lifetime and restart requirements while preserving managed lifecycle and runtime handle ownership. |
 | 1.0 | 2026-08-13 | Published the BF-1050 plugin developer contract and canonical SDK-only reference pattern. |

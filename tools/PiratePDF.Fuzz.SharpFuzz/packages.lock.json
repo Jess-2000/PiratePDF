@@ -24,27 +24,27 @@
       },
       "SkiaSharp": {
         "type": "Transitive",
-        "resolved": "4.150.1",
-        "contentHash": "5v3T8X1N62Dp+AkPO70GNBNS/NRBPGMOTiN+Prg33sZAcm/Ug3YOAH+3RTj/jxJV8NGTJs2idGpC2Qdae2mGLQ==",
+        "resolved": "4.150.7",
+        "contentHash": "De8qL2H46s+Kds3WDoxB+BAp0C+kn9Q1UUDtKinjlMRL6R0wHNzDO38bwrdjD6BjDF4k5mDC+NoeAZfqU28vKw==",
         "dependencies": {
-          "SkiaSharp.NativeAssets.Win32": "4.150.1",
-          "SkiaSharp.NativeAssets.macOS": "4.150.1"
+          "SkiaSharp.NativeAssets.Win32": "4.150.7",
+          "SkiaSharp.NativeAssets.macOS": "4.150.7"
         }
       },
       "SkiaSharp.NativeAssets.Linux": {
         "type": "Transitive",
-        "resolved": "4.150.1",
-        "contentHash": "7IZtljoTBp0EH7/6K3p3yey44db3W7hkV9UPdCOaQQ2TxFkmFOpXwOPiQ865DrG+szgp0aKpQs8vYrzRdF83Ng=="
+        "resolved": "4.150.7",
+        "contentHash": "/1Ms7yHJxL9S8QvW44KyE5zsQvgOYcbkbV6MfphrP1M8gI/BIacZBGF/4tMiNbkNm10L/h24NqRqTFfi/vKkSw=="
       },
       "SkiaSharp.NativeAssets.macOS": {
         "type": "Transitive",
-        "resolved": "4.150.1",
-        "contentHash": "r755HVwaHZhyf1clWjrM2/RoOZYCzkQEmE9pu/mVsebPejWu52niNPUwtfyf112qoF0PIk6OndqVOUoITj6TwQ=="
+        "resolved": "4.150.7",
+        "contentHash": "7hIH3pTzs7Y0W18btrW/rv/MRlC3o9tXoJ50bDY4Nn8dXvp4WWBsBr87hCvW0JkGrjGlql5xk03iaEJHd4ZoeA=="
       },
       "SkiaSharp.NativeAssets.Win32": {
         "type": "Transitive",
-        "resolved": "4.150.1",
-        "contentHash": "qrLSL8OonbkMJdSH8heK0Jl39Y2xxZGdd7Ru4cyBXk2ITdx+Fu1sCFLmvCKmnMaYs//mlN/YSpSpOurEXErcQw=="
+        "resolved": "4.150.7",
+        "contentHash": "7h6W96B4GaFAM1IjfE4iLWyQwUtyElUbk5hlTU2Xod7jxXRYA9gYBYPrPEsxlz2Sm+iLktpqH9TYeMa2qHyfUw=="
       },
       "blackflag.engine.abstractions": {
         "type": "Project",
@@ -122,8 +122,8 @@
         "type": "Project",
         "dependencies": {
           "BlackFlag.Engine.Rendering": "[1.0.0, )",
-          "SkiaSharp": "[4.150.1, )",
-          "SkiaSharp.NativeAssets.Linux": "[4.150.1, )"
+          "SkiaSharp": "[4.150.7, )",
+          "SkiaSharp.NativeAssets.Linux": "[4.150.7, )"
         }
       },
       "blackflag.engine.security": {
@@ -166,6 +166,23 @@
           "BlackFlag.Engine.Rendering.Skia": "[1.0.0, )",
           "BlackFlag.Engine.Services": "[1.0.0, )"
         }
+      }
+    },
+    "net10.0/win-x64": {
+      "SkiaSharp.NativeAssets.Linux": {
+        "type": "Transitive",
+        "resolved": "4.150.7",
+        "contentHash": "/1Ms7yHJxL9S8QvW44KyE5zsQvgOYcbkbV6MfphrP1M8gI/BIacZBGF/4tMiNbkNm10L/h24NqRqTFfi/vKkSw=="
+      },
+      "SkiaSharp.NativeAssets.macOS": {
+        "type": "Transitive",
+        "resolved": "4.150.7",
+        "contentHash": "7hIH3pTzs7Y0W18btrW/rv/MRlC3o9tXoJ50bDY4Nn8dXvp4WWBsBr87hCvW0JkGrjGlql5xk03iaEJHd4ZoeA=="
+      },
+      "SkiaSharp.NativeAssets.Win32": {
+        "type": "Transitive",
+        "resolved": "4.150.7",
+        "contentHash": "7h6W96B4GaFAM1IjfE4iLWyQwUtyElUbk5hlTU2Xod7jxXRYA9gYBYPrPEsxlz2Sm+iLktpqH9TYeMa2qHyfUw=="
       }
     }
   }

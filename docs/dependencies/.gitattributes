@@ -1,0 +1,6 @@
+# Hash-checked evidence and vendor notices must survive checkout byte-for-byte.
+*.json -text
+*.xml -text
+THIRD-PARTY-NOTICES.txt -text
+licenses/*.txt -text
+evidence/*.txt -text

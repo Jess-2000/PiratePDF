@@ -57,7 +57,7 @@ internal static partial class DocumentationValidator
                 MarkdownStructureValidator.Validate(
                     document));
 
-            if (!document.HasSection(
+            if (document.MetadataSupplementPath is null && !document.HasSection(
                     DocumentationContract.RevisionHistoryHeading))
             {
                 issues.Add(

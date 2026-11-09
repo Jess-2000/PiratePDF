@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>CycloneDX.Core</id>
+    <version>12.1.1</version>
+    <authors>Patrick Dwyer &amp; Steve Springett</authors>
+    <license type="expression">Apache-2.0</license>
+    <licenseUrl>https://licenses.nuget.org/Apache-2.0</licenseUrl>
+    <projectUrl>https://github.com/CycloneDX/cyclonedx-dotnet-library</projectUrl>
+    <description>A .NET Standard library for CycloneDX bill-of-material documents.</description>
+    <copyright>Copyright (c) OWASP Foundation</copyright>
+    <repository type="git" url="https://github.com/CycloneDX/cyclonedx-dotnet-library.git" branch="refs/heads/main" commit="27b9b5acbbb2198b43489cc840d1ad632d0124d8" />
+    <dependencies>
+      <group targetFramework="net8.0">
+        <dependency id="JsonSchema.Net" version="9.1.1" exclude="Build,Analyzers" />
+        <dependency id="protobuf-net" version="3.2.56" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net10.0">
+        <dependency id="JsonSchema.Net" version="9.1.1" exclude="Build,Analyzers" />
+        <dependency id="protobuf-net" version="3.2.56" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="JsonSchema.Net" version="9.1.1" exclude="Build,Analyzers" />
+        <dependency id="System.Text.Json" version="10.0.3" exclude="Build,Analyzers" />
+        <dependency id="protobuf-net" version="3.2.56" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

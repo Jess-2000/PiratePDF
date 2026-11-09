@@ -215,6 +215,8 @@ public static class PdfEditingSaveService
                         SaveDomain.Annotations,
                     PdfExistingTextEditOperation =>
                         SaveDomain.ExistingText,
+                    PdfExistingTextResourceChangeOperation =>
+                        SaveDomain.ExistingText,
                     _ => throw new NotSupportedException(
                         $"Editing operation '{operation.GetType().Name}' does not have a public save orchestration path.")
                 };

@@ -8,10 +8,31 @@ internal sealed class MutationWorkspace : IDisposable
     private FileStream? reader;
     private bool ownsCase;
     private bool createdRoot;
+    private bool preserveCase;
     internal bool CleanupSucceeded { get; private set; }
     internal string InputPath => Path.Combine(root, "case.bin");
 
     internal MutationWorkspace(string repositoryRoot) => root = Path.Combine(repositoryRoot, "artifacts", "fuzz", "mutation-work");
+
+    private MutationWorkspace(string repositoryRoot, string runId) =>
+        root = Path.Combine(repositoryRoot, "artifacts", "fuzz", "incoming", runId);
+
+    internal static MutationWorkspace ForCampaign(string repositoryRoot, string runId) => new(repositoryRoot, runId);
+
+    internal void PreserveInput() => preserveCase = true;
+
+    internal bool CampaignContentsValid()
+    {
+        CheckDirectories(root, allowMissing: false);
+        int count = 0;
+        foreach (string path in Directory.EnumerateFileSystemEntries(root))
+        {
+            if (++count > 2 || Path.GetFileName(path) is not ("active.lock" or "case.bin") ||
+                (File.GetAttributes(path) & (FileAttributes.Directory | FileAttributes.ReparsePoint | FileAttributes.Device)) != 0)
+                return false;
+        }
+        return true;
+    }
 
     internal void Open()
     {
@@ -28,14 +49,27 @@ internal sealed class MutationWorkspace : IDisposable
     }
 
     internal async Task PrepareAsync(ReadOnlyMemory<byte> bytes, int maximum, CancellationToken token)
+        => await PrepareCoreAsync(bytes, maximum, false, token).ConfigureAwait(false);
+
+    internal Task PrepareBrokeredAsync(ReadOnlyMemory<byte> bytes, int maximum, CancellationToken token) => PrepareCoreAsync(bytes, maximum, true, token);
+
+    private async Task PrepareCoreAsync(ReadOnlyMemory<byte> bytes, int maximum, bool atomic, CancellationToken token)
     {
         ArgumentOutOfRangeException.ThrowIfLessThan(maximum, bytes.Length);
         CheckDirectories(root, allowMissing: false);
-        await using (var writer = new FileStream(InputPath, FileMode.CreateNew, FileAccess.Write, FileShare.None,
+        string staging = atomic ? Path.Combine(root, "case.pending") : InputPath;
+        await using (var writer = new FileStream(staging, FileMode.CreateNew, FileAccess.Write, FileShare.None,
             bufferSize: 1, FileOptions.Asynchronous))
         {
-            ownsCase = true;
+            ownsCase = !atomic;
             await writer.WriteAsync(bytes, token).ConfigureAwait(false);
+        }
+        if (atomic)
+        {
+            token.ThrowIfCancellationRequested();
+            CheckDirectories(root, allowMissing: false);
+            File.Move(staging, InputPath);
+            ownsCase = true;
         }
         // Hold a read-only sharing lease through worker consumption, reducing ordinary Windows write/delete races.
         // Ancestor substitution/hard-link confinement is still not an atomic security boundary.
@@ -65,7 +99,9 @@ internal sealed class MutationWorkspace : IDisposable
 
     private bool Close()
     {
-        bool clean = ClearCase();
+        bool clean = !preserveCase && ClearCase();
+        reader?.Dispose();
+        reader = null;
         bool ownsLease = lease is not null;
         try
         {

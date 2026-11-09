@@ -1,0 +1,97 @@
+{
+  "Format": "PiratePDF serviced SBOM tool legal/provenance review v1",
+  "ReviewedOn": "2026-11-08",
+  "Approval": "Owner approved source rebuild with Pkcs 8.0.2 in B14B",
+  "OriginalReview": "license-review.json",
+  "OriginalReviewSHA256": "CEC2D40F1FADF91705623F99D0DD7174A0087DED875F2B0F373F82E410E1BBF2",
+  "UpstreamSourceCommit": "6938a02734b0c30e1a59976f5bd592f1ee8be1eb",
+  "NewComponent": {
+    "Identity": "System.Security.Cryptography.Pkcs/8.0.2",
+    "Usage": "sbom-tool",
+    "Status": "verified-evidence",
+    "ReviewedLicense": "MIT",
+    "DeclaredLicense": "MIT",
+    "DeclaredLicenseType": "expression",
+    "Repository": "https://github.com/dotnet/runtime",
+    "Commit": "b9a49e4a6d3a444a3685e318c74a7892d01873f7",
+    "ArchiveUrl": "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.pkcs/8.0.2/system.security.cryptography.pkcs.8.0.2.nupkg",
+    "ArchiveSha512": "6fb6cbf867b8cac6beb53bcc982178907e1d57d7074dc85652058258ec04a68523127d234be60eb0a7a5bebb5d4c47a617dc3aa8226d82c3e83459ed0644ac46",
+    "ManifestEvidence": [
+      {
+        "Artifact": "evidence/19e3688ac8d4b34a7c1851d2bcc8519a272e2d9c4e7b7cdbdaced3c95290c9b0.txt",
+        "Sha256": "19e3688ac8d4b34a7c1851d2bcc8519a272e2d9c4e7b7cdbdaced3c95290c9b0",
+        "Source": "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.pkcs/8.0.2/system.security.cryptography.pkcs.8.0.2.nupkg#System.Security.Cryptography.Pkcs.nuspec",
+        "Kind": "package-manifest"
+      }
+    ],
+    "LegalTexts": [
+      {
+        "Artifact": "licenses/97c1a7b3da6a4c6ad516448719f45114b41a4d4c5aa300a944476e2e4f5da438.txt",
+        "Sha256": "97c1a7b3da6a4c6ad516448719f45114b41a4d4c5aa300a944476e2e4f5da438",
+        "Source": "https://raw.githubusercontent.com/dotnet/runtime/b9a49e4a6d3a444a3685e318c74a7892d01873f7/THIRD-PARTY-NOTICES.TXT",
+        "Kind": "legal-text"
+      },
+      {
+        "Artifact": "licenses/b60b2912da28eaa6518593c9e2efb5334ee062d3c42e80d8fdfa806b3dc52977.txt",
+        "Sha256": "b60b2912da28eaa6518593c9e2efb5334ee062d3c42e80d8fdfa806b3dc52977",
+        "Source": "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.pkcs/8.0.2/system.security.cryptography.pkcs.8.0.2.nupkg#THIRD-PARTY-NOTICES.TXT",
+        "Kind": "legal-text"
+      },
+      {
+        "Artifact": "licenses/cfc21f5e8bd655ae997eec916138b707b1d290b83272c02a95c9f821b8c87310.txt",
+        "Sha256": "cfc21f5e8bd655ae997eec916138b707b1d290b83272c02a95c9f821b8c87310",
+        "Source": "https://raw.githubusercontent.com/dotnet/runtime/b9a49e4a6d3a444a3685e318c74a7892d01873f7/LICENSE.TXT",
+        "Kind": "legal-text"
+      },
+      {
+        "Artifact": "licenses/d7a68596ab69b06f51ca278a6545148e4269a9381c26d597c13df5d88e08cf5b.txt",
+        "Sha256": "d7a68596ab69b06f51ca278a6545148e4269a9381c26d597c13df5d88e08cf5b",
+        "Source": "https://api.nuget.org/v3-flatcontainer/system.security.cryptography.pkcs/8.0.2/system.security.cryptography.pkcs.8.0.2.nupkg#LICENSE.TXT",
+        "Kind": "legal-text"
+      }
+    ],
+    "Verification": "Archive manifest identity/license/repository; legal texts at manifest-declared commit.",
+    "Obligations": "When redistributing copies/substantial portions, preserve copyright and permission notice.",
+    "Distribution": "Source-serviced development SBOM tool only; no engine or desktop distribution"
+  },
+  "OriginalTermsDecision": "2026-10-31 conversation: Owner confirms non-revenue-generating use and accepts the documented terms for Json.More.Net 3.0.0, JsonPointer.Net 7.0.0 and JsonSchema.Net 9.1.1.",
+  "Limitations": "Exact unchanged packages retain their existing reviewed terms. Source variant remains development-only and is not an official upstream release.",
+  "PkcsBinaryHashes": [
+    {
+      "Path": "lib/net462/System.Security.Cryptography.Pkcs.dll",
+      "SHA256": "f6e6da556861f048c1adc0c4febfce58cbcf4a93c0c452f2475f7818c9b44715"
+    },
+    {
+      "Path": "lib/net6.0/System.Security.Cryptography.Pkcs.dll",
+      "SHA256": "9adabedab3e739f8c689c8b3cf688d3d2c0b8ff787e1e7e649e39926353fe878"
+    },
+    {
+      "Path": "lib/net7.0/System.Security.Cryptography.Pkcs.dll",
+      "SHA256": "28c1a5a3498366b694be3a0435146e9de8860148fc781322dc5ced25a08011c0"
+    },
+    {
+      "Path": "lib/net8.0/System.Security.Cryptography.Pkcs.dll",
+      "SHA256": "f4fcece252af1532cfbc70fd89b2afd79f506ee6286f3558994ca41502714ea1"
+    },
+    {
+      "Path": "lib/netstandard2.0/System.Security.Cryptography.Pkcs.dll",
+      "SHA256": "a92457bf3be023a1f9bf3385c83c1073349ef8c1a9c671fdb2e161786a798a99"
+    },
+    {
+      "Path": "lib/netstandard2.1/System.Security.Cryptography.Pkcs.dll",
+      "SHA256": "b711305f3b19c71960be188b285a2dcbf12cc6f835b7fee8fe088d5b3fb4c45e"
+    },
+    {
+      "Path": "runtimes/win/lib/net6.0/System.Security.Cryptography.Pkcs.dll",
+      "SHA256": "bed2edb788ea47b6374284dd2ce98cc3f22c22ddca1707fba6c070f7fd534697"
+    },
+    {
+      "Path": "runtimes/win/lib/net7.0/System.Security.Cryptography.Pkcs.dll",
+      "SHA256": "07799e8993e94db70c4482fc64d0e48add6bf312f8f06f13f5f261d07b2780e4"
+    },
+    {
+      "Path": "runtimes/win/lib/net8.0/System.Security.Cryptography.Pkcs.dll",
+      "SHA256": "443c614ab2f18918770ee5187e5deb39cd09c06a475ca6ed58c7a4b466d3e658"
+    }
+  ]
+}

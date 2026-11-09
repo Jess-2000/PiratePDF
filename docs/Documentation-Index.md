@@ -114,6 +114,8 @@
 | BF-DOC-0004 | [BlackFlag Engine — Parser Infrastructure RC1](Parser-Infrastructure-RC1.md) | Architecture | 0.4.0 | Tested | 2026-07-30 |
 | BF-DOC-0005 | [BlackFlag Engine 0.5.0 — PDF Object Model RC1](PDF-Object-Model-RC1.md) | Architecture | 0.5.0 | In Development | 2026-07-30 |
 | BF-DOC-1001 | [Documentation Template RC1](Documentation-Template-RC1.md) | Developer Documentation | 0.1.0 | In Development | 2026-07-30 |
+| Draft — allocation pending | [PiratePDF B9 Phase A Completion-2 — Independent Supervision and Evidence Integrity](reviews/Post-BF-1054-B9-Phase-A-Completion-2-Independent-Supervision-and-Evidence-Integrity.md) | Engineering Review | 0.3 | Review | 2026-10-10 |
+| Draft — ID pending allocation | [PiratePDF B9 Phase A Completion-1 — Correctness and Resource Accounting](reviews/Post-BF-1054-B9-Phase-A-Completion-1-Correctness-and-Resource-Accounting.md) | Engineering Review | 0.2 | Review | 2026-10-10 |
 | PP-ADR-000 | [Architecture Decision Records](ADR/README.md) | Architecture Decision Record | 2.0 | Approved | 2026-07-31 |
 | PP-ADR-0000 | [ADR-0000 — Project Charter Governance](ADR/ADR-0000-project-charter-governance.md) | Architecture Decision Record | 1.1 | Approved | 2026-08-09 |
 | PP-ADR-001 | [ADR-0001 â€” Use C# as the Primary Language](ADR/ADR-0001-use-csharp-as-primary-language.md) | Architecture Decision Record | 1.0 | Approved | 2026-07-24 |
@@ -130,9 +132,9 @@
 | PP-ADR-012 | [ADR-0012 — Implement Filter Decoders as Pure Transformations](ADR/ADR-0012-pure-filter-transformations.md) | Architecture Decision Record | 1.0 | Approved | 2026-08-06 |
 | PP-ADR-013 | [ADR-0013 — Use One Free and Open-Source PiratePDF Edition](ADR/ADR-0013-one-free-open-source-edition.md) | Architecture Decision Record | 1.0 | Approved | 2026-08-09 |
 | PP-ADR-014 | [ADR-0014 — Require Independent Source Implementation](ADR/ADR-0014-require-independent-source-implementation.md) | Architecture Decision Record | 1.0 | Approved | 2026-08-09 |
-| PP-ADR-INDEX-001 | [Architecture Decision Record Index](ADR/ADR-Index.md) | Architecture Decision Record | 1.2 | Approved | 2026-08-09 |
-| PP-ARCH-001 | [PiratePDF Master Blueprint - Volume II: BlackFlag Engine Architecture](Blueprint/Volume-II-BlackFlag-Engine-Architecture.md) | Architecture | 1.1 | Approved | 2026-08-09 |
-| PP-ARCH-CONV-001 | [Passive Document Conversion Architecture](Architecture/PASSIVE-DOCUMENT-CONVERSION.md) | Architecture | 1.0 | Approved | 2026-08-06 |
+| PP-ADR-INDEX-001 | [Architecture Decision Record Index](ADR/ADR-Index.md) | Architecture Decision Record | 1.3 | Approved | 2026-11-08 |
+| PP-ARCH-001 | [PiratePDF Master Blueprint - Volume II: BlackFlag Engine Architecture](Blueprint/Volume-II-BlackFlag-Engine-Architecture.md) | Architecture | 1.2 | Approved | 2026-11-08 |
+| PP-ARCH-CONV-001 | [Passive Document Conversion Architecture](Architecture/PASSIVE-DOCUMENT-CONVERSION.md) | Architecture | 1.1 | Approved | 2026-11-08 |
 | PP-ARCH-MEM-001 | [BlackFlag Memory and Resource Architecture](Architecture/MEMORY-ARCHITECTURE.md) | Architecture | 1.0 | In Development | 2026-08-06 |
 | PP-AUD-001 | [Pre-BF-1054 C# Repository Engineering Audit](reviews/Pre-BF-1054-CSharp-Repository-Audit.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
 | PP-AUD-002 | [Pre-BF-1054 Batch 1 — Plugin Boundary Hardening](reviews/Pre-BF-1054-Batch-1-Plugin-Boundary-Hardening.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
@@ -142,7 +144,7 @@
 | PP-AUD-006 | [Pre-BF-1054 Batch 3 — Abstractions Test Quality](reviews/Pre-BF-1054-Batch-3-Abstractions-Test-Quality.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
 | PP-AUD-007 | [Pre-BF-1054 Batch 3 — Completion Report](reviews/Pre-BF-1054-Batch-3-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
 | PP-AUD-008 | [Pre-BF-1054 Structural-Refactoring Necessity Assessment](reviews/Pre-BF-1054-Structural-Refactoring-Necessity-Assessment.md) | Engineering Review | 1.0 | Review | 2026-08-26 |
-| PP-AUD-009 | [Post-BF-1054 C# Repository Engineering, Security and Optimization Audit](reviews/Post-BF-1054-CSharp-Repository-Audit.md) | Engineering Review | 1.19 | Review | 2026-09-23 |
+| PP-AUD-009 | [Post-BF-1054 C# Repository Engineering, Security and Optimization Audit](reviews/Post-BF-1054-CSharp-Repository-Audit.md) | Engineering Review | 1.28 | Review | 2026-11-08 |
 | PP-AUD-010 | [Post-BF-1054 Batch B1 - Bounded Mutation Decode](reviews/Post-BF-1054-Batch-B1-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-06 |
 | PP-AUD-011 | [Post-BF-1054 Batch B2 - JPEG Preallocation Validation](reviews/Post-BF-1054-Batch-B2-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-07 |
 | PP-AUD-012 | [Post-BF-1054 Batch B3 - Allocated Font Resource Name](reviews/Post-BF-1054-Batch-B3-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-08 |
@@ -172,28 +174,53 @@
 | PP-AUD-036 | [Post-BF-1054 Batch B9 - Fuzz Toolchain Smoke Completion Report](reviews/Post-BF-1054-Batch-B9-Fuzz-Toolchain-Smoke-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-26 |
 | PP-AUD-037 | [Post-BF-1054 Batch B9 - Failure Artifact Reproduction and Promotion Report](reviews/Post-BF-1054-Batch-B9-Failure-Artifact-Reproduction-and-Promotion-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-09-27 |
 | PP-AUD-038 | [Post-BF-1054 Batch B9 - CI Portability Remediation Report](reviews/Post-BF-1054-Batch-B9-CI-Portability-Remediation-Report.md) | Engineering Review | 1.1 | Review | 2026-10-05 |
-| PP-CHARTER-001 | [PiratePDF Project Charter](Project-Charter.md) | Project Charter | 1.1 | Approved | 2026-08-09 |
+| PP-AUD-039 | [Post-BF-1054 B9 - First-Party Fuzzing Feasibility and Migration Assessment](reviews/Post-BF-1054-B9-First-Party-Fuzzing-Feasibility-and-Migration-Assessment.md) | Engineering Review | 1.0 | Review | 2026-10-10 |
+| PP-AUD-040 | [Post-BF-1054 Batch B10 - Reopen/Render Conformance](reviews/Post-BF-1054-Batch-B10-Reopen-Render-Conformance-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-10-27 |
+| PP-AUD-041 | [Post-BF-1054 Batch B11 - Packaged Native Resolution and Fallback](reviews/Post-BF-1054-Batch-B11-Packaged-Native-Resolution-Completion-Report.md) | Engineering Review | 1.3 | Review | 2026-10-31 |
+| PP-AUD-042 | [Post-BF-1054 Batch B12 - Dependency Provenance and SBOM](reviews/Post-BF-1054-Batch-B12-Dependency-Provenance-and-Sbom-Completion-Report.md) | Engineering Review | 1.2 | Review | 2026-10-31 |
+| PP-AUD-043 | [B13 Signing, Provenance and Documentation Reconciliation](reviews/Post-BF-1054-Batch-B13-Signing-Provenance-and-Documentation-Reconciliation-Report.md) | Engineering Review | 1.0 | Review | 2026-11-08 |
+| PP-AUD-044 | [B14 Native AOT, Trimming and Deployment Compatibility](reviews/Post-BF-1054-Batch-B14-Deployment-Compatibility-Report.md) | Engineering Review | 1.0 | Review | 2026-11-08 |
+| PP-AUD-045 | [B14A Runtime and Toolchain Security Remediation](reviews/Post-BF-1054-Batch-B14A-Runtime-Toolchain-Security-Report.md) | Engineering Review | 1.0 | Review | 2026-11-08 |
+| PP-AUD-046 | [B14B Package Rebuild and Artifact Currency](reviews/Post-BF-1054-Batch-B14B-Artifact-Currency-Report.md) | Engineering Review | 1.0 | Review | 2026-11-08 |
+| PP-AUD-047 | [Post-BF-1054 Batch B16 — Final Maintenance Execution Plan](reviews/Post-BF-1054-Batch-B16-Final-Maintenance-Execution-Plan.md) | Engineering Review | 1.1 | Review | 2026-11-08 |
+| PP-AUD-048 | [B16 Final Repository Cleanup and Managed-Fuzzer Optimization](reviews/Post-BF-1054-Batch-B16-Final-Maintenance-Completion-Report.md) | Engineering Review | 1.0 | Review | 2026-11-08 |
+| PP-CHARTER-001 | [PiratePDF Project Charter](Project-Charter.md) | Project Charter | 1.2 | Approved | 2026-11-08 |
+| PP-DEP-001 | [Dependency Inventory, Notices and SBOM Procedure](dependencies/README.md) | Developer Documentation | 1.3 | Review | 2026-11-08 |
+| PP-DEP-002 | [B12 License and Provenance Resolution Matrix](dependencies/License-Provenance-Resolution.md) | Developer Documentation | 1.1 | Review | 2026-11-08 |
 | PP-DEV-001 | [PiratePDF Master Blueprint - Volume IV: Engineering Standards](Blueprint/Volume-IV-Engineering-Standards.md) | Developer Documentation | 1.1 | Approved | 2026-08-15 |
-| PP-DEV-002 | [BlackFlag Engine Plugin Development Contract](04-Developer/Plugin-Development.md) | Developer Documentation | 1.0 | Implemented | 2026-08-13 |
-| PP-DOC-000 | [PiratePDF Documentation](README.md) | Documentation Index | 1.0 | Approved | 2026-07-24 |
-| PP-GOV-002 | [PiratePDF Documentation Standards](05-Governance/Documentation-Standards.md) | Governance | 1.1 | Approved | 2026-08-16 |
-| PP-GOV-003 | [Documentation Validation Rules](05-Governance/Documentation-Validation-Rules.md) | Governance | 1.0 | Approved | 2026-07-24 |
+| PP-DEV-002 | [BlackFlag Engine Plugin Development Contract](04-Developer/Plugin-Development.md) | Developer Documentation | 1.3 | Implemented | 2026-11-08 |
+| PP-DEV-003 | [Deployment Compatibility and B14 Experiments](04-Developer/Deployment-Compatibility.md) | Developer Documentation | 1.2 | Review | 2026-11-08 |
+| PP-DOC-000 | [PiratePDF Documentation](README.md) | Documentation Index | 1.2 | Approved | 2026-11-08 |
+| PP-GOV-002 | [PiratePDF Documentation Standards](05-Governance/Documentation-Standards.md) | Governance | 1.2 | Approved | 2026-10-24 |
+| PP-GOV-003 | [Documentation Validation Rules](05-Governance/Documentation-Validation-Rules.md) | Governance | 1.1 | Approved | 2026-11-08 |
+| PP-GOV-004 | [Native H2b Deferral and Maintenance Sequencing](05-Governance/H2b-Deferral-and-Maintenance-Sequencing.md) | Governance | 1.3 | Approved | 2026-11-08 |
+| PP-GOV-005 | [PiratePDF v1 Platform Support and Native Lifetime](05-Governance/Platform-Support-and-Native-Lifetime.md) | Governance | 1.0 | Approved | 2026-10-31 |
+| PP-GOV-006 | [Document Form JavaScript Policy](05-Governance/Document-Form-JavaScript-Policy.md) | Governance | 1.0 | Approved | 2026-11-08 |
+| PP-GOV-007 | [Runtime, Dependency and Artifact Currency](05-Governance/Runtime-Dependency-and-Artifact-Currency.md) | Governance | 1.0 | Approved | 2026-11-08 |
+| PP-HANDOFF-001 | [PiratePDF Maintenance Handoff](handoffs/PiratePDF-Maintenance-Handoff-Post-BF-1054-Part1.md) | Engineering Handoff | 1.14 | Review | 2026-11-08 |
 | PP-HIST-001 | [Building BlackFlag](BUILDING-BLACKFLAG.md) | Developer Guide | 0.1 | In Development | 2026-08-06 |
+| PP-HIST-B9-001 | [B9 Coverage-Guided Campaign Readiness (historical; metadata registered 2026-10-24)](reviews/Post-BF-1054-B9-Coverage-Guided-Campaign-Readiness.md) | Historical Metadata Registration | 1.0 | Review | 2026-10-24 |
+| PP-HIST-B9-002 | [B9 Phase A Completion-2: Final Integration (historical; metadata registered 2026-10-24)](reviews/Post-BF-1054-B9-Phase-A-Completion-2-Final-Integration.md) | Historical Metadata Registration | 1.0 | Review | 2026-10-24 |
+| PP-HIST-B9-003 | [B9 Phase A: Remaining Completion-2 Supervision and Handoff (historical; metadata registered 2026-10-24)](reviews/Post-BF-1054-B9-Phase-A-Completion-2-Remaining-Independent-Supervision-and-Handoff.md) | Historical Metadata Registration | 1.0 | Review | 2026-10-24 |
+| PP-HIST-B9-004 | [B9 Completion-2 Stabilization and Reassessment (historical; metadata registered 2026-10-24)](reviews/Post-BF-1054-B9-Phase-A-Completion-2-Stabilization.md) | Historical Metadata Registration | 1.0 | Review | 2026-10-24 |
+| PP-HIST-B9-005 | [B9 Phase A Completion-2B: Independent Parent and Worker Ownership (historical; metadata registered 2026-10-24)](reviews/Post-BF-1054-B9-Phase-A-Completion-2B-Independent-Parent-and-Worker-Ownership.md) | Historical Metadata Registration | 1.0 | Review | 2026-10-24 |
 | PP-HIST-BF-1040 | [BF-1040 Milestone Reflection](releases/BF-1040/Milestone-Reflection.md) | Project History | 1.0 | Tested | 2026-08-06 |
 | PP-HIST-BF-1041 | [BF-1041 Milestone Reflection](releases/BF-1041/Milestone-Reflection.md) | Project History | 1.0 | Tested | 2026-08-06 |
+| PP-REL-001 | [Windows Release Signing and Provenance](releases/Windows-Release-Signing-and-Provenance.md) | Release Documentation | 1.3 | Approved | 2026-11-08 |
 | PP-REL-BF-1039 | [BF-1039 Release Summary](releases/BF-1039/Release-Summary.md) | Release Documentation | 1.0 | Tested | 2026-07-31 |
 | PP-REL-BF-1040 | [BF-1040 Release Summary](releases/BF-1040/Release-Summary.md) | Release Documentation | 1.0 | Tested | 2026-08-06 |
 | PP-REL-BF-1041 | [BF-1041 Release Summary](releases/BF-1041/Release-Summary.md) | Release Documentation | 1.0 | Tested | 2026-08-06 |
-| PP-ROAD-000 | [PiratePDF Roadmaps](02-Roadmaps/README.md) | Roadmap | 1.0 | Approved | 2026-07-24 |
-| PP-ROAD-002 | [PiratePDF Master Blueprint - Volume VI: Future Roadmap](Blueprint/Volume-VI-Future-Roadmap.md) | Roadmap | 1.0 | Approved | 2026-07-24 |
-| PP-SPEC-000 | [PiratePDF Technical Specifications](Technical-Specifications/README.md) | Technical Specification | 1.0 | In Development | 2026-07-24 |
-| PP-SPEC-001 | [PiratePDF Master Blueprint - Volume III: PiratePDF Application Specification](Blueprint/Volume-III-PiratePDF-Application-Specification.md) | Technical Specification | 1.0 | Approved | 2026-07-24 |
+| PP-ROAD-000 | [PiratePDF Roadmaps](02-Roadmaps/README.md) | Roadmap | 1.9 | Approved | 2026-11-08 |
+| PP-ROAD-002 | [PiratePDF Master Blueprint - Volume VI: Future Roadmap](Blueprint/Volume-VI-Future-Roadmap.md) | Roadmap | 1.9 | Approved | 2026-11-08 |
+| PP-ROAD-003 | [Windows Desktop Development Sequence](02-Roadmaps/Windows-Desktop-Development-Sequence.md) | Roadmap | 1.5 | Approved | 2026-11-08 |
+| PP-SPEC-000 | [PiratePDF Technical Specifications](Technical-Specifications/README.md) | Technical Specification | 1.1 | In Development | 2026-11-08 |
+| PP-SPEC-001 | [PiratePDF Master Blueprint - Volume III: PiratePDF Application Specification](Blueprint/Volume-III-PiratePDF-Application-Specification.md) | Technical Specification | 1.1 | Approved | 2026-11-08 |
 | PP-SPEC-010 | [BlackFlag Engine Abstractions Specification](Technical-Specifications/BlackFlag-Engine/Abstractions.md) | Technical Specification | 1.0 | In Development | 2026-07-24 |
 | PP-SPEC-011 | [BlackFlag Engine Core Specification](Technical-Specifications/BlackFlag-Engine/Core.md) | Technical Specification | 1.0 | In Development | 2026-07-24 |
 | PP-SPEC-012 | [BlackFlag Engine I/O Specification](Technical-Specifications/BlackFlag-Engine/IO.md) | Technical Specification | 1.0 | In Development | 2026-07-24 |
 | PP-SPEC-013 | [BlackFlag Engine Syntax Specification](Technical-Specifications/BlackFlag-Engine/Syntax.md) | Technical Specification | 1.0 | In Development | 2026-07-24 |
-| PP-SPEC-014 | [BlackFlag Engine Document Model Specification](Technical-Specifications/BlackFlag-Engine/Document.md) | Technical Specification | 1.0 | In Development | 2026-07-24 |
-| PP-SPEC-015 | [BlackFlag Engine SDK Specification](Technical-Specifications/BlackFlag-Engine/SDK.md) | Technical Specification | 1.5 | In Development | 2026-08-13 |
+| PP-SPEC-014 | [BlackFlag Engine Document Model Specification](Technical-Specifications/BlackFlag-Engine/Document.md) | Technical Specification | 1.1 | In Development | 2026-11-08 |
+| PP-SPEC-015 | [BlackFlag Engine SDK Specification](Technical-Specifications/BlackFlag-Engine/SDK.md) | Technical Specification | 1.6 | In Development | 2026-11-08 |
 | PP-SPEC-BF-1036 | [BF-1036 — Collection Parser](milestones/BF-1036-Collection-Parser.md) | Technical Specification | 1.0 | Approved | 2026-07-30 |
 | PP-SPEC-BF-1037 | [BF-1037 — Indirect Objects and References](milestones/BF-1037-Indirect-Objects-and-References.md) | Technical Specification | 1.0 | Tested | 2026-07-31 |
 | PP-SPEC-BF-1038 | [BF-1038 — Traditional Cross-Reference Tables and Trailers](milestones/BF-1038-Traditional-Cross-Reference-Tables.md) | Technical Specification | 1.0 | Tested | 2026-07-31 |
@@ -208,5 +235,5 @@
 | PP-SPEC-BF-1048B | [BF-1048B â€” Core Rendering Engine](milestones/BF-1048B-Core-Rendering-Engine.md) | Technical Specification | 1.0 | Implemented | 2026-08-07 |
 | PP-SPEC-BF-1048C | [BF-1048C — Text and Font Rendering](milestones/BF-1048C-Text-and-Font-Rendering.md) | Technical Specification | 1.0 | Implemented | 2026-08-09 |
 | PP-TEST-001 | [PiratePDF Master Blueprint - Volume V: Testing and Quality Assurance](Blueprint/Volume-V-Testing-and-QA.md) | Testing Documentation | 1.0 | Approved | 2026-07-24 |
-| PP-VSN-000 | [PiratePDF Master Blueprint](Blueprint/README.md) | Vision | 1.1 | Approved | 2026-08-09 |
-| PP-VSN-001 | [PiratePDF Master Blueprint - Volume I: Vision and Product Strategy](Blueprint/Volume-I-Vision-and-Product-Strategy.md) | Vision | 1.1 | Approved | 2026-08-09 |
+| PP-VSN-000 | [PiratePDF Master Blueprint](Blueprint/README.md) | Vision | 1.2 | Approved | 2026-11-08 |
+| PP-VSN-001 | [PiratePDF Master Blueprint - Volume I: Vision and Product Strategy](Blueprint/Volume-I-Vision-and-Product-Strategy.md) | Vision | 1.3 | Approved | 2026-11-08 |

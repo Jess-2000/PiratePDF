@@ -28,7 +28,12 @@ BlackFlag Engine is the document-processing core behind PiratePDF. Its architect
 
 A central design goal is **preservation-aware editing and writing**. Editing determines what the logical document becomes; Writing determines how that result is serialized. This separation helps PiratePDF avoid unnecessary document reconstruction and retain unrelated structures and object identities where practical.
 
-The engine is designed to remain platform-agnostic. PiratePDF Version 1.0 targets Windows and macOS, while broader Linux support is planned for a later release.
+The engine is designed to remain platform-agnostic. PiratePDF v1 officially
+targets **Windows 10/11 x64 only**. Linux and macOS are deferred to future
+community-led support. Existing cross-platform code remains in place. See
+[platform support and native lifetime](docs/05-Governance/Platform-Support-and-Native-Lifetime.md).
+There is no desktop application entry project yet; application distribution
+and startup qualification remain open under B11.
 
 ## Current Engineering Areas
 
@@ -45,11 +50,51 @@ Development to date includes substantial work in these areas:
 - existing-text discovery/editing, find/replace, typography/style/decorations, font embedding/subsetting paths, width-aware adjustment, and SDK/service exposure completed through BF-1054.
 
 
+## Maintenance continuation — 2026-10-31
+
+[PP-GOV-004](docs/05-Governance/H2b-Deferral-and-Maintenance-Sequencing.md)
+defers native H2b execution/security qualification to an unspecified future
+PiratePDF update. It remains incomplete, unqualified and disabled; its code,
+evidence and fail-closed protections are preserved. Managed fuzzing remains
+partially verified, and B9 / POST-P2-002 remains open.
+
+**B10 / POST-P2-003 is complete; B11 / POST-P2-004 remains partial** because
+there is no desktop entry project to qualify its actual Windows x64
+distribution/startup. B12 / POST-P2-005 is complete. The current B13 /
+POST-P2-006 documentation reconciliation is complete and precedes scoped B14, B15 and final B16
+before BF-1055 in the approved
+sequence, with B16 reserved as the final cleanup/profile batch. This sequence
+is independent of native H2b qualification.
+Existing acceptance/release gates remain unchanged. POST-P2-004 covers
+packaged-platform dependency resolution/fallback, not H2b activation.
+BF-1055 remains separate product development. No production native fuzzing
+or unsandboxed fallback for untrusted PDFs is authorized. See the
+[amended maintenance handoff](docs/handoffs/PiratePDF-Maintenance-Handoff-Post-BF-1054-Part1.md)
+for current status and distinct validation scopes.
+
 ## Security Posture
+
+Repository dependency evidence, preserved third-party notices and schema-validated
+engine/tooling SBOMs are documented in the [dependency accountability procedure](docs/dependencies/README.md).
+They are not an application-distribution SBOM or a claim of legal compliance;
+the [version-specific review](docs/dependencies/License-Provenance-Resolution.md)
+records applicable notices and the owner's current tool-use decision. Review
+changed versions, terms and actual distributed artifacts before shipping.
 
 PiratePDF is offline-first and treats documents, embedded resources, plugins, paths, metadata, and native/runtime boundaries as untrusted. Security work prioritizes bounded parsing and resource use, passive handling of active PDF content, fuzzing/adversarial corpus testing, least privilege, controlled native-library loading, plugin/SDK isolation, and minimizing sensitive document-data lifetime.
 
-Official release hardening is expected to include dependency/SBOM review, artifact provenance and hashes, Windows Authenticode signing, and macOS code signing/notarization. Native AOT may be evaluated for deployment hardening and performance characteristics, but it is **not** treated as an obfuscation guarantee or security boundary.
+The approved form security policy permits supported local field events only
+under sandbox and policy enforcement. Safe Mode disables document scripts.
+The present engine provides passive discovery and reporting. Script runtime
+and desktop event integration require separate qualification.
+[Document form policy](docs/05-Governance/Document-Form-JavaScript-Policy.md).
+
+Official Windows release requirements cover Authenticode, source/build identity,
+final SHA-256 hashes, dependency/SBOM evidence and isolated signing credentials.
+Production provisioning and final signed-artifact qualification are deferred to
+the executable/packaging and release workstreams. Native AOT remains a
+deployment choice requiring its own compatibility validation.
+[Signing and provenance](docs/releases/Windows-Release-Signing-and-Provenance.md).
 
 ## Documentation
 
@@ -71,6 +116,24 @@ The repository documentation is maintained as part of the product. Good starting
 - [Milestone Documentation](docs/milestones/) — detailed records of completed BlackFlag work slices.
 
 The broader documentation library is available from [docs/README.md](docs/README.md).
+
+## Developer toolchain
+
+[Runtime, dependency and artifact currency](docs/05-Governance/Runtime-Dependency-and-Artifact-Currency.md)
+governs servicing checks, affected-package rebuilds, minimum secure runtimes,
+native/dependency review and owner-approved exceptions. B14A is complete.
+B14B artifact currency is complete with eight verified development groups,
+the SkiaSharp 4.150.7 patch and owner-reported elevated gate success.
+B15 hosted checkpoint d031cfa passed. B16 cleanup and measured managed-filter
+optimization are implemented and verified, with formal acceptance recommended under the
+[B16 report](docs/reviews/Post-BF-1054-Batch-B16-Final-Maintenance-Completion-Report.md).
+BF-1055 follows accepted B16 under its own task scope.
+Historical artifacts retain their original evidence and distribution restrictions.
+
+Use .NET SDK 10.0.403 as selected by global.json and CI. Ordinary net10.0
+outputs require runtime 10.0.14 or a compatible later patch. The B14A security
+report tracks patched-runtime validation and gate acceptance. Local SDK setup
+and deployment guidance are in [Deployment compatibility](docs/04-Developer/Deployment-Compatibility.md).
 
 ## Repository Layout
 

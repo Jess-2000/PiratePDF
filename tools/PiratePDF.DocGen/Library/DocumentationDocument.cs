@@ -59,6 +59,9 @@ internal sealed class DocumentationDocument
 
     public DocumentMetadata Metadata { get; }
 
+    // Set only after the approved original/policy hashes and complete registration validate.
+    internal string? MetadataSupplementPath { get; init; }
+
     public string FilePath =>
         Metadata.FilePath;
 

@@ -191,7 +191,13 @@ public sealed partial class PdfEditableDocument
                 resourceName,
                 objectReplacements.Count,
                 previousStream.Length,
-                replacementStream.Length);
+                replacementStream.Length)
+            {
+                AffectedObjectIdentifiers = Array.AsReadOnly(objectReplacements.Keys
+                    .OrderBy(identifier => identifier.ObjectNumber)
+                    .ThenBy(identifier => identifier.GenerationNumber)
+                    .ToArray())
+            };
 
         session.ValidateOperation(
             operation);

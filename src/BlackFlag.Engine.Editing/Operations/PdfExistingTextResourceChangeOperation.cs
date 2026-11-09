@@ -51,6 +51,10 @@ public sealed class PdfExistingTextResourceChangeOperation :
         PdfExistingTextEditability.EditableWithResourceChange;
 
     public int AffectedObjectCount { get; }
+
+    // Owned identifiers let preservation-aware Writing include every projected
+    // resource object without rewriting unrelated objects or exposing mutable state.
+    internal IReadOnlyList<PdfObjectIdentifier> AffectedObjectIdentifiers { get; init; } = [];
     public int PreviousLength { get; }
     public int ReplacementLength { get; }
 }

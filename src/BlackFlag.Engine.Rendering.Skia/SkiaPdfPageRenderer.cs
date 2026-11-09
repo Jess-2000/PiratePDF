@@ -175,7 +175,8 @@ public sealed partial class SkiaPdfPageRenderer : IPdfPageRenderer, IDisposable
                         break;
 
                     case PdfDisplayForm form:
-                        ApplyMatrix(canvas, form.Transform);
+                        // Interpreted Form children already carry the effective page-space
+                        // transform and clip. Applying the placement again moves them twice.
                         RenderList(
                             canvas,
                             form.Content,

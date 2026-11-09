@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>SharpFuzz</id>
+    <version>2.3.0</version>
+    <title>SharpFuzz</title>
+    <authors>Nemanja Mijailovic</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <description>AFL-based fuzz testing for .NET</description>
+    <copyright>Copyright © 2018-2025, Nemanja Mijailovic</copyright>
+    <tags>fuzzing testing fuzz-testing fuzzer afl afl-fuzz libfuzzer</tags>
+    <repository type="git" url="https://github.com/Metalnem/sharpfuzz.git" commit="7dde242459c5459cb988fb8ace4397a9485d720f" />
+    <dependencies>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="SharpFuzz.Common" version="2.2.0" exclude="Build,Analyzers" />
+        <dependency id="System.Memory" version="4.6.0" exclude="Build,Analyzers" />
+        <dependency id="dnlib" version="4.4.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

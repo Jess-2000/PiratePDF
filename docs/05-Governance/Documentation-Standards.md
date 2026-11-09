@@ -4,12 +4,12 @@
 |---|---|
 | **Document ID** | PP-GOV-002 |
 | **Category** | Governance |
-| **Version** | 1.1 |
+| **Version** | 1.2 |
 | **Status** | Approved |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1026; BF-1053 |
-| **Last Updated** | 2026-08-16 |
-| **Next Review** | 2026-11-16 |
+| **Last Updated** | 2026-10-24 |
+| **Next Review** | 2027-01-24 |
 
 ---
 
@@ -88,5 +88,52 @@ A canonical newly authored milestone must satisfy both conditions:
 
 | Version | Date | Description |
 |---|---|---|
+| 1.2 | 2026-10-24 | Authorized narrow, hash-bound corrective registrations for five immutable B9 reports; original bytes and unknown historical metadata retained. |
 | 1.0 | 2026-07-23 | Established documentation standards. |
 | 1.1 | 2026-08-16 | Aligned validation, repair, template, and deterministic review-date policy. |
+
+## Historical B9 metadata supplements
+
+Policy contract: `B9-HISTORICAL-METADATA-V1`, authorized on 2026-10-24.
+
+The five historical reports named below may receive new corrective metadata
+registrations in `docs/reviews/B9-Historical-Metadata.json`. The original bytes
+must never be changed to satisfy metadata or revision-history requirements.
+This is a narrow supplementation mechanism, not a directory or historical-label
+exemption. All unrelated and newly authored documents retain the usual rules.
+
+| Registration ID | Original under docs/reviews/ |
+|---|---|
+| PP-HIST-B9-001 | Post-BF-1054-B9-Coverage-Guided-Campaign-Readiness.md |
+| PP-HIST-B9-002 | Post-BF-1054-B9-Phase-A-Completion-2-Final-Integration.md |
+| PP-HIST-B9-003 | Post-BF-1054-B9-Phase-A-Completion-2-Remaining-Independent-Supervision-and-Handoff.md |
+| PP-HIST-B9-004 | Post-BF-1054-B9-Phase-A-Completion-2-Stabilization.md |
+| PP-HIST-B9-005 | Post-BF-1054-B9-Phase-A-Completion-2B-Independent-Parent-and-Worker-Ownership.md |
+
+Each version-1 JSON record contains exact `OriginalPath` and `OriginalSha256`,
+`DocumentId`, `Registered`, `NextReview`, `HistoricalMetadata`, `History`, and
+`PolicySha256` binding it to this policy's complete bytes. Paths are exact,
+repository-relative and limited to the table. Hashes use uppercase SHA-256.
+Duplicate, conflicting, malformed, unknown-field, unsupported-claim, missing
+resource and hash-mismatched records fail closed. Records cannot override a
+canonical historical header or hide malformed original Markdown.
+
+These are **new registrations**, not reconstructed historical metadata. Their
+category is Historical Metadata Registration, version 1.0, status Review,
+owner PiratePDF Project, and related work item BF-1054. This registration
+ownership and work-item association follow the current project authorization;
+they do not assert historical authorship or acceptance. `Registered` is
+2026-10-24 and `NextReview` is 2027-01-24. The original report hash and retained
+content substantiate its identity and original statements. This policy and its
+hash substantiate the newly assigned registration fields. The original report's
+canonical historical metadata remains `Unknown; not reconstructed.`
+
+The exact history entry is `2026-10-24: Initial corrective registration; original
+report unchanged.` It records only this later corrective action, never an
+invented original creation/update date, version, owner, review or acceptance.
+Generated catalog titles explicitly identify the registration date; their
+metadata dates describe the registration, not the original report's creation.
+DocGen validates the registration and policy before using it for missing
+metadata/history requirements, always validates original Markdown structure,
+and never proposes automatic repairs to these immutable originals. A missing
+or invalid supplement leaves requirements unsatisfied and errors visible.

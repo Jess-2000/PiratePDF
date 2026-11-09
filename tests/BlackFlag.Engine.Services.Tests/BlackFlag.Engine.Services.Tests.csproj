@@ -36,6 +36,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\BlackFlag.Engine.Parsing\BlackFlag.Engine.Parsing.csproj" />
+    <ProjectReference Include="..\..\src\BlackFlag.Engine.Rendering.Skia\BlackFlag.Engine.Rendering.Skia.csproj" />
+    <ProjectReference Include="..\..\src\BlackFlag.Engine.SDK.Adapters\BlackFlag.Engine.SDK.Adapters.csproj" />
+    <Compile Include="..\BlackFlag.Engine.Fonts.Tests\TestFontFactory.cs" Link="Conformance\TestFontFactory.cs" />
+    <Compile Include="..\BlackFlag.Engine.Parsing.Tests\TestRandomAccessSource.cs" Link="Conformance\TestRandomAccessSource.cs" />
     <ProjectReference
       Include="..\..\src\BlackFlag.Engine.Services\BlackFlag.Engine.Services.csproj" />
     <ProjectReference
