@@ -4,21 +4,21 @@
 |---|---|
 | **Document ID** | PP-ARCH-001 |
 | **Category** | Architecture |
-| **Version** | 1.1 |
+| **Version** | 1.2 |
 | **Status** | Approved |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1000, BF-2000 |
-| **Last Updated** | 2026-08-09 |
-| **Next Review** | 2026-11-09 |
+| **Last Updated** | 2026-11-08 |
+| **Next Review** | 2027-02-08 |
 
 ---
 
 ## Volume II â€” BlackFlag Engine Architecture
 
-**Document ID:** PP-BP-VOL2  
-**Version:** 1.1  
+**Legacy volume alias:** PP-BP-VOL2
+**Version:** 1.2
 **Status:** Approved  
-**Last Updated:** August 9, 2026
+**Last Updated:** November 8, 2026
 
 ---
 
@@ -47,6 +47,15 @@ BlackFlag Engine must be:
 ---
 
 ## 3. Initial Project Structure
+
+This section records the initial architectural organization. The current
+checkpoint also implements Parsing, Rendering, Fonts, Security, Editing,
+Writing, Plugins, Services and SDK adapter projects. BF-1054 is complete, and
+BF-1055 canonical font editing remains a separately scoped upcoming milestone.
+PdfDocument owns authoritative state, Editing supplies transactional mutation
+and history, and Writing supplies preservation-aware serialization. Desktop
+integration uses SDK/Services boundaries and preserves that ownership model.
+[Current handoff](../handoffs/PiratePDF-Maintenance-Handoff-Post-BF-1054-Part1.md).
 
 The first implementation phase contains:
 
@@ -359,7 +368,13 @@ The engine must:
 - Isolate native code.
 - Fuzz high-risk parsers when practical.
 
-Embedded JavaScript is not part of the initial product scope.
+The canonical form policy permits supported local calculations, validation and
+user-triggered form events under qualified sandbox and policy enforcement.
+Safe Mode disables document scripts. Passive parsing, rendering, saving and
+inspection never execute them. The current engine inventories script/action
+structures and supports structural forms. Runtime and desktop event execution
+require separate implementation and qualification.
+[Document form policy](../05-Governance/Document-Form-JavaScript-Policy.md).
 
 ---
 
@@ -402,5 +417,6 @@ This architecture is correctly implemented when:
 
 | Version | Date | Description |
 |---|---|---|
+| 1.2 | 2026-11-08 | Replace obsolete blanket JavaScript exclusion with the canonical bounded local-form policy and actual implementation status. |
 | 1.0 | 2026-07-24 | Standardized document metadata and Blueprint structure. |
 | 1.1 | 2026-08-09 | Updated BlackFlag Engine boundaries for the single-edition free/open-source PiratePDF product model. |

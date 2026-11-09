@@ -1,0 +1,855 @@
+{
+    "Format":  "PiratePDF B14 deployment evidence v1",
+    "MeasuredOn":  "2026-11-08",
+    "SDK":  "10.0.302",
+    "Runtime":  "10.0.10",
+    "RID":  "win-x64",
+    "CPU":  "Intel Core i7-14650HX",
+    "LogicalProcessors":  24,
+    "Method":  "One warmup then five sequential fresh-process samples per supported mode/workload. Final measurements start after publish and gate execution. OS file cache remains warm. BOOT is first managed marker, READY follows aggregate workload; idle sample is 250ms later. No forced GC. Peak working set is sampled, with 5ms polling and 250ms idle interval.",
+    "Scope":  "Existing DocGen and test-dependent isolated workload. Directory sizes include developer/test/debug assets and exclude machine-shared runtime for framework-dependent output. No desktop qualification.",
+    "Summary":  [
+                    {
+                        "Name":  "docgen",
+                        "Mode":  "fdd",
+                        "Workload":  "validate",
+                        "Samples":  5,
+                        "AllExitZero":  true,
+                        "BootMs":  null,
+                        "ReadyMs":  null,
+                        "WorkloadMs":  null,
+                        "TotalMs":  {
+                                        "Minimum":  256.772,
+                                        "Median":  259.754,
+                                        "Maximum":  268.928
+                                    },
+                        "PeakWorkingSetBytes":  {
+                                                    "Minimum":  50671616,
+                                                    "Median":  51757056,
+                                                    "Maximum":  55332864
+                                                },
+                        "IdleWorkingSetBytes":  null
+                    },
+                    {
+                        "Name":  "docgen",
+                        "Mode":  "scd",
+                        "Workload":  "validate",
+                        "Samples":  5,
+                        "AllExitZero":  true,
+                        "BootMs":  null,
+                        "ReadyMs":  null,
+                        "WorkloadMs":  null,
+                        "TotalMs":  {
+                                        "Minimum":  275.958,
+                                        "Median":  283.577,
+                                        "Maximum":  303.272
+                                    },
+                        "PeakWorkingSetBytes":  {
+                                                    "Minimum":  50610176,
+                                                    "Median":  54210560,
+                                                    "Maximum":  54358016
+                                                },
+                        "IdleWorkingSetBytes":  null
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "fdd",
+                        "Workload":  "conformance",
+                        "Samples":  5,
+                        "AllExitZero":  true,
+                        "BootMs":  {
+                                       "Minimum":  73.209,
+                                       "Median":  77.934,
+                                       "Maximum":  86.476
+                                   },
+                        "ReadyMs":  {
+                                        "Minimum":  795.492,
+                                        "Median":  947.083,
+                                        "Maximum":  1001.966
+                                    },
+                        "WorkloadMs":  {
+                                           "Minimum":  714.555,
+                                           "Median":  860.101,
+                                           "Maximum":  912.887
+                                       },
+                        "TotalMs":  {
+                                        "Minimum":  1087.492,
+                                        "Median":  1218.506,
+                                        "Maximum":  1275.873
+                                    },
+                        "PeakWorkingSetBytes":  {
+                                                    "Minimum":  60166144,
+                                                    "Median":  60383232,
+                                                    "Maximum":  61345792
+                                                },
+                        "IdleWorkingSetBytes":  {
+                                                    "Minimum":  59432960,
+                                                    "Median":  60203008,
+                                                    "Maximum":  61124608
+                                                }
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "fdd",
+                        "Workload":  "fonts",
+                        "Samples":  5,
+                        "AllExitZero":  true,
+                        "BootMs":  {
+                                       "Minimum":  66.343,
+                                       "Median":  75.970,
+                                       "Maximum":  93.181
+                                   },
+                        "ReadyMs":  {
+                                        "Minimum":  878.717,
+                                        "Median":  883.650,
+                                        "Maximum":  924.867
+                                    },
+                        "WorkloadMs":  {
+                                           "Minimum":  805.191,
+                                           "Median":  815.15,
+                                           "Maximum":  831.182
+                                       },
+                        "TotalMs":  {
+                                        "Minimum":  1148.520,
+                                        "Median":  1155.454,
+                                        "Maximum":  1202.673
+                                    },
+                        "PeakWorkingSetBytes":  {
+                                                    "Minimum":  226246656,
+                                                    "Median":  226791424,
+                                                    "Maximum":  227307520
+                                                },
+                        "IdleWorkingSetBytes":  {
+                                                    "Minimum":  130383872,
+                                                    "Median":  131371008,
+                                                    "Maximum":  132100096
+                                                }
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "scd",
+                        "Workload":  "conformance",
+                        "Samples":  5,
+                        "AllExitZero":  true,
+                        "BootMs":  {
+                                       "Minimum":  81.884,
+                                       "Median":  92.557,
+                                       "Maximum":  99.334
+                                   },
+                        "ReadyMs":  {
+                                        "Minimum":  901.121,
+                                        "Median":  935.122,
+                                        "Maximum":  968.386
+                                    },
+                        "WorkloadMs":  {
+                                           "Minimum":  818.066,
+                                           "Median":  839.917,
+                                           "Maximum":  872.239
+                                       },
+                        "TotalMs":  {
+                                        "Minimum":  1169.595,
+                                        "Median":  1200.130,
+                                        "Maximum":  1261.479
+                                    },
+                        "PeakWorkingSetBytes":  {
+                                                    "Minimum":  60518400,
+                                                    "Median":  60813312,
+                                                    "Maximum":  61816832
+                                                },
+                        "IdleWorkingSetBytes":  {
+                                                    "Minimum":  60469248,
+                                                    "Median":  60751872,
+                                                    "Maximum":  61464576
+                                                }
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "scd",
+                        "Workload":  "fonts",
+                        "Samples":  5,
+                        "AllExitZero":  true,
+                        "BootMs":  {
+                                       "Minimum":  87.443,
+                                       "Median":  91.952,
+                                       "Maximum":  97.024
+                                   },
+                        "ReadyMs":  {
+                                        "Minimum":  920.202,
+                                        "Median":  992.769,
+                                        "Maximum":  1036.864
+                                    },
+                        "WorkloadMs":  {
+                                           "Minimum":  833.552,
+                                           "Median":  899.364,
+                                           "Maximum":  935.58
+                                       },
+                        "TotalMs":  {
+                                        "Minimum":  1203.118,
+                                        "Median":  1268.309,
+                                        "Maximum":  1314.414
+                                    },
+                        "PeakWorkingSetBytes":  {
+                                                    "Minimum":  188375040,
+                                                    "Median":  226836480,
+                                                    "Maximum":  227147776
+                                                },
+                        "IdleWorkingSetBytes":  {
+                                                    "Minimum":  100454400,
+                                                    "Median":  131239936,
+                                                    "Maximum":  131461120
+                                                }
+                    }
+                ],
+    "Publish":  [
+                    {
+                        "Name":  "docgen",
+                        "Run":  "docgen-publish-results.json",
+                        "Mode":  "fdd",
+                        "Exit":  0,
+                        "ElapsedMs":  1211.705,
+                        "Bytes":  386254,
+                        "Files":  5
+                    },
+                    {
+                        "Name":  "docgen",
+                        "Run":  "docgen-publish-results.json",
+                        "Mode":  "scd",
+                        "Exit":  0,
+                        "ElapsedMs":  6860.038,
+                        "Bytes":  80575748,
+                        "Files":  192
+                    },
+                    {
+                        "Name":  "docgen",
+                        "Run":  "docgen-publish-results.json",
+                        "Mode":  "trim",
+                        "Exit":  1,
+                        "ElapsedMs":  3279.132,
+                        "Bytes":  null,
+                        "Files":  0
+                    },
+                    {
+                        "Name":  "docgen",
+                        "Run":  "docgen-publish-results.json",
+                        "Mode":  "aot",
+                        "Exit":  1,
+                        "ElapsedMs":  3086.832,
+                        "Bytes":  null,
+                        "Files":  0
+                    },
+                    {
+                        "Name":  "docgen",
+                        "Run":  "docgen-publish-results-run1.json",
+                        "Mode":  "fdd",
+                        "Exit":  0,
+                        "ElapsedMs":  1855.509,
+                        "Bytes":  386254.0,
+                        "Files":  5
+                    },
+                    {
+                        "Name":  "docgen",
+                        "Run":  "docgen-publish-results-run1.json",
+                        "Mode":  "scd",
+                        "Exit":  0,
+                        "ElapsedMs":  2198.114,
+                        "Bytes":  80575748.0,
+                        "Files":  192
+                    },
+                    {
+                        "Name":  "docgen",
+                        "Run":  "docgen-publish-results-run2.json",
+                        "Mode":  "fdd",
+                        "Exit":  0,
+                        "ElapsedMs":  1823.589,
+                        "Bytes":  386254.0,
+                        "Files":  5
+                    },
+                    {
+                        "Name":  "docgen",
+                        "Run":  "docgen-publish-results-run2.json",
+                        "Mode":  "scd",
+                        "Exit":  0,
+                        "ElapsedMs":  1916.685,
+                        "Bytes":  80575748.0,
+                        "Files":  192
+                    },
+                    {
+                        "Name":  "engine",
+                        "Run":  "engine-publish-results.json",
+                        "Mode":  "fdd",
+                        "Exit":  0,
+                        "ElapsedMs":  80212.624,
+                        "Bytes":  110105903,
+                        "Files":  145
+                    },
+                    {
+                        "Name":  "engine",
+                        "Run":  "engine-publish-results.json",
+                        "Mode":  "scd",
+                        "Exit":  0,
+                        "ElapsedMs":  71335.819,
+                        "Bytes":  190295359,
+                        "Files":  332
+                    },
+                    {
+                        "Name":  "engine",
+                        "Run":  "engine-publish-results.json",
+                        "Mode":  "trim",
+                        "Exit":  1,
+                        "ElapsedMs":  89153.765,
+                        "Bytes":  null,
+                        "Files":  0
+                    },
+                    {
+                        "Name":  "engine",
+                        "Run":  "engine-publish-results.json",
+                        "Mode":  "aot",
+                        "Exit":  1,
+                        "ElapsedMs":  10746.748,
+                        "Bytes":  null,
+                        "Files":  0
+                    },
+                    {
+                        "Name":  "engine",
+                        "Run":  "engine-publish-results-run1.json",
+                        "Mode":  "fdd",
+                        "Exit":  0,
+                        "ElapsedMs":  4455.555,
+                        "Bytes":  110105903.0,
+                        "Files":  145
+                    },
+                    {
+                        "Name":  "engine",
+                        "Run":  "engine-publish-results-run1.json",
+                        "Mode":  "scd",
+                        "Exit":  0,
+                        "ElapsedMs":  4456.810,
+                        "Bytes":  190295359.0,
+                        "Files":  332
+                    },
+                    {
+                        "Name":  "engine",
+                        "Run":  "engine-publish-results-run2.json",
+                        "Mode":  "fdd",
+                        "Exit":  0,
+                        "ElapsedMs":  4092.159,
+                        "Bytes":  110105903.0,
+                        "Files":  145
+                    },
+                    {
+                        "Name":  "engine",
+                        "Run":  "engine-publish-results-run2.json",
+                        "Mode":  "scd",
+                        "Exit":  0,
+                        "ElapsedMs":  4203.546,
+                        "Bytes":  190295359.0,
+                        "Files":  332
+                    }
+                ],
+    "Samples":  [
+                    {
+                        "Name":  "docgen",
+                        "Mode":  "fdd",
+                        "Workload":  "validate",
+                        "Sample":  0,
+                        "Warmup":  true,
+                        "Exit":  0,
+                        "BootMs":  null,
+                        "ReadyMs":  null,
+                        "WorkloadMs":  null,
+                        "TotalMs":  6490.0329,
+                        "PeakWorkingSetBytes":  60456960,
+                        "IdleWorkingSetBytes":  null
+                    },
+                    {
+                        "Name":  "docgen",
+                        "Mode":  "fdd",
+                        "Workload":  "validate",
+                        "Sample":  1,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  null,
+                        "ReadyMs":  null,
+                        "WorkloadMs":  null,
+                        "TotalMs":  268.9278,
+                        "PeakWorkingSetBytes":  54919168,
+                        "IdleWorkingSetBytes":  null
+                    },
+                    {
+                        "Name":  "docgen",
+                        "Mode":  "fdd",
+                        "Workload":  "validate",
+                        "Sample":  2,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  null,
+                        "ReadyMs":  null,
+                        "WorkloadMs":  null,
+                        "TotalMs":  256.7718,
+                        "PeakWorkingSetBytes":  51757056,
+                        "IdleWorkingSetBytes":  null
+                    },
+                    {
+                        "Name":  "docgen",
+                        "Mode":  "fdd",
+                        "Workload":  "validate",
+                        "Sample":  3,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  null,
+                        "ReadyMs":  null,
+                        "WorkloadMs":  null,
+                        "TotalMs":  259.7536,
+                        "PeakWorkingSetBytes":  55332864,
+                        "IdleWorkingSetBytes":  null
+                    },
+                    {
+                        "Name":  "docgen",
+                        "Mode":  "fdd",
+                        "Workload":  "validate",
+                        "Sample":  4,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  null,
+                        "ReadyMs":  null,
+                        "WorkloadMs":  null,
+                        "TotalMs":  263.3825,
+                        "PeakWorkingSetBytes":  50671616,
+                        "IdleWorkingSetBytes":  null
+                    },
+                    {
+                        "Name":  "docgen",
+                        "Mode":  "fdd",
+                        "Workload":  "validate",
+                        "Sample":  5,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  null,
+                        "ReadyMs":  null,
+                        "WorkloadMs":  null,
+                        "TotalMs":  257.4284,
+                        "PeakWorkingSetBytes":  51425280,
+                        "IdleWorkingSetBytes":  null
+                    },
+                    {
+                        "Name":  "docgen",
+                        "Mode":  "scd",
+                        "Workload":  "validate",
+                        "Sample":  0,
+                        "Warmup":  true,
+                        "Exit":  0,
+                        "BootMs":  null,
+                        "ReadyMs":  null,
+                        "WorkloadMs":  null,
+                        "TotalMs":  710.6484,
+                        "PeakWorkingSetBytes":  54321152,
+                        "IdleWorkingSetBytes":  null
+                    },
+                    {
+                        "Name":  "docgen",
+                        "Mode":  "scd",
+                        "Workload":  "validate",
+                        "Sample":  1,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  null,
+                        "ReadyMs":  null,
+                        "WorkloadMs":  null,
+                        "TotalMs":  283.5772,
+                        "PeakWorkingSetBytes":  54210560,
+                        "IdleWorkingSetBytes":  null
+                    },
+                    {
+                        "Name":  "docgen",
+                        "Mode":  "scd",
+                        "Workload":  "validate",
+                        "Sample":  2,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  null,
+                        "ReadyMs":  null,
+                        "WorkloadMs":  null,
+                        "TotalMs":  275.9581,
+                        "PeakWorkingSetBytes":  50610176,
+                        "IdleWorkingSetBytes":  null
+                    },
+                    {
+                        "Name":  "docgen",
+                        "Mode":  "scd",
+                        "Workload":  "validate",
+                        "Sample":  3,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  null,
+                        "ReadyMs":  null,
+                        "WorkloadMs":  null,
+                        "TotalMs":  303.272,
+                        "PeakWorkingSetBytes":  54337536,
+                        "IdleWorkingSetBytes":  null
+                    },
+                    {
+                        "Name":  "docgen",
+                        "Mode":  "scd",
+                        "Workload":  "validate",
+                        "Sample":  4,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  null,
+                        "ReadyMs":  null,
+                        "WorkloadMs":  null,
+                        "TotalMs":  281.17150000000004,
+                        "PeakWorkingSetBytes":  51384320,
+                        "IdleWorkingSetBytes":  null
+                    },
+                    {
+                        "Name":  "docgen",
+                        "Mode":  "scd",
+                        "Workload":  "validate",
+                        "Sample":  5,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  null,
+                        "ReadyMs":  null,
+                        "WorkloadMs":  null,
+                        "TotalMs":  289.3671,
+                        "PeakWorkingSetBytes":  54358016,
+                        "IdleWorkingSetBytes":  null
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "fdd",
+                        "Workload":  "conformance",
+                        "Sample":  0,
+                        "Warmup":  true,
+                        "Exit":  0,
+                        "BootMs":  2396.7215,
+                        "ReadyMs":  9500.7421000000013,
+                        "WorkloadMs":  7059.35,
+                        "TotalMs":  9785.134,
+                        "PeakWorkingSetBytes":  63766528,
+                        "IdleWorkingSetBytes":  63705088
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "fdd",
+                        "Workload":  "conformance",
+                        "Sample":  1,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  86.4756,
+                        "ReadyMs":  795.4918,
+                        "WorkloadMs":  714.555,
+                        "TotalMs":  1087.4924,
+                        "PeakWorkingSetBytes":  60166144,
+                        "IdleWorkingSetBytes":  59432960
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "fdd",
+                        "Workload":  "conformance",
+                        "Sample":  2,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  73.2086,
+                        "ReadyMs":  972.1884,
+                        "WorkloadMs":  881.075,
+                        "TotalMs":  1260.2845,
+                        "PeakWorkingSetBytes":  61345792,
+                        "IdleWorkingSetBytes":  61124608
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "fdd",
+                        "Workload":  "conformance",
+                        "Sample":  3,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  85.4191,
+                        "ReadyMs":  947.0825000000001,
+                        "WorkloadMs":  860.101,
+                        "TotalMs":  1218.5056,
+                        "PeakWorkingSetBytes":  61009920,
+                        "IdleWorkingSetBytes":  60936192
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "fdd",
+                        "Workload":  "conformance",
+                        "Sample":  4,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  77.9345,
+                        "ReadyMs":  911.70980000000009,
+                        "WorkloadMs":  822.706,
+                        "TotalMs":  1197.0416,
+                        "PeakWorkingSetBytes":  60325888,
+                        "IdleWorkingSetBytes":  60203008
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "fdd",
+                        "Workload":  "conformance",
+                        "Sample":  5,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  77.1156,
+                        "ReadyMs":  1001.9665,
+                        "WorkloadMs":  912.887,
+                        "TotalMs":  1275.8734000000002,
+                        "PeakWorkingSetBytes":  60383232,
+                        "IdleWorkingSetBytes":  60133376
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "fdd",
+                        "Workload":  "fonts",
+                        "Sample":  0,
+                        "Warmup":  true,
+                        "Exit":  0,
+                        "BootMs":  81.8842,
+                        "ReadyMs":  5875.6157,
+                        "WorkloadMs":  5783.697,
+                        "TotalMs":  6162.9909000000007,
+                        "PeakWorkingSetBytes":  196034560,
+                        "IdleWorkingSetBytes":  187006976
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "fdd",
+                        "Workload":  "fonts",
+                        "Sample":  1,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  75.969500000000011,
+                        "ReadyMs":  878.7174,
+                        "WorkloadMs":  805.191,
+                        "TotalMs":  1150.8897,
+                        "PeakWorkingSetBytes":  227307520,
+                        "IdleWorkingSetBytes":  132100096
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "fdd",
+                        "Workload":  "fonts",
+                        "Sample":  2,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  68.0808,
+                        "ReadyMs":  882.1797,
+                        "WorkloadMs":  811.606,
+                        "TotalMs":  1155.4545,
+                        "PeakWorkingSetBytes":  227172352,
+                        "IdleWorkingSetBytes":  131457024
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "fdd",
+                        "Workload":  "fonts",
+                        "Sample":  3,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  66.3428,
+                        "ReadyMs":  883.65000000000009,
+                        "WorkloadMs":  815.15,
+                        "TotalMs":  1148.5197,
+                        "PeakWorkingSetBytes":  226791424,
+                        "IdleWorkingSetBytes":  131371008
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "fdd",
+                        "Workload":  "fonts",
+                        "Sample":  4,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  93.180500000000009,
+                        "ReadyMs":  899.19450000000006,
+                        "WorkloadMs":  826.931,
+                        "TotalMs":  1174.5515,
+                        "PeakWorkingSetBytes":  226246656,
+                        "IdleWorkingSetBytes":  130383872
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "fdd",
+                        "Workload":  "fonts",
+                        "Sample":  5,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  88.3679,
+                        "ReadyMs":  924.8673,
+                        "WorkloadMs":  831.182,
+                        "TotalMs":  1202.6729,
+                        "PeakWorkingSetBytes":  226516992,
+                        "IdleWorkingSetBytes":  130555904
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "scd",
+                        "Workload":  "conformance",
+                        "Sample":  0,
+                        "Warmup":  true,
+                        "Exit":  0,
+                        "BootMs":  2628.6214,
+                        "ReadyMs":  10353.159800000001,
+                        "WorkloadMs":  7735.379,
+                        "TotalMs":  10647.5378,
+                        "PeakWorkingSetBytes":  63791104,
+                        "IdleWorkingSetBytes":  63770624
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "scd",
+                        "Workload":  "conformance",
+                        "Sample":  1,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  96.450600000000009,
+                        "ReadyMs":  950.7808,
+                        "WorkloadMs":  863.663,
+                        "TotalMs":  1244.7811000000002,
+                        "PeakWorkingSetBytes":  61501440,
+                        "IdleWorkingSetBytes":  61288448
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "scd",
+                        "Workload":  "conformance",
+                        "Sample":  2,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  81.88430000000001,
+                        "ReadyMs":  901.1212,
+                        "WorkloadMs":  818.066,
+                        "TotalMs":  1169.5948,
+                        "PeakWorkingSetBytes":  60792832,
+                        "IdleWorkingSetBytes":  60751872
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "scd",
+                        "Workload":  "conformance",
+                        "Sample":  3,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  89.75500000000001,
+                        "ReadyMs":  935.12200000000007,
+                        "WorkloadMs":  839.917,
+                        "TotalMs":  1200.1304,
+                        "PeakWorkingSetBytes":  60518400,
+                        "IdleWorkingSetBytes":  60469248
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "scd",
+                        "Workload":  "conformance",
+                        "Sample":  4,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  99.3345,
+                        "ReadyMs":  968.38640000000009,
+                        "WorkloadMs":  872.239,
+                        "TotalMs":  1261.4785000000002,
+                        "PeakWorkingSetBytes":  61816832,
+                        "IdleWorkingSetBytes":  61464576
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "scd",
+                        "Workload":  "conformance",
+                        "Sample":  5,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  92.5574,
+                        "ReadyMs":  926.4611,
+                        "WorkloadMs":  829.763,
+                        "TotalMs":  1189.4922000000001,
+                        "PeakWorkingSetBytes":  60813312,
+                        "IdleWorkingSetBytes":  60620800
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "scd",
+                        "Workload":  "fonts",
+                        "Sample":  0,
+                        "Warmup":  true,
+                        "Exit":  0,
+                        "BootMs":  89.9299,
+                        "ReadyMs":  944.18950000000007,
+                        "WorkloadMs":  848.313,
+                        "TotalMs":  1222.4414000000002,
+                        "PeakWorkingSetBytes":  226762752,
+                        "IdleWorkingSetBytes":  131231744
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "scd",
+                        "Workload":  "fonts",
+                        "Sample":  1,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  97.024,
+                        "ReadyMs":  927.2749,
+                        "WorkloadMs":  833.552,
+                        "TotalMs":  1207.0791000000002,
+                        "PeakWorkingSetBytes":  226488320,
+                        "IdleWorkingSetBytes":  130908160
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "scd",
+                        "Workload":  "fonts",
+                        "Sample":  2,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  89.2283,
+                        "ReadyMs":  992.7689,
+                        "WorkloadMs":  899.778,
+                        "TotalMs":  1275.5179,
+                        "PeakWorkingSetBytes":  226836480,
+                        "IdleWorkingSetBytes":  131239936
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "scd",
+                        "Workload":  "fonts",
+                        "Sample":  3,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  93.6345,
+                        "ReadyMs":  1036.8639,
+                        "WorkloadMs":  935.58,
+                        "TotalMs":  1314.4135,
+                        "PeakWorkingSetBytes":  188375040,
+                        "IdleWorkingSetBytes":  100454400
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "scd",
+                        "Workload":  "fonts",
+                        "Sample":  4,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  87.443400000000011,
+                        "ReadyMs":  993.97440000000006,
+                        "WorkloadMs":  899.364,
+                        "TotalMs":  1268.3094,
+                        "PeakWorkingSetBytes":  227049472,
+                        "IdleWorkingSetBytes":  131268608
+                    },
+                    {
+                        "Name":  "engine",
+                        "Mode":  "scd",
+                        "Workload":  "fonts",
+                        "Sample":  5,
+                        "Warmup":  false,
+                        "Exit":  0,
+                        "BootMs":  91.9516,
+                        "ReadyMs":  920.202,
+                        "WorkloadMs":  837.442,
+                        "TotalMs":  1203.1183,
+                        "PeakWorkingSetBytes":  227147776,
+                        "IdleWorkingSetBytes":  131461120
+                    }
+                ]
+}

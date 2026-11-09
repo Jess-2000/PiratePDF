@@ -1,9 +1,9 @@
 # BlackFlag Engine and PiratePDF Project Charter
 
-**Version:** 1.2
+**Version:** 1.3
 **Status:** Founding Charter
 **Adopted:** 2026-07-31
-**Last Updated:** 2026-09-05
+**Last Updated:** 2026-11-08
 
 > Dedicated to everyone who believes professional software should be built
 > with care.
@@ -121,9 +121,13 @@ the same production capabilities.
 
 A document is data, not executable instructions.
 
-BlackFlag does not automatically execute document-supplied JavaScript, open
-actions, additional actions, launch actions, automatic form submissions,
-external navigation, embedded executables, rich media, or multimedia.
+Document-open, document-close and unattended document-JavaScript execution are
+prohibited. Supported local form events may execute only within the qualified
+sandbox and policy scope defined by PP-GOV-006. Safe Mode disables document
+scripts while preserving supported non-scripted controls. Importing, rendering,
+saving and inspection remain passive. Document scripts cannot acquire external
+I/O, transmission, filesystem, process, code-loading or privileged authority.
+[Document form policy](docs/05-Governance/Document-Form-JavaScript-Policy.md).
 
 ### Explicit User Intent
 
@@ -155,6 +159,12 @@ Official PiratePDF releases should be traceable to reviewed source and approved
 build inputs. Release processes protect signing credentials, record artifact
 identity and provenance, validate bundled dependencies, and use platform trust
 mechanisms appropriate to the supported operating systems.
+
+Windows 10/11 x64 is the official v1 release target under PP-GOV-005.
+The Windows signing/provenance contract records the required publisher,
+source/build identity, final SHA-256 hashes and protected credential boundary.
+Production provisioning and actual signed-release qualification are future work.
+[Release signing and provenance](docs/releases/Windows-Release-Signing-and-Provenance.md).
 
 Release hardening may include native compilation, trimming, or symbol reduction,
 but those mechanisms never replace secure design, validation, or transparency.
@@ -271,6 +281,7 @@ principles remain.
 
 | Version | Date | Description |
 |---|---|---|
+| 1.3 | 2026-11-08 | Reconcile owner-approved local form-event policy, passive-operation restrictions and Windows release provenance requirements. |
 | 1.1 | 2026-08-09 | Founding charter baseline for PiratePDF and BlackFlag Engine. |
 | 1.2 | 2026-09-05 | Strengthened durable security principles for native/runtime/dependency trust boundaries, verifiable distribution, release provenance, and risk-proportional adversarial validation. |
 

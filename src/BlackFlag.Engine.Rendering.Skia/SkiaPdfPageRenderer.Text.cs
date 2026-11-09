@@ -107,6 +107,9 @@ public sealed partial class SkiaPdfPageRenderer : IPdfPageRenderer, IDisposable
                 }
 
                 outline.Transform(
+                    // Skia glyph paths use downward Y; PDF text space uses upward Y.
+                    SKMatrix.CreateScale(1, -1));
+                outline.Transform(
                     SKMatrix.CreateTranslation(
                         checked((float)glyph.X),
                         0));
@@ -264,7 +267,7 @@ public sealed partial class SkiaPdfPageRenderer : IPdfPageRenderer, IDisposable
                         SkewX = 0,
                         TransX = checked((float)(glyph.X * run.GraphicsState.HorizontalScaling / 100.0)),
                         SkewY = 0,
-                        ScaleY = 1,
+                        ScaleY = -1, // Match the Skia-to-PDF glyph conversion used when painting.
                         TransY = checked((float)run.GraphicsState.TextRise),
                         Persp0 = 0,
                         Persp1 = 0,

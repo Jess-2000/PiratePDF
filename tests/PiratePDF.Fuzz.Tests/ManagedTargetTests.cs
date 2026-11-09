@@ -1,5 +1,6 @@
 using System.Buffers.Binary;
 using System.IO.Compression;
+using System.Threading.Tasks;
 using BlackFlag.Engine.Fonts.Sanitization;
 using BlackFlag.Engine.Fonts.Tests;
 
@@ -7,6 +8,32 @@ namespace PiratePDF.Fuzz.Tests;
 
 public sealed class ManagedTargetTests
 {
+    [Theory]
+    [InlineData("filter-asciihex")]
+    [InlineData("filter-flate")]
+    public void ConcurrentFilterCallsKeepBudgetsAndCancellationIndependent(string id)
+    {
+        byte[] decoded = new byte[8191];
+        new Random(1049).NextBytes(decoded);
+        byte[] encoded = id == "filter-asciihex"
+            ? System.Text.Encoding.ASCII.GetBytes(Convert.ToHexString(decoded) + ">")
+            : Compress(decoded);
+        byte[] snapshot = encoded.ToArray();
+        FuzzResult expected = FuzzResult.Success(decoded);
+        FuzzTarget target = TargetRegistry.Get(id);
+        using var cancellation = new CancellationTokenSource();
+        cancellation.Cancel();
+
+        Parallel.For(0, 64, _ =>
+        {
+            Assert.Equal(expected, target.Run(encoded));
+            Assert.Throws<OperationCanceledException>(() => target.Run(encoded, cancellation.Token));
+            Assert.Equal(FuzzResult.Rejected("InvalidData"), target.Run("G>"u8));
+            Assert.Equal(expected, target.Run(encoded));
+        });
+        Assert.Equal(snapshot, encoded);
+    }
+
     [Theory]
     [InlineData("filter-asciihex")]
     [InlineData("filter-flate")]

@@ -1,0 +1,57 @@
+[
+    {
+        "Version":  1,
+        "OriginalPath":  "docs/reviews/Post-BF-1054-B9-Coverage-Guided-Campaign-Readiness.md",
+        "OriginalSha256":  "20879382AF3C13C93383989588359045D76A7F1E82EC3916FBE0A25BBAA471D0",
+        "DocumentId":  "PP-HIST-B9-001",
+        "Registered":  "2026-10-24",
+        "NextReview":  "2027-01-24",
+        "HistoricalMetadata":  "Unknown; not reconstructed.",
+        "History":  "2026-10-24: Initial corrective registration; original report unchanged.",
+        "PolicySha256":  "060EBF0711B65B9E50F39B6508167A7B9A19F6B4D4FDA1ED83518928B3951191"
+    },
+    {
+        "Version":  1,
+        "OriginalPath":  "docs/reviews/Post-BF-1054-B9-Phase-A-Completion-2-Final-Integration.md",
+        "OriginalSha256":  "7B96E7523BBBFD0841AE4B0DD45B97A4200A4DC3DCA4D263EA965C6C5D19BCF9",
+        "DocumentId":  "PP-HIST-B9-002",
+        "Registered":  "2026-10-24",
+        "NextReview":  "2027-01-24",
+        "HistoricalMetadata":  "Unknown; not reconstructed.",
+        "History":  "2026-10-24: Initial corrective registration; original report unchanged.",
+        "PolicySha256":  "060EBF0711B65B9E50F39B6508167A7B9A19F6B4D4FDA1ED83518928B3951191"
+    },
+    {
+        "Version":  1,
+        "OriginalPath":  "docs/reviews/Post-BF-1054-B9-Phase-A-Completion-2-Remaining-Independent-Supervision-and-Handoff.md",
+        "OriginalSha256":  "2567F17385FA5DB3AB58C04A5FE9FCDD3972F200ACDA7F5063B5B4817D15D0B9",
+        "DocumentId":  "PP-HIST-B9-003",
+        "Registered":  "2026-10-24",
+        "NextReview":  "2027-01-24",
+        "HistoricalMetadata":  "Unknown; not reconstructed.",
+        "History":  "2026-10-24: Initial corrective registration; original report unchanged.",
+        "PolicySha256":  "060EBF0711B65B9E50F39B6508167A7B9A19F6B4D4FDA1ED83518928B3951191"
+    },
+    {
+        "Version":  1,
+        "OriginalPath":  "docs/reviews/Post-BF-1054-B9-Phase-A-Completion-2-Stabilization.md",
+        "OriginalSha256":  "1D53E0FF98F11C169CD4745D88B6A60F5AEED98034124FFEE6690DC300789428",
+        "DocumentId":  "PP-HIST-B9-004",
+        "Registered":  "2026-10-24",
+        "NextReview":  "2027-01-24",
+        "HistoricalMetadata":  "Unknown; not reconstructed.",
+        "History":  "2026-10-24: Initial corrective registration; original report unchanged.",
+        "PolicySha256":  "060EBF0711B65B9E50F39B6508167A7B9A19F6B4D4FDA1ED83518928B3951191"
+    },
+    {
+        "Version":  1,
+        "OriginalPath":  "docs/reviews/Post-BF-1054-B9-Phase-A-Completion-2B-Independent-Parent-and-Worker-Ownership.md",
+        "OriginalSha256":  "2AD918BB88F6E422AC7CCE10F6E36149256D4F550040F1174DC6ABD66365FA29",
+        "DocumentId":  "PP-HIST-B9-005",
+        "Registered":  "2026-10-24",
+        "NextReview":  "2027-01-24",
+        "HistoricalMetadata":  "Unknown; not reconstructed.",
+        "History":  "2026-10-24: Initial corrective registration; original report unchanged.",
+        "PolicySha256":  "060EBF0711B65B9E50F39B6508167A7B9A19F6B4D4FDA1ED83518928B3951191"
+    }
+]

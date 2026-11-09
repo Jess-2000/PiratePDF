@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1" xmlns="http://cyclonedx.org/schema/bom/1.6">
+  <metadata>
+    <tools>
+      <components>
+        <component type="application">
+          <authors>
+            <author>
+              <name>CycloneDX</name>
+            </author>
+          </authors>
+          <name>CycloneDX module for .NET</name>
+          <version>6.3.1.0</version>
+          <externalReferences>
+            <reference type="website">
+              <url>https://github.com/CycloneDX/cyclonedx-dotnet</url>
+            </reference>
+          </externalReferences>
+        </component>
+      </components>
+    </tools>
+    <component type="library" bom-ref="PiratePDF-engine@working-tree">
+      <name>PiratePDF-engine</name>
+      <version>working-tree</version>
+    </component>
+  </metadata>
+  <components>
+    <component type="library" bom-ref="pkg:nuget/SkiaSharp@4.150.7">
+      <authors>
+        <author>
+          <name>Microsoft</name>
+        </author>
+      </authors>
+      <name>SkiaSharp</name>
+      <version>4.150.7</version>
+      <description>SkiaSharp is a cross-platform 2D graphics API for .NET platforms based on Google's Skia Graphics Library.
+It provides a comprehensive 2D API that can be used across mobile, server and desktop models to render images.</description>
+      <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">AEB25E36846D4C77BDDB848620BED621B87D3E15FFDE5979C08C57E5F5B5C54D31D0503B8A7B51E9A2B3D97AB2A1FE8B1C48EAFB41E6F611F5EAAB80C85AB3AD</hash>
+      </hashes>
+      <licenses>
+        <license>
+          <id>MIT</id>
+        </license>
+      </licenses>
+      <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+      <purl>pkg:nuget/SkiaSharp@4.150.7</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://go.microsoft.com/fwlink/?linkid=868515</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://go.microsoft.com/fwlink/?linkid=868515</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:nuget/SkiaSharp.NativeAssets.Linux@4.150.7">
+      <authors>
+        <author>
+          <name>Microsoft</name>
+        </author>
+      </authors>
+      <name>SkiaSharp.NativeAssets.Linux</name>
+      <version>4.150.7</version>
+      <description>SkiaSharp is a cross-platform 2D graphics API for .NET platforms based on Google's Skia Graphics Library.
+It provides a comprehensive 2D API that can be used across mobile, server and desktop models to render images.</description>
+      <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">2AAF3097A61B055067341FF3C9D2A311248AE446EB2C208C9224B67CBC6173EAE2C1576AC4702701AAB127483A0411D230959D1C63FDFE3E41A48FA18CBA606C</hash>
+      </hashes>
+      <licenses>
+        <license>
+          <id>MIT</id>
+        </license>
+      </licenses>
+      <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+      <purl>pkg:nuget/SkiaSharp.NativeAssets.Linux@4.150.7</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://go.microsoft.com/fwlink/?linkid=868515</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://go.microsoft.com/fwlink/?linkid=868515</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:nuget/SkiaSharp.NativeAssets.macOS@4.150.7">
+      <authors>
+        <author>
+          <name>Microsoft</name>
+        </author>
+      </authors>
+      <name>SkiaSharp.NativeAssets.macOS</name>
+      <version>4.150.7</version>
+      <description>SkiaSharp is a cross-platform 2D graphics API for .NET platforms based on Google's Skia Graphics Library.
+It provides a comprehensive 2D API that can be used across mobile, server and desktop models to render images.</description>
+      <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">12A271FE7814825AB1BCD4D15556F70604AE642426563F2BC0C6825A8EC6E87B161A4645BB1F9E2D98F67031A9E33A59E497334AE7E5CD50947396B30F945D19</hash>
+      </hashes>
+      <licenses>
+        <license>
+          <id>MIT</id>
+        </license>
+      </licenses>
+      <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+      <purl>pkg:nuget/SkiaSharp.NativeAssets.macOS@4.150.7</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://go.microsoft.com/fwlink/?linkid=868515</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://go.microsoft.com/fwlink/?linkid=868515</url>
+        </reference>
+      </externalReferences>
+    </component>
+    <component type="library" bom-ref="pkg:nuget/SkiaSharp.NativeAssets.Win32@4.150.7">
+      <authors>
+        <author>
+          <name>Microsoft</name>
+        </author>
+      </authors>
+      <name>SkiaSharp.NativeAssets.Win32</name>
+      <version>4.150.7</version>
+      <description>SkiaSharp is a cross-platform 2D graphics API for .NET platforms based on Google's Skia Graphics Library.
+It provides a comprehensive 2D API that can be used across mobile, server and desktop models to render images.</description>
+      <scope>required</scope>
+      <hashes>
+        <hash alg="SHA-512">EEDC079DE1A3F349AA304D795EF7F4DC7D38D130AF9904B79BA7B1844C7B75E1BFCE51E868423681137996A08D1A2F7F9DD97365576877C07869946E015FBF2B</hash>
+      </hashes>
+      <licenses>
+        <license>
+          <id>MIT</id>
+        </license>
+      </licenses>
+      <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+      <purl>pkg:nuget/SkiaSharp.NativeAssets.Win32@4.150.7</purl>
+      <externalReferences>
+        <reference type="website">
+          <url>https://go.microsoft.com/fwlink/?linkid=868515</url>
+        </reference>
+        <reference type="vcs">
+          <url>https://go.microsoft.com/fwlink/?linkid=868515</url>
+        </reference>
+      </externalReferences>
+    </component>
+  </components>
+  <dependencies>
+    <dependency ref="PiratePDF-engine@working-tree">
+      <dependency ref="pkg:nuget/SkiaSharp@4.150.7" />
+      <dependency ref="pkg:nuget/SkiaSharp.NativeAssets.Linux@4.150.7" />
+      <dependency ref="pkg:nuget/SkiaSharp.NativeAssets.macOS@4.150.7" />
+      <dependency ref="pkg:nuget/SkiaSharp.NativeAssets.Win32@4.150.7" />
+    </dependency>
+    <dependency ref="pkg:nuget/SkiaSharp.NativeAssets.Linux@4.150.7" />
+    <dependency ref="pkg:nuget/SkiaSharp.NativeAssets.macOS@4.150.7" />
+    <dependency ref="pkg:nuget/SkiaSharp.NativeAssets.Win32@4.150.7" />
+    <dependency ref="pkg:nuget/SkiaSharp@4.150.7">
+      <dependency ref="pkg:nuget/SkiaSharp.NativeAssets.Win32@4.150.7" />
+      <dependency ref="pkg:nuget/SkiaSharp.NativeAssets.macOS@4.150.7" />
+    </dependency>
+  </dependencies>
+</bom>

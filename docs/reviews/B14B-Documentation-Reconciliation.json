@@ -1,0 +1,245 @@
+{
+  "Format": "PiratePDF B14B Markdown reconciliation v1",
+  "ReviewedOn": "2026-11-08",
+  "Scope": "Relevant current authority plus explicitly protected completed evidence; no repository-wide historical rewrite",
+  "Reviewed": [
+    {
+      "Path": "AGENTS.md",
+      "Disposition": "modified",
+      "Reason": "Repository-wide operating authority, currency policy and maintenance sequence",
+      "BeforeSHA256": "B47725A2382B1120A7AA66A56BDAD0569FD91BD57FC244164DDB3A8D1EB50E3C",
+      "AfterSHA256": "3B61F73C35E49BFFCBA3048F309B7D47F68146359FD8C1DDF357E23269BF5AF2"
+    },
+    {
+      "Path": "README.md",
+      "Disposition": "modified",
+      "Reason": "Developer entry point, policy link and current sequence",
+      "BeforeSHA256": "6703D2B30AFA612102CAE0E149B1DC9C57ADCCC360277AC2E408DF0F48E8B601",
+      "AfterSHA256": "51805229C6731E0E99D3C2E767509DF0BCCBCDF1B953424D22FAC1B23F3FB54A"
+    },
+    {
+      "Path": "PROJECT-CHARTER.md",
+      "Disposition": "retained",
+      "Reason": "Stable security/provenance principles already cover servicing; retained",
+      "BeforeSHA256": "C52A41AB7E7B24C8F7690964F8757BC6110F2B8743BBD977AB13DF60CC79EDB0",
+      "AfterSHA256": "C52A41AB7E7B24C8F7690964F8757BC6110F2B8743BBD977AB13DF60CC79EDB0"
+    },
+    {
+      "Path": "docs/Project-Charter.md",
+      "Disposition": "retained",
+      "Reason": "Product scope and engineering commitments retained",
+      "BeforeSHA256": "3EB652DDFEB8DEBC13BD737D79FD4C4F0E9E8EF1FF9A60CCA0D8D00D6DAAEEB1",
+      "AfterSHA256": "3EB652DDFEB8DEBC13BD737D79FD4C4F0E9E8EF1FF9A60CCA0D8D00D6DAAEEB1"
+    },
+    {
+      "Path": "docs/README.md",
+      "Disposition": "modified",
+      "Reason": "Governance navigation and historical/current authority",
+      "BeforeSHA256": "DD5B5177A4124AA8F5D58F67D1AEC38EBDEB76E850232EF90984F254E862868E",
+      "AfterSHA256": "2A39AC74035935B0E2B3D934BD8EC04760FA81B0188B9117102DBA2A22A05959"
+    },
+    {
+      "Path": "docs/02-Roadmaps/README.md",
+      "Disposition": "modified",
+      "Reason": "Current B14A/B14B/B15/B16 sequencing",
+      "BeforeSHA256": "4642C5D0088E4F4260F1C7D53D635CA1524EF4B3555CC22D606B311D49F8C3DB",
+      "AfterSHA256": "A00EFB888A6E78DFD2EAABB7A1D58A97967B9C8F34D603319039147B614EEBB4"
+    },
+    {
+      "Path": "docs/02-Roadmaps/Windows-Desktop-Development-Sequence.md",
+      "Disposition": "modified",
+      "Reason": "Future desktop/installer servicing and deferred qualification",
+      "BeforeSHA256": "A5177E8DE1C832C36B163BBFF219802F7FB6887F1B99769F451D4FD089FD3656",
+      "AfterSHA256": "09A7199129689982A5DA88252905CC07DB0983AAB59A6F5EB67265B5A9E4E1E3"
+    },
+    {
+      "Path": "docs/Blueprint/README.md",
+      "Disposition": "retained",
+      "Reason": "Existing architecture navigation retained",
+      "BeforeSHA256": "02F4453C41B6544B78946D47B03EEED067A6974C1700C0E17E99AF62546D83C4",
+      "AfterSHA256": "02F4453C41B6544B78946D47B03EEED067A6974C1700C0E17E99AF62546D83C4"
+    },
+    {
+      "Path": "docs/Blueprint/Volume-IV-Engineering-Standards.md",
+      "Disposition": "retained",
+      "Reason": "Existing minimum engineering/source-size rules retained",
+      "BeforeSHA256": "981E24FDB45B3DDCFC49A4CE3A51ADB24348570207A019676675B1FD0AC5C87E",
+      "AfterSHA256": "981E24FDB45B3DDCFC49A4CE3A51ADB24348570207A019676675B1FD0AC5C87E"
+    },
+    {
+      "Path": "docs/Blueprint/Volume-V-Testing-and-QA.md",
+      "Disposition": "retained",
+      "Reason": "Existing historical testing scaffold retained; concrete gate guidance lives in current handoff/dependency/release documents",
+      "BeforeSHA256": "F35A1EEBAA6D319EE7A4DC96D90CAF93BEA445BA65930126578FD5BEF8546419",
+      "AfterSHA256": "F35A1EEBAA6D319EE7A4DC96D90CAF93BEA445BA65930126578FD5BEF8546419"
+    },
+    {
+      "Path": "docs/Blueprint/Volume-VI-Future-Roadmap.md",
+      "Disposition": "modified",
+      "Reason": "Current maintenance sequence and B14A servicing disposition",
+      "BeforeSHA256": "47981FFC7CCA16911639E771B7808EC6D86411D38A28B7F71604594F9E0FDC61",
+      "AfterSHA256": "4FF59631CE0305C7BB53C6B48A4CE6B209542D3BAA2CF09541071882D32C3B63"
+    },
+    {
+      "Path": "docs/Technical-Specifications/README.md",
+      "Disposition": "retained",
+      "Reason": "Public contracts and subsystem specifications retained",
+      "BeforeSHA256": "BB9B5769210054D4A20091E55374A03F1E7AEC45B639B609FC2CEE58C5E416FA",
+      "AfterSHA256": "BB9B5769210054D4A20091E55374A03F1E7AEC45B639B609FC2CEE58C5E416FA"
+    },
+    {
+      "Path": "docs/BUILDING-BLACKFLAG.md",
+      "Disposition": "retained",
+      "Reason": "Living engineering history and complete-solution validation principles retained",
+      "BeforeSHA256": "281AF9A102E94FB970565DC26DA0B28A1C76E0A54BF5FE326BE059387868F145",
+      "AfterSHA256": "281AF9A102E94FB970565DC26DA0B28A1C76E0A54BF5FE326BE059387868F145"
+    },
+    {
+      "Path": "docs/04-Developer/Plugin-Development.md",
+      "Disposition": "modified",
+      "Reason": "SDK/plugin dependency and artifact servicing obligations",
+      "BeforeSHA256": "9C1CE301A15F8585B85B872F1D1DCF9CF65B27808D4917D55A5C7F843EF00E04",
+      "AfterSHA256": "E5919485EDB585CF091179C190A48A95A4F17CFB52943955D2FE2B0356250485"
+    },
+    {
+      "Path": "docs/04-Developer/Deployment-Compatibility.md",
+      "Disposition": "modified",
+      "Reason": "Developer SDK setup, runtime floors, publish modes and reusable verification",
+      "BeforeSHA256": "44007B41752A2235A87DDB2FC9C3035BBC992C1B0A27EB34EA73DDA2599D16DB",
+      "AfterSHA256": "9B197B7958428C798CCDC852065E0E9D1B132803848D6A4FB6AAD4302D0176BA"
+    },
+    {
+      "Path": "docs/05-Governance/Documentation-Standards.md",
+      "Disposition": "retained",
+      "Reason": "Hash-bound metadata policy retained",
+      "BeforeSHA256": "37E9783C94A8BC31BD35A87F4D118F14FE78A28CFC0F6934A4A0588B21348E86",
+      "AfterSHA256": "37E9783C94A8BC31BD35A87F4D118F14FE78A28CFC0F6934A4A0588B21348E86"
+    },
+    {
+      "Path": "docs/05-Governance/Documentation-Validation-Rules.md",
+      "Disposition": "retained",
+      "Reason": "Existing DocGen controls retained; no release-gate weakening",
+      "BeforeSHA256": "9D0B3462DE79263E16CB695B6504205F494B75DD4381F9AB5E77A4920AA8D6C4",
+      "AfterSHA256": "9D0B3462DE79263E16CB695B6504205F494B75DD4381F9AB5E77A4920AA8D6C4"
+    },
+    {
+      "Path": "docs/05-Governance/H2b-Deferral-and-Maintenance-Sequencing.md",
+      "Disposition": "modified",
+      "Reason": "Sequencing reconciliation and independent fail-closed H2b qualification",
+      "BeforeSHA256": "C8D6B10DA8F31F4AEA31F62E58DE267237F998A1882F60179135011849B85A45",
+      "AfterSHA256": "E7E0DB52B593F25D3D7F700E02896BA1E8469F5E0C635BC36E29B48DD4879E7E"
+    },
+    {
+      "Path": "docs/05-Governance/Platform-Support-and-Native-Lifetime.md",
+      "Disposition": "retained",
+      "Reason": "Windows x64 target and resident-native lifetime authority retained",
+      "BeforeSHA256": "B78F3B1E0F7C7EF93DD0E4123570EE5A5B6A436EA2BD31D00463C96DAF6E1510",
+      "AfterSHA256": "B78F3B1E0F7C7EF93DD0E4123570EE5A5B6A436EA2BD31D00463C96DAF6E1510"
+    },
+    {
+      "Path": "docs/05-Governance/Document-Form-JavaScript-Policy.md",
+      "Disposition": "retained",
+      "Reason": "Independent document-script security boundary retained",
+      "BeforeSHA256": "A8CEF43FAE8658B51947C77DE9AF3BACD5C2B9E992CCEAF7F2579C17B631601C",
+      "AfterSHA256": "A8CEF43FAE8658B51947C77DE9AF3BACD5C2B9E992CCEAF7F2579C17B631601C"
+    },
+    {
+      "Path": "docs/05-Governance/Runtime-Dependency-and-Artifact-Currency.md",
+      "Disposition": "new",
+      "Reason": "New owner-authorized permanent currency governance, PP-GOV-007",
+      "BeforeSHA256": null,
+      "AfterSHA256": "39E4F2A2751C21830A05AF30D72B3C88445E63562B2DBF540ADD9EBBC0886613"
+    },
+    {
+      "Path": "docs/releases/Windows-Release-Signing-and-Provenance.md",
+      "Disposition": "modified",
+      "Reason": "Currency-related release blocking, final hashes/SBOM/signing and hosted limitations",
+      "BeforeSHA256": "1351BB09DDDFC9686DD13750821507EEB1BF4D79205439CF54E6FEAF9323C9FE",
+      "AfterSHA256": "BFCFC44A2174D1CB1E768F248087AE11941A4E47A77B07E6D3B188442E54D350"
+    },
+    {
+      "Path": "docs/dependencies/README.md",
+      "Disposition": "modified",
+      "Reason": "Current dependency/native/SBOM evidence, historical B12 copies and verification procedure",
+      "BeforeSHA256": "D2465EBBF91CB5E45B415B79BE2B778460AA58E178CCC076D1337CE9560B9A30",
+      "AfterSHA256": "99CEEE9C008D0B283162D4FC440FC211190F12046D218C4B233A86B8A84F15F1"
+    },
+    {
+      "Path": "docs/dependencies/License-Provenance-Resolution.md",
+      "Disposition": "modified",
+      "Reason": "Version-specific legal/provenance review and identical Skia legal texts",
+      "BeforeSHA256": "30F4A68F5BD01855A5B071AD97A7DBA10166BC47FDB5E5F20F974B064EA960B0",
+      "AfterSHA256": "98A4E5658D067A192EEF8033367F3EAF74190A8B4F05797CA0CC4186B0C4864C"
+    },
+    {
+      "Path": "docs/handoffs/PiratePDF-Maintenance-Handoff-Post-BF-1054-Part1.md",
+      "Disposition": "modified",
+      "Reason": "Current execution/acceptance and recovery handoff",
+      "BeforeSHA256": "99BA25AE3F2EC0ACA5990549D09FA28E417B67B573C73988F11E839766B550CD",
+      "AfterSHA256": "7D4CDE256D3554E56DF61648CFFDF74452513EF3CA0C43FED60ACFF0225D6FED"
+    },
+    {
+      "Path": "docs/reviews/Post-BF-1054-CSharp-Repository-Audit.md",
+      "Disposition": "modified",
+      "Reason": "Current engineering/security acceptance summary",
+      "BeforeSHA256": "0C2507CCE1B0C02018EF4E279AE7EFEAB38051196A9957FCA6C6805C01D87DAF",
+      "AfterSHA256": "1DBC533769D6A38F7E0AF77CDF2A5EC808389CD205487A1C2F5CBA7BBDE070F0"
+    },
+    {
+      "Path": "docs/reviews/Post-BF-1054-Batch-B12-Dependency-Provenance-and-Sbom-Completion-Report.md",
+      "Disposition": "retained",
+      "Reason": "Completed B12 report preserved as historical evidence",
+      "BeforeSHA256": "3EFD008F17C356C5607198D62E89C63C47A0D00FFA42F8B531302EA464587F3C",
+      "AfterSHA256": "3EFD008F17C356C5607198D62E89C63C47A0D00FFA42F8B531302EA464587F3C"
+    },
+    {
+      "Path": "docs/reviews/Post-BF-1054-Batch-B13-Signing-Provenance-and-Documentation-Reconciliation-Report.md",
+      "Disposition": "retained",
+      "Reason": "Completed B13 report preserved as historical evidence",
+      "BeforeSHA256": "F3E812000D30CB1CD1224A2C3D1C3587BD93199AFD18FD02F9A61C48DD322816",
+      "AfterSHA256": "F3E812000D30CB1CD1224A2C3D1C3587BD93199AFD18FD02F9A61C48DD322816"
+    },
+    {
+      "Path": "docs/reviews/Post-BF-1054-Batch-B14-Deployment-Compatibility-Report.md",
+      "Disposition": "retained",
+      "Reason": "Completed B14 report preserves original .NET 10.0.10 findings and measurements",
+      "BeforeSHA256": "6272BE72E9A6312FF9A235DA4C9FFFC048A4696F1FA297DAC7949AC1AF26CFB4",
+      "AfterSHA256": "6272BE72E9A6312FF9A235DA4C9FFFC048A4696F1FA297DAC7949AC1AF26CFB4"
+    },
+    {
+      "Path": "docs/reviews/Post-BF-1054-Batch-B14A-Runtime-Toolchain-Security-Report.md",
+      "Disposition": "retained",
+      "Reason": "Completed B14A report preserves selected inputs and owner-attributed elevated acceptance",
+      "BeforeSHA256": "02FA4D62DFB0B21E26CE02D78021E06ADD183385761C0D4FFD3C572D7E977309",
+      "AfterSHA256": "02FA4D62DFB0B21E26CE02D78021E06ADD183385761C0D4FFD3C572D7E977309"
+    },
+    {
+      "Path": "docs/reviews/Post-BF-1054-Batch-B14B-Artifact-Currency-Report.md",
+      "Disposition": "new",
+      "Reason": "New B14B servicing/verification and acceptance report, PP-AUD-046",
+      "BeforeSHA256": null,
+      "AfterSHA256": "B34CFA7D0C9756F8D64D886BDA35F7170607EC2B8EF2E56EBECA3791BC5E9B7A"
+    },
+    {
+      "Path": "docs/Documentation-Index.md",
+      "Disposition": "modified",
+      "Reason": "Generated registry includes actual PP-GOV-007 and PP-AUD-046 identifiers",
+      "BeforeSHA256": "40E532E63D2D02B67D1935682A18D79C6F7D954B601169E9AFA2F413A15E5A19",
+      "AfterSHA256": "DCD09FD03EF0B6AFB91FD72437C5057DA89FA24E2E2DA1DE1D967B0844C000A7"
+    },
+    {
+      "Path": "docs/Documentation-Health.md",
+      "Disposition": "modified",
+      "Reason": "Generated current health evidence",
+      "BeforeSHA256": "4FAE73101F173106DEBAB7CAB9821097B1A5CD2064AE1CDCDD6E15B20B7C2AC5",
+      "AfterSHA256": "6AD158E925C8525AD89087592583D8A5E148E6C20DE832A3F9ECAEB2DD02A210"
+    },
+    {
+      "Path": "docs/ValidationReport.md",
+      "Disposition": "modified",
+      "Reason": "Generated current validation evidence",
+      "BeforeSHA256": "4302A155538B1B8CB59B6CC61F22BB8980850FC06316BA19A7E190E3BDA57CFC",
+      "AfterSHA256": "0E04E2F88028B332FD3120F615E1EAC132C44B9AF5DBC70BA0F793431DB5FEE4"
+    }
+  ]
+}

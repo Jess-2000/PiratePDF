@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>CycloneDX</id>
+    <version>6.3.1</version>
+    <authors>Steve Springett &amp; Patrick Dwyer</authors>
+    <license type="expression">Apache-2.0</license>
+    <licenseUrl>https://licenses.nuget.org/Apache-2.0</licenseUrl>
+    <readme>README.md</readme>
+    <projectUrl>https://github.com/CycloneDX/cyclonedx-dotnet</projectUrl>
+    <description>A .NET Core global tool to generate CycloneDX bill-of-material documents for use with Software Composition Analysis (SCA).</description>
+    <releaseNotes>https://github.com/CycloneDX/cyclonedx-dotnet/releases</releaseNotes>
+    <copyright>Copyright (c) OWASP Foundation</copyright>
+    <packageTypes>
+      <packageType name="DotnetTool" />
+    </packageTypes>
+    <repository type="git" url="https://github.com/CycloneDX/cyclonedx-dotnet.git" branch="refs/heads/master" commit="6938a02734b0c30e1a59976f5bd592f1ee8be1eb" />
+  </metadata>
+</package>

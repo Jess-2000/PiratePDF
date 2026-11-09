@@ -14,12 +14,6 @@ public sealed partial class PdfResourceResolver
         string baseFont = GetOptionalName(dictionary, "BaseFont") ?? subtype;
         string faceName = RemoveSubsetPrefix(baseFont, out bool isSubset);
 
-        PdfDictionary? descriptor = ResolveOptionalDictionary(dictionary, "FontDescriptor");
-        string familyName = GetOptionalString(descriptor, "FontFamily") ?? faceName;
-        int weight = GetFontWeight(descriptor, faceName);
-        int stretch = GetFontStretch(descriptor);
-        PdfFontSlant slant = GetFontSlant(descriptor, faceName);
-        PdfFontTechnology technology = GetFontTechnology(subtype, descriptor);
         PdfObject? encoding = GetOptionalRaw(dictionary, "Encoding");
         PdfStream? toUnicode = ResolveOptionalStream(dictionary, "ToUnicode");
         PdfArray? descendantFonts = ResolveOptionalArray(dictionary, "DescendantFonts");
@@ -33,6 +27,29 @@ public sealed partial class PdfResourceResolver
                 $"Font descendant count {descendantFonts.Count} exceeds the configured maximum of "
                 + $"{options.MaximumFontDescendantCount}.");
         }
+
+        // Canonical consumers have no object resolver. Resolve the bounded Type 0
+        // descendant view here, retaining the original source dictionary for fidelity.
+        if (subtype == "Type0" && descendantFonts is not null)
+        {
+            descendantFonts = new PdfArray(descendantFonts.Select(value =>
+            {
+                PdfDictionary descendant = RequireDictionary(Dereference(value), PdfResourceKind.Font);
+                return (PdfObject)new PdfDictionary(descendant.Select(entry =>
+                    entry.Key.Value == "CIDToGIDMap"
+                        ? new KeyValuePair<PdfName, PdfObject>(entry.Key, Dereference(entry.Value))
+                        : entry));
+            }));
+        }
+
+        PdfDictionary? descriptor = ResolveOptionalDictionary(dictionary, "FontDescriptor");
+        if (subtype == "Type0" && descendantFonts is { Count: > 0 })
+            descriptor ??= ResolveOptionalDictionary((PdfDictionary)descendantFonts[0], "FontDescriptor");
+        string familyName = GetOptionalString(descriptor, "FontFamily") ?? faceName;
+        int weight = GetFontWeight(descriptor, faceName);
+        int stretch = GetFontStretch(descriptor);
+        PdfFontSlant slant = GetFontSlant(descriptor, faceName);
+        PdfFontTechnology technology = GetFontTechnology(subtype, descriptor);
 
         PdfStream? embeddedFont = ResolveEmbeddedFontProgram(descriptor);
         if (embeddedFont is not null && embeddedFont.Length > options.MaximumEmbeddedFontBytes)

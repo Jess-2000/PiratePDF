@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <UseAppHost>false</UseAppHost>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(StationOnly)' == 'true' or '$(PublishProfile)' == 'StationOnly'">
+    <StationOnly>true</StationOnly>
+    <AssemblyName>PiratePDF.NativeProvisioning.Station</AssemblyName>
+    <DefineConstants>$(DefineConstants);STATION_ONLY</DefineConstants>
+    <RollForward>Disable</RollForward>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(StationOnly)' != 'true'">
+    <Compile Remove="StationProvisioningEntry.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(StationOnly)' == 'true'">
+    <Compile Include="StationProvisioningEntry.cs;StationBootstrapInterop.cs" />
+    <Compile Include="../PiratePDF.Fuzz.Runner/NativeStationPolicy.cs;../PiratePDF.Fuzz.Runner/NativeStationTrust.cs;../PiratePDF.Fuzz.Runner/NativeStationTransport.cs;../PiratePDF.Fuzz.Runner/NativeStationTransaction.cs" Link="Station/%(Filename)%(Extension)" />
+    <Compile Include="../PiratePDF.Fuzz.Runner/WindowsExecutionDesktop.cs;../PiratePDF.Fuzz.Runner/WindowsExecutionDesktop.StationLease.cs" Link="Station/%(Filename)%(Extension)" />
+    <Compile Include="../PiratePDF.Fuzz.Runner/WindowsCapturePipe.cs" Link="Station/WindowsCapturePipe.cs" />
+    <None Include="../PiratePDF.Fuzz.Runner/Provision-NativeExecution.ps1" Link="Provision-NativeExecution.ps1" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+  <Target Name="RequireStationRuntimeApproval" BeforeTargets="CoreCompile" Condition="'$(StationOnly)' == 'true'">
+    <Error Condition="'$(AssemblyName)' != 'PiratePDF.NativeProvisioning.Station' or '$(EnableDefaultCompileItems)' != 'false' or '$(UseAppHost)' != 'false' or '$(TargetFramework)' != 'net10.0'" Text="Station artifact identity and closed source allowlist must remain fixed." />
+    <Error Condition="'$(RuntimeFrameworkVersion)' == ''" Text="Station-only publishing requires an explicitly selected exact RuntimeFrameworkVersion." />
+    <Error Condition="'$(SelfContained)' == 'true' or '$(PublishSingleFile)' == 'true' or '$(PublishAot)' == 'true'" Text="Only the reviewed framework-dependent station-only artifact is supported." />
+  </Target>
+  <Target Name="CompileStationBootstrap" BeforeTargets="ComputeFilesToPublish" Condition="'$(StationOnly)' == 'true'">
+    <!-- Use the existing SDK compiler against the OS-provided Framework API.
+         Operational PowerShell loads only this protected, precompiled DLL. -->
+    <PropertyGroup>
+      <StationFrameworkRoot>$(SystemRoot)\Microsoft.NET\Framework64\v4.0.30319</StationFrameworkRoot>
+      <StationBootstrapOutput>$(IntermediateOutputPath)PiratePDF.NativeProvisioning.Bootstrap.dll</StationBootstrapOutput>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(StationFrameworkRoot)\mscorlib.dll')" Text="The fixed bootstrap requires the existing Windows PowerShell Framework API. No runtime installation or fallback is permitted." />
+    <ItemGroup>
+      <StationBootstrapReference Include="$(StationFrameworkRoot)\mscorlib.dll;$(StationFrameworkRoot)\System.dll;$(StationFrameworkRoot)\System.Core.dll" />
+    </ItemGroup>
+    <Csc Sources="$(MSBuildProjectDirectory)\StationBootstrapInterop.cs;$(MSBuildProjectDirectory)\StationHelperCleanup.cs;$(MSBuildProjectDirectory)\StationLifetimeEvidence.cs" OutputAssembly="$(StationBootstrapOutput)" TargetType="Library"
+         References="@(StationBootstrapReference)" NoStandardLib="true" NoConfig="true" DefineConstants="" LangVersion="5" Nullable="disable"
+         Deterministic="true" TreatWarningsAsErrors="true" />
+    <ItemGroup>
+      <ResolvedFileToPublish Include="$(StationBootstrapOutput)" RelativePath="PiratePDF.NativeProvisioning.Bootstrap.dll" CopyToPublishDirectory="Always" />
+    </ItemGroup>
+  </Target>
+</Project>

@@ -8,7 +8,7 @@ using BlackFlag.Engine.Writing;
 namespace BlackFlag.Engine.Services.Text;
 
 /// <summary>
-/// Connects committed same-font existing-text edits to full-rewrite and
+/// Connects committed existing-text and font-resource edits to full-rewrite and
 /// incremental preservation-aware Writing.
 /// </summary>
 public static class PdfExistingTextTransactionWritingService
@@ -96,27 +96,44 @@ public static class PdfExistingTextTransactionWritingService
             index < changeSet.Count;
             index++)
         {
-            if (changeSet[index] is not
-                PdfExistingTextEditOperation operation)
+            IPdfEditOperation operation = changeSet[index];
+            PdfObjectIdentifier streamIdentifier;
+            switch (operation)
             {
-                throw new NotSupportedException(
-                    "Existing-text Writing accepts only existing-text edit operations.");
+                case PdfExistingTextEditOperation text:
+                    streamIdentifier = text.ContentStreamIdentifier;
+                    break;
+                case PdfExistingTextResourceChangeOperation resource:
+                    session.EnsureOwnership(resource);
+                    if (resource.AffectedObjectIdentifiers.Count != resource.AffectedObjectCount)
+                        throw new InvalidOperationException("The font-resource edit has no complete object identifier snapshot.");
+                    foreach (PdfObjectIdentifier identifier in resource.AffectedObjectIdentifiers)
+                    {
+                        if (!document.Objects.Contains(identifier))
+                            throw new InvalidOperationException($"Changed font-resource object '{identifier}' is unavailable.");
+                        changed.Add(identifier);
+                    }
+                    streamIdentifier = resource.ContentStreamIdentifier;
+                    break;
+                default:
+                    throw new NotSupportedException(
+                        "Existing-text Writing accepts only existing-text edit and font-resource operations.");
             }
 
             session.EnsureOwnership(
                 operation);
 
             if (!document.Objects.TryGet(
-                    operation.ContentStreamIdentifier,
+                    streamIdentifier,
                     out PdfObject? value) ||
                 value is not PdfStream)
             {
                 throw new InvalidOperationException(
-                    $"Changed existing-text stream '{operation.ContentStreamIdentifier}' is not present in the current object store.");
+                    $"Changed existing-text stream '{streamIdentifier}' is not present in the current object store.");
             }
 
             _ = changed.Add(
-                operation.ContentStreamIdentifier);
+                streamIdentifier);
         }
 
         return

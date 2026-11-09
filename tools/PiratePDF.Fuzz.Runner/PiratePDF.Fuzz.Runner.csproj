@@ -5,6 +5,9 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="../PiratePDF.NativeProvisioning/StationBootstrapInterop.cs" Link="StationBootstrapInterop.cs" />
+    <Compile Include="../PiratePDF.NativeProvisioning/StationHelperCleanup.cs" Link="StationHelperCleanup.cs" />
+    <Compile Include="../PiratePDF.NativeProvisioning/StationLifetimeEvidence.cs" Link="StationLifetimeEvidence.cs" />
     <ProjectReference Include="../PiratePDF.Fuzz.Targets/PiratePDF.Fuzz.Targets.csproj" />
   </ItemGroup>
 </Project>

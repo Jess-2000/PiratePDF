@@ -4,12 +4,12 @@
 |---|---|
 | **Document ID** | PP-SPEC-000 |
 | **Category** | Technical Specification |
-| **Version** | 1.0 |
+| **Version** | 1.1 |
 | **Status** | In Development |
 | **Owner** | PiratePDF Project |
 | **Related BF Work Items** | BF-1000, BF-2000, BF-3000, BF-8000 |
-| **Last Updated** | 2026-07-24 |
-| **Next Review** | 2026-10-24 |
+| **Last Updated** | 2026-11-08 |
+| **Next Review** | 2027-02-08 |
 
 ---
 
@@ -65,7 +65,6 @@ A specification marked `In Development` may describe both implemented and planne
 
 - PP-VSN-000 - PiratePDF Master Blueprint
 - PP-ARCH-001 - BlackFlag Engine Architecture
-- PP-GOV-002 - Project Governance Guide
 - PP-GOV-002 - Documentation Standards
 - PP-GOV-003 - Documentation Validation Rules
 - PP-ADR-000 - Architecture Decision Records
@@ -81,5 +80,6 @@ A specification marked `In Development` may describe both implemented and planne
 
 | Version | Date | Description |
 |---|---|---|
+| 1.1 | 2026-11-08 | Reconcile B13 policy, current guidance, authority references and release/maintenance sequencing. |
 | 1.0 | 2026-07-24 | Standardized the technical specification catalog. |
 
