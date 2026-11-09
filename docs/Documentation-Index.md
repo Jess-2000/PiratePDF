@@ -182,6 +182,7 @@
 | PP-AUD-044 | [B14 Native AOT, Trimming and Deployment Compatibility](reviews/Post-BF-1054-Batch-B14-Deployment-Compatibility-Report.md) | Engineering Review | 1.0 | Review | 2026-11-08 |
 | PP-AUD-045 | [B14A Runtime and Toolchain Security Remediation](reviews/Post-BF-1054-Batch-B14A-Runtime-Toolchain-Security-Report.md) | Engineering Review | 1.0 | Review | 2026-11-08 |
 | PP-AUD-046 | [B14B Package Rebuild and Artifact Currency](reviews/Post-BF-1054-Batch-B14B-Artifact-Currency-Report.md) | Engineering Review | 1.0 | Review | 2026-11-08 |
+| PP-AUD-047 | [Post-BF-1054 Batch B16 — Final Maintenance Execution Plan](reviews/Post-BF-1054-Batch-B16-Final-Maintenance-Execution-Plan.md) | Engineering Review | 1.0 | Draft | 2026-11-08 |
 | PP-CHARTER-001 | [PiratePDF Project Charter](Project-Charter.md) | Project Charter | 1.2 | Approved | 2026-11-08 |
 | PP-DEP-001 | [Dependency Inventory, Notices and SBOM Procedure](dependencies/README.md) | Developer Documentation | 1.3 | Review | 2026-11-08 |
 | PP-DEP-002 | [B12 License and Provenance Resolution Matrix](dependencies/License-Provenance-Resolution.md) | Developer Documentation | 1.1 | Review | 2026-11-08 |
